@@ -35,19 +35,33 @@ export const Hero: React.FC = () => {
         </div>
       </div>
       <div ref={fadeInTrust.ref} className={`container mx-auto mt-12 md:mt-16 text-center px-4 ${fadeInTrust.className}`}>
-        <p className="text-gray-500 uppercase tracking-widest text-xs md:text-sm mb-4">Zaufali nam / Certyfikaty</p>
-        <div className="flex flex-wrap justify-center items-center gap-x-3 md:gap-x-6 gap-y-2 text-gray-300 text-sm md:text-base">
-          <span>Chess.com</span>
-          <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-          <span>Wagento</span>
-          <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-          <span>eWay Corp</span>
-          <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-          <span>BigCommerce</span>
-          <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-          <span>Meta</span>
-           <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-          <span>University of California</span>
+        <p className="text-gray-500 uppercase tracking-widest text-xs md:text-sm mb-6">Pracowałem już z</p>
+        <div className="overflow-hidden">
+          <div className="flex animate-scroll space-x-8 md:space-x-12">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex space-x-8 md:space-x-12 flex-shrink-0">
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Chess.com</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Wagento</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">eWay Corp</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">BigCommerce</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Tour & Holiday</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Commerce Hero</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Grupa Fibra</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Dietana</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Redlin</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Talk Commerce</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -16,12 +16,25 @@ declare global {
   }
 }
 
-export const FinalCTA: React.FC = () => {
+interface FinalCTAProps {
+  cookiePreferences: {
+    necessary: boolean;
+    performance: boolean;
+    analytics: boolean;
+  } | null;
+}
+
+export const FinalCTA: React.FC<FinalCTAProps> = ({ cookiePreferences }) => {
     const fadeInSection = useFadeIn<HTMLDivElement>();
     const calendlyRef = useRef<HTMLDivElement>(null);
     
     useEffect(() => {
       let isInitialized = false;
+
+      // Only load Calendly if performance cookies are accepted
+      if (!cookiePreferences?.performance) {
+        return;
+      }
 
       // Load Calendly script dynamically to avoid conflicts
       const loadCalendlyScript = () => {
@@ -49,7 +62,7 @@ export const FinalCTA: React.FC = () => {
           calendlyRef.current.innerHTML = '';
           
           window.Calendly.initInlineWidget({
-            url: 'https://calendly.com/stanislaw-drozniak/30min?background_color=101820&text_color=ffffff&primary_color=fee715',
+            url: 'https://calendly.com/stanislaw-drozniak/30min?hide_gdpr_banner=1&background_color=101820&text_color=ffffff&primary_color=fee715',
             parentElement: calendlyRef.current,
             prefill: {},
             utm: {}
@@ -69,7 +82,7 @@ export const FinalCTA: React.FC = () => {
           calendlyRef.current.innerHTML = '';
         }
       };
-    }, []);
+    }, [cookiePreferences]);
 
   return (
     <section id="cta" className="py-16 md:py-24 px-4 md:px-6 bg-gradient-to-r from-[#fee715] to-[#00C9A7]">
@@ -82,7 +95,22 @@ export const FinalCTA: React.FC = () => {
           Rozmowa jest zupełnie niezobowiązująca - przeanalizujemy wspólnie Twój biznes, ja zaproponuję rozwiązania i ustalimy czy chcemy pracować razem.
         </p>
         <div className="mt-6 md:mt-8">
-          <div ref={calendlyRef} className="calendly-container" style={{minWidth: '320px', height: '700px', position: 'relative', zIndex: 1}}></div>
+          {cookiePreferences?.performance ? (
+            <div ref={calendlyRef} className="calendly-container" style={{minWidth: '320px', height: '700px', position: 'relative', zIndex: 1}}></div>
+          ) : (
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-8 max-w-md mx-auto">
+              <h3 className="font-[Montserrat] text-xl font-bold text-[#101820] mb-4">Zarezerwuj rozmowę</h3>
+              <p className="text-[#101820]/80 mb-6">Aby zobaczyć kalendarz, zaakceptuj pliki cookies wydajności w bannerze na dole strony.</p>
+              <a 
+                href="https://calendly.com/stanislaw-drozniak/30min" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="bg-[#101820] text-white font-bold py-3 px-6 rounded-lg hover:bg-black transition-colors duration-300 inline-block"
+              >
+                Otwórz kalendarz w nowej karcie
+              </a>
+            </div>
+          )}
           <p className="text-[#101820]/70 text-xs md:text-sm mt-4">Jeśli kalendarz się nie wyświetla, kliknij <a href="https://calendly.com/stanislaw-drozniak/30min" target="_blank" rel="noopener noreferrer" className="underline">tutaj</a> aby otworzyć w nowej karcie.</p>
         </div>
 
