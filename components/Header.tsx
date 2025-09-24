@@ -32,13 +32,13 @@ export const Header: React.FC = () => {
               key={link.href} 
               href={link.href} 
               onClick={(e) => handleSmoothScroll(e, link.href)}
-              className="group relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/5"
+              className="group relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/5 bg-white/5 border border-white/10"
             >
-              <span className="relative z-10 text-gray-300 group-hover:text-white font-medium transition-colors duration-300">
+              <span className="relative z-10 text-white group-hover:text-[#fee715] font-medium transition-colors duration-300">
                 {link.label}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-[#fee715] to-[#00C9A7] group-hover:w-3/4 transition-all duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 rounded-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-[#fee715] to-[#00C9A7] group-hover:w-3/4 transition-all duration-300"></div>
             </a>
           ))}
         </nav>
