@@ -49,6 +49,34 @@
     .animate-scroll:hover {
       animation-play-state: paused;
     }
+
+    /* Custom text selection colors */
+    ::selection {
+      background-color: #fee715;
+      color: #101820;
+    }
+    
+    ::-moz-selection {
+      background-color: #fee715;
+      color: #101820;
+    }
+
+    /* For yellow/white text, use dark selection */
+    .text-[#fee715]::selection,
+    .text-white::selection,
+    .text-gray-200::selection,
+    .text-gray-300::selection {
+      background-color: #101820;
+      color: #fee715;
+    }
+    
+    .text-[#fee715]::-moz-selection,
+    .text-white::-moz-selection,
+    .text-gray-200::-moz-selection,
+    .text-gray-300::-moz-selection {
+      background-color: #101820;
+      color: #fee715;
+    }
   </style>
 
 <script type="importmap">

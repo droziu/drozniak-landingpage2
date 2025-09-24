@@ -125,7 +125,7 @@ export const TargetAudience: React.FC = () => {
         <div className="text-center mt-12 md:mt-16">
           <div className="bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-6 md:p-8 max-w-3xl mx-auto">
             <p className="text-lg md:text-xl text-gray-200 font-medium mb-4">
-              Jeśli rozpoznajesz się w pierwszej kolumnie, to prawdopodobnie mogę Ci pomóc zbudować system, który będzie działał dla Ciebie 24/7.
+              Jeśli rozpoznajesz się w pierwszej kolumnie, to prawdopodobnie mogę Ci pomóc
             </p>
             <a 
               href="#cta" 
@@ -137,7 +137,7 @@ export const TargetAudience: React.FC = () => {
               }}
               className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-lg md:text-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:-translate-y-1 transition-all duration-300 inline-block"
             >
-              Sprawdźmy, czy pasujemy do siebie
+              Umów darmową rozmowę
             </a>
           </div>
         </div>
