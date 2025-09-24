@@ -12,8 +12,7 @@ export const Hero: React.FC = () => {
     <section className="min-h-screen flex flex-col justify-center text-center py-12 md:py-20 px-4 md:px-6">
       <div className="container mx-auto max-w-4xl">
         <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-8 leading-tight ${fadeInH1.className}`}>
-          <p className="mb-2">Masz świetną usługę, zadowolonych klientów i polecenia.</p>
-          <p>Ale czujesz, że to za mało, aby stabilnie rosnąć.</p>
+          Masz klientów tylko z polecenia lub przypadku? <br/><span style={{color: '#fee715'}}>Brakuje Ci systemu.</span>
         </h1>
         <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-10 px-2 ${fadeInSub.className}`}>
           <p className="mb-6 text-gray-200 font-medium">Proponuję Ci jednorazową inwestycję: analiza, strategia i wdrożenie narzędzia opartego na AI – specjalnie dla małych firm i freelancerów.</p>

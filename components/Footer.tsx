@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="md:col-span-1 md:text-center">
-             <div className="text-2xl font-bold font-[Montserrat] text-[#fee715] mb-4">
+             <div className="text-2xl font-bold font-[Montserrat] text-[#fee715] mb-4 flex justify-center">
                <Logo />
              </div>
              <p className="text-sm">&copy; {new Date().getFullYear()} Drozniak.com Wszelkie prawa zastrzeżone.</p>
