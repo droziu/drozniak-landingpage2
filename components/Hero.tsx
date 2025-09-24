@@ -4,6 +4,7 @@ import { useFadeIn } from '../hooks/useFadeIn';
 
 export const Hero: React.FC = () => {
     const fadeInH1 = useFadeIn<HTMLHeadingElement>();
+    const fadeInYellow = useFadeIn<HTMLDivElement>();
     const fadeInSub = useFadeIn<HTMLParagraphElement>();
     const fadeInCTA = useFadeIn<HTMLDivElement>();
     const fadeInTrust = useFadeIn<HTMLDivElement>();
@@ -14,7 +15,7 @@ export const Hero: React.FC = () => {
         <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-relaxed ${fadeInH1.className}`}>
           Masz klientów tylko z polecenia lub przypadku?
         </h1>
-        <div ref={fadeInH1.ref} className="mb-6">
+        <div ref={fadeInYellow.ref} className={`mb-6 ${fadeInYellow.className}`}>
           <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] hover:from-[#00C9A7] hover:to-[#fee715] bg-clip-text text-transparent font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold leading-relaxed transition-all duration-500 cursor-pointer">Brakuje Ci systemu.</span>
         </div>
         <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-10 px-2 leading-relaxed ${fadeInSub.className}`}>
