@@ -11,10 +11,10 @@ export const Hero: React.FC = () => {
   return (
     <section className="min-h-screen flex flex-col justify-center text-center py-12 md:py-20 px-4 md:px-6">
       <div className="container mx-auto max-w-4xl">
-        <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-8 leading-normal ${fadeInH1.className}`}>
+        <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-normal ${fadeInH1.className}`}>
           Masz klientów tylko z polecenia lub przypadku? <br/><br/><span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent animate-pulse inline-block">Brakuje Ci systemu.</span>
         </h1>
-        <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-10 px-2 ${fadeInSub.className}`}>
+        <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-10 px-2 mt-4 ${fadeInSub.className}`}>
           <p className="mb-6 text-gray-200 font-medium">Proponuję Ci jednorazową inwestycję: analiza, strategia i wdrożenie narzędzia opartego na AI – specjalnie dla małych firm i freelancerów.</p>
           <p>Zamiast płacić co miesiąc agencji za raporty i wykresy – dostajesz <span style={{color: '#fee715'}}>system, który działa 24/7</span> i faktycznie zdobywa klientów.</p>
         </div>
