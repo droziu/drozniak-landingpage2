@@ -15,7 +15,7 @@ export const Hero: React.FC = () => {
           Masz klientów tylko z polecenia lub przypadku?
         </h1>
         <div className="mb-8">
-          <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] hover:bg-gradient-to-l hover:from-[#00C9A7] hover:to-[#fee715] bg-clip-text text-transparent font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold leading-relaxed transition-all duration-500 cursor-pointer">Brakuje Ci systemu.</span>
+          <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] hover:from-[#00C9A7] hover:to-[#fee715] bg-clip-text text-transparent font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold leading-relaxed transition-all duration-500 cursor-pointer">Brakuje Ci systemu.</span>
         </div>
         <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-10 px-2 leading-relaxed ${fadeInSub.className}`}>
           <p className="mb-6 text-gray-200 font-medium">Proponuję Ci jednorazową inwestycję: analiza, strategia i wdrożenie narzędzia opartego na AI – specjalnie dla małych firm i freelancerów.</p>

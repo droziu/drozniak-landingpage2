@@ -14,7 +14,7 @@ export const Pricing: React.FC = () => {
             <p className="text-gray-300 text-base md:text-lg">Jednorazowa inwestycja netto:</p>
             <p className="font-[Montserrat] text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#fee715] my-4">1 - 4 tys. zł</p>
             <p className="text-gray-400 max-w-md mx-auto text-sm md:text-base leading-relaxed">
-                Zakres zależy od Twoich potrzeb i budżetu, dlatego podaję widełki. Większość projektów mieści się w zakresie 1–4 tys. zł.<br/>
+                Zakres zależy od Twojej sytuacji i budżetu, ale większość projektów mieści się w zakresie 1–4 tys. zł.<br/>
                 Po rozmowie dostaniesz konkretną ofertę z wariantami dla Twojego biznesu.
             </p>
         </div>
