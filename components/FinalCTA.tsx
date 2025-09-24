@@ -88,12 +88,14 @@ export const FinalCTA: React.FC<FinalCTAProps> = ({ cookiePreferences }) => {
     <section id="cta" className="py-16 md:py-24 px-4 md:px-6 bg-gradient-to-r from-[#fee715] to-[#00C9A7]">
       <div ref={fadeInSection.ref} className={`container mx-auto max-w-4xl text-center px-2 ${fadeInSection.className}`}>
         <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-6xl font-extrabold text-[#101820] mb-6">Gotów na system, który sprzedaje?</h2>
-        <p className="text-lg md:text-xl text-[#101820]/80 max-w-2xl mx-auto mb-6 md:mb-10">
-          Pracuję maksymalnie z 5 klientami miesięcznie. Jeśli chcesz, żebym przygotował taki system dla Ciebie w ciągu najbliższych 6 tygodni - zarezerwuj rozmowę.
-        </p>
-        <p className="text-base md:text-lg text-[#101820]/70 max-w-3xl mx-auto mb-6 md:mb-10 leading-relaxed">
-          Rozmowa jest zupełnie niezobowiązująca - przeanalizujemy wspólnie Twój biznes, ja zaproponuję rozwiązania i ustalimy czy chcemy pracować razem.
-        </p>
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 md:p-8 max-w-4xl mx-auto mb-6 md:mb-10">
+          <p className="text-lg md:text-xl text-[#101820]/90 max-w-2xl mx-auto mb-4">
+            Pracuję maksymalnie z 5 klientami miesięcznie. Jeśli chcesz, żebym przygotował taki system dla Ciebie w ciągu najbliższych 6 tygodni - zarezerwuj rozmowę.
+          </p>
+          <p className="text-base md:text-lg text-[#101820]/70 max-w-3xl mx-auto leading-relaxed">
+            Rozmowa jest zupełnie niezobowiązująca - przeanalizujemy wspólnie Twój biznes, ja zaproponuję rozwiązania i ustalimy czy chcemy pracować razem.
+          </p>
+        </div>
         <div className="mt-6 md:mt-8">
           {cookiePreferences?.performance ? (
             <div ref={calendlyRef} className="calendly-container" style={{minWidth: '320px', height: '700px', position: 'relative', zIndex: 1}}></div>

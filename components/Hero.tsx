@@ -38,7 +38,7 @@ export const Hero: React.FC = () => {
         <p className="text-gray-500 uppercase tracking-widest text-xs md:text-sm mb-6">Pracowałem już z</p>
         <div className="overflow-hidden">
           <div className="flex animate-scroll space-x-8 md:space-x-12">
-            {[...Array(3)].map((_, i) => (
+            {[...Array(4)].map((_, i) => (
               <div key={i} className="flex space-x-8 md:space-x-12 flex-shrink-0">
                 <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Chess.com</span>
                 <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
@@ -59,6 +59,7 @@ export const Hero: React.FC = () => {
                 <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Redlin</span>
                 <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
                 <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Talk Commerce</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
               </div>
             ))}
           </div>

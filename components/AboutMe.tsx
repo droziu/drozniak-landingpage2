@@ -18,18 +18,20 @@ export const AboutMe: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Photo Section */}
           <div ref={fadeInImage.ref} className={`order-2 lg:order-1 ${fadeInImage.className}`}>
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-2xl transform rotate-3"></div>
-              <div className="relative bg-[#101820] rounded-2xl p-2">
+            <div className="relative group cursor-pointer">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-2xl transform rotate-3 group-hover:rotate-6 group-hover:scale-105 transition-all duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] rounded-2xl transform -rotate-3 group-hover:-rotate-6 group-hover:scale-105 transition-all duration-500 opacity-0 group-hover:opacity-100"></div>
+              <div className="relative bg-[#101820] rounded-2xl p-2 group-hover:scale-105 transition-transform duration-500">
                 <img 
                   src="/images/12345.jpg" 
                   alt="Stanisław Drożniak" 
-                  className="w-full h-auto rounded-xl object-cover"
+                  className="w-full h-auto rounded-xl object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 bg-[#fee715] text-[#101820] px-4 py-2 rounded-full font-bold text-sm">
-                Prawie 10 lat doświadczenia
+              <div className="absolute -bottom-4 -right-4 bg-[#fee715] text-[#101820] px-4 py-2 rounded-full font-bold text-sm group-hover:scale-110 transition-transform duration-300">
+                9 lat doświadczenia
               </div>
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
           </div>
 
@@ -45,36 +47,30 @@ export const AboutMe: React.FC = () => {
               </p>
 
               <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
-                Przez lata pomogłem dziesiątkom firm i freelancerów z ich marketingiem, integracją AI i automatyzacją procesów. Wiem, jak wyglądają Twoje zmagania, bo sam przez nie przeszedłem.
+                Przez lata pomogłem dziesiątkom firm i freelancerów z ich marketingiem, integracją AI i automatyzacją procesów. Wiem, jak wyglądają Twoje zmagania, więc prawdopodobnie będę mógł Ci pomóc skuteczniej niż duża agencja.
               </p>
             </div>
 
             {/* Certificates */}
             <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-              <h3 className="font-[Montserrat] text-xl font-bold text-[#fee715] mb-4">Certyfikaty i kwalifikacje</h3>
-              <div className="grid sm:grid-cols-2 gap-3 text-sm md:text-base">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-[#fee715] rounded-full"></div>
-                  <span className="text-gray-300">Certified Social Media Marketing Professional (META)</span>
+              <h3 className="font-[Montserrat] text-xl font-bold text-[#fee715] mb-6 text-center">Certyfikaty i kwalifikacje</h3>
+              <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
+                <div className="bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30 rounded-lg px-4 py-2">
+                  <span className="text-[#fee715] font-bold text-sm md:text-base">META</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-[#fee715] rounded-full"></div>
-                  <span className="text-gray-300">Marketing Certificates (University of California)</span>
+                <div className="bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30 rounded-lg px-4 py-2">
+                  <span className="text-[#fee715] font-bold text-sm md:text-base">Adobe</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-[#fee715] rounded-full"></div>
-                  <span className="text-gray-300">Adobe Certified Professional</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-[#fee715] rounded-full"></div>
-                  <span className="text-gray-300">AI Integration Specialist</span>
+                <div className="bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30 rounded-lg px-4 py-2">
+                  <span className="text-[#fee715] font-bold text-sm md:text-base">University of California</span>
                 </div>
               </div>
             </div>
 
             <div className="bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-6">
               <p className="text-lg md:text-xl text-gray-200 font-medium text-center">
-                "Rozumiem Twoje wyzwania, bo sam przez nie przeszedłem. Mogę pomóc Ci zbudować system, który będzie działał dla Ciebie 24/7."
+                "Rozumiem Twoje wyzwania, bo sam przez nie przeszedłem.<br/>
+                Pomogę Ci zbudować system, który będzie pozyskiwał nowych klientów, niezależnie od poleceń."
               </p>
             </div>
           </div>

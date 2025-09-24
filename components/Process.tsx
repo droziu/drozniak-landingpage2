@@ -35,9 +35,11 @@ export const Process: React.FC = () => {
                 <div ref={fadeInHeader.ref} className={`text-center mb-12 md:mb-16 px-2 ${fadeInHeader.className}`}>
                     <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4">Proces w 4 krokach</h2>
                     <p className="text-base md:text-lg text-gray-400 mb-4 md:mb-6">Od chaosu do przewidywalnego systemu w kilka tygodni.</p>
-                    <p className="text-sm md:text-base text-gray-500 max-w-3xl mx-auto leading-relaxed">
-                        Prowadzę Cię za rękę przez cały proces. Ustalam propozycję, plan działania i rozwiązania. Sam wymyślam narzędzie interaktywne, dopasowane do Twojego biznesu i branży. Po zakupie wszystkie Twoje problemy się rozwiązują.
-                    </p>
+                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 md:p-8 max-w-4xl mx-auto">
+                        <p className="text-sm md:text-base text-gray-300 leading-relaxed">
+                            Prowadzę Cię za rękę przez cały proces. Ustalam propozycję, plan działania i rozwiązania. Sam wymyślam narzędzie interaktywne, dopasowane do Twojego biznesu i branży. Po zakupie wszystkie Twoje problemy się rozwiązują.
+                        </p>
+                    </div>
                 </div>
                 <div className="space-y-8 md:space-y-12">
                     <ProcessStep

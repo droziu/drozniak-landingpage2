@@ -45,63 +45,63 @@ export const CookieConsent: React.FC<CookieConsentProps> = ({ onAccept }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#101820] border-t border-[#fee715] p-4 md:p-6">
-      <div className="container mx-auto max-w-4xl">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#101820] border-t border-[#fee715] p-3 md:p-4">
+      <div className="container mx-auto max-w-3xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <div className="flex-1">
-            <h3 className="font-[Montserrat] text-lg font-bold text-[#fee715] mb-2">
+            <h3 className="font-[Montserrat] text-base font-bold text-[#fee715] mb-2">
               🍪 Zarządzanie plikami cookies
             </h3>
-            <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+            <p className="text-gray-300 text-xs md:text-sm leading-relaxed mb-3">
               Używamy plików cookies, aby zapewnić najlepsze doświadczenie na naszej stronie. 
               Niektóre są niezbędne do działania strony, inne pomagają nam analizować ruch i personalizować treści.
             </p>
-            <div className="mt-3 space-y-2">
-              <label className="flex items-center space-x-2 text-sm text-gray-300">
+            <div className="space-y-1">
+              <label className="flex items-center space-x-2 text-xs text-gray-300">
                 <input 
                   type="checkbox" 
                   checked={preferences.necessary} 
                   disabled 
-                  className="w-4 h-4 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-2"
+                  className="w-3 h-3 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-1"
                 />
                 <span>Niezbędne (zawsze włączone)</span>
               </label>
-              <label className="flex items-center space-x-2 text-sm text-gray-300">
+              <label className="flex items-center space-x-2 text-xs text-gray-300">
                 <input 
                   type="checkbox" 
                   checked={preferences.performance}
                   onChange={(e) => setPreferences(prev => ({ ...prev, performance: e.target.checked }))}
-                  className="w-4 h-4 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-2"
+                  className="w-3 h-3 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-1"
                 />
                 <span>Wydajność (Calendly, zewnętrzne narzędzia)</span>
               </label>
-              <label className="flex items-center space-x-2 text-sm text-gray-300">
+              <label className="flex items-center space-x-2 text-xs text-gray-300">
                 <input 
                   type="checkbox" 
                   checked={preferences.analytics}
                   onChange={(e) => setPreferences(prev => ({ ...prev, analytics: e.target.checked }))}
-                  className="w-4 h-4 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-2"
+                  className="w-3 h-3 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-1"
                 />
                 <span>Analityka (Google Analytics, śledzenie)</span>
               </label>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
               onClick={handleRejectAll}
-              className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors duration-300"
+              className="px-3 py-1.5 text-xs text-gray-400 hover:text-white transition-colors duration-300"
             >
               Odrzuć wszystkie
             </button>
             <button
               onClick={handleAcceptSelected}
-              className="px-4 py-2 text-sm bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors duration-300"
+              className="px-3 py-1.5 text-xs bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors duration-300"
             >
               Zapisz wybór
             </button>
             <button
               onClick={handleAcceptAll}
-              className="px-4 py-2 text-sm bg-[#fee715] text-[#101820] font-bold rounded-md hover:bg-[#ffd600] transition-colors duration-300"
+              className="px-3 py-1.5 text-xs bg-[#fee715] text-[#101820] font-bold rounded-md hover:bg-[#ffd600] transition-colors duration-300"
             >
               Akceptuj wszystkie
             </button>

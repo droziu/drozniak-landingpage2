@@ -5,11 +5,18 @@ import { useFadeIn } from '../hooks/useFadeIn';
 const TestimonialCard: React.FC<{ quote: string; author: string; company: string;}> = ({ quote, author, company }) => {
     const fadeInCard = useFadeIn<HTMLDivElement>();
     return (
-        <div ref={fadeInCard.ref} className={`bg-white/5 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-lg shadow-xl ${fadeInCard.className}`}>
-            <p className="text-gray-300 italic text-base md:text-lg mb-4 md:mb-6 leading-relaxed">"{quote}"</p>
-            <div className="text-right">
-                <p className="font-bold text-white text-sm md:text-base">{author}</p>
-                <p className="text-[#fee715] text-sm md:text-base">{company}</p>
+        <div ref={fadeInCard.ref} className={`group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-lg shadow-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl ${fadeInCard.className}`}>
+            {/* Gradient outline */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#fee715] to-[#00C9A7] opacity-0 group-hover:opacity-30 transition-opacity duration-500 blur-sm"></div>
+            
+            {/* Content */}
+            <div className="relative z-10">
+                <p className="text-gray-300 italic text-base md:text-lg mb-4 md:mb-6 leading-relaxed">"{quote}"</p>
+                <div className="text-right">
+                    <p className="font-bold text-white text-sm md:text-base">{author}</p>
+                    <p className="text-[#fee715] text-sm md:text-base">{company}</p>
+                </div>
             </div>
         </div>
     );
