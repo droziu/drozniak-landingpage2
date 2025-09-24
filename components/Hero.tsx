@@ -11,10 +11,10 @@ export const Hero: React.FC = () => {
   return (
     <section className="min-h-screen flex flex-col justify-center text-center py-12 md:py-20 px-4 md:px-6">
       <div className="container mx-auto max-w-4xl">
-        <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-8 leading-relaxed ${fadeInH1.className}`}>
+        <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-relaxed ${fadeInH1.className}`}>
           Masz klientów tylko z polecenia lub przypadku?
         </h1>
-        <div className="mb-8">
+        <div ref={fadeInH1.ref} className="mb-6">
           <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] hover:from-[#00C9A7] hover:to-[#fee715] bg-clip-text text-transparent font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold leading-relaxed transition-all duration-500 cursor-pointer">Brakuje Ci systemu.</span>
         </div>
         <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-10 px-2 leading-relaxed ${fadeInSub.className}`}>
