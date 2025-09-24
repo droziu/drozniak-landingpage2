@@ -9,7 +9,7 @@ import { Solution } from './components/Solution';
 import { Process } from './components/Process';
 import { CaseStudies } from './components/CaseStudies';
 import { Pricing } from './components/Pricing';
-import { AIPractice } from './components/AIPractice';
+import { TargetAudience } from './components/TargetAudience';
 import { Testimonials } from './components/Testimonials';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
@@ -68,7 +68,7 @@ const App: React.FC = () => {
         <Process />
         <CaseStudies />
         <Pricing />
-        <AIPractice />
+        <TargetAudience />
         <Testimonials />
         <FinalCTA cookiePreferences={cookiePreferences} />
       </main>
