@@ -5,7 +5,7 @@ import { useFadeIn } from '../hooks/useFadeIn';
 const TestimonialCard: React.FC<{ quote: string; author: string; company: string;}> = ({ quote, author, company }) => {
     const fadeInCard = useFadeIn<HTMLDivElement>();
     return (
-        <div ref={fadeInCard.ref} className={`group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-lg shadow-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl ${fadeInCard.className}`}>
+        <div ref={fadeInCard.ref} className={`group relative bg-white/5 backdrop-blur-md border border-white/10 p-6 md:p-8 rounded-lg shadow-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:border-[#fee715]/50 ${fadeInCard.className}`}>
             {/* Gradient outline */}
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#fee715] to-[#00C9A7] opacity-0 group-hover:opacity-30 transition-opacity duration-500 blur-sm"></div>

@@ -69,8 +69,8 @@ export const AboutMe: React.FC = () => {
 
             <div className="bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-6">
               <p className="text-lg md:text-xl text-gray-200 font-medium text-center">
-                "Rozumiem Twoje wyzwania, bo sam przez nie przeszedłem.<br/>
-                Pomogę Ci zbudować system, który będzie pozyskiwał nowych klientów, niezależnie od poleceń."
+                "Rozumiem Twoje problemy i frustracje biznesowe.<br/>
+                Wspólnie możemy popracować nad Twoim marketingiem i stworzyć działający system."
               </p>
             </div>
           </div>

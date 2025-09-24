@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
           <div className="md:col-span-1">
             <h4 className="font-[Montserrat] text-lg font-bold text-white mb-4">O mnie</h4>
             <p className="text-sm leading-relaxed">
-              Pomagam małym firmom i freelancerom budować systemy marketingowe, które realnie wpływają na wyniki. Łączę strategię, technologię i AI, aby tworzyć rozwiązania, które działają.
+              Pomagam małym firmom i freelancerom tworzyć systemy marketingowe, które realnie zwiększają wyniki. Łączę strategię, technologię i AI, aby dostarczać rozwiązania, które po prostu działają.
             </p>
           </div>
 
@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
              <div className="text-2xl font-bold font-[Montserrat] text-[#fee715] mb-4">
                <Logo />
              </div>
-             <p className="text-sm">&copy; {new Date().getFullYear()} Twoja Nazwa Firmy. Wszelkie prawa zastrzeżone.</p>
+             <p className="text-sm">&copy; {new Date().getFullYear()} Drozniak.com Wszelkie prawa zastrzeżone.</p>
           </div>
 
           <div className="md:col-span-1 md:text-right">

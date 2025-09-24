@@ -18,7 +18,7 @@ export const StickyCTA: React.FC<StickyCTAProps> = ({ isVisible }) => {
         }}
         className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-2 md:py-3 px-4 md:px-6 rounded-full shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 text-sm md:text-base"
       >
-        <span>Umów rozmowę</span>
+        <span>Zacznij Tutaj</span>
       </a>
     </div>
   );
