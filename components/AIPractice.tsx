@@ -24,8 +24,8 @@ export const AIPractice: React.FC = () => {
           <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">To nie magia, a konkretne narzędzia, które wykonują za Ciebie powtarzalną pracę.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-start">
-          <div className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+          <div className="space-y-6 flex flex-col">
             <AIPracticeItem title="Inteligentne tagowanie leadów">
                 Na podstawie odpowiedzi w interaktywnym narzędziu, system AI sam ocenia, czy dany klient jest "gorący", "ciepły" czy "zimny", i odpowiednio go oznacza w Twojej bazie.
             </AIPracticeItem>
@@ -33,7 +33,7 @@ export const AIPractice: React.FC = () => {
                 System automatycznie generuje i wysyła pierwszego maila do klienta, używając informacji z formularza, aby treść była idealnie dopasowana do jego potrzeb.
             </AIPracticeItem>
           </div>
-          <div className="space-y-6">
+          <div className="space-y-6 flex flex-col">
             <AIPracticeItem title="Automatyczne podsumowania dla Ciebie">
                 Po każdym wypełnieniu formularza, AI tworzy krótkie, zwięzłe podsumowanie potrzeb klienta i wysyła je do Ciebie, abyś był zawsze przygotowany do rozmowy.
             </AIPracticeItem>

@@ -1,14 +1,20 @@
 
 import React from 'react';
 import { useFadeIn } from '../hooks/useFadeIn';
-import { ZapIcon } from './icons/ZapIcon';
+import { RocketIcon } from './icons/RocketIcon';
 
 export const FomoAI: React.FC = () => {
     const fadeInSection = useFadeIn<HTMLDivElement>();
   return (
     <section ref={fadeInSection.ref} className={`py-20 px-6 bg-gradient-to-b from-[#18232F] to-[#101820] ${fadeInSection.className}`}>
       <div className="container mx-auto max-w-4xl text-center">
-        <ZapIcon className="w-16 h-16 text-[#fee715] mx-auto mb-6" />
+        <div className="relative inline-block">
+          <RocketIcon className="w-16 h-16 text-[#fee715] mx-auto mb-6 animate-bounce" />
+          <div className="absolute inset-0 w-16 h-16 mx-auto">
+            <div className="absolute inset-0 bg-[#fee715]/20 rounded-full animate-ping"></div>
+            <div className="absolute inset-2 bg-[#fee715]/10 rounded-full animate-pulse"></div>
+          </div>
+        </div>
         <h2 className="font-[Montserrat] text-4xl md:text-5xl font-extrabold mb-6">Jesteśmy w erze AI. Wykorzystaj to.</h2>
         <p className="text-lg text-gray-300 leading-relaxed mb-8 max-w-3xl mx-auto">
           Interaktywne narzędzia konwertują <span className="text-[#fee715] font-bold">2–3× lepiej</span> niż PDF-y. AI segmentuje i podpowiada, kto jest naprawdę zainteresowany. Za rok większość firm to wdroży - pytanie, czy chcesz być pierwszy, czy ostatni?
