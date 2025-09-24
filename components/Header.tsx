@@ -4,7 +4,7 @@ import { Logo } from './icons/Logo';
 
 export const Header: React.FC = () => {
   const navLinks = [
-    { href: '#rozwiazanie', label: 'Rozwiązanie' },
+    { href: '#rozwiazanie', label: 'Na Czym To Polega?' },
     { href: '#case', label: 'Case Studies' },
     { href: '#cena', label: 'Cena' },
   ];
