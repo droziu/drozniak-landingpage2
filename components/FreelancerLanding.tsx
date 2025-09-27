@@ -228,7 +228,7 @@ export const FreelancerLanding: React.FC = () => {
           </div>
 
           {/* Real Examples */}
-          <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-2xl p-6 md:p-8 lg:p-12 mb-12 md:mb-16">
+          <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-2xl p-6 md:p-8 lg:p-12 mb-8 md:mb-12">
             <h3 className="font-[Montserrat] text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center text-white">
               Przykłady tego, co otrzymujesz:
             </h3>
