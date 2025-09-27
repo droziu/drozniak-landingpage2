@@ -1,17 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { AboutMe } from './components/AboutMe';
-import { Problem } from './components/Problem';
-import { FomoAI } from './components/FomoAI';
-import { Solution } from './components/Solution';
-import { Process } from './components/Process';
-import { CaseStudies } from './components/CaseStudies';
-import { Pricing } from './components/Pricing';
-import { TargetAudience } from './components/TargetAudience';
-import { Testimonials } from './components/Testimonials';
-import { FinalCTA } from './components/FinalCTA';
+import { AIStrategyPage } from './components/AIStrategyPage';
+import { FreelancerLanding } from './components/FreelancerLanding';
 import { Footer } from './components/Footer';
 import { StickyCTA } from './components/StickyCTA';
 import { CookieConsent } from './components/CookieConsent';
@@ -57,25 +49,18 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
-      <Header />
-      <main>
-        <Hero />
-        <AboutMe />
-        <Problem />
-        <FomoAI />
-        <Solution />
-        <Process />
-        <CaseStudies />
-        <Pricing />
-        <TargetAudience />
-        <Testimonials />
-        <FinalCTA cookiePreferences={cookiePreferences} />
-      </main>
-      <Footer />
-      <StickyCTA isVisible={isStickyCtaVisible} />
-      <CookieConsent onAccept={handleCookieAccept} />
-    </div>
+    <Router>
+      <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
+        <Header />
+        <Routes>
+          <Route path="/" element={<AIStrategyPage cookiePreferences={cookiePreferences} />} />
+          <Route path="/freelancer" element={<FreelancerLanding />} />
+        </Routes>
+        <Footer />
+        <StickyCTA isVisible={isStickyCtaVisible} />
+        <CookieConsent onAccept={handleCookieAccept} />
+      </div>
+    </Router>
   );
 };
 

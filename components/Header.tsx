@@ -1,9 +1,16 @@
 
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Logo } from './icons/Logo';
 
 export const Header: React.FC = () => {
-  const navLinks = [
+  const location = useLocation();
+  const isFreelancerPage = location.pathname === '/freelancer';
+  
+  const navLinks = isFreelancerPage ? [
+    { href: '#process', label: 'Jak To Działa?' },
+    { href: '#cta', label: 'Konsultacja' },
+  ] : [
     { href: '#rozwiazanie', label: 'Na Czym To Polega?' },
     { href: '#case', label: 'Case Studies' },
     { href: '#cena', label: 'Cena' },
@@ -19,14 +26,39 @@ export const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-50 bg-[#101820]/90 backdrop-blur-xl border-b border-white/10">
       <div className="container mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center">
-        <a href="#" className="text-xl md:text-2xl font-bold font-[Montserrat] text-[#fee715] group">
+        <Link to="/" className="text-xl md:text-2xl font-bold font-[Montserrat] text-[#fee715] group">
           <div className="relative">
             <Logo />
             <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
           </div>
-        </a>
+        </Link>
         
         <nav className="hidden md:flex items-center space-x-2">
+          {/* Page Navigation */}
+          <div className="flex items-center space-x-1 mr-4">
+            <Link 
+              to="/" 
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                !isFreelancerPage 
+                  ? 'bg-[#fee715] text-[#101820]' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              AI Strategy
+            </Link>
+            <Link 
+              to="/freelancer" 
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                isFreelancerPage 
+                  ? 'bg-[#fee715] text-[#101820]' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              Freelancer Sites
+            </Link>
+          </div>
+          
+          {/* Section Navigation */}
           {navLinks.map((link, index) => (
             <a 
               key={link.href} 
@@ -53,7 +85,7 @@ export const Header: React.FC = () => {
           }}
           className="group relative bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-2 px-4 md:px-6 rounded-lg hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:-translate-y-1 transition-all duration-300 text-sm md:text-base overflow-hidden"
         >
-          <span className="relative z-10">Umów rozmowę</span>
+          <span className="relative z-10">{isFreelancerPage ? 'Umów konsultację' : 'Umów rozmowę'}</span>
           <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </a>
       </div>
