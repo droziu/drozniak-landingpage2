@@ -78,7 +78,7 @@ export const FreelancerLanding: React.FC = () => {
       {/* Why Section */}
       <section id="why" className="py-20 md:py-28 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <h2 className="font-[Montserrat] text-3xl md:text-5xl font-bold mb-8 text-white">
               Dlaczego portfolio to za mało?
             </h2>
@@ -87,7 +87,7 @@ export const FreelancerLanding: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="space-y-8">
               <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 hover:bg-red-500/15 transition-all duration-300">
                 <div className="flex items-center mb-4">
@@ -213,7 +213,7 @@ export const FreelancerLanding: React.FC = () => {
             Dlaczego to jest lepsze niż agencja?
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-12 mb-20">
+          <div className="grid md:grid-cols-2 gap-12 mb-12">
             {/* Traditional Agency */}
             <div className="bg-red-500/5 border border-red-500/20 rounded-2xl p-8">
               <h3 className="text-2xl font-bold mb-6 text-red-300">Typowa Agencja</h3>
