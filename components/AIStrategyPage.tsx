@@ -1,15 +1,15 @@
 import React from 'react';
-import { Hero } from './components/Hero';
-import { AboutMe } from './components/AboutMe';
-import { Problem } from './components/Problem';
-import { FomoAI } from './components/FomoAI';
-import { Solution } from './components/Solution';
-import { Process } from './components/Process';
-import { CaseStudies } from './components/CaseStudies';
-import { Pricing } from './components/Pricing';
-import { TargetAudience } from './components/TargetAudience';
-import { Testimonials } from './components/Testimonials';
-import { FinalCTA } from './components/FinalCTA';
+import { Hero } from './Hero';
+import { AboutMe } from './AboutMe';
+import { Problem } from './Problem';
+import { FomoAI } from './FomoAI';
+import { Solution } from './Solution';
+import { Process } from './Process';
+import { CaseStudies } from './CaseStudies';
+import { Pricing } from './Pricing';
+import { TargetAudience } from './TargetAudience';
+import { Testimonials } from './Testimonials';
+import { FinalCTA } from './FinalCTA';
 
 interface AIStrategyPageProps {
   cookiePreferences: {
