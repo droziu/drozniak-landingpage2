@@ -82,7 +82,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Why Section */}
-      <section id="why" className="py-12 md:py-16 lg:py-20 px-4 md:px-6">
+      <section id="why" className="py-6 md:py-8 lg:py-10 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white">
@@ -254,7 +254,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Process Section */}
-      <section id="process" className="py-12 md:py-16 lg:py-20 px-4 md:px-6 bg-gradient-to-b from-transparent to-white/5">
+      <section id="process" className="py-6 md:py-8 lg:py-10 px-4 md:px-6 bg-gradient-to-b from-transparent to-white/5">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-white">
             Jak to działa?
@@ -293,7 +293,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Pricing Comparison */}
-      <section id="pricing" className="py-12 md:py-16 lg:py-20 px-4 md:px-6">
+      <section id="pricing" className="py-6 md:py-8 lg:py-10 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
           <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-white">
             Dlaczego to jest lepsze niż agencja?
@@ -415,7 +415,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section id="cta" className="py-12 md:py-16 lg:py-20 px-4 md:px-6 bg-gradient-to-b from-white/5 to-transparent">
+      <section id="cta" className="py-6 md:py-8 lg:py-10 px-4 md:px-6 bg-gradient-to-b from-white/5 to-transparent">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white">
             Gotowy na zmianę?
