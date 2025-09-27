@@ -17,7 +17,7 @@ export const FreelancerLanding: React.FC = () => {
   return (
     <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
           {/* Hero Section */}
-          <section className="min-h-screen flex flex-col justify-center text-center py-4 md:py-24 px-4 md:px-6 relative">
+          <section className="min-h-screen flex flex-col justify-center text-center py-2 md:py-24 px-4 md:px-6 relative">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-10 w-32 h-32 bg-[#fee715]/10 rounded-full blur-xl animate-pulse"></div>
