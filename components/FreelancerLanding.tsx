@@ -11,7 +11,7 @@ export const FreelancerLanding: React.FC = () => {
   return (
     <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col justify-center text-center py-12 md:py-20 px-4 md:px-6 relative">
+      <section className="min-h-screen flex flex-col justify-center text-center py-16 md:py-24 px-4 md:px-6 relative">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-10 w-32 h-32 bg-[#fee715]/10 rounded-full blur-xl animate-pulse"></div>
@@ -46,7 +46,7 @@ export const FreelancerLanding: React.FC = () => {
             <p className="text-gray-400 text-sm">Bezpłatna konsultacja • 30 minut online • Zero zobowiązań</p>
           </div>
         </div>
-        <div ref={fadeInTrust.ref} className={`container mx-auto mt-12 md:mt-16 text-center px-4 ${fadeInTrust.className}`}>
+        <div ref={fadeInTrust.ref} className={`container mx-auto mt-16 md:mt-20 text-center px-4 ${fadeInTrust.className}`}>
           <p className="text-gray-500 uppercase tracking-widest text-xs md:text-sm mb-6">Strony dla freelancerów z branż</p>
           <div className="overflow-hidden">
             <div className="flex animate-scroll space-x-8 md:space-x-12">
@@ -76,9 +76,9 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Why Section */}
-      <section id="why" className="py-16 md:py-24 px-4 md:px-6">
+      <section id="why" className="py-20 md:py-28 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <h2 className="font-[Montserrat] text-3xl md:text-5xl font-bold mb-8 text-white">
               Dlaczego portfolio to za mało?
             </h2>
@@ -87,7 +87,7 @@ export const FreelancerLanding: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
             <div className="space-y-8">
               <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 hover:bg-red-500/15 transition-all duration-300">
                 <div className="flex items-center mb-4">
@@ -168,7 +168,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Process Section */}
-      <section id="process" className="py-16 md:py-24 px-4 md:px-6 bg-gradient-to-b from-transparent to-white/5">
+      <section id="process" className="py-20 md:py-28 px-4 md:px-6 bg-gradient-to-b from-transparent to-white/5">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-[Montserrat] text-3xl md:text-5xl font-bold mb-12 text-center text-white">
             Jak to działa?
@@ -207,13 +207,13 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Pricing Comparison */}
-      <section id="pricing" className="py-16 md:py-24 px-4 md:px-6">
+      <section id="pricing" className="py-20 md:py-28 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
           <h2 className="font-[Montserrat] text-3xl md:text-5xl font-bold mb-12 text-center text-white">
             Dlaczego to jest lepsze niż agencja?
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-12 mb-16">
+          <div className="grid md:grid-cols-2 gap-12 mb-20">
             {/* Traditional Agency */}
             <div className="bg-red-500/5 border border-red-500/20 rounded-2xl p-8">
               <h3 className="text-2xl font-bold mb-6 text-red-300">Typowa Agencja</h3>
@@ -315,7 +315,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section id="cta" className="py-16 md:py-24 px-4 md:px-6 bg-gradient-to-b from-white/5 to-transparent">
+      <section id="cta" className="py-20 md:py-28 px-4 md:px-6 bg-gradient-to-b from-white/5 to-transparent">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-[Montserrat] text-3xl md:text-5xl font-bold mb-8 text-white">
             Gotowy na zmianę?

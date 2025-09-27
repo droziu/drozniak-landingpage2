@@ -6,24 +6,6 @@ import { Logo } from './icons/Logo';
 export const Header: React.FC = () => {
   const location = useLocation();
   const isFreelancerPage = location.pathname === '/freelancer';
-  
-  const navLinks = isFreelancerPage ? [
-    { href: '#why', label: 'Dlaczego To Działa?' },
-    { href: '#process', label: 'Jak To Działa?' },
-    { href: '#pricing', label: 'Cena' },
-    { href: '#cta', label: 'Kontakt' },
-  ] : [
-    { href: '#rozwiazanie', label: 'Na Czym To Polega?' },
-    { href: '#case', label: 'Case Studies' },
-    { href: '#cena', label: 'Cena' },
-  ];
-
-  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
-    e.preventDefault();
-    document.querySelector(href)?.scrollIntoView({
-      behavior: 'smooth'
-    });
-  };
 
   return (
     <header className="sticky top-0 z-50 bg-[#101820]/95 backdrop-blur-xl border-b border-white/10">
@@ -35,52 +17,32 @@ export const Header: React.FC = () => {
           </div>
         </Link>
         
-        {/* Premium Page Navigation */}
-        <div className="flex items-center space-x-1 bg-white/5 rounded-xl p-1 border border-white/10">
+        {/* Wave-style Page Navigation */}
+        <div className="flex items-center bg-white/5 rounded-full p-1 border border-white/10 relative overflow-hidden">
+          {/* Wave background effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 rounded-full opacity-50"></div>
+          
           <Link 
             to="/" 
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 relative overflow-hidden ${
+            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 relative z-10 ${
               !isFreelancerPage 
-                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg' 
+                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg transform scale-105' 
                 : 'text-gray-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            <span className="relative z-10">Full Package</span>
-            {!isFreelancerPage && (
-              <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-            )}
+            Full Package
           </Link>
           <Link 
             to="/freelancer" 
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 relative overflow-hidden ${
+            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 relative z-10 ${
               isFreelancerPage 
-                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg' 
+                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg transform scale-105' 
                 : 'text-gray-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            <span className="relative z-10">Freelancer Landing Page</span>
-            {isFreelancerPage && (
-              <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-            )}
+            Freelancer Landing Page
           </Link>
         </div>
-        
-        {/* Section Navigation - Only show on desktop */}
-        <nav className="hidden lg:flex items-center space-x-2">
-          {navLinks.map((link, index) => (
-            <a 
-              key={link.href} 
-              href={link.href} 
-              onClick={(e) => handleSmoothScroll(e, link.href)}
-              className="group relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/10 text-sm font-medium"
-            >
-              <span className="relative z-10 text-gray-300 group-hover:text-white transition-colors duration-300">
-                {link.label}
-              </span>
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-[#fee715] to-[#00C9A7] group-hover:w-3/4 transition-all duration-300"></div>
-            </a>
-          ))}
-        </nav>
         
         {/* CTA Button */}
         <a 
