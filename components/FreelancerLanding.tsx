@@ -17,7 +17,7 @@ export const FreelancerLanding: React.FC = () => {
   return (
     <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
           {/* Hero Section */}
-          <section className="min-h-screen flex flex-col justify-center text-center py-8 md:py-24 px-4 md:px-6 relative">
+          <section className="min-h-screen flex flex-col justify-center text-center py-4 md:py-24 px-4 md:px-6 relative">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-10 w-32 h-32 bg-[#fee715]/10 rounded-full blur-xl animate-pulse"></div>
@@ -176,44 +176,44 @@ export const FreelancerLanding: React.FC = () => {
             
             <div className="grid md:grid-cols-2 gap-6 md:gap-8">
               <div className="space-y-4">
-                <h4 className="text-lg md:text-xl font-bold text-red-300 mb-3">❌ Typowe problemy:</h4>
+                <h4 className="text-lg md:text-xl font-bold text-red-300 mb-3">Typowe problemy:</h4>
                     <div className="space-y-3">
                       <div className="flex items-start">
-                        <CrossIcon className="w-4 h-4 text-red-400 mr-3 mt-1 flex-shrink-0" />
+                        <span className="text-red-400 mr-3 mt-1">•</span>
                         <p className="text-gray-300 text-sm md:text-base">Strona nie działa na telefonie</p>
                       </div>
                       <div className="flex items-start">
-                        <CrossIcon className="w-4 h-4 text-red-400 mr-3 mt-1 flex-shrink-0" />
+                        <span className="text-red-400 mr-3 mt-1">•</span>
                         <p className="text-gray-300 text-sm md:text-base">Tekst za mały do czytania</p>
                       </div>
                       <div className="flex items-start">
-                        <CrossIcon className="w-4 h-4 text-red-400 mr-3 mt-1 flex-shrink-0" />
+                        <span className="text-red-400 mr-3 mt-1">•</span>
                         <p className="text-gray-300 text-sm md:text-base">Przyciski za małe do kliknięcia</p>
                       </div>
                       <div className="flex items-start">
-                        <CrossIcon className="w-4 h-4 text-red-400 mr-3 mt-1 flex-shrink-0" />
+                        <span className="text-red-400 mr-3 mt-1">•</span>
                         <p className="text-gray-300 text-sm md:text-base">Wolne ładowanie na telefonie</p>
                       </div>
                     </div>
               </div>
               
               <div className="space-y-4">
-                <h4 className="text-lg md:text-xl font-bold text-[#fee715] mb-3">✅ Co otrzymujesz:</h4>
+                <h4 className="text-lg md:text-xl font-bold text-[#fee715] mb-3">Co otrzymujesz:</h4>
                 <div className="space-y-3">
                   <div className="flex items-start">
-                    <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 mt-1 flex-shrink-0" />
+                    <span className="text-[#fee715] mr-3 mt-1">•</span>
                     <p className="text-gray-300 text-sm md:text-base">Strona wygląda świetnie na każdym urządzeniu</p>
                   </div>
                   <div className="flex items-start">
-                    <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 mt-1 flex-shrink-0" />
+                    <span className="text-[#fee715] mr-3 mt-1">•</span>
                     <p className="text-gray-300 text-sm md:text-base">Czytelny tekst i intuicyjna nawigacja</p>
                   </div>
                   <div className="flex items-start">
-                    <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 mt-1 flex-shrink-0" />
+                    <span className="text-[#fee715] mr-3 mt-1">•</span>
                     <p className="text-gray-300 text-sm md:text-base">Przyciski dostosowane do dotyku</p>
                   </div>
                   <div className="flex items-start">
-                    <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 mt-1 flex-shrink-0" />
+                    <span className="text-[#fee715] mr-3 mt-1">•</span>
                     <p className="text-gray-300 text-sm md:text-base">Błyskawiczne ładowanie na telefonie</p>
                   </div>
                 </div>
@@ -235,8 +235,8 @@ export const FreelancerLanding: React.FC = () => {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               <div className="text-center">
                 <div className="bg-[#fee715] text-[#101820] text-2xl md:text-3xl font-bold w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">1</div>
-                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Pierwsze wrażenie, które sprzedaje</h4>
-                <p className="text-gray-300 text-xs md:text-sm">Nie zwykłe „Oto moje prace", ale komunikat: „Rozwiązuję Twój problem X w sposób Y, który daje rezultat Z". Klient od razu widzi, dlaczego powinien wybrać właśnie Ciebie.</p>
+                    <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Pierwsze wrażenie,<br />które sprzedaje</h4>
+                    <p className="text-gray-300 text-xs md:text-sm">Nie „Oto moje prace", ale: „Rozwiązuję Twój problem X w sposób Y, który daje rezultat Z".</p>
               </div>
               <div className="text-center">
                 <div className="bg-[#fee715] text-[#101820] text-2xl md:text-3xl font-bold w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">2</div>
@@ -305,31 +305,31 @@ export const FreelancerLanding: React.FC = () => {
               <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-red-300">Typowa Agencja</h3>
                   <div className="space-y-3 md:space-y-4">
                     <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
+                      <span className="text-red-400 mr-3 flex-shrink-0">•</span>
                       <span className="text-gray-300 text-sm md:text-base">Koszt: 3000+ PLN</span>
                     </div>
                     <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
+                      <span className="text-red-400 mr-3 flex-shrink-0">•</span>
                       <span className="text-gray-300 text-sm md:text-base">Szablon + logo</span>
                     </div>
                     <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
+                      <span className="text-red-400 mr-3 flex-shrink-0">•</span>
                       <span className="text-gray-300 text-sm md:text-base">Brak wiedzy marketingowej</span>
                     </div>
                     <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
+                      <span className="text-red-400 mr-3 flex-shrink-0">•</span>
                       <span className="text-gray-300 text-sm md:text-base">Nie można zweryfikować jakości</span>
                     </div>
                     <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
+                      <span className="text-red-400 mr-3 flex-shrink-0">•</span>
                       <span className="text-gray-300 text-sm md:text-base">Strona jak tysiące innych</span>
                     </div>
                     <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
+                      <span className="text-red-400 mr-3 flex-shrink-0">•</span>
                       <span className="text-gray-300 text-sm md:text-base">+ Koszt copywritera (1000+ PLN)</span>
                     </div>
                     <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
+                      <span className="text-red-400 mr-3 flex-shrink-0">•</span>
                       <span className="text-gray-300 text-sm md:text-base">Słaba optymalizacja mobilna</span>
                     </div>
                   </div>
@@ -347,31 +347,31 @@ export const FreelancerLanding: React.FC = () => {
               <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-white">Moja Usługa</h3>
               <div className="space-y-3 md:space-y-4">
                 <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
+                  <span className="text-[#fee715] mr-3 flex-shrink-0">•</span>
                   <span className="text-gray-300 text-sm md:text-base">Koszt: 1500-2500 PLN</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
+                  <span className="text-[#fee715] mr-3 flex-shrink-0">•</span>
                   <span className="text-gray-300 text-sm md:text-base">Unikalny design</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
+                  <span className="text-[#fee715] mr-3 flex-shrink-0">•</span>
                   <span className="text-gray-300 text-sm md:text-base">Wiedza marketingowa</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
+                  <span className="text-[#fee715] mr-3 flex-shrink-0">•</span>
                   <span className="text-gray-300 text-sm md:text-base">Optymalizacja pod konwersję</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
+                  <span className="text-[#fee715] mr-3 flex-shrink-0">•</span>
                   <span className="text-gray-300 text-sm md:text-base">Twoja strona ma unikalny design</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
+                  <span className="text-[#fee715] mr-3 flex-shrink-0">•</span>
                   <span className="text-gray-300 text-sm md:text-base">Copywriting w cenie</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
+                  <span className="text-[#fee715] mr-3 flex-shrink-0">•</span>
                   <span className="text-gray-300 text-sm md:text-base">Podłączamy Twoją domenę, a Ty otrzymujesz moje pełne wsparcie przez kolejne 60 dni</span>
                 </div>
               </div>
