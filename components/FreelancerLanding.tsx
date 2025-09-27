@@ -21,10 +21,10 @@ export const FreelancerLanding: React.FC = () => {
         
         <div className="container mx-auto max-w-4xl relative z-10">
           <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-tight md:leading-relaxed ${fadeInH1.className}`}>
-            Twój freelancing zasługuje na
+            Strona, która sprzedaje Twoje usługi,
           </h1>
           <div ref={fadeInYellow.ref} className={`mb-4 md:mb-6 ${fadeInYellow.className}`}>
-            <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] hover:from-[#00C9A7] hover:to-[#fee715] bg-clip-text text-transparent font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight md:leading-relaxed transition-all duration-500 cursor-pointer">profesjonalną stronę.</span>
+            <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] hover:from-[#00C9A7] hover:to-[#fee715] bg-clip-text text-transparent font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight md:leading-relaxed transition-all duration-500 cursor-pointer">a nie tylko ładnie wygląda.</span>
           </div>
           <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 md:mb-10 px-2 leading-relaxed ${fadeInSub.className}`}>
             <p className="mb-6 text-gray-200 font-medium">Jako były video-editor freelancer i obecny specjalista marketingu, łączę wiedzę z obu światów, aby stworzyć strony, które nie tylko wyglądają świetnie, ale przede wszystkim <span style={{color: '#fee715'}}>konwertują i budują Twoją ekspertyzę.</span></p>
