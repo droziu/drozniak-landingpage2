@@ -76,7 +76,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Why Section */}
-      <section id="why" className="py-16 md:py-20 lg:py-28 px-4 md:px-6">
+      <section id="why" className="py-12 md:py-16 lg:py-20 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white">
@@ -144,7 +144,11 @@ export const FreelancerLanding: React.FC = () => {
           {/* Mobile Optimization Section */}
           <div className="bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-2xl p-6 md:p-8 lg:p-12 mb-8 md:mb-12">
             <div className="text-center mb-6 md:mb-8">
-              <div className="text-[#fee715] text-4xl md:text-5xl mb-4">📱</div>
+              <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 md:w-10 md:h-10 bg-[#101820] rounded-full flex items-center justify-center">
+                  <div className="w-4 h-4 md:w-5 md:h-5 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-sm"></div>
+                </div>
+              </div>
               <h3 className="font-[Montserrat] text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-white">
                 Perfekcyjna optymalizacja mobilna
               </h3>
@@ -215,18 +219,18 @@ export const FreelancerLanding: React.FC = () => {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               <div className="text-center">
                 <div className="bg-[#fee715] text-[#101820] text-2xl md:text-3xl font-bold w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">1</div>
-                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Hero Section</h4>
-                <p className="text-gray-300 text-xs md:text-sm">Nie "Oto moje prace", ale "Rozwiązuję Twój problem X w sposób Y, który daje rezultat Z"</p>
+                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Pierwsze wrażenie, które sprzedaje</h4>
+                <p className="text-gray-300 text-xs md:text-sm">Nie zwykłe „Oto moje prace", ale komunikat: „Rozwiązuję Twój problem X w sposób Y, który daje rezultat Z". Klient od razu widzi, dlaczego powinien wybrać właśnie Ciebie.</p>
               </div>
               <div className="text-center">
                 <div className="bg-[#fee715] text-[#101820] text-2xl md:text-3xl font-bold w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">2</div>
-                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Proces Pracy</h4>
-                <p className="text-gray-300 text-xs md:text-sm">Pokazujesz, jak pracujesz, co klient otrzyma i dlaczego to jest lepsze niż u konkurencji</p>
+                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Twoja metoda, która wyróżnia Cię na tle konkurencji</h4>
+                <p className="text-gray-300 text-xs md:text-sm">Przejrzysty proces pokazujący, dlaczego współpraca z Tobą to gwarancja efektu. To buduje zaufanie i eliminuje wątpliwości.</p>
               </div>
               <div className="text-center sm:col-span-2 lg:col-span-1">
                 <div className="bg-[#fee715] text-[#101820] text-2xl md:text-3xl font-bold w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">3</div>
-                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Social Proof</h4>
-                <p className="text-gray-300 text-xs md:text-sm">Opinie klientów, case studies, liczby - wszystko co buduje zaufanie i ekspertyzę</p>
+                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Dowody, które zamieniają ciekawość w zaufanie</h4>
+                <p className="text-gray-300 text-xs md:text-sm">Opinie klientów, liczby, case studies – twarde fakty, które potwierdzają, że jesteś ekspertem i naprawdę dowozisz wyniki.</p>
               </div>
             </div>
           </div>
@@ -234,7 +238,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Process Section */}
-      <section id="process" className="py-16 md:py-20 lg:py-28 px-4 md:px-6 bg-gradient-to-b from-transparent to-white/5">
+      <section id="process" className="py-12 md:py-16 lg:py-20 px-4 md:px-6 bg-gradient-to-b from-transparent to-white/5">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-white">
             Jak to działa?
@@ -273,7 +277,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* Pricing Comparison */}
-      <section id="pricing" className="py-16 md:py-20 lg:py-28 px-4 md:px-6">
+      <section id="pricing" className="py-12 md:py-16 lg:py-20 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
           <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-white">
             Dlaczego to jest lepsze niż agencja?
@@ -322,7 +326,7 @@ export const FreelancerLanding: React.FC = () => {
             {/* My Service */}
             <div className="bg-gradient-to-br from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/30 rounded-2xl p-6 md:p-8 relative overflow-hidden">
               <div className="absolute top-3 md:top-4 right-3 md:right-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] px-3 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold shadow-lg">
-                🏆 OFERTA PREMIUM
+                OFERTA PREMIUM
               </div>
               <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-white">Moja Usługa</h3>
               <div className="space-y-3 md:space-y-4">
@@ -344,7 +348,7 @@ export const FreelancerLanding: React.FC = () => {
                 </div>
                 <div className="flex items-center">
                   <span className="text-[#fee715] mr-3">✅</span>
-                  <span className="text-gray-300 text-sm md:text-base">Strona jak żadna inna</span>
+                  <span className="text-gray-300 text-sm md:text-base">Twoja strona ma unikalny design</span>
                 </div>
                 <div className="flex items-center">
                   <span className="text-[#fee715] mr-3">✅</span>
@@ -352,7 +356,7 @@ export const FreelancerLanding: React.FC = () => {
                 </div>
                 <div className="flex items-center">
                   <span className="text-[#fee715] mr-3">✅</span>
-                  <span className="text-gray-300 text-sm md:text-base">Perfekcyjna optymalizacja mobilna</span>
+                  <span className="text-gray-300 text-sm md:text-base">Podłączamy Twoją domenę, a Ty otrzymujesz moje pełne wsparcie przez kolejne 60 dni</span>
                 </div>
               </div>
               <div className="mt-4 md:mt-6 p-3 md:p-4 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-lg">
@@ -369,19 +373,25 @@ export const FreelancerLanding: React.FC = () => {
             </h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               <div>
-                <div className="text-[#fee715] text-3xl md:text-4xl mb-3 md:mb-4">👤</div>
+                <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-[#101820] rounded-full"></div>
+                </div>
                 <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Pracuję sam</h4>
                 <p className="text-gray-300 text-xs md:text-sm">Nie mam zespołu, biura, kosztów operacyjnych. Cały budżet idzie na jakość.</p>
               </div>
               <div>
-                <div className="text-[#fee715] text-3xl md:text-4xl mb-3 md:mb-4">🏢</div>
+                <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-[#101820] rounded-full"></div>
+                </div>
                 <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Doświadczenie z korporacjami</h4>
-                <p className="text-gray-300 text-xs md:text-sm">Pracowałem z firmami wartymi miliony. Znam, co działa w marketingu.</p>
+                <p className="text-gray-300 text-xs md:text-sm">Pracowałem z firmami wartymi miliony. Wiem, co sprzedaje, a co nie.</p>
               </div>
               <div className="sm:col-span-2 lg:col-span-1">
-                <div className="text-[#fee715] text-3xl md:text-4xl mb-3 md:mb-4">⚡</div>
+                <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-[#101820] rounded-full"></div>
+                </div>
                 <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Szybkość działania</h4>
-                <p className="text-gray-300 text-xs md:text-sm">Bez biurokracji, bez długich procesów. Szybko, sprawnie, skutecznie.</p>
+                <p className="text-gray-300 text-xs md:text-sm">Bez biurokracji, bez długich procesów. Stronę otrzymasz w ciągu maksymalnie 21 dni.</p>
               </div>
             </div>
           </div>
@@ -389,7 +399,7 @@ export const FreelancerLanding: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section id="cta" className="py-16 md:py-20 lg:py-28 px-4 md:px-6 bg-gradient-to-b from-white/5 to-transparent">
+      <section id="cta" className="py-12 md:py-16 lg:py-20 px-4 md:px-6 bg-gradient-to-b from-white/5 to-transparent">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white">
             Gotowy na zmianę?
@@ -403,13 +413,13 @@ export const FreelancerLanding: React.FC = () => {
               href="mailto:stanislaw@drozniak.com?subject=Konsultacja - Strona dla freelancera&body=Cześć! Chciałbym/chciałabym umówić się na konsultację dotyczącą nowej strony internetowej."
               className="bg-[#fee715] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-base md:text-lg lg:text-xl hover:bg-gradient-to-r hover:from-[#fee715] hover:to-[#00C9A7] hover:shadow-2xl hover:shadow-[#fee715]/30 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center"
             >
-              📧 Wyślij email
+              Wyślij email
             </a>
             <a 
               href="tel:+48123456789"
               className="bg-gradient-to-r from-[#00C9A7] to-[#fee715] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-base md:text-lg lg:text-xl hover:shadow-2xl hover:shadow-[#00C9A7]/30 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center"
             >
-              📞 Zadzwoń teraz
+              Zadzwoń teraz
             </a>
           </div>
           
