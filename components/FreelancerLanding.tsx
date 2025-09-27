@@ -53,7 +53,7 @@ export const FreelancerLanding: React.FC = () => {
           </div>
         </div>
         <div ref={fadeInTrust.ref} className={`container mx-auto mt-12 md:mt-16 lg:mt-20 text-center px-4 ${fadeInTrust.className}`}>
-          <p className="text-gray-500 uppercase tracking-widest text-xs md:text-sm mb-4 md:mb-6">Strony dla freelancerów z branż</p>
+              <p className="text-gray-500 uppercase tracking-widest text-xs md:text-sm mb-4 md:mb-6">Współpracowałem już z</p>
           <div className="overflow-hidden">
             <div className="flex animate-scroll space-x-6 md:space-x-8 lg:space-x-12">
               {[...Array(4)].map((_, i) => (
@@ -84,7 +84,7 @@ export const FreelancerLanding: React.FC = () => {
       {/* Why Section */}
       <section id="why" className="py-12 md:py-16 lg:py-20 px-4 md:px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12 md:mb-16">
+          <div className="text-center mb-8 md:mb-12">
             <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white">
               Dlaczego portfolio to za mało?
             </h2>
@@ -93,7 +93,7 @@ export const FreelancerLanding: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-8">
             <div className="space-y-6 md:space-y-8">
                   <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 md:p-6 hover:bg-red-500/15 transition-all duration-300">
                     <div className="flex items-center mb-3 md:mb-4">
@@ -160,7 +160,7 @@ export const FreelancerLanding: React.FC = () => {
           </div>
 
           {/* Mobile Optimization Section */}
-          <div className="bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-2xl p-6 md:p-8 lg:p-12 mb-8 md:mb-12">
+          <div className="bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-2xl p-6 md:p-8 lg:p-12 mb-12 md:mb-16">
                 <div className="text-center mb-6 md:mb-8">
                   <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
                     <MobileIcon className="w-8 h-8 md:w-10 md:h-10 text-[#101820]" />
@@ -228,7 +228,7 @@ export const FreelancerLanding: React.FC = () => {
           </div>
 
           {/* Real Examples */}
-          <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-2xl p-6 md:p-8 lg:p-12">
+          <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-2xl p-6 md:p-8 lg:p-12 mb-12 md:mb-16">
             <h3 className="font-[Montserrat] text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center text-white">
               Przykłady tego, co otrzymujesz:
             </h3>
