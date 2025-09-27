@@ -22,32 +22,46 @@ export const Header: React.FC = () => {
           </div>
         </Link>
         
-        {/* Wave-style Page Navigation */}
-        <div className="flex items-center bg-white/5 rounded-full p-1 border border-white/10 relative overflow-hidden">
-          {/* Wave background effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 rounded-full opacity-50"></div>
-          
-          <Link 
-            to="/" 
-            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 relative z-10 ${
-              !isFreelancerPage 
-                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg transform scale-105' 
-                : 'text-gray-300 hover:text-white hover:bg-white/10'
-            }`}
-          >
-            Kompletny System
-          </Link>
-          <Link 
-            to="/freelancer" 
-            className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 relative z-10 ${
-              isFreelancerPage 
-                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg transform scale-105' 
-                : 'text-gray-300 hover:text-white hover:bg-white/10'
-            }`}
-          >
-            Strona Dla Freelancera
-          </Link>
-        </div>
+            {/* Wave-style Page Navigation - Hidden on mobile */}
+            <div className="hidden md:block relative">
+              {/* Wave background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/5 to-[#00C9A7]/5 rounded-full blur-sm"></div>
+              
+              {/* Navigation container with wave effect */}
+              <div className="relative flex items-center bg-white/5 rounded-full p-1 border border-white/10 overflow-hidden">
+                {/* Animated wave background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 rounded-full opacity-60 animate-pulse"></div>
+                
+                {/* Active indicator wave */}
+                <div 
+                  className={`absolute top-0 left-0 h-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full transition-all duration-500 ease-out ${
+                    isFreelancerPage ? 'translate-x-full' : 'translate-x-0'
+                  }`}
+                  style={{ width: '50%' }}
+                ></div>
+                
+                <Link 
+                  to="/" 
+                  className={`relative z-10 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 ${
+                    !isFreelancerPage 
+                      ? 'text-[#101820] font-bold' 
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  Kompletny System
+                </Link>
+                <Link 
+                  to="/freelancer" 
+                  className={`relative z-10 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 ${
+                    isFreelancerPage 
+                      ? 'text-[#101820] font-bold' 
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  Strona Dla Freelancera
+                </Link>
+              </div>
+            </div>
         
         {/* Desktop CTA Button - Hidden on mobile */}
         <a 
@@ -77,19 +91,18 @@ export const Header: React.FC = () => {
 
       {/* Mobile Dropdown Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-[#101820]/98 backdrop-blur-xl border-b border-white/10 shadow-2xl">
-          <div className="container mx-auto px-4 py-6">
-            <div className="space-y-4">
-              {/* Page Selection */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Wybierz stronę</h3>
+        <div className="md:hidden absolute top-full left-0 right-0 bg-[#101820] border-b border-white/20 shadow-2xl z-50">
+          <div className="container mx-auto px-4 py-4">
+            <div className="space-y-3">
+              {/* Page Selection - Simple and Clear */}
+              <div className="space-y-2">
                 <Link 
                   to="/" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block w-full px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                  className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 ${
                     !isFreelancerPage 
-                      ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg' 
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
+                      ? 'text-[#fee715] border-b border-[#fee715]/30' 
+                      : 'text-gray-300 hover:text-white'
                   }`}
                 >
                   Kompletny System
@@ -97,10 +110,10 @@ export const Header: React.FC = () => {
                 <Link 
                   to="/freelancer" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block w-full px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                  className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 ${
                     isFreelancerPage 
-                      ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg' 
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
+                      ? 'text-[#fee715] border-b border-[#fee715]/30' 
+                      : 'text-gray-300 hover:text-white'
                   }`}
                 >
                   Strona Dla Freelancera
@@ -108,7 +121,7 @@ export const Header: React.FC = () => {
               </div>
 
               {/* CTA Button */}
-              <div className="pt-4 border-t border-white/10">
+              <div className="pt-3 border-t border-white/10">
                 <a 
                   href="#cta" 
                   onClick={(e) => {

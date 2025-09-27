@@ -10,7 +10,7 @@ export const Hero: React.FC = () => {
     const fadeInTrust = useFadeIn<HTMLDivElement>();
 
   return (
-    <section className="min-h-screen flex flex-col justify-center text-center py-12 md:py-20 px-4 md:px-6">
+    <section className="min-h-screen flex flex-col justify-center text-center py-8 md:py-20 px-4 md:px-6">
       <div className="container mx-auto max-w-4xl">
         <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-tight md:leading-relaxed ${fadeInH1.className}`}>
           Masz klientów tylko z polecenia lub przypadku?
