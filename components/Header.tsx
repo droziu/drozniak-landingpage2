@@ -8,8 +8,10 @@ export const Header: React.FC = () => {
   const isFreelancerPage = location.pathname === '/freelancer';
   
   const navLinks = isFreelancerPage ? [
+    { href: '#why', label: 'Dlaczego To Działa?' },
     { href: '#process', label: 'Jak To Działa?' },
-    { href: '#cta', label: 'Konsultacja' },
+    { href: '#pricing', label: 'Cena' },
+    { href: '#cta', label: 'Kontakt' },
   ] : [
     { href: '#rozwiazanie', label: 'Na Czym To Polega?' },
     { href: '#case', label: 'Case Studies' },
@@ -24,8 +26,8 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#101820]/90 backdrop-blur-xl border-b border-white/10">
-      <div className="container mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center">
+    <header className="sticky top-0 z-50 bg-[#101820]/95 backdrop-blur-xl border-b border-white/10">
+      <div className="container mx-auto px-4 md:px-6 py-4 md:py-5 flex justify-between items-center">
         <Link to="/" className="text-xl md:text-2xl font-bold font-[Montserrat] text-[#fee715] group">
           <div className="relative">
             <Logo />
@@ -33,48 +35,54 @@ export const Header: React.FC = () => {
           </div>
         </Link>
         
-        <nav className="hidden md:flex items-center space-x-2">
-          {/* Page Navigation */}
-          <div className="flex items-center space-x-1 mr-4">
-            <Link 
-              to="/" 
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
-                !isFreelancerPage 
-                  ? 'bg-[#fee715] text-[#101820]' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              AI Strategy
-            </Link>
-            <Link 
-              to="/freelancer" 
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
-                isFreelancerPage 
-                  ? 'bg-[#fee715] text-[#101820]' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              Freelancer Sites
-            </Link>
-          </div>
-          
-          {/* Section Navigation */}
+        {/* Premium Page Navigation */}
+        <div className="flex items-center space-x-1 bg-white/5 rounded-xl p-1 border border-white/10">
+          <Link 
+            to="/" 
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 relative overflow-hidden ${
+              !isFreelancerPage 
+                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg' 
+                : 'text-gray-300 hover:text-white hover:bg-white/10'
+            }`}
+          >
+            <span className="relative z-10">Full Package</span>
+            {!isFreelancerPage && (
+              <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+            )}
+          </Link>
+          <Link 
+            to="/freelancer" 
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 relative overflow-hidden ${
+              isFreelancerPage 
+                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] shadow-lg' 
+                : 'text-gray-300 hover:text-white hover:bg-white/10'
+            }`}
+          >
+            <span className="relative z-10">Freelancer Landing Page</span>
+            {isFreelancerPage && (
+              <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+            )}
+          </Link>
+        </div>
+        
+        {/* Section Navigation - Only show on desktop */}
+        <nav className="hidden lg:flex items-center space-x-2">
           {navLinks.map((link, index) => (
             <a 
               key={link.href} 
               href={link.href} 
               onClick={(e) => handleSmoothScroll(e, link.href)}
-              className="group relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/5 bg-white/5 border border-white/10"
+              className="group relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/10 text-sm font-medium"
             >
-              <span className="relative z-10 text-white group-hover:text-[#fee715] font-medium transition-colors duration-300">
+              <span className="relative z-10 text-gray-300 group-hover:text-white transition-colors duration-300">
                 {link.label}
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 rounded-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-[#fee715] to-[#00C9A7] group-hover:w-3/4 transition-all duration-300"></div>
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-[#fee715] to-[#00C9A7] group-hover:w-3/4 transition-all duration-300"></div>
             </a>
           ))}
         </nav>
         
+        {/* CTA Button */}
         <a 
           href="#cta" 
           onClick={(e) => {
@@ -83,7 +91,7 @@ export const Header: React.FC = () => {
               behavior: 'smooth'
             });
           }}
-          className="group relative bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-2 px-4 md:px-6 rounded-lg hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:-translate-y-1 transition-all duration-300 text-sm md:text-base overflow-hidden"
+          className="group relative bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-2 px-4 md:px-6 rounded-lg hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:-translate-y-0.5 transition-all duration-300 text-sm md:text-base overflow-hidden"
         >
           <span className="relative z-10">{isFreelancerPage ? 'Umów konsultację' : 'Umów rozmowę'}</span>
           <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
