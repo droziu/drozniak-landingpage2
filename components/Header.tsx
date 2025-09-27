@@ -30,7 +30,7 @@ export const Header: React.FC = () => {
                 : 'text-gray-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            Full Package
+            Kompletny System
           </Link>
           <Link 
             to="/freelancer" 
@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
                 : 'text-gray-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            Freelancer Landing Page
+            Strona Dla Freelancera
           </Link>
         </div>
         
