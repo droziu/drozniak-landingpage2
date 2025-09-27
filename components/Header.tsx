@@ -13,7 +13,12 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#101820]/95 backdrop-blur-xl border-b border-white/10 relative overflow-hidden">
+    <header className="sticky top-0 z-50 relative overflow-hidden">
+      {/* Wave background with wavy bottom */}
+      <div className="absolute inset-0 bg-[#101820]/95 backdrop-blur-xl" style={{
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 85%, 95% 90%, 85% 95%, 75% 98%, 65% 100%, 50% 98%, 35% 95%, 25% 90%, 15% 85%, 5% 80%, 0% 75%)'
+      }}></div>
+      
       {/* Wave background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-[#fee715]/5 to-[#00C9A7]/5 opacity-30"></div>
