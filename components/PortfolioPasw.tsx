@@ -662,13 +662,6 @@ export const PortfolioPasw: React.FC = () => {
               </div>
             </div>
 
-            {/* Analysis Comment */}
-            <div className="mt-6 text-center max-w-3xl mx-auto">
-              <p className="text-gray-300 leading-relaxed text-sm md:text-base italic">
-                Wynik 89 na mobile jest bardzo dobry jak na stronę z animacjami i dynamicznym tłem.
-              </p>
-            </div>
-
             {/* Source */}
             <div className="text-center mt-4">
               <p className="text-gray-400 text-sm">
