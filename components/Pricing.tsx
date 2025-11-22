@@ -21,13 +21,9 @@ export const Pricing: React.FC = () => {
         
         <div className="mt-8 md:mt-12">
             <a 
-                href="#cta" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.querySelector('#cta')?.scrollIntoView({
-                    behavior: 'smooth'
-                  });
-                }}
+                href="https://calendly.com/drozniakstanislaw/spotkanie"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-white text-[#101820] font-bold py-3 md:py-4 px-6 md:px-10 rounded-lg text-lg md:text-xl hover:bg-gray-200 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#fee715]/40 transition-all duration-300 w-full sm:w-auto inline-block"
             >
                 Porozmawiajmy o wycenie dla Ciebie

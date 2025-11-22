@@ -1,16 +1,36 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Logo } from './icons/Logo';
 
 export const Header: React.FC = () => {
   const location = useLocation();
-  const isFreelancerPage = location.pathname === '/freelancer';
+  const isHomePage = location.pathname === '/';
+  const isSystemPage = location.pathname === '/system';
+  const isStronyWWWPage = location.pathname === '/strony-www';
+  const isSzkoleniaPage = location.pathname === '/szkolenia';
+  const isContactPage = location.pathname === '/kontakt';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsServicesDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-[#101820]/95 backdrop-blur-xl border-b border-white/10">
@@ -23,44 +43,90 @@ export const Header: React.FC = () => {
         </Link>
         
             {/* Professional Navigation - Hidden on mobile */}
-            <nav className="hidden md:flex items-center space-x-8">
+            <nav className="hidden md:flex items-center space-x-8 h-16">
               <Link 
                 to="/" 
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  !isFreelancerPage 
-                    ? 'text-[#fee715] border-b border-[#fee715] pb-1' 
-                    : 'text-gray-300 hover:text-white'
+                className={`relative flex items-center h-16 text-sm font-medium transition-colors duration-200 ${
+                  isHomePage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
                 }`}
               >
-                Kompletny System
+                Kim jestem
+                {isHomePage && (
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                )}
               </Link>
+              
+              {/* Services Dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
+                  className={`relative flex items-center h-16 text-sm font-medium transition-colors duration-200 ${
+                    isSystemPage || isStronyWWWPage || isSzkoleniaPage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  Co oferuję
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                  {(isSystemPage || isStronyWWWPage || isSzkoleniaPage) && (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                  )}
+                </button>
+                
+                {isServicesDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-[#101820] border border-white/20 rounded-lg shadow-xl z-50">
+                    <div className="py-2">
+                      <Link
+                        to="/strony-www"
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                        className={`block px-4 py-2 text-sm transition-colors duration-200 ${
+                          isStronyWWWPage 
+                            ? 'text-[#fee715] bg-[#fee715]/10' 
+                            : 'text-gray-300 hover:text-white hover:bg-white/5'
+                        }`}
+                      >
+                        Strony WWW
+                      </Link>
+                      <Link
+                        to="/system"
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                        className={`block px-4 py-2 text-sm transition-colors duration-200 ${
+                          isSystemPage 
+                            ? 'text-[#fee715] bg-[#fee715]/10' 
+                            : 'text-gray-300 hover:text-white hover:bg-white/5'
+                        }`}
+                      >
+                        Systemy sprzedażowe
+                      </Link>
+                      <Link
+                        to="/szkolenia"
+                        onClick={() => setIsServicesDropdownOpen(false)}
+                        className={`block px-4 py-2 text-sm transition-colors duration-200 ${
+                          isSzkoleniaPage 
+                            ? 'text-[#fee715] bg-[#fee715]/10' 
+                            : 'text-gray-300 hover:text-white hover:bg-white/5'
+                        }`}
+                      >
+                        Szkolenia dla firm
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
               <Link 
-                to="/freelancer" 
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  isFreelancerPage 
-                    ? 'text-[#fee715] border-b border-[#fee715] pb-1' 
-                    : 'text-gray-300 hover:text-white'
+                to="/kontakt" 
+                className={`relative flex items-center h-16 text-sm font-medium transition-colors duration-200 ${
+                  isContactPage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
                 }`}
               >
-                Strona Dla Freelancera
+                Kontakt
+                {isContactPage && (
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                )}
               </Link>
-            </nav>
+        </nav>
         
-        {/* Desktop CTA Button - Hidden on mobile */}
-        <a 
-          href="#cta" 
-          onClick={(e) => {
-            e.preventDefault();
-            document.querySelector('#cta')?.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }}
-          className="hidden md:block group relative bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-2 px-4 md:px-6 rounded-lg hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:-translate-y-0.5 transition-all duration-300 text-sm md:text-base overflow-hidden"
-        >
-          <span className="relative z-10">{isFreelancerPage ? 'Umów konsultację' : 'Umów rozmowę'}</span>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        </a>
-
         {/* Mobile Hamburger Menu */}
         <button
           onClick={toggleMobileMenu}
@@ -82,42 +148,66 @@ export const Header: React.FC = () => {
                 <Link 
                   to="/" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 ${
-                    !isFreelancerPage 
-                      ? 'text-[#fee715] border-b border-[#fee715]/30' 
-                      : 'text-gray-300 hover:text-white'
+                  className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 relative ${
+                    isHomePage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
                   }`}
                 >
-                  Kompletny System
+                  Kim jestem
+                  {isHomePage && (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                  )}
                 </Link>
+                
+                {/* Services Section */}
+                <div className="border-b border-white/10 pb-2">
+                  <p className="text-gray-400 text-sm font-medium px-4 py-2">Co oferuję</p>
+                  <Link 
+                    to="/strony-www" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block w-full py-2 px-4 text-sm transition-all duration-300 ${
+                      isStronyWWWPage 
+                        ? 'text-[#fee715] bg-[#fee715]/10' 
+                        : 'text-gray-300 hover:text-white'
+                    }`}
+                  >
+                    Strony WWW
+                  </Link>
+                  <Link 
+                    to="/system" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block w-full py-2 px-4 text-sm transition-all duration-300 ${
+                      isSystemPage 
+                        ? 'text-[#fee715] bg-[#fee715]/10' 
+                        : 'text-gray-300 hover:text-white'
+                    }`}
+                  >
+                    Systemy sprzedażowe
+                  </Link>
+                  <Link 
+                    to="/szkolenia" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block w-full py-2 px-4 text-sm transition-all duration-300 ${
+                      isSzkoleniaPage 
+                        ? 'text-[#fee715] bg-[#fee715]/10' 
+                        : 'text-gray-300 hover:text-white'
+                    }`}
+                  >
+                    Szkolenia dla firm
+                  </Link>
+                </div>
+                
                 <Link 
-                  to="/freelancer" 
+                  to="/kontakt" 
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 ${
-                    isFreelancerPage 
-                      ? 'text-[#fee715] border-b border-[#fee715]/30' 
-                      : 'text-gray-300 hover:text-white'
+                  className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 relative ${
+                    isContactPage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
                   }`}
                 >
-                  Strona Dla Freelancera
+                  Kontakt
+                  {isContactPage && (
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                  )}
                 </Link>
-              </div>
-
-              {/* CTA Button */}
-              <div className="pt-3 border-t border-white/10">
-                <a 
-                  href="#cta" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsMobileMenuOpen(false);
-                    document.querySelector('#cta')?.scrollIntoView({
-                      behavior: 'smooth'
-                    });
-                  }}
-                  className="block w-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 px-4 rounded-lg text-center hover:shadow-2xl hover:shadow-[#fee715]/30 transform hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  {isFreelancerPage ? 'Umów konsultację' : 'Umów rozmowę'}
-                </a>
               </div>
             </div>
           </div>

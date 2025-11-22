@@ -21,16 +21,24 @@ export const Footer: React.FC = () => {
              <div className="text-2xl font-bold font-[Montserrat] text-[#fee715] mb-4 flex justify-center">
                <Logo />
              </div>
-             <p className="text-sm">&copy; {new Date().getFullYear()} Drozniak.com Wszelkie prawa zastrzeżone.</p>
+             <p className="text-sm mb-3">&copy; {new Date().getFullYear()} Drozniak.pl Wszelkie prawa zastrzeżone.</p>
+             <a href="/polityka-prywatnosci" className="text-sm hover:text-white transition-colors">Polityka Prywatności</a>
           </div>
 
           <div className="md:col-span-1 md:text-right">
-             <h4 className="font-[Montserrat] text-lg font-bold text-white mb-4">Znajdź mnie</h4>
-             <div className="flex space-x-4 md:justify-end mb-6">
-                <a href="#" aria-label="LinkedIn" className="text-gray-400 hover:text-white transition-colors duration-300"><LinkedinIcon className="w-6 h-6"/></a>
-                <a href="#" aria-label="Twitter" className="text-gray-400 hover:text-white transition-colors duration-300"><TwitterIcon className="w-6 h-6"/></a>
+             <h4 className="font-[Montserrat] text-lg font-bold text-white mb-4">Kontakt</h4>
+             <div className="space-y-2">
+                <p className="text-sm">
+                  <a href="mailto:stanislaw@drozniak.com" className="text-gray-400 hover:text-[#fee715] transition-colors duration-300">
+                    stanislaw@drozniak.com
+                  </a>
+                </p>
+                <p className="text-sm">
+                  <a href="tel:+48792491196" className="text-gray-400 hover:text-[#fee715] transition-colors duration-300">
+                    +48 792 491 196
+                  </a>
+                </p>
              </div>
-             <a href="#" className="text-sm hover:text-white transition-colors">Polityka Prywatności</a>
           </div>
 
         </div>

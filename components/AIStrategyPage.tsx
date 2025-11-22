@@ -28,7 +28,9 @@ export const AIStrategyPage: React.FC<AIStrategyPageProps> = ({ cookiePreference
       <FomoAI />
       <Solution />
       <Process />
-      <CaseStudies />
+      <div className="hidden">
+        <CaseStudies />
+      </div>
       <Pricing />
       <TargetAudience />
       <Testimonials />

@@ -56,7 +56,7 @@ export const TargetAudience: React.FC = () => {
       <div className="container mx-auto max-w-6xl">
         <div ref={fadeInHeader.ref} className={`text-center mb-12 md:mb-16 px-2 ${fadeInHeader.className}`}>
           <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4">
-            Dla kogo to jest <span className="text-[#fee715]">(a dla kogo nie)</span>
+            <span className="text-[#fee715]">Czy to dla Ciebie</span>
           </h2>
           <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
             Sprawdź, czy moje rozwiązanie pasuje do Twojej sytuacji biznesowej
@@ -69,7 +69,7 @@ export const TargetAudience: React.FC = () => {
             <div className="text-center mb-8">
               <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#00C9A7]/10 to-transparent border border-[#00C9A7]/20 rounded-full px-6 py-3">
                 <CheckIcon className="w-6 h-6 text-[#00C9A7]" />
-                <h3 className="font-[Montserrat] text-xl font-bold text-[#00C9A7]">To jest dla Ciebie, jeśli:</h3>
+                <h3 className="font-[Montserrat] text-xl font-bold text-[#00C9A7]">Tak, jeśli:</h3>
               </div>
             </div>
             
@@ -101,7 +101,7 @@ export const TargetAudience: React.FC = () => {
             <div className="text-center mb-8">
               <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-500/10 to-transparent border border-red-500/20 rounded-full px-6 py-3">
                 <XIcon className="w-6 h-6 text-red-500" />
-                <h3 className="font-[Montserrat] text-xl font-bold text-red-500">To nie jest dla Ciebie, jeśli:</h3>
+                <h3 className="font-[Montserrat] text-xl font-bold text-red-500">Nie, jeśli:</h3>
               </div>
             </div>
             
@@ -128,13 +128,9 @@ export const TargetAudience: React.FC = () => {
               Jeśli rozpoznajesz się w pierwszej kolumnie, to prawdopodobnie mogę Ci pomóc
             </p>
             <a 
-              href="#cta" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#cta')?.scrollIntoView({
-                  behavior: 'smooth'
-                });
-              }}
+              href="https://calendly.com/drozniakstanislaw/spotkanie"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-lg md:text-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:-translate-y-1 transition-all duration-300 inline-block"
             >
               Umów darmową rozmowę

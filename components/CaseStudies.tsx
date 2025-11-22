@@ -24,7 +24,7 @@ const CaseCard: React.FC<CaseCardProps> = ({ category, title, description, resul
                     <p className="font-semibold text-white">Wynik:</p>
                     <p className="text-[#00C9A7] font-bold text-lg">{result}</p>
                 </div>
-                <a href="#cta" className="inline-flex items-center text-white font-bold mt-6 group-hover:text-[#fee715] transition-colors duration-300">
+                <a href="https://calendly.com/drozniakstanislaw/spotkanie" target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-white font-bold mt-6 group-hover:text-[#fee715] transition-colors duration-300">
                     Zobacz, jak możemy pomóc Tobie
                     <ArrowRightIcon className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
