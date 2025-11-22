@@ -265,7 +265,7 @@ export const MainPage: React.FC = () => {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 md:py-32 px-6 md:px-8 bg-gradient-to-b from-transparent to-[#101820]">
+      <section id="cta" className="py-20 md:py-32 px-6 md:px-8 bg-gradient-to-b from-transparent to-[#101820]">
         <div className="container mx-auto max-w-4xl text-center">
           <div className="space-y-8">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-[Montserrat]">
