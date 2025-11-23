@@ -31,10 +31,15 @@ export const StronyWWWPage: React.FC = () => {
   const [stability, setStability] = useState(0);
   const [mySpeedWidth, setMySpeedWidth] = useState(0);
   const [templateSpeedWidth, setTemplateSpeedWidth] = useState(0);
+  const [selectedBudget, setSelectedBudget] = useState<{ value: string; label: string }>({ value: '', label: '' });
+  const [isBudgetDropdownOpen, setIsBudgetDropdownOpen] = useState(false);
+  const budgetDropdownRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const firstViewRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const stabilityRef = useRef<HTMLDivElement>(null);
+  const testimonialsContainerRef = useRef<HTMLDivElement>(null);
+  const testimonialsContentRef = useRef<HTMLDivElement>(null);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +76,20 @@ export const StronyWWWPage: React.FC = () => {
     handleScroll(); // Initial check
 
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close budget dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (budgetDropdownRef.current && !budgetDropdownRef.current.contains(event.target as Node)) {
+        setIsBudgetDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   // Counter animations for speed section
@@ -116,6 +135,63 @@ export const StronyWWWPage: React.FC = () => {
     }
 
     return () => observer.disconnect();
+  }, []);
+
+  // Infinite loop scrolling for testimonials on mobile
+  useEffect(() => {
+    const container = testimonialsContainerRef.current;
+    const content = testimonialsContentRef.current;
+    
+    if (!container || !content) return;
+
+    // Set initial scroll position to the start (not the duplicate)
+    const setInitialPosition = () => {
+      if (window.innerWidth < 768) {
+        container.scrollTop = 0;
+      }
+    };
+    
+    setInitialPosition();
+    
+    // Handle window resize
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        // On desktop, reset scroll position
+        container.scrollTop = 0;
+      } else {
+        // On mobile, ensure we're at the start
+        setInitialPosition();
+      }
+    };
+
+    const handleScroll = () => {
+      // Only apply on mobile (when container is scrollable)
+      if (window.innerWidth >= 768) return; // md breakpoint
+      
+      const scrollTop = container.scrollTop;
+      const scrollHeight = content.scrollHeight;
+      
+      // Calculate the midpoint (where the duplicate starts)
+      const midpoint = scrollHeight / 2;
+      
+      // If scrolled past the midpoint, seamlessly jump back to equivalent position in first half
+      if (scrollTop >= midpoint) {
+        container.scrollTop = scrollTop - midpoint;
+      }
+      // If scrolled to the very top, jump to the duplicate section (for upward scrolling)
+      else if (scrollTop <= 0 && scrollHeight > container.clientHeight) {
+        // Only jump if there's actually content to scroll
+        container.scrollTop = midpoint - 10; // Small offset to prevent infinite loop
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
@@ -194,9 +270,16 @@ export const StronyWWWPage: React.FC = () => {
               <div className="absolute top-0 left-0 right-4 h-20 bg-gradient-to-b from-[#101820] via-[#101820]/90 to-transparent z-10 pointer-events-none"></div>
               <div className="absolute bottom-0 left-0 right-4 h-24 bg-gradient-to-t from-[#101820] via-[#101820]/90 to-transparent z-10 pointer-events-none"></div>
               
-                     {/* Auto-scrolling testimonials */}
-                     <div className="max-h-[60vh] overflow-hidden relative">
-                       <div className="animate-testimonials-scroll space-y-4 pr-4">
+                     {/* Testimonials - auto-scroll on desktop, manual scroll on mobile */}
+                     <div 
+                       ref={testimonialsContainerRef}
+                       className="max-h-[60vh] overflow-y-auto md:overflow-hidden relative scrollbar-hide"
+                       style={{ WebkitOverflowScrolling: 'touch' }}
+                     >
+                       <div 
+                         ref={testimonialsContentRef}
+                         className="md:animate-testimonials-scroll space-y-4 pr-4"
+                       >
                          {/* Testimonial 1 - Brent Peterson with photo */}
                          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
                            <div className="flex items-start space-x-4">
@@ -1232,16 +1315,75 @@ export const StronyWWWPage: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Budżet</label>
-                  <select 
-                    required
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#fee715] transition-colors"
-                  >
-                    <option value="">Wybierz budżet</option>
-                    <option value="2500-4000">2500–4000 zł</option>
-                    <option value="4000-7000">4000–7000 zł</option>
-                    <option value="7000-15000">7000–15000 zł</option>
-                    <option value="15000+">15000+ zł</option>
-                  </select>
+                  <div className="relative" ref={budgetDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={() => setIsBudgetDropdownOpen(!isBudgetDropdownOpen)}
+                      className={`w-full bg-white/10 border rounded-lg px-4 py-3 text-left text-white focus:outline-none focus:border-[#fee715] transition-colors flex items-center justify-between ${
+                        isBudgetDropdownOpen ? 'border-[#fee715]' : 'border-white/20'
+                      }`}
+                    >
+                      <span className={selectedBudget.value ? 'text-white' : 'text-gray-400'}>
+                        {selectedBudget.label || 'Wybierz budżet'}
+                      </span>
+                      <svg 
+                        className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                          isBudgetDropdownOpen ? 'rotate-180' : ''
+                        }`}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {isBudgetDropdownOpen && (
+                      <div className="absolute z-50 w-full mt-2 bg-[#18232F] border border-white/20 rounded-lg shadow-2xl overflow-hidden backdrop-blur-md">
+                        <div className="py-2">
+                          {[
+                            { value: '', label: 'Wybierz budżet' },
+                            { value: '2500-4000', label: '2500–4000 zł' },
+                            { value: '4000-7000', label: '4000–7000 zł' },
+                            { value: '7000-15000', label: '7000–15000 zł' },
+                            { value: '15000+', label: '15000+ zł' }
+                          ].map((option) => (
+                            <button
+                              key={option.value}
+                              type="button"
+                              onClick={() => {
+                                if (option.value) {
+                                  setSelectedBudget({ value: option.value, label: option.label });
+                                }
+                                setIsBudgetDropdownOpen(false);
+                              }}
+                              className={`w-full px-4 py-3 text-left text-white transition-all duration-200 flex items-center justify-between group ${
+                                selectedBudget.value === option.value
+                                  ? 'bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border-l-2 border-[#fee715]'
+                                  : option.value 
+                                    ? 'hover:bg-white/10 hover:border-l-2 hover:border-white/20'
+                                    : 'text-gray-400 cursor-default'
+                              }`}
+                              disabled={!option.value}
+                            >
+                              <span className={option.value ? 'text-white' : 'text-gray-400'}>{option.label}</span>
+                              {selectedBudget.value === option.value && (
+                                <div className="flex items-center">
+                                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-[#101820]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  </div>
+                                </div>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {/* Hidden input for form submission */}
+                    <input type="hidden" name="budget" value={selectedBudget.value} required={!selectedBudget.value} />
+                  </div>
                 </div>
 
                 <div>

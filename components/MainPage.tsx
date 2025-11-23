@@ -32,7 +32,7 @@ export const MainPage: React.FC = () => {
             </div>
             
             {/* Right - Visual - Similar Scale */}
-            <div className="relative">
+            <div className="relative hidden md:block">
               {/* Background Halo/Gradient */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#fee715]/25 via-transparent to-[#00C9A7]/25 rounded-3xl blur-3xl scale-110"></div>
               
@@ -273,7 +273,7 @@ export const MainPage: React.FC = () => {
             </h2>
             
             <p className="text-xl text-gray-300 leading-relaxed">
-              Napisz do mnie — odpowiadam w 24 h.
+              Napisz do mnie —<br className="md:hidden" /> odpowiadam w 24 godziny.
             </p>
             
             <a

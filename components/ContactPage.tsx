@@ -17,7 +17,7 @@ export const ContactPage: React.FC = () => {
             Kontakt
           </h1>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-            Napisz krótko, czego potrzebujesz. Odpowiadam zwykle w 24 h.
+            Napisz krótko, czego potrzebujesz. Odpowiadam zwykle w 24 godziny.
           </p>
         </div>
 
@@ -42,7 +42,7 @@ export const ContactPage: React.FC = () => {
         {/* Footer */}
         <div className="mt-16 text-center">
           <p className="text-gray-400 text-sm">
-            Zwykle odpisuję w ciągu 24 h • Twoje dane są bezpieczne • <a href="/polityka-prywatnosci" className="text-[#fee715] hover:text-white transition-colors">Polityka prywatności</a>
+            Zwykle odpisuję w ciągu 24 godzin • Twoje dane są bezpieczne • <a href="/polityka-prywatnosci" className="text-[#fee715] hover:text-white transition-colors">Polityka prywatności</a>
           </p>
         </div>
       </div>
