@@ -28,10 +28,10 @@ export const useFadeIn = <T extends HTMLElement,>() => {
   }, []);
 
   const animationClasses = isVisible
-    ? 'opacity-100 translate-y-0'
-    : 'opacity-0 translate-y-5';
+    ? 'opacity-100'
+    : 'opacity-0';
   
-  const transitionClasses = 'transition-all duration-1000 ease-in-out';
+  const transitionClasses = 'transition-opacity duration-500 ease-in-out';
 
   return { ref: domRef, className: `${transitionClasses} ${animationClasses}` };
 };

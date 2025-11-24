@@ -41,10 +41,96 @@ export const StronyWWWPage: React.FC = () => {
   const testimonialsContainerRef = useRef<HTMLDivElement>(null);
   const testimonialsContentRef = useRef<HTMLDivElement>(null);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormStatus('success');
-    setTimeout(() => setFormStatus('idle'), 5000);
+    
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const industry = formData.get('industry') as string;
+    const budget = selectedBudget.value;
+    const message = formData.get('message') as string;
+
+    // Validate required fields
+    if (!name || !email || !industry || !budget || !message) {
+      alert('Proszę wypełnić wszystkie pola formularza.');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Proszę podać prawidłowy adres e-mail.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/strony-www', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          industry,
+          budget,
+          message,
+        }),
+      });
+
+      // Check if response is ok and has content
+      if (!response.ok) {
+        // Try to parse error response, but handle empty responses
+        let errorMessage = 'Wystąpił błąd podczas wysyłania formularza';
+        try {
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const text = await response.text();
+            if (text) {
+              const errorData = JSON.parse(text);
+              errorMessage = errorData.error || errorMessage;
+            }
+          } else {
+            const text = await response.text();
+            errorMessage = text || errorMessage;
+          }
+        } catch (parseError) {
+          // If we can't parse the error, use default message
+          console.error('Error parsing error response:', parseError);
+          if (response.status === 404) {
+            errorMessage = 'Endpoint API nie został znaleziony. Upewnij się, że używasz Vercel CLI do lokalnego developmentu (vercel dev) lub przetestuj na produkcji.';
+          }
+        }
+        throw new Error(errorMessage);
+      }
+
+      // Parse successful response
+      const text = await response.text();
+      if (!text) {
+        throw new Error('Otrzymano pustą odpowiedź z serwera.');
+      }
+
+      const result = JSON.parse(text);
+      
+      if (result.success) {
+        setFormStatus('success');
+        form.reset();
+        setSelectedBudget({ value: '', label: '' });
+        setTimeout(() => setFormStatus('idle'), 10000);
+      } else {
+        throw new Error('Formularz został wysłany, ale wystąpił nieoczekiwany błąd.');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      if (error instanceof SyntaxError && error.message.includes('JSON')) {
+        alert('Błąd komunikacji z serwerem. Endpointy API działają tylko na Vercel. Użyj "vercel dev" do lokalnego testowania lub przetestuj na produkcji.');
+      } else {
+        alert(error instanceof Error ? error.message : 'Wystąpił błąd podczas wysyłania formularza. Spróbuj ponownie.');
+      }
+    }
   };
 
   // Scroll detection for timeline progress
@@ -1279,7 +1365,7 @@ export const StronyWWWPage: React.FC = () => {
             
             {formStatus === 'success' ? (
               <div className="text-center py-8">
-                <p className="text-[#fee715] font-bold text-lg mb-2">Dziękuję — odezwę się dziś.</p>
+                <p className="text-[#fee715] font-bold text-lg mb-2">Dziękuję za kontakt. Zazwyczaj odpowiadam w ciągu 24 godzin w dni robocze.</p>
               </div>
             ) : (
               <form onSubmit={handleFormSubmit} className="space-y-6">
@@ -1287,6 +1373,7 @@ export const StronyWWWPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-300 mb-2">Imię i firma</label>
                   <input 
                     type="text" 
+                    name="name"
                     required
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#fee715] transition-colors"
                     placeholder="Jan Kowalski, Firma XYZ"
@@ -1297,6 +1384,7 @@ export const StronyWWWPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-300 mb-2">E-mail</label>
                   <input 
                     type="email" 
+                    name="email"
                     required
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#fee715] transition-colors"
                     placeholder="jan@firma.pl"
@@ -1307,6 +1395,7 @@ export const StronyWWWPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-300 mb-2">Branża</label>
                   <input 
                     type="text"
+                    name="industry"
                     required
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#fee715] transition-colors"
                     placeholder="np. usługi prawne, gastronomia, edukacja..."
@@ -1343,10 +1432,10 @@ export const StronyWWWPage: React.FC = () => {
                         <div className="py-2">
                           {[
                             { value: '', label: 'Wybierz budżet' },
-                            { value: '2500-4000', label: '2500–4000 zł' },
-                            { value: '4000-7000', label: '4000–7000 zł' },
-                            { value: '7000-15000', label: '7000–15000 zł' },
-                            { value: '15000+', label: '15000+ zł' }
+                            { value: '1500-3000', label: '1500–3000 zł' },
+                            { value: '3000-6000', label: '3000–6000 zł' },
+                            { value: '6000-12000', label: '6000–12000 zł' },
+                            { value: '12000+', label: '12000 zł+' }
                           ].map((option) => (
                             <button
                               key={option.value}
@@ -1389,6 +1478,7 @@ export const StronyWWWPage: React.FC = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Cel strony</label>
                   <textarea 
+                    name="message"
                     required
                     rows={4}
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#fee715] transition-colors resize-none"

@@ -14,6 +14,7 @@ import { SzkoleniaPage } from './components/SzkoleniaPage';
 import { Footer } from './components/Footer';
 import { StickyCTA } from './components/StickyCTA';
 import { CookieConsent } from './components/CookieConsent';
+import { ScrollToTop } from './components/ScrollToTop';
 
 const App: React.FC = () => {
   const [isStickyCtaVisible, setStickyCtaVisible] = useState(false);
@@ -58,6 +59,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
+        <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/" element={<MainPage />} />
