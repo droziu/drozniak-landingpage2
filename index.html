@@ -67,10 +67,18 @@
 
     .animate-testimonials-scroll {
       animation: testimonialsScroll 60s linear infinite;
+      will-change: transform;
     }
 
     .animate-testimonials-scroll:hover {
       animation-play-state: paused;
+    }
+
+    @media (min-width: 768px) {
+      .animate-testimonials-scroll {
+        animation: testimonialsScroll 60s linear infinite;
+        will-change: transform;
+      }
     }
 
     /* Hide scrollbar on mobile for testimonials */

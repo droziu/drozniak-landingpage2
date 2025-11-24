@@ -24,9 +24,13 @@ export const Hero: React.FC = () => {
         </div>
         <div ref={fadeInCTA.ref} className={`flex flex-col items-center space-y-3 px-4 ${fadeInCTA.className}`}>
             <a 
-                href="https://calendly.com/drozniakstanislaw/spotkanie"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#cta"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#cta')?.scrollIntoView({
+                    behavior: 'smooth'
+                  });
+                }}
                 className="bg-[#fee715] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-10 rounded-lg text-lg md:text-xl hover:bg-gradient-to-r hover:from-[#fee715] hover:to-[#00C9A7] hover:shadow-2xl hover:shadow-[#fee715]/30 transform hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto"
             >
                 Chcę poznać szczegóły

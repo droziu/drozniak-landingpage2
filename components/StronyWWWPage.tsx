@@ -33,6 +33,7 @@ export const StronyWWWPage: React.FC = () => {
   const [templateSpeedWidth, setTemplateSpeedWidth] = useState(0);
   const [selectedBudget, setSelectedBudget] = useState<{ value: string; label: string }>({ value: '', label: '' });
   const [isBudgetDropdownOpen, setIsBudgetDropdownOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const budgetDropdownRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const firstViewRef = useRef<HTMLDivElement>(null);
@@ -223,16 +224,33 @@ export const StronyWWWPage: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Infinite loop scrolling for testimonials on mobile
+  // Detect desktop/mobile for testimonials animation
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    
+    return () => {
+      window.removeEventListener('resize', checkDesktop);
+    };
+  }, []);
+
+  // Infinite loop scrolling for testimonials on mobile only
   useEffect(() => {
     const container = testimonialsContainerRef.current;
     const content = testimonialsContentRef.current;
     
     if (!container || !content) return;
 
-    // Set initial scroll position to the start (not the duplicate)
+    // Only set up mobile scrolling - desktop uses CSS animation
+    const isMobile = () => window.innerWidth < 768;
+
+    // Set initial scroll position to the start (mobile only)
     const setInitialPosition = () => {
-      if (window.innerWidth < 768) {
+      if (isMobile()) {
         container.scrollTop = 0;
       }
     };
@@ -241,18 +259,16 @@ export const StronyWWWPage: React.FC = () => {
     
     // Handle window resize
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        // On desktop, reset scroll position
-        container.scrollTop = 0;
-      } else {
+      if (isMobile()) {
         // On mobile, ensure we're at the start
         setInitialPosition();
       }
+      // On desktop, don't interfere with CSS animation
     };
 
     const handleScroll = () => {
       // Only apply on mobile (when container is scrollable)
-      if (window.innerWidth >= 768) return; // md breakpoint
+      if (!isMobile()) return;
       
       const scrollTop = container.scrollTop;
       const scrollHeight = content.scrollHeight;
@@ -271,7 +287,10 @@ export const StronyWWWPage: React.FC = () => {
       }
     };
 
-    container.addEventListener('scroll', handleScroll, { passive: true });
+    // Only add scroll listener on mobile
+    if (isMobile()) {
+      container.addEventListener('scroll', handleScroll, { passive: true });
+    }
     window.addEventListener('resize', handleResize);
     
     return () => {
@@ -325,9 +344,13 @@ export const StronyWWWPage: React.FC = () => {
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <a 
-                  href="https://calendly.com/drozniakstanislaw/spotkanie"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#cta"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector('#cta')?.scrollIntoView({
+                      behavior: 'smooth'
+                    });
+                  }}
                   className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-4 px-8 rounded-lg text-center hover:shadow-xl hover:shadow-[#fee715]/20 transition-shadow duration-300"
                 >
                   Umów rozmowę 20 min
@@ -364,7 +387,7 @@ export const StronyWWWPage: React.FC = () => {
                      >
                        <div 
                          ref={testimonialsContentRef}
-                         className="md:animate-testimonials-scroll space-y-4 pr-4"
+                         className={`space-y-4 pr-4 ${isDesktop ? 'animate-testimonials-scroll' : ''}`}
                        >
                          {/* Testimonial 1 - Brent Peterson with photo */}
                          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
@@ -1007,9 +1030,13 @@ export const StronyWWWPage: React.FC = () => {
             <div className="mt-20 text-center">
               <p className="text-gray-300 text-lg mb-6">Cały proces trwa zwykle 14–21 dni roboczych.<br />Jesteśmy w stałym kontakcie — dokładnie wiesz, co dzieje się na każdym etapie.</p>
               <a 
-                href="https://calendly.com/drozniakstanislaw/spotkanie"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#cta"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#cta')?.scrollIntoView({
+                    behavior: 'smooth'
+                  });
+                }}
                 className="inline-block bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-4 px-8 rounded-lg hover:shadow-xl hover:shadow-[#fee715]/20 transition-shadow duration-300"
               >
                 Zacznij tutaj
