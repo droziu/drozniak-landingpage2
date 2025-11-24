@@ -719,7 +719,7 @@ export const PortfolioPasw: React.FC = () => {
               Stwórzmy razem stronę, która działa szybko, wygląda profesjonalnie i pomaga osiągać Twoje cele biznesowe.
             </p>
             <Link
-              to="/kontakt"
+              to="/strony-www#cta"
               className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold px-8 py-4 rounded-lg hover:shadow-lg hover:shadow-[#fee715]/50 transition-all duration-300 transform hover:scale-105 relative overflow-hidden"
             >
               <span className="relative z-10">Skontaktuj się ze mną</span>
