@@ -23,7 +23,7 @@ export const AboutMe: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] rounded-2xl transform -rotate-3 group-hover:-rotate-6 group-hover:scale-105 transition-all duration-500 opacity-0 group-hover:opacity-100"></div>
               <div className="relative bg-[#101820] rounded-2xl p-2 group-hover:scale-105 transition-transform duration-500">
                 <img 
-                  src="/images/12345.jpg" 
+                  src="/images/Drozniak_photo_suit_1.jpg" 
                   alt="Stanisław Drożniak" 
                   className="w-full h-auto rounded-xl object-cover group-hover:scale-105 transition-transform duration-500"
                 />

@@ -133,7 +133,7 @@ export const MainPage: React.FC = () => {
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden">
                 <img
-                  src="/images/drozniak_photo_v1.jpg"
+                  src="/images/Drozniak_photo_suit_1.jpg"
                   alt="Stanisław Drożniak"
                   className="w-full h-auto object-cover"
                 />
