@@ -11,6 +11,7 @@ import { ContactPage } from './components/ContactPage';
 import { PortfolioRedlin } from './components/PortfolioRedlin';
 import { PortfolioPasw } from './components/PortfolioPasw';
 import { SzkoleniaPage } from './components/SzkoleniaPage';
+import { DoradztwoHotelIrys } from './components/DoradztwoHotelIrys';
 import { Footer } from './components/Footer';
 import { StickyCTA } from './components/StickyCTA';
 import { CookieConsent } from './components/CookieConsent';
@@ -74,6 +75,7 @@ const App: React.FC = () => {
           <Route path="/portfolio-redlin" element={<PortfolioRedlin />} />
           <Route path="/portfolio-pasw" element={<PortfolioPasw />} />
           <Route path="/szkolenia" element={<SzkoleniaPage />} />
+          <Route path="/doradztwo-hotel-irys" element={<DoradztwoHotelIrys />} />
         </Routes>
         <Footer />
         <StickyCTA isVisible={isStickyCtaVisible} />
