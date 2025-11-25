@@ -17,13 +17,18 @@ const SolutionItem: React.FC<{ title: string; children: React.ReactNode }> = ({ 
 }
 
 export const Solution: React.FC = () => {
-    const fadeInHeader = useFadeIn<HTMLHeadingElement>();
+    const fadeInHeader = useFadeIn<HTMLDivElement>();
   return (
     <section id="rozwiazanie" className="py-16 md:py-20 px-4 md:px-6">
       <div className="container mx-auto max-w-5xl">
-        <h2 ref={fadeInHeader.ref} className={`font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold text-center mb-12 md:mb-16 px-2 ${fadeInHeader.className}`}>
-          Jedna inwestycja, kompletny <span className="text-[#fee715]">system</span>
-        </h2>
+        <div ref={fadeInHeader.ref} className={`text-center mb-12 md:mb-16 px-2 ${fadeInHeader.className}`}>
+          <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 md:mb-6">
+            Elementy, z których może składać się <span className="text-[#fee715]">system</span>
+          </h2>
+          <p className="text-gray-300 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
+            Zakres dobieramy do Twojej sytuacji – od pojedynczego narzędzia po pełny system.
+          </p>
+        </div>
         <div className="grid md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-8 md:gap-y-10">
             <SolutionItem title="Audyt i Strategia">
                 Przygotowuję analizę Twoich dotychczasowych działań, grupy docelowej i konkurencji. Tworzę strategię komunikacji, która trafia w sedno.

@@ -6,7 +6,7 @@ const PricingScenario: React.FC<{
   number: number; 
   title: string; 
   price: string; 
-  description: string;
+  description: React.ReactNode;
 }> = ({ number, title, price, description }) => {
   const fadeInItem = useFadeIn<HTMLDivElement>();
   return (
@@ -55,7 +55,7 @@ export const Pricing: React.FC = () => {
       <div ref={fadeInSection.ref} className={`container mx-auto max-w-6xl px-2 relative z-10 ${fadeInSection.className}`}>
         <div className="text-center mb-12 md:mb-16">
           <div className="inline-block">
-            <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 bg-gradient-to-r from-[#fee715] via-white to-[#00C9A7] bg-clip-text text-transparent">
+            <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 pb-1 leading-tight bg-gradient-to-r from-[#fee715] via-white to-[#00C9A7] bg-clip-text text-transparent">
               Ile to kosztuje?
             </h2>
             <div className="h-1 w-24 mx-auto bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full mt-4"></div>
@@ -67,21 +67,33 @@ export const Pricing: React.FC = () => {
             number={1}
             title="Pojedyncze narzędzie"
             price="od ok. 1 500 zł netto"
-            description="Narzędzie interaktywne, dopasowane do Twojej firmy, które będzie konwertowało lepiej niż kolejny &quot;darmowy ebook&quot;. Kalkulator, quiz lub blueprint lejka z rekomendacjami działań – zaczynają się od ok. 1 500 zł netto."
+            description={
+              <>
+                Wybieramy 1 kluczowy element z <a href="#rozwiazanie" className="text-[#fee715] hover:text-[#ffd600] underline transition-colors">listy</a> (np. interaktywne narzędzie albo blueprint lejka) i robimy go od A do Z.
+              </>
+            }
           />
           
           <PricingScenario
             number={2}
             title="System dla małej firmy"
             price="3 000–6 000 zł netto"
-            description="Większość projektów dla małych firm i freelancerów (np. narzędzie + prosty landing + podstawowe automatyzacje) zamyka się zwykle w przedziale 3 000–6 000 zł netto. Dokładna kwota zależy od liczby elementów i stopnia automatyzacji."
+            description={
+              <>
+                Najczęściej obejmuje 2–4 elementy z <a href="#rozwiazanie" className="text-[#fee715] hover:text-[#ffd600] underline transition-colors">listy</a> (np. audyt + narzędzie + prosty landing). Dokładny zakres dobieramy po rozmowie.
+              </>
+            }
           />
           
           <PricingScenario
             number={3}
             title="System szyty na miarę"
             price="wycena indywidualna"
-            description="Pełne systemy (analiza, strategia, narzędzie, landing, automatyzacje, integracje) wyceniam indywidualnie po krótkim audycie. Najpierw ustalamy zakres, dopiero potem dostajesz konkretną propozycję kosztów."
+            description={
+              <>
+                Pełny system obejmuje wszystkie obszary z <a href="#rozwiazanie" className="text-[#fee715] hover:text-[#ffd600] underline transition-colors">listy</a> + dodatkowe integracje i automatyzacje.
+              </>
+            }
           />
         </div>
       </div>
