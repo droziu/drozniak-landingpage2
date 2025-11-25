@@ -15,6 +15,7 @@ import { Footer } from './components/Footer';
 import { StickyCTA } from './components/StickyCTA';
 import { CookieConsent } from './components/CookieConsent';
 import { ScrollToTop } from './components/ScrollToTop';
+import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { SchemaMarkup } from './components/SchemaMarkup';
 
 const App: React.FC = () => {
@@ -76,6 +77,7 @@ const App: React.FC = () => {
         </Routes>
         <Footer />
         <StickyCTA isVisible={isStickyCtaVisible} />
+        <ScrollToTopButton />
         <CookieConsent onAccept={handleCookieAccept} />
       </div>
     </Router>

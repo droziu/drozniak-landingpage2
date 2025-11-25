@@ -37,8 +37,10 @@ export const ContactForm: React.FC = () => {
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
+      const isMobile = window.innerWidth < 768;
+      const minHeight = isMobile ? 120 : 72; // Larger min height on mobile for long placeholder
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.max(72, textareaRef.current.scrollHeight)}px`;
+      textareaRef.current.style.height = `${Math.max(minHeight, textareaRef.current.scrollHeight)}px`;
     }
   }, [formData.message]);
 
@@ -253,7 +255,7 @@ export const ContactForm: React.FC = () => {
           name="message"
           value={formData.message}
           onChange={handleInputChange}
-          className={`w-full px-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300 resize-none min-h-[72px] max-h-[200px] overflow-y-auto ${
+          className={`w-full px-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300 resize-none min-h-[120px] md:min-h-[72px] max-h-[200px] overflow-y-auto ${
             errors.message ? 'border-red-500' : 'border-white/20 focus:border-[#fee715]'
           }`}
           placeholder="Napisz krótko, czego potrzebujesz: nowa strona www, system pozyskiwania klientów, szkolenie z AI w marketingu (cel, branża, przybliżony zakres)"

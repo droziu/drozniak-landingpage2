@@ -17,16 +17,16 @@ export const MainPage: React.FC = () => {
       <section className="min-h-screen flex flex-col justify-center px-6 md:px-8 py-20">
         <div className="container mx-auto max-w-7xl">
           {/* Centered Eyebrow */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-8 md:mb-16">
             <p className="text-[#fee715] text-sm font-medium tracking-wide uppercase">
               Marketing • strony www • sztuczna inteligencja • szkolenia
             </p>
           </div>
           
           {/* Row 1: Typography + Visual - Similar Sizes */}
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center mb-24">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-16 lg:gap-20 items-center mb-12 md:mb-24">
             {/* Left - Typography */}
-            <div className="space-y-8">
+            <div className="space-y-4 md:space-y-8">
               {/* Main headline */}
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-[Montserrat] leading-[1.15]">
                 <span className="block text-white">Pomagam małym firmom</span>
@@ -35,7 +35,7 @@ export const MainPage: React.FC = () => {
               </h1>
               
               {/* Lead */}
-              <p className="text-xl md:text-2xl text-gray-400 leading-relaxed">
+              <p className="text-lg md:text-xl lg:text-2xl text-gray-400 leading-relaxed">
                 Tworzę <strong>systemy pozyskiwania klientów z internetu</strong>, <strong>strony internetowe dla małych firm</strong> oraz wykorzystuję <strong>AI w marketingu</strong> i <strong>automatyzację</strong> do zwiększania sprzedaży.
               </p>
             </div>
@@ -93,7 +93,7 @@ export const MainPage: React.FC = () => {
           
           {/* Row 2: Centered CTAs */}
           <div className="flex justify-center">
-            <div className="flex flex-col sm:flex-row gap-6">
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
               <Link
                 to="/strony-www"
                 className="inline-flex items-center justify-center bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-4 px-8 rounded-lg hover:shadow-xl hover:shadow-[#fee715]/20 transition-all duration-300"
@@ -114,17 +114,35 @@ export const MainPage: React.FC = () => {
       {/* About Section */}
       <section className="py-20 md:py-32 px-6 md:px-8">
         <div className="container mx-auto max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
-            {/* Left - Content */}
-            <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-[Montserrat] bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent leading-tight pb-2">
-                Kim jestem i jak pracuję
-              </h2>
-              
+          {/* Mobile: single column with custom order, Desktop: grid 2 columns */}
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 md:gap-16 lg:gap-20">
+            {/* Title - order 1 on mobile, part of left column on desktop */}
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-[Montserrat] bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent leading-tight pb-2 order-1 lg:col-span-1">
+              Kim jestem i jak pracuję
+            </h2>
+            
+            {/* First paragraph - order 2 on mobile, part of left column on desktop */}
+            <div className="space-y-4 text-lg text-gray-300 leading-relaxed order-2 lg:col-span-1">
+              <p>
+                Jestem specjalistą od marketingu i technologii. Od lat pomagam małym firmom i freelancerom uporządkować procesy sprzedażowe i komunikację online.
+              </p>
+            </div>
+            
+            {/* Photo - order 3 on mobile, right column on desktop */}
+            <div className="relative order-3 lg:col-start-2 lg:row-start-1 lg:row-end-4">
+              <div className="relative rounded-2xl overflow-hidden">
+                <img
+                  src="/images/Drozniak_photo_suit_1.jpg"
+                  alt="Stanisław Drożniak - specjalista od systemów pozyskiwania klientów i stron internetowych dla małych firm"
+                  className="w-full h-auto object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#101820]/20 to-transparent"></div>
+              </div>
+            </div>
+            
+            {/* Rest of content - order 4 on mobile, part of left column on desktop */}
+            <div className="space-y-6 order-4 lg:col-span-1">
               <div className="space-y-4 text-lg text-gray-300 leading-relaxed">
-                <p>
-                  Jestem specjalistą od marketingu i technologii. Od lat pomagam małym firmom i freelancerom uporządkować procesy sprzedażowe i komunikację online.
-                </p>
                 <p>
                   Zajmuję się <span className="font-bold text-[#fee715]">wdrażaniem systemów pozyskiwania klientów dla małych firm</span> - od sprawdzenia aktualnych działań, przez automatyzację marketingu i analizę danych, po wdrożenie AI w procesach sprzedażowych.
                 </p>
@@ -136,18 +154,6 @@ export const MainPage: React.FC = () => {
               <p className="text-base text-gray-400 italic">
                 Pracuję samodzielnie - bez zespołu i pośredników. Cały budżet moich klientów idzie w jakość, design i skuteczność.
               </p>
-            </div>
-            
-            {/* Right - Photo */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden">
-                <img
-                  src="/images/Drozniak_photo_suit_1.jpg"
-                  alt="Stanisław Drożniak - specjalista od systemów pozyskiwania klientów i stron internetowych dla małych firm"
-                  className="w-full h-auto object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#101820]/20 to-transparent"></div>
-              </div>
             </div>
           </div>
         </div>

@@ -12,6 +12,7 @@ export const Header: React.FC = () => {
   const isContactPage = location.pathname === '/kontakt';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleMobileMenu = () => {
@@ -142,73 +143,109 @@ export const Header: React.FC = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-[#101820] border-b border-white/20 shadow-2xl z-50">
           <div className="container mx-auto px-4 py-4">
-            <div className="space-y-3">
-              {/* Page Selection - Simple and Clear */}
-              <div className="space-y-2">
-                <Link 
-                  to="/" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 relative ${
-                    isHomePage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
+            <div className="space-y-1">
+              {/* Kim jestem */}
+              <Link 
+                to="/" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 relative ${
+                  isHomePage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Kim jestem
+                {isHomePage && (
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                )}
+              </Link>
+              
+              {/* Co oferuję - with dropdown */}
+              <div>
+                <button
+                  onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                  className={`w-full py-3 text-center text-base font-medium transition-all duration-300 relative flex items-center justify-center ${
+                    isSystemPage || isStronyWWWPage || isSzkoleniaPage 
+                      ? 'text-[#fee715]' 
+                      : 'text-gray-300 hover:text-white'
                   }`}
                 >
-                  Kim jestem
-                  {isHomePage && (
+                  Co oferuję
+                  <svg 
+                    className={`w-4 h-4 ml-2 transition-transform duration-300 ${
+                      isMobileServicesOpen ? 'rotate-180' : ''
+                    }`} 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                  {(isSystemPage || isStronyWWWPage || isSzkoleniaPage) && (
                     <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
                   )}
-                </Link>
+                </button>
                 
-                {/* Services Section */}
-                <div className="border-b border-white/10 pb-2">
-                  <p className="text-gray-400 text-sm font-medium px-4 py-2">Co oferuję</p>
-                  <Link 
-                    to="/strony-www" 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block w-full py-2 px-4 text-sm transition-all duration-300 ${
-                      isStronyWWWPage 
-                        ? 'text-[#fee715] bg-[#fee715]/10' 
-                        : 'text-gray-300 hover:text-white'
-                    }`}
-                  >
-                    Strony WWW
-                  </Link>
-                  <Link 
-                    to="/system" 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block w-full py-2 px-4 text-sm transition-all duration-300 ${
-                      isSystemPage 
-                        ? 'text-[#fee715] bg-[#fee715]/10' 
-                        : 'text-gray-300 hover:text-white'
-                    }`}
-                  >
-                    Systemy sprzedażowe
-                  </Link>
-                  <Link 
-                    to="/szkolenia" 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block w-full py-2 px-4 text-sm transition-all duration-300 ${
-                      isSzkoleniaPage 
-                        ? 'text-[#fee715] bg-[#fee715]/10' 
-                        : 'text-gray-300 hover:text-white'
-                    }`}
-                  >
-                    Szkolenia dla firm
-                  </Link>
-                </div>
-                
-                <Link 
-                  to="/kontakt" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 relative ${
-                    isContactPage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
-                  }`}
-                >
-                  Kontakt
-                  {isContactPage && (
-                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
-                  )}
-                </Link>
+                {/* Services Dropdown */}
+                {isMobileServicesOpen && (
+                  <div className="mt-2 space-y-1">
+                    <Link 
+                      to="/strony-www" 
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        setIsMobileServicesOpen(false);
+                      }}
+                      className={`block w-full py-2 px-4 text-sm transition-all duration-300 rounded ${
+                        isStronyWWWPage 
+                          ? 'text-[#fee715] bg-[#fee715]/10' 
+                          : 'text-gray-300 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      Strony WWW
+                    </Link>
+                    <Link 
+                      to="/system" 
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        setIsMobileServicesOpen(false);
+                      }}
+                      className={`block w-full py-2 px-4 text-sm transition-all duration-300 rounded ${
+                        isSystemPage 
+                          ? 'text-[#fee715] bg-[#fee715]/10' 
+                          : 'text-gray-300 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      Systemy sprzedażowe
+                    </Link>
+                    <Link 
+                      to="/szkolenia" 
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        setIsMobileServicesOpen(false);
+                      }}
+                      className={`block w-full py-2 px-4 text-sm transition-all duration-300 rounded ${
+                        isSzkoleniaPage 
+                          ? 'text-[#fee715] bg-[#fee715]/10' 
+                          : 'text-gray-300 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      Szkolenia dla firm
+                    </Link>
+                  </div>
+                )}
               </div>
+              
+              {/* Kontakt */}
+              <Link 
+                to="/kontakt" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 relative ${
+                  isContactPage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Kontakt
+                {isContactPage && (
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                )}
+              </Link>
             </div>
           </div>
         </div>

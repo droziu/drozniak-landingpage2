@@ -49,6 +49,7 @@ export const StronyWWWPage: React.FC = () => {
   const firstViewRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const stabilityRef = useRef<HTMLDivElement>(null);
+  const testimonialsContainerRef = useRef<HTMLDivElement>(null);
   const testimonialsContentRef = useRef<HTMLDivElement>(null);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -247,8 +248,36 @@ export const StronyWWWPage: React.FC = () => {
     };
   }, []);
 
-  // Auto-scroll testimonials using CSS transform (GPU-accelerated, no jumps)
-  // No useEffect needed - CSS handles everything
+  // Endless scroll for mobile testimonials (manual scroll)
+  useEffect(() => {
+    const container = testimonialsContainerRef.current;
+    const content = testimonialsContentRef.current;
+    
+    if (!container || !content) return;
+
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) return; // Only on mobile
+
+    const handleScroll = () => {
+      const scrollTop = container.scrollTop;
+      const scrollHeight = content.scrollHeight;
+      const midpoint = scrollHeight / 2;
+
+      // Endless loop: when reaching midpoint, reset to beginning
+      if (scrollTop >= midpoint) {
+        container.scrollTop = scrollTop - midpoint;
+      } else if (scrollTop <= 0) {
+        // If scrolled to top, jump to midpoint for seamless loop
+        container.scrollTop = midpoint - 10;
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <main>
@@ -330,11 +359,14 @@ export const StronyWWWPage: React.FC = () => {
               <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-[#101820] via-[#101820]/90 to-transparent z-10 pointer-events-none"></div>
               <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#101820] via-[#101820]/90 to-transparent z-10 pointer-events-none"></div>
               
-                     {/* Testimonials - CSS transform animation (smooth, no jumps) */}
+                     {/* Testimonials - CSS transform animation on desktop, manual scroll on mobile */}
                      <div 
-                       className="relative overflow-hidden"
+                       ref={testimonialsContainerRef}
+                       className="relative md:overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:hidden"
                        style={{ 
-                         maxHeight: 'calc(60vh - 1px)'
+                         maxHeight: 'calc(60vh - 1px)',
+                         scrollbarWidth: 'none',
+                         msOverflowStyle: 'none'
                        }}
                        onMouseEnter={() => {
                          setIsHovering(true);
@@ -345,7 +377,7 @@ export const StronyWWWPage: React.FC = () => {
                      >
                        <div 
                          ref={testimonialsContentRef}
-                         className={`space-y-4 pr-4 animate-testimonials-scroll ${isHovering ? 'paused' : ''}`}
+                         className={`space-y-4 pr-4 md:animate-testimonials-scroll ${isHovering ? 'md:paused' : ''}`}
                        >
                          {/* Testimonial 1 - Brent Peterson with photo */}
                          <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
@@ -1004,7 +1036,10 @@ export const StronyWWWPage: React.FC = () => {
             
             {/* Bottom CTA */}
             <div className="mt-20 text-center">
-              <p className="text-gray-300 text-lg mb-6">Cały proces trwa zwykle 14–21 dni roboczych.<br />Jesteśmy w stałym kontakcie — dokładnie wiesz, co dzieje się na każdym etapie.</p>
+              <p className="text-gray-300 text-lg mb-6">
+                Cały proces trwa zwykle 14–21 dni roboczych.<br />
+                <span className="whitespace-nowrap">Jesteśmy w stałym kontakcie</span> — dokładnie wiesz, co dzieje się na każdym etapie.
+              </p>
               <a 
                 href="#cta"
                 onClick={(e) => {
@@ -1298,20 +1333,6 @@ export const StronyWWWPage: React.FC = () => {
             ))}
           </div>
 
-          {/* CTA */}
-          <div className="text-center mt-16">
-            <h3 className="font-[Montserrat] text-2xl md:text-3xl font-bold mb-6 text-white">
-              Masz inne pytanie? Zadaj mi je bezpośrednio.
-            </h3>
-            <a
-              href="https://calendly.com/drozniakstanislaw/spotkanie"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-4 px-8 rounded-lg text-lg hover:shadow-2xl hover:shadow-[#fee715]/30 transition-all duration-300 transform hover:scale-105"
-            >
-              Umów rozmowę 20 min
-            </a>
-          </div>
         </div>
       </section>
 
@@ -1319,7 +1340,7 @@ export const StronyWWWPage: React.FC = () => {
       <section id="cta" className="py-12 md:py-20 px-4 md:px-6 bg-white/5">
         <div className="container mx-auto max-w-6xl">
           <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-bold mb-12 text-center text-white">
-            Skontaktuj się tak, jak wolisz
+            Wybierz preferowaną formę kontaktu
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8 mb-12">

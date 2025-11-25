@@ -10,7 +10,7 @@ export const Hero: React.FC = () => {
     const fadeInTrust = useFadeIn<HTMLDivElement>();
 
   return (
-    <section className="min-h-screen flex flex-col justify-center py-2 md:py-20 px-4 md:px-6">
+    <section className="min-h-screen flex flex-col justify-center py-12 md:py-20 px-4 md:px-6">
       <div className="container mx-auto max-w-7xl">
         {/* Two column layout: 60% text, 40% visualization */}
         <div className="grid lg:grid-cols-[55%_45%] gap-8 lg:gap-10 items-start mb-16 md:mb-24">
