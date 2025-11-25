@@ -154,7 +154,7 @@ export const SzkoleniaPage: React.FC = () => {
 
         {/* Charakter i przeznaczenie szkoleń Section */}
         <section className="mb-20 md:mb-24">
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <h2 className="font-[Montserrat] text-3xl md:text-4xl font-bold mb-6 text-center text-white">
               Charakter i przeznaczenie szkoleń
             </h2>
@@ -190,7 +190,7 @@ export const SzkoleniaPage: React.FC = () => {
             Zakres tematyczny szkoleń
           </h2>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {trainingTypes.map((training, index) => (
               <div
                 key={index}

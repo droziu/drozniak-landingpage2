@@ -255,20 +255,26 @@ export const StronyWWWPage: React.FC = () => {
     
     if (!container || !content) return;
 
-    const isMobile = window.innerWidth < 768;
-    if (!isMobile) return; // Only on mobile
+    // Check if mobile on mount and resize
+    const checkMobile = () => window.innerWidth < 768;
+    if (!checkMobile()) return; // Only on mobile
 
     const handleScroll = () => {
+      if (!checkMobile()) return; // Exit if resized to desktop
+      
       const scrollTop = container.scrollTop;
       const scrollHeight = content.scrollHeight;
+      const clientHeight = container.clientHeight;
       const midpoint = scrollHeight / 2;
+      const threshold = 50; // Threshold for reset
 
-      // Endless loop: when reaching midpoint, reset to beginning
-      if (scrollTop >= midpoint) {
+      // Endless loop: when reaching near the end of first half, reset to beginning
+      if (scrollTop >= midpoint - threshold) {
+        // Reset to equivalent position in first half
         container.scrollTop = scrollTop - midpoint;
-      } else if (scrollTop <= 0) {
-        // If scrolled to top, jump to midpoint for seamless loop
-        container.scrollTop = midpoint - 10;
+      } else if (scrollTop <= threshold) {
+        // If scrolled near top, jump to equivalent position in second half for seamless upward scroll
+        container.scrollTop = midpoint + scrollTop;
       }
     };
 
@@ -369,15 +375,19 @@ export const StronyWWWPage: React.FC = () => {
                          msOverflowStyle: 'none'
                        }}
                        onMouseEnter={() => {
-                         setIsHovering(true);
+                         if (window.innerWidth >= 768) {
+                           setIsHovering(true);
+                         }
                        }}
                        onMouseLeave={() => {
-                         setIsHovering(false);
+                         if (window.innerWidth >= 768) {
+                           setIsHovering(false);
+                         }
                        }}
                      >
                        <div 
                          ref={testimonialsContentRef}
-                         className={`space-y-4 pr-4 md:animate-testimonials-scroll ${isHovering ? 'md:paused' : ''}`}
+                         className={`space-y-4 pr-4 testimonials-scroll-desktop ${isHovering ? 'paused' : ''}`}
                        >
                          {/* Testimonial 1 - Brent Peterson with photo */}
                          <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
@@ -980,7 +990,7 @@ export const StronyWWWPage: React.FC = () => {
               ].map((step, index) => (
                 <div 
                   key={index}
-                  ref={(el) => stepRefs.current[index] = el}
+                  ref={(el) => { if (el) stepRefs.current[index] = el; }}
                   className="relative flex items-start"
                 >
                   {/* Timeline Point */}

@@ -16,18 +16,18 @@ export const Hero: React.FC = () => {
         <div className="grid lg:grid-cols-[55%_45%] gap-8 lg:gap-10 items-start mb-16 md:mb-24">
           {/* Left Column - Text */}
           <div className="text-center lg:text-left">
-            <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 md:mb-5 leading-tight ${fadeInH1.className}`}>
+            <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 md:mb-7 leading-tight ${fadeInH1.className}`}>
               Masz klientów tylko z polecenia lub przypadku?
             </h1>
-            <div ref={fadeInYellow.ref} className={`mb-7 md:mb-9 ${fadeInYellow.className}`}>
+            <div ref={fadeInYellow.ref} className={`mb-9 md:mb-11 ${fadeInYellow.className}`}>
               <h2 className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] hover:from-[#00C9A7] hover:to-[#fee715] bg-clip-text text-transparent font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight pb-1 transition-all duration-500">
                 Brakuje Ci systemu.
               </h2>
             </div>
-            <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 mb-9 md:mb-11 leading-relaxed ${fadeInSub.className}`}>
+            <div ref={fadeInSub.ref} className={`text-base sm:text-lg md:text-xl text-gray-300 mb-11 md:mb-14 leading-relaxed ${fadeInSub.className}`}>
               <p className="text-gray-200 font-medium">Proponuję jednorazową inwestycję: analiza, strategia i wdrożenie narzędzia opartego na AI – zaprojektowanego specjalnie dla małych firm i freelancerów.</p>
             </div>
-            <div ref={fadeInCTA.ref} className={`flex flex-col items-center lg:items-start space-y-3 ${fadeInCTA.className}`}>
+            <div ref={fadeInCTA.ref} className={`flex flex-col items-center lg:items-start space-y-4 ${fadeInCTA.className}`}>
                 <a 
                     href="#cta"
                     onClick={(e) => {
