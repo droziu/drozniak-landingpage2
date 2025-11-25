@@ -1,8 +1,17 @@
 import React, { useEffect } from 'react';
 import { ContactForm } from './ContactForm';
 import { ContactAside } from './ContactAside';
+import { useSEO } from '../hooks/useSEO';
 
 export const ContactPage: React.FC = () => {
+  useSEO({
+    title: 'Kontakt - System pozyskiwania klientów i strony WWW | Stanisław Drożniak',
+    description: 'Skontaktuj się w sprawie systemu pozyskiwania klientów, strony internetowej dla małej firmy lub szkolenia z AI w marketingu. Odpowiadam w 24 godziny.',
+    keywords: 'kontakt, system pozyskiwania klientów, strony www dla małych firm, szkolenia AI',
+    ogTitle: 'Kontakt - System pozyskiwania klientów i strony WWW',
+    ogDescription: 'Skontaktuj się w sprawie systemu pozyskiwania klientów, strony internetowej lub szkolenia z AI w marketingu.',
+  });
+
   // Reset scroll position to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -11,39 +20,27 @@ export const ContactPage: React.FC = () => {
   return (
     <main className="py-16 md:py-24 px-4 md:px-6">
       <div className="container mx-auto max-w-7xl">
-        {/* Header */}
-        <div className="text-center mb-12">
+        {/* Header - left aligned */}
+        <div className="mb-8 md:mb-12">
           <h1 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
             Kontakt
           </h1>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-            Napisz krótko, czego potrzebujesz. Odpowiadam zwykle w 24 godziny.
+          <p className="text-gray-300 text-lg leading-relaxed max-w-[60ch]">
+            Opisz krótko, czego potrzebujesz – zwykle wracam z odpowiedzią w ciągu 24 godzin.
           </p>
         </div>
 
-        {/* 12-column grid layout */}
-        <div className="grid grid-cols-12 gap-8 lg:gap-12">
-          {/* Form - Col 1-7 on desktop, full width on tablet/mobile */}
-          <div className="col-span-12 lg:col-span-7">
+        {/* Two column layout: 70% form, 30% aside */}
+        <div className="grid grid-cols-1 lg:grid-cols-[70%_1fr] gap-8 lg:gap-12 items-start">
+          {/* Form - Main action */}
+          <div>
             <ContactForm />
           </div>
 
-          {/* Separator - hidden on mobile */}
-          <div className="hidden lg:block col-span-1">
-            <div className="h-full w-px bg-white/10"></div>
-          </div>
-
-          {/* Aside - Col 8-12 on desktop, full width on tablet/mobile */}
-          <div className="col-span-12 lg:col-span-4">
+          {/* Aside - Other channels */}
+          <div>
             <ContactAside />
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-400 text-sm">
-            Zwykle odpisuję w ciągu 24 godzin • Twoje dane są bezpieczne • <a href="/polityka-prywatnosci" className="text-[#fee715] hover:text-white transition-colors">Polityka prywatności</a>
-          </p>
         </div>
       </div>
     </main>

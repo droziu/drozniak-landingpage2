@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSEO } from '../hooks/useSEO';
 
 export const PortfolioPasw: React.FC = () => {
+  useSEO({
+    title: 'Strona WWW dla szkoły sztuk walki PASW – case study | Stanisław Drożniak',
+    description: 'Strona internetowa dla Pszczyńskiej Akademii Sztuk Walki. Case study: jak stworzyć szybką stronę www dla szkoły sztuk walki i małej firmy edukacyjnej.',
+    keywords: 'strona www dla szkoły sztuk walki, strona internetowa dla szkoły, strony www dla małych firm edukacyjnych, strona dla akademii',
+    ogTitle: 'Strona WWW dla szkoły sztuk walki PASW – case study',
+    ogDescription: 'Strona internetowa dla szkoły sztuk walki. Zobacz, jak stworzyć szybką stronę www dla małej firmy edukacyjnej.',
+  });
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isBeforeAfterExpanded, setIsBeforeAfterExpanded] = useState(false);
   const [isHistoriaExpanded, setIsHistoriaExpanded] = useState(false);
@@ -159,14 +168,14 @@ export const PortfolioPasw: React.FC = () => {
           <div className="text-center mb-16 md:mb-20">
             <h1 className="font-[Montserrat] text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
-                Pszczyńska Akademia Sztuk Walki
+                Strona www dla szkoły sztuk walki PASW
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8">
-              nowa strona internetowa
+              case study: strona internetowa dla szkoły
             </p>
             <p className="text-xl md:text-2xl font-semibold text-white max-w-3xl mx-auto leading-relaxed mb-12 md:mb-16">
-              Redesign strony PASW – <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">szybsza, czytelniejsza</span> i dopasowana do użytkowników mobilnych.
+              <strong>Strona www dla szkoły sztuk walki</strong> PASW – <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">szybsza, czytelniejsza</span> i dopasowana do użytkowników mobilnych. Przykład <strong>strony internetowej dla małej firmy edukacyjnej</strong>.
             </p>
           </div>
 

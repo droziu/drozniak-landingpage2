@@ -1,7 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSEO } from '../hooks/useSEO';
 
 export const MainPage: React.FC = () => {
+  useSEO({
+    title: 'System pozyskiwania klientów i strony WWW dla małych firm | Stanisław Drożniak',
+    description: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Tworzę systemy pozyskiwania klientów, strony internetowe dla małych firm oraz szkolenia z AI w marketingu.',
+    keywords: 'system pozyskiwania klientów, strony internetowe dla małych firm, strony www dla freelancerów, AI w marketingu małej firmy, automatyzacja marketingu, strategia marketingowa dla małych firm',
+    ogTitle: 'System pozyskiwania klientów i strony WWW dla małych firm',
+    ogDescription: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Systemy sprzedażowe, strony WWW i szkolenia z AI.',
+  });
+
   return (
     <main className="bg-[#101820] text-white overflow-x-hidden">
       {/* Hero Section */}
@@ -19,15 +28,15 @@ export const MainPage: React.FC = () => {
             {/* Left - Typography */}
             <div className="space-y-8">
               {/* Main headline */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-[Montserrat] leading-tight">
-                Tworzę <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">systemy</span>, które sprzedają
-                <br />
-                i <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">strony</span>, które naprawdę działają.
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-[Montserrat] leading-[1.15]">
+                <span className="block text-white">Pomagam małym firmom</span>
+                <span className="block text-white">i freelancerom</span>
+                <span className="block bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">pozyskiwać klientów online</span>
               </h1>
               
               {/* Lead */}
               <p className="text-xl md:text-2xl text-gray-400 leading-relaxed">
-                Łączę strategię marketingową, nowoczesny design i technologie webowe.
+                Tworzę <strong>systemy pozyskiwania klientów z internetu</strong>, <strong>strony internetowe dla małych firm</strong> oraz wykorzystuję <strong>AI w marketingu</strong> i <strong>automatyzację</strong> do zwiększania sprzedaży.
               </p>
             </div>
             
@@ -89,13 +98,13 @@ export const MainPage: React.FC = () => {
                 to="/strony-www"
                 className="inline-flex items-center justify-center bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-4 px-8 rounded-lg hover:shadow-xl hover:shadow-[#fee715]/20 transition-all duration-300"
               >
-                Zobacz strony WWW
+                Strony internetowe dla małych firm
               </Link>
               <Link
                 to="/system"
                 className="inline-flex items-center justify-center border-2 border-[#fee715] text-[#fee715] hover:bg-[#fee715] hover:text-[#101820] font-bold py-4 px-8 rounded-lg transition-all duration-300"
               >
-                Zobacz system sprzedażowy
+                System pozyskiwania klientów
               </Link>
             </div>
           </div>
@@ -114,13 +123,13 @@ export const MainPage: React.FC = () => {
               
               <div className="space-y-4 text-lg text-gray-300 leading-relaxed">
                 <p>
-                  Jestem specjalistą od marketingu i technologii. Od lat pomagam firmom uporządkować procesy sprzedażowe i komunikację online.
+                  Jestem specjalistą od marketingu i technologii. Od lat pomagam małym firmom i freelancerom uporządkować procesy sprzedażowe i komunikację online.
                 </p>
                 <p>
-                  Zajmuję się <span className="font-bold text-[#fee715]">wdrażaniem systemów pozyskiwania klientów</span> - od sprawdzenia aktualnych działań, przez automatyzację i analizę danych, po wdrożenie AI w procesach.
+                  Zajmuję się <span className="font-bold text-[#fee715]">wdrażaniem systemów pozyskiwania klientów dla małych firm</span> - od sprawdzenia aktualnych działań, przez automatyzację marketingu i analizę danych, po wdrożenie AI w procesach sprzedażowych.
                 </p>
                 <p>
-                  <span className="font-bold text-[#fee715]">Tworzę też strony internetowe</span>, które są nie tylko szybkie i estetyczne, ale przede wszystkim zaprojektowane z myślą o konwersji.
+                  <span className="font-bold text-[#fee715]">Tworzę też strony internetowe dla małych firm i freelancerów</span>, które są nie tylko szybkie i estetyczne, ale przede wszystkim zaprojektowane z myślą o konwersji i pozyskiwaniu klientów.
                 </p>
               </div>
               
@@ -134,7 +143,7 @@ export const MainPage: React.FC = () => {
               <div className="relative rounded-2xl overflow-hidden">
                 <img
                   src="/images/Drozniak_photo_suit_1.jpg"
-                  alt="Stanisław Drożniak"
+                  alt="Stanisław Drożniak - specjalista od systemów pozyskiwania klientów i stron internetowych dla małych firm"
                   className="w-full h-auto object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#101820]/20 to-transparent"></div>
@@ -158,18 +167,18 @@ export const MainPage: React.FC = () => {
                 </div>
                 
                 <h3 className="text-2xl md:text-3xl font-bold font-[Montserrat]">
-                  Kompletny system sprzedaży dla Twojej firmy
+                  System pozyskiwania klientów dla małych firm
                 </h3>
                 
                 <p className="text-gray-300 leading-relaxed">
-                  Analizuję wszystkie działania marketingowe — od landing page'a, przez reklamy i social media, po wykorzystanie AI. Na tej podstawie tworzę proces, który realnie pomaga pozyskiwać nowych klientów.
+                  Analizuję wszystkie działania marketingowe — od landing page'a, przez reklamy i social media, po wykorzystanie AI. Na tej podstawie tworzę <strong>system pozyskiwania klientów</strong>, który realnie pomaga małym firmom i freelancerom pozyskiwać nowych klientów z internetu.
                 </p>
                 
                 <Link
                   to="/system"
                   className="inline-flex items-center text-[#fee715] hover:text-white font-medium transition-colors duration-300"
                 >
-                  Zobacz, jak to działa
+                  Zobacz system pozyskiwania klientów
                   <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -187,18 +196,18 @@ export const MainPage: React.FC = () => {
                 </div>
                 
                 <h3 className="text-2xl md:text-3xl font-bold font-[Montserrat]">
-                  Strony, które łączą design i skuteczność
+                  Strony internetowe dla małych firm i freelancerów
                 </h3>
                 
                 <p className="text-gray-300 leading-relaxed">
-                  Buduję strony oparte na nowoczesnych frameworkach (np. Next.js, Astro, Vercel). Każda powstaje od zera - dopasowana do marki, lekka, szybka i gotowa do skalowania.
+                  Buduję <strong>strony www dla małych firm i freelancerów</strong> oparte na nowoczesnych frameworkach (np. Next.js, Astro, Vercel). Każda powstaje od zera - dopasowana do marki, lekka, szybka i gotowa do skalowania. Strony projektowane pod pozyskiwanie klientów.
                 </p>
                 
                 <Link
                   to="/strony-www"
                   className="inline-flex items-center text-[#fee715] hover:text-white font-medium transition-colors duration-300"
                 >
-                  Zobacz realizacje
+                  Zobacz strony internetowe dla małych firm
                   <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>

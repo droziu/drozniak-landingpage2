@@ -15,6 +15,7 @@ import { Footer } from './components/Footer';
 import { StickyCTA } from './components/StickyCTA';
 import { CookieConsent } from './components/CookieConsent';
 import { ScrollToTop } from './components/ScrollToTop';
+import { SchemaMarkup } from './components/SchemaMarkup';
 
 const App: React.FC = () => {
   const [isStickyCtaVisible, setStickyCtaVisible] = useState(false);
@@ -59,6 +60,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
+        <SchemaMarkup />
         <ScrollToTop />
         <Header />
         <Routes>

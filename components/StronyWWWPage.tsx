@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircleIcon } from './icons/CheckCircleIcon';
+import { useSEO } from '../hooks/useSEO';
 
 // Add custom styles for animation
 const pathAnimationStyle = `
@@ -21,6 +22,14 @@ const pathAnimationStyle = `
 `;
 
 export const StronyWWWPage: React.FC = () => {
+  useSEO({
+    title: 'Strony internetowe dla małych firm i freelancerów | Stanisław Drożniak',
+    description: 'Strony www dla małych firm i freelancerów. Strona internetowa dla trenera, dietetyka, zespołu muzycznego. Szybkie, nowoczesne strony projektowane pod pozyskiwanie klientów.',
+    keywords: 'strony internetowe dla małych firm, strony www dla freelancerów, strona www dla trenera, strona internetowa dla dietetyka, strona www dla zespołu muzycznego, strony www dla małych firm',
+    ogTitle: 'Strony internetowe dla małych firm i freelancerów',
+    ogDescription: 'Strony www dla małych firm i freelancerów. Szybkie, nowoczesne strony projektowane pod pozyskiwanie klientów.',
+  });
+
   const [expandedTech, setExpandedTech] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const [formStatus, setFormStatus] = useState<'idle' | 'success'>('idle');
@@ -34,12 +43,12 @@ export const StronyWWWPage: React.FC = () => {
   const [selectedBudget, setSelectedBudget] = useState<{ value: string; label: string }>({ value: '', label: '' });
   const [isBudgetDropdownOpen, setIsBudgetDropdownOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
   const budgetDropdownRef = useRef<HTMLDivElement>(null);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const firstViewRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const stabilityRef = useRef<HTMLDivElement>(null);
-  const testimonialsContainerRef = useRef<HTMLDivElement>(null);
   const testimonialsContentRef = useRef<HTMLDivElement>(null);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -238,66 +247,8 @@ export const StronyWWWPage: React.FC = () => {
     };
   }, []);
 
-  // Infinite loop scrolling for testimonials on mobile only
-  useEffect(() => {
-    const container = testimonialsContainerRef.current;
-    const content = testimonialsContentRef.current;
-    
-    if (!container || !content) return;
-
-    // Only set up mobile scrolling - desktop uses CSS animation
-    const isMobile = () => window.innerWidth < 768;
-
-    // Set initial scroll position to the start (mobile only)
-    const setInitialPosition = () => {
-      if (isMobile()) {
-        container.scrollTop = 0;
-      }
-    };
-    
-    setInitialPosition();
-    
-    // Handle window resize
-    const handleResize = () => {
-      if (isMobile()) {
-        // On mobile, ensure we're at the start
-        setInitialPosition();
-      }
-      // On desktop, don't interfere with CSS animation
-    };
-
-    const handleScroll = () => {
-      // Only apply on mobile (when container is scrollable)
-      if (!isMobile()) return;
-      
-      const scrollTop = container.scrollTop;
-      const scrollHeight = content.scrollHeight;
-      
-      // Calculate the midpoint (where the duplicate starts)
-      const midpoint = scrollHeight / 2;
-      
-      // If scrolled past the midpoint, seamlessly jump back to equivalent position in first half
-      if (scrollTop >= midpoint) {
-        container.scrollTop = scrollTop - midpoint;
-      }
-      // If scrolled to the very top, jump to the duplicate section (for upward scrolling)
-      else if (scrollTop <= 0 && scrollHeight > container.clientHeight) {
-        // Only jump if there's actually content to scroll
-        container.scrollTop = midpoint - 10; // Small offset to prevent infinite loop
-      }
-    };
-
-    // Only add scroll listener on mobile
-    if (isMobile()) {
-      container.addEventListener('scroll', handleScroll, { passive: true });
-    }
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  // Auto-scroll testimonials using CSS transform (GPU-accelerated, no jumps)
+  // No useEffect needed - CSS handles everything
 
   return (
     <main>
@@ -313,7 +264,7 @@ export const StronyWWWPage: React.FC = () => {
               </h1>
               
               <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
-                Projekt na zamówienie. Błyskawicznie szybkie w działaniu. Zaprojektowane pod cele Twojej firmy z uwzględnieniem strategii marketingowych.
+                Projekt na zamówienie. Błyskawicznie szybkie w działaniu. Zaprojektowane pod cele Twojej firmy z uwzględnieniem strategii marketingowych. Tworzę <strong>strony www dla małych firm i freelancerów</strong>, które pomagają w <strong>pozyskiwaniu klientów</strong>.
               </p>
 
               {/* 3 Pills */}
@@ -370,32 +321,42 @@ export const StronyWWWPage: React.FC = () => {
             </div>
 
             {/* Right Column - Testimonials */}
-            <div>
+            <div className="md:sticky md:top-32 h-fit">
               {/* Section title - above the testimonials */}
-              <h3 className="text-white font-semibold text-lg mb-6 text-center">Co mówią osoby, z którymi współpracowałem</h3>
+              <h3 className="text-white font-semibold text-lg mb-6">Co mówią osoby, z którymi współpracowałem</h3>
               
               <div className="relative">
               {/* Gradient fade-out overlays - extended */}
-              <div className="absolute top-0 left-0 right-4 h-20 bg-gradient-to-b from-[#101820] via-[#101820]/90 to-transparent z-10 pointer-events-none"></div>
-              <div className="absolute bottom-0 left-0 right-4 h-24 bg-gradient-to-t from-[#101820] via-[#101820]/90 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-[#101820] via-[#101820]/90 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#101820] via-[#101820]/90 to-transparent z-10 pointer-events-none"></div>
               
-                     {/* Testimonials - auto-scroll on desktop, manual scroll on mobile */}
+                     {/* Testimonials - CSS transform animation (smooth, no jumps) */}
                      <div 
-                       ref={testimonialsContainerRef}
-                       className="max-h-[60vh] overflow-y-auto md:overflow-hidden relative scrollbar-hide"
-                       style={{ WebkitOverflowScrolling: 'touch' }}
+                       className="relative overflow-hidden"
+                       style={{ 
+                         maxHeight: 'calc(60vh - 1px)'
+                       }}
+                       onMouseEnter={() => {
+                         setIsHovering(true);
+                       }}
+                       onMouseLeave={() => {
+                         setIsHovering(false);
+                       }}
                      >
                        <div 
                          ref={testimonialsContentRef}
-                         className={`space-y-4 pr-4 ${isDesktop ? 'animate-testimonials-scroll' : ''}`}
+                         className={`space-y-4 pr-4 animate-testimonials-scroll ${isHovering ? 'paused' : ''}`}
                        >
                          {/* Testimonial 1 - Brent Peterson with photo */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c1.jpg" 
                                alt="Brent Peterson" 
                                className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                               width="48"
+                               height="48"
+                               loading="eager"
                              />
                              <div className="flex-1">
                                <h4 className="text-white font-semibold text-sm">Brent Peterson</h4>
@@ -406,7 +367,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 2 - Russell Garner with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -421,12 +382,15 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 3 - Kalen Jordan with photo */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c2.jpg" 
                                alt="Kalen Jordan" 
                                className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                               width="48"
+                               height="48"
+                               loading="eager"
                              />
                              <div className="flex-1">
                                <h4 className="text-white font-semibold text-sm">Kalen Jordan</h4>
@@ -437,7 +401,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 4 - Michał Fus with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -452,12 +416,15 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 5 - Bartosz Nosiadek with photo */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c3.jpg" 
                                alt="Bartosz Nosiadek" 
                                className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                               width="48"
+                               height="48"
+                               loading="eager"
                              />
                              <div className="flex-1">
                                <h4 className="text-white font-semibold text-sm">Bartosz Nosiadek</h4>
@@ -468,7 +435,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 6 - Kaja Lewandowska with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -483,7 +450,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 7 - Damian Lewandowski with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -498,7 +465,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 8 - Jarosław Babiuch with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -514,12 +481,15 @@ export const StronyWWWPage: React.FC = () => {
 
                          {/* Duplicate for seamless loop */}
                          {/* Testimonial 1 - Brent Peterson with photo */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c1.jpg" 
                                alt="Brent Peterson" 
                                className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                               width="48"
+                               height="48"
+                               loading="eager"
                              />
                              <div className="flex-1">
                                <h4 className="text-white font-semibold text-sm">Brent Peterson</h4>
@@ -530,7 +500,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 2 - Russell Garner with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -545,12 +515,15 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 3 - Kalen Jordan with photo */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c2.jpg" 
                                alt="Kalen Jordan" 
                                className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                               width="48"
+                               height="48"
+                               loading="eager"
                              />
                              <div className="flex-1">
                                <h4 className="text-white font-semibold text-sm">Kalen Jordan</h4>
@@ -561,7 +534,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 4 - Michał Fus with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -576,12 +549,15 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 5 - Bartosz Nosiadek with photo */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c3.jpg" 
                                alt="Bartosz Nosiadek" 
                                className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                               width="48"
+                               height="48"
+                               loading="eager"
                              />
                              <div className="flex-1">
                                <h4 className="text-white font-semibold text-sm">Bartosz Nosiadek</h4>
@@ -592,7 +568,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 6 - Kaja Lewandowska with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -607,7 +583,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 7 - Damian Lewandowski with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -622,7 +598,7 @@ export const StronyWWWPage: React.FC = () => {
                          </div>
 
                          {/* Testimonial 8 - Jarosław Babiuch with icon */}
-                         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 glass-effect">
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -693,13 +669,13 @@ export const StronyWWWPage: React.FC = () => {
               <div className="aspect-video overflow-hidden">
                 <img 
                   src="/images/redlin_mockup_thumbnail.jpg" 
-                  alt="REDLIN - Strona internetowa z systemem płatności i modułem biletów" 
+                  alt="Strona www dla zespołu muzycznego REDLIN z systemem płatności i modułem biletów" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
               <div className="p-6">
-                <h3 className="font-bold text-white mb-2">Strona internetowa dla zespołu REDLIN</h3>
-                <p className="text-sm text-gray-300">Kompletny, responsywny serwis koncertowy z wygodnym procesem kupowania biletów, płatnościami online i sekcjami zaprojektowanymi pod fanów.</p>
+                <h3 className="font-bold text-white mb-2">Strona www dla zespołu muzycznego REDLIN</h3>
+                <p className="text-sm text-gray-300">Kompletny, responsywny serwis koncertowy z wygodnym procesem kupowania biletów, płatnościami online i sekcjami zaprojektowanymi pod fanów. Przykład <strong>strony internetowej dla zespołu muzycznego</strong>.</p>
               </div>
             </Link>
 
@@ -708,13 +684,13 @@ export const StronyWWWPage: React.FC = () => {
               <div className="aspect-video overflow-hidden">
                 <img 
                   src="/images/pasw_mockup_thumbnail.jpg" 
-                  alt="Pszczyńska Akademia Sztuk Walki - Strona internetowa" 
+                  alt="Strona internetowa dla szkoły sztuk walki - Pszczyńska Akademia Sztuk Walki" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
               <div className="p-6">
-                <h3 className="font-bold text-white mb-2">Strona dla Pszczyńskiej Akademii Sztuk Walki</h3>
-                <p className="text-sm text-gray-300">Ultraszybka, responsywna witryna z przejrzystą nawigacją, łatwym kontaktem i odświeżoną historią szkoły w formie osi czasu.</p>
+                <h3 className="font-bold text-white mb-2">Strona internetowa dla szkoły sztuk walki</h3>
+                <p className="text-sm text-gray-300">Ultraszybka, responsywna witryna z przejrzystą nawigacją, łatwym kontaktem i odświeżoną historią szkoły w formie osi czasu. Przykład <strong>strony www dla małej firmy</strong> z branży edukacyjnej.</p>
               </div>
             </Link>
           </div>
@@ -1204,7 +1180,7 @@ export const StronyWWWPage: React.FC = () => {
                 <div className="rounded-2xl overflow-hidden shadow-xl shadow-black/30 mb-6">
                   <img 
                     src="/images/pasw_speedtest.jpg" 
-                    alt="Lighthouse Performance Metrics" 
+                    alt="Wyniki wydajności strony internetowej dla małej firmy - Lighthouse Performance Metrics" 
                     className="w-full h-auto"
                   />
                 </div>

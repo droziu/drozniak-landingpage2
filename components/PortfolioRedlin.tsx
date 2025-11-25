@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSEO } from '../hooks/useSEO';
 
 export const PortfolioRedlin: React.FC = () => {
+  useSEO({
+    title: 'Strona WWW dla zespołu muzycznego REDLIN – case study | Stanisław Drożniak',
+    description: 'Strona internetowa dla zespołu muzycznego REDLIN z systemem płatności i modułem biletów. Case study: jak stworzyć stronę www dla zespołu muzycznego.',
+    keywords: 'strona www dla zespołu muzycznego, strona internetowa dla zespołu muzycznego, system sprzedaży biletów online, strona koncertowa',
+    ogTitle: 'Strona WWW dla zespołu muzycznego REDLIN – case study',
+    ogDescription: 'Strona internetowa dla zespołu muzycznego z systemem płatności i modułem biletów. Zobacz, jak stworzyć stronę www dla zespołu muzycznego.',
+  });
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHomeExpanded, setIsHomeExpanded] = useState(false);
 
@@ -173,14 +182,14 @@ export const PortfolioRedlin: React.FC = () => {
           <div className="text-center mb-16 md:mb-20">
             <h1 className="font-[Montserrat] text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
-                Zespół REDLIN
+                Strona www dla zespołu muzycznego REDLIN
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8">
-              — nowa strona koncertowa z systemem sprzedaży biletów
+              — case study: strona internetowa dla zespołu muzycznego z systemem sprzedaży biletów
             </p>
             <p className="text-xl md:text-2xl font-semibold text-white max-w-3xl mx-auto leading-relaxed mb-12 md:mb-16">
-              Redesign strony REDLIN — <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">szybsza, nowocześniejsza</span> i zaprojektowana pod sprzedaż biletów, promocję koncertów i budowanie społeczności fanów.
+              <strong>Strona www dla zespołu muzycznego</strong> REDLIN — <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">szybsza, nowocześniejsza</span> i zaprojektowana pod sprzedaż biletów, promocję koncertów i budowanie społeczności fanów. Przykład kompleksowej <strong>strony internetowej dla zespołu muzycznego</strong>.
             </p>
           </div>
 

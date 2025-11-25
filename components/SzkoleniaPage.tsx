@@ -1,11 +1,19 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSEO } from '../hooks/useSEO';
 
 export const SzkoleniaPage: React.FC = () => {
-  // Reset scroll position to top on mount and set page title
+  useSEO({
+    title: 'Szkolenia z AI w marketingu dla małych firm | Stanisław Drożniak',
+    description: 'Szkolenia z AI w marketingu dla małych firm. AI w marketingu małej firmy - praktyczne zastosowania. Automatyzacja marketingu w małej firmie. Warsztaty i szkolenia projektowane na zamówienie.',
+    keywords: 'szkolenia z AI w marketingu, AI w marketingu małej firmy, automatyzacja marketingu w małej firmie, szkolenia AI w marketingu, AI w marketingu dla małych firm',
+    ogTitle: 'Szkolenia z AI w marketingu dla małych firm',
+    ogDescription: 'Szkolenia z AI w marketingu dla małych firm. Praktyczne zastosowania AI i automatyzacji marketingu w małej firmie.',
+  });
+
+  // Reset scroll position to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Szkolenia dla firm | Marketing, Media Społecznościowe, AI';
   }, []);
 
   const targetAudience = [
@@ -36,8 +44,8 @@ export const SzkoleniaPage: React.FC = () => {
       )
     },
     {
-      title: 'AI w marketingu (wdrożenia operacyjne)',
-      description: 'Zastosowanie narzędzi AI w tworzeniu treści, automatyzacji zadań, analizie danych i pracy zespołów.',
+      title: 'AI w marketingu małej firmy – praktyczne zastosowania',
+      description: 'Zastosowanie narzędzi AI w tworzeniu treści, automatyzacji zadań, analizie danych i pracy zespołów. <strong>AI w marketingu małej firmy</strong> - realne przykłady i wdrożenia.',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -45,8 +53,8 @@ export const SzkoleniaPage: React.FC = () => {
       )
     },
     {
-      title: 'AI w biznesie i automatyzacja procesów',
-      description: 'Przykłady integracji i automatyzacji, tworzenie workflowów, dokumentacji i procedur wykorzystujących AI.',
+      title: 'Automatyzacja marketingu w małej firmie',
+      description: 'Przykłady integracji i <strong>automatyzacji marketingu w małej firmie</strong>, tworzenie workflowów, dokumentacji i procedur wykorzystujących AI.',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -117,13 +125,13 @@ export const SzkoleniaPage: React.FC = () => {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="font-[Montserrat] text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
-                Szkolenia dla firm
+                Szkolenia z AI w marketingu
               </span>
               <br />
-              <span className="text-white">w obszarze marketingu, mediów społecznościowych i wdrażania AI</span>
+              <span className="text-white">dla małych firm</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-              Kompleksowe programy szkoleniowe dostosowane do potrzeb organizacji, zespołów marketingowych i działów sprzedaży. Możliwe również szkolenia indywidualne (1:1), projektowane pod konkretne wymagania i cele biznesowe.
+              <strong>AI w marketingu małej firmy</strong> - praktyczne zastosowania i <strong>automatyzacja marketingu w małej firmie</strong>. Kompleksowe programy szkoleniowe dostosowane do potrzeb organizacji, zespołów marketingowych i działów sprzedaży. Możliwe również szkolenia indywidualne (1:1), projektowane pod konkretne wymagania i cele biznesowe.
             </p>
             <div className="flex justify-center">
               <Link

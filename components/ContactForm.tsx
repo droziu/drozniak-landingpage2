@@ -177,7 +177,7 @@ export const ContactForm: React.FC = () => {
         autoComplete="off"
       />
 
-      {/* Row 1: Name (1/2) | Email (1/2) */}
+      {/* Row 1: Name | Email */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
@@ -226,37 +226,20 @@ export const ContactForm: React.FC = () => {
         </div>
       </div>
 
-      {/* Row 2: Phone (1/2) | Company (1/2) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
-            Telefon (opc.)
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#fee715] focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300"
-            placeholder="Telefon (jeśli wolisz szybki kontakt)"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="company" className="block text-sm font-medium text-gray-300 mb-2">
-            Firma (opc.)
-          </label>
-          <input
-            type="text"
-            id="company"
-            name="company"
-            value={formData.company}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#fee715] focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300"
-            placeholder="Nazwa firmy (opcjonalnie)"
-          />
-        </div>
+      {/* Row 2: Phone (optional, full width) */}
+      <div>
+        <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+          Telefon (opc.)
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          value={formData.phone}
+          onChange={handleInputChange}
+          className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#fee715] focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300"
+          placeholder="Telefon (jeśli wolisz szybki kontakt)"
+        />
       </div>
 
       {/* Row 3: Message (full width) */}
@@ -273,7 +256,7 @@ export const ContactForm: React.FC = () => {
           className={`w-full px-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300 resize-none min-h-[72px] max-h-[200px] overflow-y-auto ${
             errors.message ? 'border-red-500' : 'border-white/20 focus:border-[#fee715]'
           }`}
-          placeholder="Napisz krótko, czego potrzebujesz (cel strony, branża, przybliżony zakres)"
+          placeholder="Napisz krótko, czego potrzebujesz: nowa strona www, system pozyskiwania klientów, szkolenie z AI w marketingu (cel, branża, przybliżony zakres)"
           aria-describedby={errors.message ? 'message-error' : undefined}
         />
         {errors.message && (
@@ -284,8 +267,8 @@ export const ContactForm: React.FC = () => {
       </div>
 
       {/* Row 4: Privacy (left) | Submit (right) */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex items-start space-x-3">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-start space-x-3 flex-1">
           <input
             type="checkbox"
             id="privacy"
@@ -314,7 +297,7 @@ export const ContactForm: React.FC = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 px-8 rounded-lg hover:shadow-lg hover:shadow-[#fee715]/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 px-8 rounded-lg hover:shadow-lg hover:shadow-[#fee715]/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed md:flex-shrink-0"
         >
           {isLoading ? 'Wysyłanie...' : 'Wyślij wiadomość'}
         </button>
