@@ -37,7 +37,7 @@ export const Process: React.FC = () => {
                     <p className="text-base md:text-lg text-gray-400 mb-4 md:mb-6">Od chaosu do przewidywalnego systemu w kilka tygodni.</p>
                     <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 md:p-8 max-w-4xl mx-auto">
                         <p className="text-sm md:text-base text-gray-300 leading-relaxed">
-                            Prowadzę Cię za rękę przez cały proces. Ustalam propozycję, plan działania i rozwiązania. Sam wymyślam narzędzie interaktywne, dopasowane do Twojego biznesu i branży. Po zakupie wszystkie Twoje problemy się rozwiązują.
+                            Prowadzę Cię za rękę przez cały proces. Ustalam propozycję, plan działania i rozwiązania. Sam wymyślam narzędzie interaktywne, dopasowane do Twojego biznesu i branży.
                         </p>
                     </div>
                 </div>

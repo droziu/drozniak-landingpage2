@@ -23,17 +23,19 @@ export const AIStrategyPage: React.FC<AIStrategyPageProps> = ({ cookiePreference
   return (
     <main>
       <Hero />
-      <AboutMe />
       <Problem />
       <FomoAI />
       <Solution />
-      <Process />
       <div className="hidden">
         <CaseStudies />
       </div>
+      <Process />
       <Pricing />
       <TargetAudience />
-      <Testimonials />
+      <AboutMe />
+      <div className="hidden">
+        <Testimonials />
+      </div>
       <FinalCTA cookiePreferences={cookiePreferences} />
     </main>
   );

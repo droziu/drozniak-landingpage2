@@ -2,33 +2,87 @@
 import React from 'react';
 import { useFadeIn } from '../hooks/useFadeIn';
 
+const PricingScenario: React.FC<{ 
+  number: number; 
+  title: string; 
+  price: string; 
+  description: string;
+}> = ({ number, title, price, description }) => {
+  const fadeInItem = useFadeIn<HTMLDivElement>();
+  return (
+    <div ref={fadeInItem.ref} className={`group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 md:p-8 shadow-xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:border-[#fee715]/50 ${fadeInItem.className}`}>
+      {/* Gradient overlay on hover */}
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#fee715]/5 via-transparent to-[#00C9A7]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      
+      {/* Subtle gradient border effect */}
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#fee715]/20 via-[#00C9A7]/20 to-[#fee715]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm -z-10"></div>
+      
+      {/* Content */}
+      <div className="relative z-10">
+        <div className="mb-6">
+          <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] mb-5 mx-auto shadow-lg shadow-[#fee715]/30 group-hover:shadow-[#fee715]/50 group-hover:scale-110 transition-all duration-300">
+            <span className="font-[Montserrat] font-bold text-[#101820] text-xl">{number}</span>
+          </div>
+          <h3 className="font-[Montserrat] text-xl md:text-2xl font-bold text-white text-center mb-5">{title}</h3>
+        </div>
+        
+        <div className="mb-6 pb-6 border-b border-white/10 group-hover:border-[#fee715]/30 transition-colors duration-300">
+          <p className="font-[Montserrat] text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent text-center leading-tight">{price}</p>
+        </div>
+        
+        <p className="text-gray-300 text-sm md:text-base leading-relaxed text-center">{description}</p>
+      </div>
+    </div>
+  );
+};
+
 export const Pricing: React.FC = () => {
     const fadeInSection = useFadeIn<HTMLDivElement>();
   return (
-    <section id="cena" className="py-16 md:py-20 px-4 md:px-6 bg-gradient-to-b from-[#18232F] to-[#101820]">
-      <div ref={fadeInSection.ref} className={`container mx-auto max-w-3xl text-center px-2 ${fadeInSection.className}`}>
-        <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4">Transparentna inwestycja</h2>
-        <p className="text-base md:text-lg text-gray-400 mb-6 md:mb-8">Lubię znać cenę od początku – dlatego sam jej nie ukrywam.</p>
-        
-        <div className="bg-[#101820] border-2 border-[#fee715] rounded-xl p-6 md:p-10 inline-block shadow-2xl shadow-[#fee715]/10 max-w-full group hover:shadow-[#fee715]/30 hover:scale-105 transition-all duration-500 cursor-pointer">
-            <p className="text-gray-300 text-base md:text-lg">Jednorazowa inwestycja netto:</p>
-            <p className="font-[Montserrat] text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#fee715] my-4">1 - 4 tys. zł</p>
-            <p className="text-gray-400 max-w-md mx-auto text-sm md:text-base leading-relaxed">
-                Zakres zależy od Twojej sytuacji i budżetu, ale większość projektów mieści się w zakresie 1–4 tys. zł.<br/>
-                Po rozmowie dostaniesz konkretną ofertę z wariantami dla Twojego biznesu.
-            </p>
+    <section id="cena" className="py-16 md:py-20 px-4 md:px-6 bg-gradient-to-b from-[#18232F] to-[#101820] relative overflow-hidden">
+      {/* Subtle grid background */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <pattern id="pricing-grid" width="10" height="10" patternUnits="userSpaceOnUse">
+              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="100" height="100" fill="url(#pricing-grid)" className="text-white"/>
+        </svg>
+      </div>
+      
+      <div ref={fadeInSection.ref} className={`container mx-auto max-w-6xl px-2 relative z-10 ${fadeInSection.className}`}>
+        <div className="text-center mb-12 md:mb-16">
+          <div className="inline-block">
+            <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 bg-gradient-to-r from-[#fee715] via-white to-[#00C9A7] bg-clip-text text-transparent">
+              Ile to kosztuje?
+            </h2>
+            <div className="h-1 w-24 mx-auto bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full mt-4"></div>
+          </div>
         </div>
         
-        <div className="mt-8 md:mt-12">
-            <a 
-                href="https://calendly.com/drozniakstanislaw/spotkanie"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white text-[#101820] font-bold py-3 md:py-4 px-6 md:px-10 rounded-lg text-lg md:text-xl hover:bg-gray-200 transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#fee715]/40 transition-all duration-300 w-full sm:w-auto inline-block"
-            >
-                Porozmawiajmy o wycenie dla Ciebie
-            </a>
-            <p className="text-gray-400 text-sm mt-4 md:mt-6">Bezpłatna, 20-minutowa konsultacja</p>
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          <PricingScenario
+            number={1}
+            title="Pojedyncze narzędzie"
+            price="od ok. 1 500 zł netto"
+            description="Narzędzie interaktywne, dopasowane do Twojej firmy, które będzie konwertowało lepiej niż kolejny &quot;darmowy ebook&quot;. Kalkulator, quiz lub blueprint lejka z rekomendacjami działań – zaczynają się od ok. 1 500 zł netto."
+          />
+          
+          <PricingScenario
+            number={2}
+            title="System dla małej firmy"
+            price="3 000–6 000 zł netto"
+            description="Większość projektów dla małych firm i freelancerów (np. narzędzie + prosty landing + podstawowe automatyzacje) zamyka się zwykle w przedziale 3 000–6 000 zł netto. Dokładna kwota zależy od liczby elementów i stopnia automatyzacji."
+          />
+          
+          <PricingScenario
+            number={3}
+            title="System szyty na miarę"
+            price="wycena indywidualna"
+            description="Pełne systemy (analiza, strategia, narzędzie, landing, automatyzacje, integracje) wyceniam indywidualnie po krótkim audycie. Najpierw ustalamy zakres, dopiero potem dostajesz konkretną propozycję kosztów."
+          />
         </div>
       </div>
     </section>

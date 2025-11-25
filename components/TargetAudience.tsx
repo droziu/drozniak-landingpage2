@@ -78,7 +78,7 @@ export const TargetAudience: React.FC = () => {
                 <CheckIcon />
               </TargetAudienceItem>
               
-              <TargetAudienceItem isPositive={true} text="Utknąłeś w okolicach 8 000 – 20 000 zł miesięcznie i chcesz przejść wyżej.">
+              <TargetAudienceItem isPositive={true} text="Masz stabilne przychody, ale utknąłeś na pewnym poziomie i chcesz przejść wyżej.">
                 <CheckIcon />
               </TargetAudienceItem>
               
@@ -114,7 +114,7 @@ export const TargetAudience: React.FC = () => {
                 <XIcon />
               </TargetAudienceItem>
               
-              <TargetAudienceItem isPositive={false} text="Jeśli inwestycja rzędu kilkuset złotych to dla Ciebie zaporowa kwota, to moje rozwiązanie może nie być jeszcze najlepszą opcją. W takiej sytuacji lepiej na początek zdobywać klientów samodzielnie.">
+              <TargetAudienceItem isPositive={false} text="Jeśli inwestycja rzędu kilku tysięcy złotych jest dla Ciebie zaporowa – ten model współpracy raczej nie będzie odpowiedni.">
                 <XIcon />
               </TargetAudienceItem>
             </div>

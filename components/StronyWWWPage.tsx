@@ -1255,7 +1255,7 @@ export const StronyWWWPage: React.FC = () => {
               },
               {
                 question: "Ile to kosztuje?",
-                answer: "Prosty landing page zaczyna się od 2500 zł netto, a większość projektów mieści się w przedziale 4000–7000 zł. W tej cenie otrzymujesz stronę, która pracuje na Twoje wyniki - jest szybka, zoptymalizowana i zaprojektowana pod konwersję. Pracuję bez pośredników i zespołów projektowych - wszystko tworzę sam, od strategii po wdrożenie. Dzięki temu płacisz za jakość i skuteczność, nie za strukturę agencji i wewnętrzne koszty."
+                answer: "Prosty landing page zaczyna się od 1500 zł netto, a większość projektów mieści się w przedziale 3000 - 5000 zł. W tej cenie otrzymujesz stronę, która pracuje na Twoje wyniki - jest szybka, zoptymalizowana i zaprojektowana pod konwersję. Pracuję bez pośredników i zespołów projektowych - wszystko tworzę sam, od strategii po wdrożenie. Dzięki temu płacisz za jakość i skuteczność, nie za strukturę agencji i wewnętrzne koszty."
               },
               {
                 question: "Czym Twoje strony różnią się od innych wykonawców?",
