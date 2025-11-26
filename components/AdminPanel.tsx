@@ -147,6 +147,19 @@ export const AdminPanel: React.FC = () => {
         console.log('Obliczanie postępu dla użytkownika:', profile.id, profile.email);
         const totalLessons = trainingModules.reduce((sum, m) => sum + m.lessons.length, 0);
         
+        // Sprawdź czy kurs został zakończony lub jest gotowy do zakończenia
+        const { data: certificateData } = await supabase
+          .from('course_certificates')
+          .select('course_completed, course_ready_to_complete')
+          .eq('user_id', profile.id)
+          .maybeSingle();
+        
+        const isCourseCompleted = certificateData?.course_completed || false;
+        const isReadyToComplete = certificateData?.course_ready_to_complete || false;
+        
+        // Jeśli kurs jest gotowy do zakończenia lub zakończony, wszystkie lekcje są ukończone
+        const allLessonsCompleted = isCourseCompleted || isReadyToComplete;
+        
         // Pobierz postęp modułów
         const { data: moduleProgressData, error: progressError } = await supabase
           .from('training_progress')
@@ -176,9 +189,13 @@ export const AdminPanel: React.FC = () => {
           const moduleResponses = responsesData?.filter(r => r.module_code === `modul_${module.id}`) || [];
           
           // Sprawdź ile lekcji jest ukończonych
-          // Używamy tej samej logiki co w TrainingPage - sprawdzamy tylko czy wszystkie quizy są ukończone
           const completedInModule = module.lessons.filter(lesson => {
-            // Jeśli lekcja nie ma quizu, uznajemy ją za ukończoną jeśli ma zapisany postęp
+            // Jeśli kurs został zakończony lub jest gotowy do zakończenia, wszystkie lekcje są ukończone
+            if (allLessonsCompleted) {
+              return true;
+            }
+            
+            // Jeśli lekcja nie ma quizu, sprawdzamy tylko czy ma zapisany postęp
             if (lesson.quiz.length === 0) {
               return moduleProgressData?.some(
                 p => p.module_code === `modul_${module.id}` && p.last_step_code === lesson.id
@@ -650,7 +667,7 @@ export const AdminPanel: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Przycisk "Zakończ Kurs" */}
+                        {/* Przycisk "Zakończ Szkolenie" */}
                         {currentUserProgress.percentage === 100 && (
                           <div className="mt-6 pt-6 border-t border-white/10">
                             <button
@@ -717,7 +734,7 @@ export const AdminPanel: React.FC = () => {
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                               </svg>
-                              {actionLoading ? 'Oznaczanie...' : 'Zakończ Kurs'}
+                              {actionLoading ? 'Oznaczanie...' : 'Zakończ Szkolenie'}
                             </button>
                             <p className="text-xs text-gray-400 mt-2 text-center">
                               Oznaczy kurs jako gotowy do zakończenia. Użytkownik zobaczy ekran końcowy z formularzem certyfikatu.

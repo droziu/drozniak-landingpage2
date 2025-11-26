@@ -42,17 +42,17 @@ export default async function handler(
     };
 
     // Prepare email content
-    const emailSubject = `Ukończenie kursu - ${fullName} (${companyName})`;
+    const emailSubject = `Ukończenie szkolenia - ${fullName} (${companyName})`;
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
         <div style="background-color: #101820; color: white; padding: 30px; border-radius: 10px 10px 0 0;">
-          <h1 style="margin: 0; font-size: 24px; color: #fee715;">Ukończenie kursu</h1>
+          <h1 style="margin: 0; font-size: 24px; color: #fee715;">Ukończenie szkolenia</h1>
           <p style="margin: 10px 0 0 0; color: #00C9A7; font-size: 14px;">Social Boost: Sztuka Marketingu Online</p>
         </div>
         <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
           <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; border-left: 4px solid #fee715; margin-bottom: 20px;">
             <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.6;">
-              Użytkownik ukończył kurs i przesłał dane do przygotowania zaświadczenia.
+              Użytkownik ukończył szkolenie i przesłał dane do przygotowania zaświadczenia.
             </p>
           </div>
           
@@ -97,7 +97,7 @@ export default async function handler(
 
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
             <p style="margin: 0; color: #999; font-size: 12px; text-align: center;">
-              Email wysłany automatycznie z formularza zakończenia kursu
+              Email wysłany automatycznie z formularza zakończenia szkolenia
             </p>
           </div>
         </div>

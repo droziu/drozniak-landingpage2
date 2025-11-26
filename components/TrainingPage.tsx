@@ -244,7 +244,7 @@ export const TrainingPage: React.FC = () => {
           setCanCompleteCourse(false);
         }
       } catch (error) {
-        console.error('Błąd sprawdzania ukończenia kursu:', error);
+        console.error('Błąd sprawdzania ukończenia szkolenia:', error);
       }
     };
 
@@ -992,7 +992,7 @@ export const TrainingPage: React.FC = () => {
 
       if (updateError) {
         console.error('Błąd oznaczania kursu jako gotowy:', updateError);
-        alert('Wystąpił błąd podczas zakończenia kursu. Spróbuj ponownie.');
+        alert('Wystąpił błąd podczas zakończenia szkolenia. Spróbuj ponownie.');
         return;
       }
 
@@ -1483,7 +1483,7 @@ export const TrainingPage: React.FC = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium truncate">
-                        Zakończenie kursu
+                        Zakończenie szkolenia
                       </div>
                     </div>
                   </div>
@@ -3483,7 +3483,7 @@ export const TrainingPage: React.FC = () => {
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                           </svg>
-                          Zakończ Kurs
+                          Zakończ Szkolenie
                         </button>
                       ) : (
                         <button

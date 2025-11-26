@@ -101,7 +101,7 @@ export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ 
         return;
       }
 
-      // Oznacz kurs jako zakończony w course_certificates
+      // Oznacz szkolenie jako zakończone w course_certificates
       const { error: updateError } = await supabase
         .from('course_certificates')
         .update({
@@ -111,7 +111,7 @@ export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ 
         .eq('user_id', user.id);
 
       if (updateError) {
-        console.error('Błąd oznaczania kursu jako zakończony:', updateError);
+        console.error('Błąd oznaczania szkolenia jako zakończone:', updateError);
       }
 
       // Wyślij email przez Resend
