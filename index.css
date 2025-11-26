@@ -2,3 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Animacja shimmer dla progress bara */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
