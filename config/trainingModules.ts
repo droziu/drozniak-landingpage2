@@ -7,6 +7,16 @@ export interface QuizSubTask {
   description: string;
   keywords?: string[]; // słowa kluczowe, które powinny być w odpowiedzi
   hint?: string;
+  fieldType?: 'text' | 'number' | 'textarea' | 'slider' | 'choice' | 'multichoice' | 'checkbox' | 'date' | 'url' | 'text-multiple'; // typ pola interaktywnego
+  fieldOptions?: {
+    min?: number; // dla slidera
+    max?: number; // dla slidera
+    step?: number; // dla slidera
+    labels?: { value: number; label: string }[]; // dla slidera - etykiety
+    choices?: string[]; // dla choice i multichoice
+    placeholder?: string; // dla text, textarea
+    multipleFields?: { label: string; placeholder?: string }[]; // dla text-multiple - wiele pól tekstowych
+  };
 }
 
 export interface QuizQuestion {
@@ -19,6 +29,11 @@ export interface QuizQuestion {
   hint?: string; // podpowiedź przy błędnej odpowiedzi
   feedback?: string; // komunikat po poprawnej odpowiedzi
   subTasks?: QuizSubTask[]; // dla typu 'multi-task' - tablica podzadań
+  isCalculation?: boolean; // dla typu 'open' - czy to pytanie z obliczeniem numerycznym
+  correctNumericAnswer?: number; // dla pytań z obliczeniami - poprawna odpowiedź numeryczna
+  formula?: string; // dla pytań z obliczeniami - wzór do wyświetlenia
+  calculationData?: { label: string; value: number }[]; // dla pytań z obliczeniami - dane do wyświetlenia
+  campaignData?: { name: string; ctr: string; costPerClick: string; inquiries: string }[]; // dla pytań z danymi kampanii - dane kampanii do wizualnego wyświetlenia
 }
 
 export interface PracticalExample {
@@ -39,6 +54,32 @@ export interface ChecklistItem {
   text: string;
 }
 
+export interface AutomationScenario {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  points: string[];
+  timeline?: string; // Opcjonalny timeline (np. "Dzień 0, 3-5, 7-10")
+}
+
+export interface DecisionStep {
+  id: string;
+  step: number;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface ProblemAnalysis {
+  id: string;
+  title: string;
+  data: string[];
+  interpretation: string[];
+  solutions: string[];
+  icon: string;
+}
+
 export interface Lesson {
   id: string; // np. "1.1"
   moduleId: string; // np. "1"
@@ -50,6 +91,10 @@ export interface Lesson {
   keyElements?: string | KeyElement[]; // Opcjonalna sekcja: najważniejsze elementy (stary format string lub nowy format tablica)
   roleDescription?: string; // Opcjonalna sekcja: opis roli (np. "Jaką rolę pełnią...")
   roleDescriptionTitle?: string; // Opcjonalny tytuł sekcji roli
+  automationScenarios?: AutomationScenario[]; // Opcjonalna sekcja: scenariusze automatyzacji (wizualne karty)
+  automationScenariosIntro?: string; // Opcjonalny wstęp do scenariuszy automatyzacji
+  decisionSteps?: DecisionStep[]; // Opcjonalna sekcja: schemat decyzyjny (kroki procesu)
+  problemAnalyses?: ProblemAnalysis[]; // Opcjonalna sekcja: analiza problemów (dedukcja)
   practicalExamples?: PracticalExample[]; // Tablica przykładów praktycznych
   practicalExample?: string; // Stary format (dla kompatybilności wstecznej)
   additionalInfo?: string; // Opcjonalna sekcja: dodatkowe informacje (np. "Czego NIE robią...")
@@ -1659,22 +1704,131 @@ Po 2 tygodniach:
         id: '4.1',
         moduleId: '4',
         title: 'Zarządzanie opiniami i recenzjami online',
-        intro: 'Opinie i recenzje online mają ogromny wpływ na decyzje zakupowe klientów. Zarządzanie nimi to kluczowy element budowania wizerunku marki.',
-        whyImportant: 'Pozytywne opinie budują zaufanie i zachęcają nowych klientów do skorzystania z usług. Negatywne opinie, jeśli są odpowiednio obsłużone, mogą być okazją do pokazania zaangażowania w satysfakcję klienta.',
-        practicalExample: 'Restauracja może aktywnie prosić zadowolonych klientów o pozostawienie opinii na Google, a na negatywne opinie odpowiadać profesjonalnie, oferując rozwiązanie problemu.',
+        intro: `Opinie i recenzje online (Google, Booking, Facebook, portale rezerwacyjne) są dziś jednym z najważniejszych czynników wpływających na decyzje klientów. Zanim ktoś zadzwoni, napisze maila czy zarezerwuje nocleg, bardzo często najpierw sprawdza średnią ocen i kilka ostatnich komentarzy.`,
+        whyImportant: [
+          {
+            title: 'Zwiększenie liczby rezerwacji',
+            description: 'Wyższa średnia ocena = większe zaufanie',
+            points: [],
+            icon: 'target'
+          },
+          {
+            title: 'Wyróżnienie się na tle konkurencji',
+            description: 'Nawet przy podobnym standardzie obiektu',
+            points: [],
+            icon: 'visibility'
+          },
+          {
+            title: 'Szybsze wyłapywanie problemów',
+            description: 'Powtarzające się problemy (np. hałas, śniadania, sprzątanie) i realna poprawa jakości usług',
+            points: [],
+            icon: 'analytics'
+          },
+          {
+            title: 'Budowanie wizerunku',
+            description: 'Firma jako miejsce, które słucha gości i reaguje na uwagi',
+            points: [],
+            icon: 'trust'
+          }
+        ],
+        whyImportantFooter: `Brak reakcji na opinie lub emocjonalne odpowiedzi:
+
+• obniża zaufanie nowych klientów,
+
+• może sprawiać wrażenie chaosu organizacyjnego lub braku profesjonalizmu,
+
+• wzmacnia negatywne wrażenie po pojedynczym, złym doświadczeniu.`,
+        practicalExamples: [
+          {
+            title: 'Przykład praktyczny 1 – obiekt noclegowy',
+            description: `Gość wystawia opinię 3/5 na Google:
+
+„Pokój czysty, ale w nocy było dość głośno od ulicy. Śniadanie ok, ale mogłoby być bardziej urozmaicone."
+
+Słaba reakcja: brak odpowiedzi albo krótka, defensywna wiadomość w stylu:
+
+„Zawsze jest trochę hałasu, nic na to nie poradzimy."
+
+Profesjonalna reakcja:
+
+• podziękowanie za opinię,
+
+• krótkie odniesienie się do uwag,
+
+• zaznaczenie, co firma robi, aby poprawić sytuację,
+
+• zaproszenie do kontaktu bezpośredniego.
+
+Przykładowa odpowiedź:
+
+„Dziękujemy za podzielenie się opinią. Cieszymy się, że docenił/a Pan/Pani czystość i śniadanie. Hałas od ulicy to dla nas ważna uwaga – testujemy obecnie dodatkowe uszczelnienia okien oraz rozważamy dodatkowe elementy wygłuszające. Będziemy wdzięczni za kontakt bezpośredni, żeby lepiej zrozumieć szczegóły pobytu i dobrać spokojniejszy pokój przy kolejnej rezerwacji."`,
+            effect: 'Taka odpowiedź pokazuje, że firma słucha, sygnalizuje działania naprawcze i buduje zaufanie u wszystkich, którzy czytają opinię, nie tylko u jednej osoby.'
+          },
+          {
+            title: 'Przykład praktyczny 2 – powtarzający się problem',
+            description: `Jeżeli w kilku opiniach z rzędu pojawia się motyw: „smutne śniadania", „mało świeżych warzyw", „ciągle to samo menu", to:
+
+• nie wystarczy lepsza odpowiedź,
+
+• konieczna jest realna zmiana (np. rotacja dań, jedno dodatkowe ciepłe danie, lepsza ekspozycja produktów).
+
+Po wprowadzeniu zmiany warto:
+
+• poprosić kolejnych zadowolonych gości o wystawienie opinii,
+
+• sprawdzić, czy nowym recenzjom towarzyszy np. sformułowanie „śniadania się poprawiły", „jest większy wybór".`,
+            effect: 'Systematyczne reagowanie na powtarzające się problemy i wprowadzanie realnych zmian buduje długoterminową reputację i zaufanie klientów.'
+          }
+        ],
+        roleDescription: `1. Odpowiadaj na większość opinii, nie tylko na skrajnie negatywne.
+
+2. Na negatywne opinie odpowiadaj szybko, ale spokojnie.
+
+3. Nie przerzucaj winy na klienta w publicznej odpowiedzi.
+
+4. Aktywnie zachęcaj zadowolonych gości do wystawiania opinii (np. przy wymeldowaniu).
+
+5. Monitoruj średnią ocenę oraz powtarzające się motywy i traktuj je jak darmowe badanie satysfakcji.`,
+        roleDescriptionTitle: 'Dobre praktyki zarządzania opiniami',
         quiz: [
           {
             id: 'q1',
             type: 'choice',
-            question: 'Jak powinno się reagować na negatywną opinię online?',
+            question: 'Jak powinna reagować profesjonalna firma na negatywną opinię online?',
             options: [
-              'Ignorować ją',
-              'Odpowiedzieć profesjonalnie, przeprosić i zaproponować rozwiązanie',
-              'Usunąć opinię',
-              'Odpowiedzieć agresywnie'
+              'Ignorować ją, żeby „nie robić szumu"',
+              'Odpowiedzieć profesjonalnie, podziękować za opinię, przeprosić i zaproponować rozwiązanie',
+              'Usunąć opinię, jeśli to możliwe',
+              'Odpowiedzieć emocjonalnie, tłumacząc, że klient przesadza'
             ],
             correctAnswer: 1,
             feedback: 'Dokładnie tak – profesjonalna odpowiedź na negatywną opinię pokazuje zaangażowanie w satysfakcję klienta i może przekształcić negatywną sytuację w pozytywną.'
+          },
+          {
+            id: 'q2',
+            type: 'choice',
+            question: 'Które z poniższych działań najlepiej pomaga zwiększyć liczbę pozytywnych opinii?',
+            options: [
+              'Czekanie, aż klienci sami z siebie napiszą recenzję',
+              'Prośba o opinię tylko wtedy, gdy ktoś narzeka',
+              'Systematyczne, uprzejme proszenie zadowolonych gości o pozostawienie opinii (np. przy wymeldowaniu, w mailu po pobycie)',
+              'Oferowanie rabatu w zamian za wyłącznie 5-gwiazdkowe opinie'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – systematyczne, uprzejme proszenie zadowolonych gości o opinie jest najlepszą praktyką, która naturalnie zwiększa liczbę pozytywnych recenzji.'
+          },
+          {
+            id: 'q3',
+            type: 'choice',
+            question: 'Które stwierdzenie najlepiej opisuje rolę recenzji online w działalności hotelu lub pensjonatu?',
+            options: [
+              'Mają znaczenie tylko dla turystów zagranicznych',
+              'Są ważne głównie po to, żeby „ładnie wyglądały" w wyszukiwarce',
+              'Silnie wpływają na decyzje rezerwacyjne i są jednym z kluczowych źródeł informacji dla nowych gości',
+              'Są mniej istotne niż ulotki i ogłoszenia drukowane'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – recenzje online silnie wpływają na decyzje rezerwacyjne i są jednym z pierwszych źródeł informacji, które sprawdzają potencjalni klienci przed rezerwacją.'
           }
         ]
       },
@@ -1682,17 +1836,142 @@ Po 2 tygodniach:
         id: '4.2',
         moduleId: '4',
         title: 'Komunikacja z klientami w mediach społecznościowych',
-        intro: 'Szybka i profesjonalna komunikacja w mediach społecznościowych buduje zaufanie i lojalność klientów. To pierwszy punkt kontaktu dla wielu potencjalnych klientów.',
-        whyImportant: 'Klienci oczekują szybkiej odpowiedzi w mediach społecznościowych. Profesjonalna komunikacja pokazuje, że firma dba o klientów i jest dostępna, co buduje pozytywny wizerunek marki.',
-        practicalExample: 'Firma może ustalić zasady odpowiadania na wiadomości w ciągu 24 godzin, używać przyjaznego tonu i personalizować odpowiedzi, co buduje pozytywne doświadczenia klientów.',
+        intro: `Dla wielu osób Facebook czy Instagram to pierwszy punkt kontaktu z firmą. Zanim zadzwonią lub napiszą maila, szybciej wyślą wiadomość na Messengerze albo skomentują post. To oznacza, że sposób odpowiedzi w social mediach bardzo często decyduje o tym, czy klient zrobi kolejny krok (zapytanie o ofertę, rezerwacja, wizyta), czy po prostu przejdzie dalej.`,
+        whyImportant: [
+          {
+            title: 'Budowanie zaufania',
+            description: 'Firma jest „żywa", reaguje, odpowiada',
+            points: [],
+            icon: 'trust'
+          },
+          {
+            title: 'Wzmacnianie wizerunku',
+            description: 'Profesjonalne, uporządkowane miejsce',
+            points: [],
+            icon: 'visibility'
+          },
+          {
+            title: 'Zmniejszanie nieporozumień',
+            description: 'Np. źle zrozumiane godziny zameldowania, zasady rezerwacji',
+            points: [],
+            icon: 'info'
+          },
+          {
+            title: 'Szybsze domykanie sprzedaży',
+            description: 'Zapytanie → konkretna propozycja → rezerwacja',
+            points: [],
+            icon: 'sales'
+          },
+          {
+            title: 'Wpływ na postrzeganie',
+            description: 'Jak Twoją firmę postrzegają osoby, które tylko „podglądają" rozmowy pod postami, ale jeszcze się nie odezwały',
+            points: [],
+            icon: 'relations'
+          }
+        ],
+        whyImportantFooter: `Brak odpowiedzi lub chaotyczne, emocjonalne reakcje:
+
+• zniechęcają do zadawania pytań,
+
+• obniżają poczucie bezpieczeństwa („czy ktoś w ogóle tam ogarnia?"),
+
+• mogą zniechęcić do rezerwacji nawet przy dobrych zdjęciach i ofercie.`,
+        practicalExamples: [
+          {
+            title: 'Przykład praktyczny 1 – zapytanie na Messengerze',
+            description: `Klient pisze wiadomość:
+
+„Dzień dobry, czy macie Państwo wolne pokoje 2-osobowe na przyszły weekend? Interesuje mnie nocleg z soboty na niedzielę, ze śniadaniem."
+
+Słaba odpowiedź (zbyt ogólna, opóźniona):
+
+• odpowiedź po 2 dniach,
+
+• treść: „Proszę dzwonić w godzinach 9–17."
+
+Lepsza odpowiedź:
+
+• odpowiedź w ciągu kilku godzin w godzinach pracy,
+
+• treść konkretna i uporządkowana:
+
+„Dzień dobry, dziękujemy za wiadomość. W terminie sobota–niedziela mamy jeszcze dostępne pokoje 2-osobowe ze śniadaniem.
+
+Cena: 260 zł / doba za pokój ze śniadaniem.
+
+Możemy od razu zarezerwować miejsce – proszę o imię i nazwisko oraz przybliżoną godzinę przyjazdu. W razie pytań chętnie pomogę."`,
+            effect: 'Taka odpowiedź od razu zmniejsza liczbę kolejnych pytań, prowadzi klienta do konkretnej decyzji i pokazuje, że firma jest dostępna i zorganizowana.'
+          },
+          {
+            title: 'Przykład praktyczny 2 – komentarz publiczny',
+            description: `Pod postem pojawia się komentarz:
+
+„Dzwoniłem wczoraj kilka razy i nikt nie odbierał. Słaby kontakt."
+
+Możliwe reakcje:
+
+• Ignorowanie komentarza – pozostawia wrażenie, że firma unika tematu.
+
+• Oburzenie („Przecież nie możemy cały czas siedzieć przy telefonie") – eskaluje problem.
+
+• Profesjonalna odpowiedź:
+
+„Dziękujemy za sygnał. Przepraszamy za trudność z kontaktem – wczoraj w godzinach popołudniowych mieliśmy wzmożony ruch i mogliśmy nie odebrać każdej rozmowy. Prosimy o wiadomość prywatną lub numer telefonu – oddzwonimy dzisiaj i postaramy się wszystko wyjaśnić."
+
+Dodatkowo, po takiej odpowiedzi:
+
+• warto faktycznie oddzwonić,
+
+• sprawdzić, czy w określonych godzinach nie warto wprowadzić prostych usprawnień (np. przekierowanie połączeń, jasna informacja w opisie profilu o godzinach odbierania telefonu).`,
+            effect: 'Profesjonalna odpowiedź na publiczny komentarz pokazuje, że firma słucha, reaguje i dba o klientów, nawet w trudnych sytuacjach.'
+          }
+        ],
+        roleDescription: `1. Czas reakcji – odpowiadaj możliwie szybko w godzinach pracy; dobry standard to odpowiedź w ciągu kilku godzin (maksymalnie 24 godziny).
+
+2. Ton wypowiedzi – spokojny, uprzejmy, konkretny. Bez emocji, żalu ani ironii, nawet jeśli klient jest nerwowy.
+
+3. Personalizacja – jeżeli to możliwe, zwracaj się po imieniu (jeśli klient je podaje) i nawiązuj do konkretnej sytuacji.
+
+4. Klarowność – krótkie zdania, najważniejsze informacje na początku (termin, cena, dalszy krok).
+
+5. Przenoszenie trudnych tematów do kanału prywatnego – w przypadku skarg szybko zaproponuj przejście do wiadomości prywatnych lub telefonu, ale na komentarz publiczny też odpowiedz.
+
+6. Stałe „następne kroki" – kończ wiadomości jasnym wskazaniem, co klient może zrobić dalej (zadzwonić, wysłać dane do rezerwacji, wejść na konkretną stronę).`,
+        roleDescriptionTitle: 'Proste zasady dobrej komunikacji w social mediach',
         quiz: [
           {
             id: 'q1',
+            type: 'choice',
+            question: 'Jaki standard czasu odpowiedzi jest rozsądny dla małej firmy (hotel, pensjonat, lokalna usługa) w mediach społecznościowych?',
+            options: [
+              'Odpowiedź raz w tygodniu, przy przeglądaniu wiadomości',
+              'Odpowiedź w ciągu kilku godzin w godzinach pracy, maksymalnie do 24 godzin',
+              'Odpowiedź tylko wtedy, gdy klient pisze drugi raz',
+              'Odpowiedź wyłącznie rano, niezależnie od godziny wysłania wiadomości'
+            ],
+            correctAnswer: 1,
+            feedback: 'Dokładnie tak – odpowiedź w ciągu kilku godzin w godzinach pracy (maksymalnie 24 godziny) to dobry standard, który pokazuje zaangażowanie i profesjonalizm.'
+          },
+          {
+            id: 'q2',
+            type: 'choice',
+            question: 'Które z poniższych zachowań najlepiej buduje zaufanie w komunikacji w mediach społecznościowych?',
+            options: [
+              'Krótkie, jednozdaniowe odpowiedzi bez szczegółów',
+              'Ignorowanie komentarzy publicznych, odpowiadanie tylko na wiadomości prywatne',
+              'Uprzejme, konkretne odpowiedzi, dopasowane do sytuacji klienta, z jasnym „co dalej"',
+              'Odpowiadanie klientom tylko wtedy, gdy pytają o cenę'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – uprzejme, konkretne odpowiedzi dopasowane do sytuacji klienta, z jasnym wskazaniem następnych kroków, budują zaufanie i profesjonalny wizerunek.'
+          },
+          {
+            id: 'q3',
             type: 'open',
-            question: 'Jaki jest zalecany czas odpowiedzi na wiadomości w mediach społecznościowych?',
-            keywords: ['24', 'godziny', 'szybko', 'natychmiast', 'dzień'],
-            hint: 'Pomyśl o standardach, które klienci uważają za akceptowalne...',
-            feedback: 'Dokładnie tak – zaleca się odpowiadanie na wiadomości w ciągu 24 godzin, a najlepiej jeszcze szybciej, aby pokazać zaangażowanie w obsługę klienta.'
+            question: 'Napisz jedną konkretną zasadę komunikacji z klientami w mediach społecznościowych, którą chciałbyś wprowadzić lub poprawić w swojej firmie (np. „odpowiadamy na wszystkie wiadomości do 4 godzin w godzinach pracy").',
+            keywords: ['czas', 'odpowiedź', 'godziny', 'standard', 'zasada', 'komunikacja', 'reakcja', 'wiadomość', 'messenger', 'facebook', 'instagram', 'kontakt', 'dostępność', 'szybko', 'natychmiast', '24', '4', '6', '8', '12'],
+            hint: 'Pomyśl o konkretnej zasadzie, którą możesz wprowadzić w swojej firmie, np. dotyczącej czasu odpowiedzi, tonu komunikacji, personalizacji itp...',
+            feedback: 'Dziękuję za odpowiedź. Konkretne zasady komunikacji pomagają w budowaniu profesjonalnego wizerunku i zaufania klientów.'
           }
         ]
       }
@@ -1707,22 +1986,171 @@ Po 2 tygodniach:
         id: '5.1',
         moduleId: '5',
         title: 'Tworzenie skutecznych kampanii emailowych',
-        intro: 'Email marketing pozostaje jednym z najbardziej efektywnych kanałów komunikacji z klientami. Dobrze zaprojektowana kampania emailowa może przynosić wysokie wskaźniki konwersji.',
-        whyImportant: 'Email marketing pozwala na bezpośrednią komunikację z klientami, którzy wyrazili zgodę na otrzymywanie wiadomości. To kanał o wysokim ROI i możliwości personalizacji.',
-        practicalExample: 'Sklep internetowy może wysyłać spersonalizowane emaile z produktami dopasowanymi do wcześniejszych zakupów klienta, co zwiększa prawdopodobieństwo kolejnego zakupu.',
+        intro: `Email marketing, mimo rozwoju social mediów i komunikatorów, nadal jest jednym z najbardziej efektywnych kanałów dotarcia do klientów. To bezpośrednia wiadomość do osoby, która już zostawiła kontakt i w jakimś stopniu jest zainteresowana ofertą.
+
+Dobrze przygotowany email:
+
+• trafia do skrzynki osoby, która zna Twoją firmę,
+
+• może zawierać konkretną propozycję (np. termin, cena, link do rezerwacji),
+
+• pozwala budować relację „na spokojnie", poza chaosem mediów społecznościowych.`,
+        whyImportant: [
+          {
+            title: 'Docieranie do byłych klientów',
+            description: 'Możesz przypomnieć się przed kolejnym sezonem',
+            points: [],
+            icon: 'remind'
+          },
+          {
+            title: 'Informowanie o nowościach',
+            description: 'Np. nowe pokoje, pakiety rodzinne, oferta świąteczna',
+            points: [],
+            icon: 'info'
+          },
+          {
+            title: 'Kontrola nad komunikacją',
+            description: 'Nie jesteś zależny od algorytmów Facebooka czy Instagrama',
+            points: [],
+            icon: 'organize'
+          },
+          {
+            title: 'Mierzenie efektów',
+            description: 'Widzisz, kto otworzył wiadomość, kto kliknął, co było interesujące',
+            points: [],
+            icon: 'analytics'
+          }
+        ],
+        whyImportantFooter: `Bez email marketingu łatwo „zgubić" osoby, które były raz i… zniknęły. Z prostą listą mailingową możesz co jakiś czas przypomnieć im o sobie.`,
+        practicalExamples: [
+          {
+            title: 'Przykład praktyczny 1 – hotel / pensjonat',
+            description: `Załóżmy, że prowadzisz pensjonat w mieście turystycznym. Po każdym pobycie prosisz gościa o zgodę na zapis do listy mailingowej (np. na recepcji lub w formularzu online).
+
+Raz na kwartał możesz wysłać:
+
+• email z informacją o nowych pakietach (np. „Weekend dla par", „Jesienny wypoczynek z termami"),
+
+• prostą propozycję:
+
+„Dla Gości, którzy już u nas byli – 10% rabatu na pobyt w terminach poza sezonem głównym."`,
+            effect: 'Część gości wróci szybciej, niż gdyby miała sama o Tobie pamiętać, a budujesz wrażenie, że „dbasz o stałych klientów", a nie tylko o nowych.'
+          },
+          {
+            title: 'Przykład praktyczny 2 – mały lokalny biznes usługowy',
+            description: `Firma oferująca usługi (np. gabinet fizjoterapii, studio treningowe, szkoła językowa) może:
+
+• zbierać adresy email od klientów przy pierwszej wizycie,
+
+• wysyłać:
+
+• praktyczne porady (np. jak dbać o kręgosłup, jak przygotować dziecko do egzaminu),
+
+• informacje o wolnych terminach,
+
+• przypomnienia o sezonowych usługach.`,
+            effect: 'Dzięki temu klient nie musi sam śledzić profilu w social mediach, a wiadomości trafiają do skrzynki, którą i tak codziennie otwiera.'
+          }
+        ],
+        keyElements: [
+          {
+            title: 'Relewantna treść',
+            description: 'Wiadomość musi być dopasowana do odbiorcy',
+            points: [
+              'inaczej piszesz do rodziny z dziećmi',
+              'inaczej do pary szukającej weekendu tylko we dwoje'
+            ],
+            icon: 'target'
+          },
+          {
+            title: 'Personalizacja',
+            description: 'Nawet proste wstawienie imienia zwiększa szansę, że wiadomość zostanie przeczytana',
+            points: [
+              '„Panie Janie, mamy dla Pana…"'
+            ],
+            icon: 'relations'
+          },
+          {
+            title: 'Jasny cel',
+            description: 'Każdy email powinien mieć jedno główne zadanie',
+            points: [
+              'zachęcić do rezerwacji',
+              'przypomnieć o terminach',
+              'poinformować o nowości'
+            ],
+            icon: 'goal'
+          },
+          {
+            title: 'Wyraźne wezwanie do działania (CTA)',
+            description: 'Konkretne przykłady',
+            points: [
+              '„Kliknij tutaj, aby sprawdzić dostępne terminy"',
+              '„Odpowiedz na tego maila, jeśli chcesz zarezerwować pobyt w proponowanym terminie"'
+            ],
+            icon: 'cta'
+          },
+          {
+            title: 'Odpowiedni timing',
+            description: 'Wysyłanie w odpowiednim momencie',
+            points: [
+              'przypomnienie o ofercie przed długim weekendem',
+              'informacja o zimowym pakiecie na kilka tygodni przed feriami'
+            ],
+            icon: 'time'
+          }
+        ],
         quiz: [
           {
             id: 'q1',
             type: 'choice',
             question: 'Co jest kluczowe w skutecznej kampanii emailowej?',
             options: [
-              'Tylko atrakcyjny design',
-              'Relewantna treść, personalizacja i odpowiedni timing',
-              'Wysoka częstotliwość wysyłki',
-              'Długie wiadomości'
+              'Tylko atrakcyjny, kolorowy design',
+              'Relewantna treść, personalizacja i odpowiedni moment wysyłki',
+              'Wysyłanie jak najdłuższych wiadomości raz w roku',
+              'Wysyłanie tej samej wiadomości do wszystkich, niezależnie od potrzeb'
             ],
             correctAnswer: 1,
             feedback: 'Dokładnie tak – skuteczna kampania emailowa wymaga relewantnej treści dopasowanej do odbiorcy, personalizacji oraz wysłania w odpowiednim momencie.'
+          },
+          {
+            id: 'q2',
+            type: 'choice',
+            question: 'Która z poniższych wiadomości jest lepiej zaprojektowana dla byłych gości pensjonatu poza sezonem głównym?',
+            options: [
+              '„Zapraszamy do naszego pensjonatu. Mamy wolne pokoje."',
+              '„Dzień dobry, mamy promocję. Jak coś, proszę pisać."',
+              '„Dzień dobry Panie Tomaszu, dla Gości, którzy już u nas byli, przygotowaliśmy 10% rabatu na pobyt w listopadzie i grudniu (od niedzieli do piątku). Jeśli chce Pan sprawdzić dostępne terminy, proszę kliknąć w ten link lub odpowiedzieć na tego maila."',
+              '„Witam, wysyłamy informację o ofercie. Pozdrawiamy."'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – najlepsza wiadomość zawiera personalizację (imię), konkretną ofertę (10% rabatu, termin), jasne warunki (od niedzieli do piątku) i wyraźne wezwanie do działania (link lub odpowiedź).'
+          },
+          {
+            id: 'q3',
+            type: 'choice',
+            question: 'Które stwierdzenie najlepiej opisuje rolę listy mailingowej w małej firmie?',
+            options: [
+              'Lista mailingowa jest potrzebna tylko dużym sklepom internetowym.',
+              'Lista mailingowa to zbędny dodatek – wystarczą social media.',
+              'Lista mailingowa to baza kontaktów do osób, które wyraziły zgodę na komunikację i którym można regularnie przypominać o ofercie.',
+              'Lista mailingowa służy wyłącznie do wysyłania świątecznych życzeń.'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – lista mailingowa to baza kontaktów do osób, które wyraziły zgodę na komunikację i którym można regularnie przypominać o ofercie, co jest szczególnie wartościowe dla małych firm.'
+          },
+          {
+            id: 'q4',
+            type: 'choice',
+            question: 'Co z poniższego zazwyczaj NIE jest dobrym pomysłem w email marketingu?',
+            options: [
+              'Wysyłanie wiadomości bez jasnego celu i CTA',
+              'Segmentowanie listy (np. osobno rodziny, osobno klienci biznesowi)',
+              'Testowanie różnych tematów wiadomości (A/B testy)',
+              'Sprawdzanie statystyk otwarć i kliknięć po wysyłce'
+            ],
+            correctAnswer: 0,
+            feedback: 'Dokładnie tak – wysyłanie wiadomości bez jasnego celu i wyraźnego wezwania do działania (CTA) to zły pomysł, ponieważ zmniejsza szansę na zaangażowanie odbiorcy i osiągnięcie celu kampanii.'
           }
         ]
       },
@@ -1730,17 +2158,164 @@ Po 2 tygodniach:
         id: '5.2',
         moduleId: '5',
         title: 'Personalizacja i automatyzacja kampanii',
-        intro: 'Personalizacja i automatyzacja to przyszłość email marketingu. Pozwalają one na dostarczanie odpowiedniej treści do odpowiedniej osoby w odpowiednim czasie.',
-        whyImportant: 'Zautomatyzowane i spersonalizowane kampanie emailowe oszczędzają czas, zwiększają zaangażowanie odbiorców i poprawiają wskaźniki konwersji poprzez dostarczanie bardziej relewantnych treści.',
-        practicalExample: 'Firma może zautomatyzować serię powitalnych emaili dla nowych subskrybentów, które są wysyłane w określonych odstępach czasu i zawierają spersonalizowane treści na podstawie preferencji użytkownika.',
+        intro: `Wysyłanie „jednego, tego samego maila do wszystkich" coraz rzadziej działa. Klienci dostają dziesiątki wiadomości dziennie – zwracają uwagę głównie na te, które są dla nich.
+
+Personalizacja (dopasowanie treści do odbiorcy) i automatyzacja (wysyłka we właściwym momencie, bez ręcznego klikania) sprawiają, że email marketing zaczyna pracować jak dobrze ułożony system, a nie przypadkowe, pojedyncze wysyłki.`,
+        whyImportant: [
+          {
+            title: 'Oszczędność czasu',
+            description: 'Najważniejsze wiadomości (powitalne, przypomnienia, podziękowania) mogą wysyłać się same według ustalonych zasad',
+            points: [],
+            icon: 'time'
+          },
+          {
+            title: 'Wyższe zaangażowanie',
+            description: 'Klient dostaje to, co jest dla niego sensowne (np. informacje przed przyjazdem, nie ogólny newsletter „dla wszystkich")',
+            points: [],
+            icon: 'relations'
+          },
+          {
+            title: 'Lepsze wyniki sprzedaży',
+            description: 'Przypomnienia, oferty dopasowane do terminu i kontekstu łatwiej zamieniają się na rezerwacje, wizyty, zapytania',
+            points: [],
+            icon: 'sales'
+          },
+          {
+            title: 'Bardziej profesjonalny wizerunek',
+            description: 'Komunikacja wygląda jak dobrze zaplanowany proces, a nie pojedyncze „strzały"',
+            points: [],
+            icon: 'visibility'
+          }
+        ],
+        practicalExamples: [
+          {
+            title: 'Jak może wyglądać personalizacja w praktyce',
+            description: `Przykład – mały hotel / pensjonat:
+
+Zamiast ogólnego maila:
+
+„Dzień dobry, zapraszamy do rezerwacji noclegu u nas."
+
+bardziej spersonalizowana wiadomość do osoby, która już była gościem:
+
+„Dzień dobry Pani Anno,
+
+widzimy, że ostatni raz była Pani u nas zimą zeszłego roku.
+
+Na nadchodzący sezon przygotowaliśmy pakiet Weekend dla dwojga z późnym wymeldowaniem i śniadaniem w cenie.
+
+Jeśli chciałaby Pani sprawdzić dostępne terminy w listopadzie lub grudniu – proszę kliknąć w przycisk poniżej lub odpowiedzieć na tego maila."
+
+Elementy personalizacji:
+
+• imię („Pani Anno"),
+
+• nawiązanie do historii („ostatni raz była Pani zimą"),
+
+• dopasowana propozycja (weekendowy pakiet, a nie przypadkowa oferta),
+
+• jasne CTA („kliknij" / „odpowiedz na maila").`,
+            effect: 'Personalizacja zwiększa zaangażowanie i szansę na konwersję, ponieważ wiadomość jest dopasowana do konkretnego odbiorcy i jego historii z firmą.'
+          }
+        ],
+        automationScenariosIntro: 'Nie trzeba od razu budować skomplikowanych lejków. W małej firmie już kilka prostych, dobrze ustawionych automatyzacji może zrobić dużą różnicę.',
+        automationScenarios: [
+          {
+            id: 'auto-1',
+            title: 'Seria powitalna dla nowych kontaktów',
+            description: 'Każda osoba, która zapisała się na newsletter lub zostawiła maila w formularzu.',
+            icon: 'mail',
+            timeline: 'Dzień 0, 3-5, 7-10',
+            points: [
+              'Dzień 0 – mail powitalny: podziękowanie za zapis, krótka prezentacja obiektu/usługi',
+              'Dzień 3–5 – mail z konkretną wartością: np. „Jak najlepiej zaplanować weekend w [regionie] – 3 sprawdzone pomysły"',
+              'Dzień 7–10 – mail z pierwszą, delikatną propozycją: np. informacja o pakiecie z konkretnymi terminami'
+            ]
+          },
+          {
+            id: 'auto-2',
+            title: 'Mail przed przyjazdem / wizytą',
+            description: 'Wysyłany automatycznie np. 3–5 dni przed przyjazdem.',
+            icon: 'remind',
+            timeline: '3-5 dni przed',
+            points: [
+              'Przypomnienie terminu',
+              'Praktyczne informacje (parking, godziny zameldowania, dojazd)',
+              'Możliwość dopisania usług dodatkowych (np. śniadanie, późne wymeldowanie, dodatkowe łóżko)'
+            ]
+          },
+          {
+            id: 'auto-3',
+            title: 'Mail po pobycie / wykonaniu usługi',
+            description: 'Wysyłany 1–3 dni po zakończeniu pobytu/usługi.',
+            icon: 'relations',
+            timeline: '1-3 dni po',
+            points: [
+              'Podziękowanie',
+              'Prośba o opinię (np. link do Google / Booking)',
+              'Opcjonalnie: kod rabatowy na kolejny pobyt w mniej obłożonych terminach'
+            ]
+          },
+          {
+            id: 'auto-4',
+            title: 'Reaktywacja nieaktywnych klientów',
+            description: 'Do osób, które od dłuższego czasu nie otwierają maili / nie rezerwują.',
+            icon: 'traffic',
+            timeline: 'Po okresie nieaktywności',
+            points: [
+              'Przypomnienie o marce',
+              'Zaproszenie z konkretną korzyścią (np. tańszy pobyt w tygodniu)',
+              'Wyraźny CTA: „Jeśli nie chcesz otrzymywać takich wiadomości, możesz jednym kliknięciem się wypisać"'
+            ]
+          }
+        ],
         quiz: [
           {
             id: 'q1',
+            type: 'choice',
+            question: 'Na czym polega automatyzacja w email marketingu?',
+            options: [
+              'Na wysyłaniu jak największej liczby maili ręcznie',
+              'Na ustawieniu reguł, które wywołują wysyłkę odpowiednich wiadomości w określonym momencie (np. po zapisie, przed przyjazdem)',
+              'Na kupowaniu gotowych list mailingowych',
+              'Na wysyłaniu tej samej wiadomości do wszystkich kontaktów'
+            ],
+            correctAnswer: 1,
+            feedback: 'Dokładnie tak – automatyzacja polega na ustawieniu reguł, które automatycznie wywołują wysyłkę odpowiednich wiadomości w określonych momentach, bez konieczności ręcznego działania.'
+          },
+          {
+            id: 'q2',
+            type: 'choice',
+            question: 'Który przykład najlepiej pokazuje sensowną personalizację maila?',
+            options: [
+              '„Dzień dobry, zapraszamy wszystkich do skorzystania z naszej oferty."',
+              '„Witaj! Mamy promocję, szczegóły w załączniku."',
+              '„Dzień dobry Panie Marku, dziękujemy za Pana ostatni pobyt. Na najbliższe tygodnie przygotowaliśmy ofertę z rabatem dla stałych Gości. Jeśli chciałby Pan sprawdzić dostępność pokoi w listopadzie, proszę kliknąć w ten link."',
+              '„Szanowni Państwo, oferta ważna do odwołania."'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – najlepszy przykład zawiera personalizację (imię), nawiązanie do historii (ostatni pobyt), dopasowaną ofertę (rabat dla stałych Gości) i jasne wezwanie do działania (link).'
+          },
+          {
+            id: 'q3',
+            type: 'choice',
+            question: 'Jaka jest jedna z głównych korzyści automatyzacji kampanii emailowych w małej firmie?',
+            options: [
+              'Możliwość wysyłania maili bez zgody odbiorców',
+              'Brak potrzeby planowania treści',
+              'Oszczędność czasu przy zachowaniu regularnego kontaktu z klientami',
+              'Zastąpienie wszystkich innych kanałów marketingowych'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – automatyzacja pozwala oszczędzić czas przy jednoczesnym zachowaniu regularnego, zaplanowanego kontaktu z klientami, co jest szczególnie wartościowe dla małych firm z ograniczonymi zasobami.'
+          },
+          {
+            id: 'q4',
             type: 'open',
-            question: 'Jakie korzyści przynosi automatyzacja kampanii emailowych?',
-            keywords: ['czas', 'oszczędność', 'skalowanie', 'spójność', 'efektywność', 'personalizacja'],
-            hint: 'Pomyśl o tym, co automatyzacja pozwala osiągnąć w kontekście czasu i zasobów...',
-            feedback: 'Dokładnie tak – automatyzacja pozwala na oszczędność czasu, skalowanie działań, zachowanie spójności komunikacji i zwiększenie efektywności kampanii.'
+            question: 'Podaj jeden przykład wiadomości, którą w Twojej firmie można byłoby zautomatyzować (np. „mail przed przyjazdem z informacjami praktycznymi").',
+            keywords: ['automatyzacja', 'mail', 'wiadomość', 'przed', 'po', 'powitalny', 'przypomnienie', 'podziękowanie', 'reaktywacja', 'przyjazd', 'wizyta', 'pobyt', 'usługa', 'rezerwacja', 'termin', 'informacje', 'praktyczne', 'parking', 'dojazd', 'zameldowanie', 'opinia', 'rabat', 'kod'],
+            hint: 'Pomyśl o sytuacjach w Twojej firmie, które powtarzają się regularnie i wymagają wysłania podobnej wiadomości – np. przed przyjazdem, po pobycie, przy zapisie na newsletter...',
+            feedback: 'Dziękuję za odpowiedź. Automatyzacja powtarzalnych wiadomości to świetny sposób na oszczędność czasu przy jednoczesnym utrzymaniu profesjonalnej komunikacji z klientami.'
           }
         ]
       }
@@ -1755,22 +2330,158 @@ Po 2 tygodniach:
         id: '6.1',
         moduleId: '6',
         title: 'Narzędzia analityczne i ich zastosowanie',
-        intro: 'Narzędzia analityczne dostarczają kluczowych danych o zachowaniach klientów i efektywności działań marketingowych. Bez danych trudno podejmować świadome decyzje.',
-        whyImportant: 'Analiza danych pozwala na zrozumienie, co działa, a co nie, co umożliwia optymalizację działań i maksymalizację zwrotu z inwestycji marketingowych.',
-        practicalExample: 'Firma może wykorzystać Google Analytics do analizy, które strony na stronie internetowej są najczęściej odwiedzane, co pozwala na optymalizację treści i poprawę konwersji.',
+        intro: `Narzędzia analityczne (takie jak Google Analytics, statystyki Meta, systemy raportowe z silnika rezerwacyjnego, narzędzia do email marketingu) pokazują, co naprawdę dzieje się z Twoim marketingiem:
+
+kto wchodzi na stronę, skąd, co ogląda, w co klika, kiedy znika, a kiedy rezerwuje / dzwoni / pisze.
+
+Bez tych danych decyzje podejmuje się „na wyczucie". Z danymi – możesz świadomie wzmacniać to, co działa, i odcinać to, co tylko generuje koszty.`,
+        whyImportant: [
+          {
+            title: 'Widzenie źródeł zapytań i rezerwacji',
+            description: 'Z jakich źródeł faktycznie przychodzą zapytania i rezerwacje (Google, social media, polecenia, reklamy)',
+            points: [],
+            icon: 'analytics'
+          },
+          {
+            title: 'Ocena kampanii',
+            description: 'Które kampanie mają sens, a które tylko „zjadają budżet"',
+            points: [],
+            icon: 'target'
+          },
+          {
+            title: 'Analiza zachowań klientów',
+            description: 'Jak zachowują się klienci na stronie – które podstrony działają, a które trzeba poprawić',
+            points: [],
+            icon: 'data'
+          },
+          {
+            title: 'Lepsze planowanie budżetów',
+            description: 'Planowanie budżetów i sezonowość (np. jakie działania wzmacniać przed wysokim sezonem, a jakie wypełniają dołki obłożenia)',
+            points: [],
+            icon: 'organize'
+          },
+          {
+            title: 'Szybsze wychwytywanie problemów',
+            description: 'Np. nagły spadek ruchu, niedziałający formularz, kampanię z bardzo wysokim kosztem kliknięcia',
+            points: [],
+            icon: 'info'
+          }
+        ],
+        practicalExamples: [
+          {
+            title: 'Przykład 1 – Ruch na stronie www i strona ofertowa',
+            description: `Mały hotel w mieście turystycznym sprawdza w Google Analytics:
+
+• ile osób miesięcznie odwiedza stronę,
+
+• które podstrony są najczęściej oglądane (np. „Pokoje", „Cennik", „Kontakt"),
+
+• jaki jest współczynnik wyjść ze strony ofertowej (czy ludzie po wejściu od razu zamykają kartę, czy idą dalej).`,
+            effect: 'Jeśli wiele osób wchodzi na stronę „Oferta / Pokoje", a mało przechodzi do „Rezerwacja / Kontakt", to sygnał, że treść oferty, zdjęcia lub przyciski „zadzwoń / zarezerwuj" wymagają poprawy.'
+          },
+          {
+            title: 'Przykład 2 – Skuteczność reklam w social media',
+            description: `Pensjonat uruchamia kampanię Meta Ads promującą pakiet weekendowy. Po tygodniu sprawdza w panelu reklamy:
+
+• CTR (jaki procent osób po zobaczeniu reklamy klika),
+
+• koszt kliknięcia (CPC),
+
+• ile osób przeszło dalej do formularza kontaktowego,
+
+• ile realnych zapytań / rezerwacji przyszło w tym okresie.`,
+            effect: 'Jeśli CTR jest wysoki, ale mało osób pyta o ofertę, to problem może być w stronie docelowej (treść, zdjęcia, brak jasnego telefonu / formularza).'
+          },
+          {
+            title: 'Przykład 3 – Email marketing i powroty Gości',
+            description: `Obiekt noclegowy wysyła kampanię emailową do swoich byłych gości z propozycją pobytu poza wysokim sezonem. Narzędzie do emaili pokazuje:
+
+• ile osób otworzyło wiadomość (open rate),
+
+• ile kliknęło w link („zobacz terminy", „napisz do nas"),
+
+• ile finalnie zarezerwowało pobyt.`,
+            effect: 'Na tej podstawie można ocenić, czy temat wiadomości zachęca do otwarcia, czy oferta jest wystarczająco konkretna i czy warto powtórzyć podobną akcję w przyszłości.'
+          }
+        ],
         quiz: [
           {
             id: 'q1',
             type: 'choice',
-            question: 'Które narzędzie jest najbardziej uniwersalne do analizy działań marketingowych?',
+            question: 'Które narzędzie jest najczęściej używane do analizy ruchu na stronie internetowej?',
             options: [
-              'Tylko Facebook Insights',
-              'Google Analytics i inne narzędzia w zależności od kanału',
-              'Tylko Instagram Analytics',
-              'Nie potrzeba narzędzi analitycznych'
+              'Program do faktur',
+              'Google Analytics',
+              'Edytor zdjęć',
+              'Messenger'
             ],
             correctAnswer: 1,
-            feedback: 'Dokładnie tak – Google Analytics to uniwersalne narzędzie, ale warto korzystać z różnych narzędzi analitycznych w zależności od kanału marketingowego.'
+            feedback: 'Dokładnie tak – Google Analytics to najpopularniejsze i najczęściej używane narzędzie do analizy ruchu na stronie internetowej.'
+          },
+          {
+            id: 'q2',
+            type: 'choice',
+            question: 'Co mierzy współczynnik konwersji strony docelowej (np. strony z ofertą)?',
+            options: [
+              'Średni czas ładowania strony',
+              'Odsetek osób, które weszły na stronę i od razu ją zamknęły',
+              'Odsetek odwiedzających, którzy wykonali pożądane działanie (np. wysłali formularz, kliknęli „Zadzwoń", dokonali rezerwacji)',
+              'Liczbę polubień profilu w social media'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – współczynnik konwersji mierzy odsetek odwiedzających, którzy wykonali pożądane działanie, takie jak wysłanie formularza, kliknięcie w przycisk „Zadzwoń" lub dokonanie rezerwacji.'
+          },
+          {
+            id: 'q3',
+            type: 'choice',
+            question: 'Co powinno być pierwszym krokiem przed analizą danych z narzędzi analitycznych?',
+            options: [
+              'Zwiększenie budżetu reklamowego',
+              'Zmiana wszystkich tekstów na stronie',
+              'Jasne określenie celu (np. więcej rezerwacji bezpośrednich, więcej zapytań z formularza)',
+              'Instalacja jednocześnie kilku różnych systemów analitycznych'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – przed analizą danych należy jasno określić cel, co pozwala na właściwą interpretację wskaźników i podejmowanie trafnych decyzji.'
+          },
+          {
+            id: 'q4',
+            type: 'choice',
+            question: 'Który z poniższych wskaźników jest najmniej przydatny sam w sobie, jeśli nie jest powiązany z celem biznesowym?',
+            options: [
+              'Liczba rezerwacji z formularza na stronie',
+              'Liczba polubień postu na Facebooku',
+              'Współczynnik konwersji strony „Oferta"',
+              'Liczba wysłanych zapytań w miesiącu'
+            ],
+            correctAnswer: 1,
+            feedback: 'Dokładnie tak – liczba polubień postu na Facebooku sama w sobie nie przekłada się bezpośrednio na cele biznesowe, takie jak rezerwacje czy zapytania, jeśli nie jest powiązana z konkretnymi działaniami.'
+          },
+          {
+            id: 'q5',
+            type: 'choice',
+            question: 'Co w praktyce oznacza wysoki CTR reklamy (dużo kliknięć) i jednocześnie wysoki koszt pozyskania rezerwacji?',
+            options: [
+              'Reklama słabo przyciąga uwagę, ale strona świetnie zamienia odwiedzających w klientów',
+              'Reklama przyciąga uwagę, ale oferta / strona docelowa nie przekonuje do rezerwacji',
+              'Wszystko działa idealnie i nie trzeba nic zmieniać',
+              'Należy natychmiast wyłączyć wszystkie kampanie'
+            ],
+            correctAnswer: 1,
+            feedback: 'Dokładnie tak – wysoki CTR oznacza, że reklama przyciąga uwagę, ale wysoki koszt pozyskania rezerwacji sugeruje, że oferta lub strona docelowa nie przekonuje odwiedzających do rezerwacji.'
+          },
+          {
+            id: 'q6',
+            type: 'choice',
+            question: 'Jak często mała firma powinna minimum przeglądać podstawowe raporty z działań marketingowych (ruch na stronie, kampanie, maile), aby sensownie reagować?',
+            options: [
+              'Raz na rok',
+              'Raz na pół roku',
+              'Przynajmniej raz w tygodniu (lub częściej w okresach intensywnych kampanii)',
+              'W ogóle nie trzeba, jeśli są włączone reklamy'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – regularne przeglądanie raportów (przynajmniej raz w tygodniu, a częściej w okresach intensywnych kampanii) pozwala na szybkie reagowanie i optymalizację działań marketingowych.'
           }
         ]
       },
@@ -1778,17 +2489,235 @@ Po 2 tygodniach:
         id: '6.2',
         moduleId: '6',
         title: 'Optymalizacja działań marketingowych i podejmowanie decyzji na podstawie danych',
-        intro: 'Optymalizacja działań marketingowych oparta na danych to ciągły proces poprawy wyników. Regularna analiza i wprowadzanie zmian prowadzi do lepszych rezultatów.',
-        whyImportant: 'Działania marketingowe wymagają ciągłej optymalizacji. Podejmowanie decyzji na podstawie danych, a nie przypuszczeń, prowadzi do bardziej efektywnych kampanii i lepszego wykorzystania budżetu.',
-        practicalExample: 'Firma może zauważyć, że kampanie prowadzone w godzinach porannych mają wyższy wskaźnik konwersji, co pozwala na przesunięcie budżetu reklamowego na te godziny.',
+        intro: `Optymalizacja działań marketingowych to nie jednorazowe „ustawienie kampanii", ale ciągły proces:
+
+1. Zbierasz dane.
+
+2. Sprawdzasz, co działa, a co nie.
+
+3. Wprowadzasz zmiany.
+
+4. Znowu mierzysz.
+
+Z czasem zaczynasz widzieć proste schematy: co obniża koszt pozyskania klienta, co podnosi liczbę zapytań, a co jest tylko „szumem".`,
+        whyImportant: [
+          {
+            title: 'Przestajesz zgadywać',
+            description: 'Dlaczego „coś nie działa"',
+            points: [],
+            icon: 'analytics'
+          },
+          {
+            title: 'Szybciej odkrywasz problemy',
+            description: 'Gdzie faktycznie „ucieka" klient (reklama, strona, formularz, komunikacja)',
+            points: [],
+            icon: 'info'
+          },
+          {
+            title: 'Inwestujesz tam, gdzie działa',
+            description: 'Budżet tam, gdzie realnie pojawiają się zapytania i rezerwacje',
+            points: [],
+            icon: 'target'
+          },
+          {
+            title: 'Traktujesz kampanie jak testy',
+            description: 'Z konkretnym wnioskiem na przyszłość, a nie losową próbą',
+            points: [],
+            icon: 'data'
+          }
+        ],
+        whyImportantFooter: `Najważniejsza zasada: patrzymy na dane, nie tylko na „intuicję".
+
+Intuicja jest potrzebna do wymyślania rozwiązań, ale decyzję – zmieniamy / zostawiamy / wzmacniamy – warto podeprzeć liczbami.`,
+        problemAnalyses: [
+          {
+            id: 'problem-1',
+            title: 'Przykład 1: Mało kliknięć w reklamę',
+            icon: 'traffic',
+            data: [
+              'Dużo wyświetleń reklamy',
+              'CTR (procent osób, które kliknęły) jest niski – np. 0,8%'
+            ],
+            interpretation: [
+              'Reklama jest słabo zauważalna (grafika nie przyciąga uwagi)',
+              'Tekst jest zbyt ogólny („Zapraszamy do naszego hotelu"), nic konkretnego nie obiecuje',
+              'Oferta nie jest dopasowana do grupy docelowej (np. reklama dla rodzin, a targetowanie ustawione na wszystkich 18–65)'
+            ],
+            solutions: [
+              'Zmiana grafiki na bardziej czytelną, z jednym prostym komunikatem (np. „Weekend SPA – pakiet 2 noce + śniadania")',
+              'Dodanie konkretu i korzyści w nagłówku (lokalizacja, cena od…, śniadanie w cenie)',
+              'Zawężenie grupy docelowej (np. osoby 28–55, w promieniu X km od miasta, zainteresowane podróżami / rodzinnym wypoczynkiem)'
+            ]
+          },
+          {
+            id: 'problem-2',
+            title: 'Przykład 2: Dużo kliknięć, mało zapytań',
+            icon: 'sales',
+            data: [
+              'CTR jest dobry – np. 3–4%',
+              'Na stronę wchodzi sporo osób, ale mało kto wysyła zapytanie / dzwoni'
+            ],
+            interpretation: [
+              'Reklama obiecuje więcej niż strona – klient „czegoś szuka", ale tego nie widzi',
+              'Na stronie brakuje jasnego wezwania do działania (numer telefonu, przycisk „Wyślij zapytanie")',
+              'Teksty są zbyt ogólne, brakuje odpowiedzi na proste pytania: „Za ile?", „Gdzie dokładnie?", „Co jest w cenie?"'
+            ],
+            solutions: [
+              'Dodanie dużego, widocznego przycisku „Zadzwoń teraz" / „Zapytaj o termin"',
+              'Pokazanie konkretów w pierwszym ekranie (np. „Nocleg ze śniadaniem od 260 zł / doba, parking i Wi-Fi w cenie")',
+              'Dodanie krótkiej sekcji FAQ z odpowiedziami na 3–4 najczęstsze pytania'
+            ]
+          },
+          {
+            id: 'problem-3',
+            title: 'Przykład 3: Ruch ze smartfonów, ale wysoki współczynnik odrzuceń',
+            icon: 'experience',
+            data: [
+              '70–80% wejść jest z telefonów',
+              'Duży współczynnik odrzuceń (wiele osób wchodzi i od razu wychodzi)',
+              'Średni czas na stronie – tylko kilka sekund'
+            ],
+            interpretation: [
+              'Strona jest niewygodna na telefonie (trzeba powiększać, przewijać w bok)',
+              'Numer telefonu nie jest klikalny',
+              'Formularz jest zbyt długi na małym ekranie'
+            ],
+            solutions: [
+              'Sprawdzenie strony na swoim telefonie tak, jak robi to klient (bez trybu „dewelopera")',
+              'Ułatwienie kontaktu: klikany numer, przycisk „Zadzwoń" widoczny od razu',
+              'Skrócenie formularza – na start wystarczy imię, email / telefon, planowany termin, liczba osób'
+            ]
+          },
+          {
+            id: 'problem-4',
+            title: 'Przykład 4: Działania w social media i „martwe" posty',
+            icon: 'social',
+            data: [
+              'Część postów ma prawie zerowy zasięg',
+              'Inne – wyraźnie większy zasięg i więcej reakcji'
+            ],
+            interpretation: [
+              'Algorytm lepiej promuje posty z konkretną wartością (porady, realne zdjęcia, kulisy pracy) niż same grafiki z tekstem „Rezerwuj"',
+              'Godzina publikacji ma znaczenie – inne wyniki w dzień, inne wieczorem'
+            ],
+            solutions: [
+              'Opieranie się na 2–3 typach postów, które historycznie osiągają lepsze wyniki (np. realne zdjęcia obiektu + krótkie historie gości)',
+              'Publikowanie w różnych godzinach, a potem sprawdzenie, kiedy zasięgi są najwyższe',
+              'Dodawanie konkretnego wezwania do działania: „Napisz w wiadomości «WEEKEND», wyślę dostępne terminy"'
+            ]
+          }
+        ],
+        decisionSteps: [
+          {
+            id: 'step-1',
+            step: 1,
+            title: 'Ustal cel',
+            description: 'Np. więcej zapytań z formularza, więcej telefonów, więcej rezerwacji z kampanii',
+            icon: 'target'
+          },
+          {
+            id: 'step-2',
+            step: 2,
+            title: 'Wybierz wskaźnik',
+            description: 'Który najlepiej ten cel opisuje (np. liczba wysłanych formularzy, CTR, współczynnik konwersji strony)',
+            icon: 'analytics'
+          },
+          {
+            id: 'step-3',
+            step: 3,
+            title: 'Porównaj dane',
+            description: 'Jak jest teraz? Jak było miesiąc temu? Jak wygląda to dla różnych kampanii / grup docelowych?',
+            icon: 'data'
+          },
+          {
+            id: 'step-4',
+            step: 4,
+            title: 'Postaw hipotezę',
+            description: '„CTR jest niski, bo grafika nie przyciąga uwagi" lub „Ludzie klikają, ale nie wysyłają formularza, bo nie widzą ceny"',
+            icon: 'info'
+          },
+          {
+            id: 'step-5',
+            step: 5,
+            title: 'Wprowadź jedną zmianę',
+            description: 'Na raz – wtedy wiesz, co zadziałało',
+            icon: 'organize'
+          },
+          {
+            id: 'step-6',
+            step: 6,
+            title: 'Zmierz ponownie i zdecyduj',
+            description: 'Po kilku dniach / tygodniu: wzmacniam (działa), poprawiam (wymaga kolejnej zmiany), wyłączam (nie ma sensu nadal wydawać budżetu)',
+            icon: 'analytics'
+          }
+        ],
         quiz: [
           {
             id: 'q1',
+            type: 'choice',
+            question: 'Które podejście do optymalizacji działań marketingowych jest najbardziej sensowne dla małej firmy?',
+            options: [
+              'Zmieniam wszystko naraz, żeby „coś w końcu zadziałało"',
+              'Kieruję się głównie przeczuciem – danych nie ma sensu analizować',
+              'Ustalam cel, wybieram 1–2 kluczowe wskaźniki, wprowadzam pojedynczą zmianę i sprawdzam dane po kilku dniach',
+              'Uruchamiam kampanię i zostawiam ją bez zmian przez rok'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – systematyczne podejście z ustaleniem celu, wyborem kluczowych wskaźników i wprowadzaniem pojedynczych zmian pozwala na skuteczną optymalizację działań marketingowych.'
+          },
+          {
+            id: 'q2',
             type: 'open',
-            question: 'Co jest kluczowe przy optymalizacji działań marketingowych?',
-            keywords: ['dane', 'analiza', 'testowanie', 'pomiary', 'wskaźniki', 'metryki'],
-            hint: 'Pomyśl o procesie, który pozwala na ciągłe ulepszanie działań...',
-            feedback: 'Dokładnie tak – optymalizacja wymaga regularnej analizy danych, testowania różnych podejść i mierzenia kluczowych wskaźników efektywności.'
+            question: 'Reklama Twojego obiektu wyświetliła się 2 000 razy, a użytkownicy kliknęli ją 60 razy. Jaki jest CTR (Click-Through Rate – współczynnik kliknięć) tej reklamy?',
+            isCalculation: true,
+            correctNumericAnswer: 3.0,
+            formula: 'CTR = (liczba kliknięć / liczba wyświetleń) × 100%',
+            calculationData: [
+              { label: 'Liczba wyświetleń', value: 2000 },
+              { label: 'Liczba kliknięć', value: 60 }
+            ],
+            hint: 'CTR = (60 / 2000) × 100% = ?',
+            feedback: 'Dokładnie tak – CTR = (60 / 2000) × 100% = 3,0%. To dobry wynik, który pokazuje, że reklama przyciąga uwagę odbiorców.'
+          },
+          {
+            id: 'q3',
+            type: 'choice',
+            question: 'Masz dwie kampanie na Facebooku, obie kierują na tę samą stronę. Budżet jest ograniczony. Co jest najbardziej rozsądnym krokiem?',
+            campaignData: [
+              {
+                name: 'Kampania A',
+                ctr: '1,0%',
+                costPerClick: '1,50 zł',
+                inquiries: '2 zapytania w tygodniu'
+              },
+              {
+                name: 'Kampania B',
+                ctr: '3,5%',
+                costPerClick: '0,90 zł',
+                inquiries: '7 zapytań w tygodniu'
+              }
+            ],
+            options: [
+              'Wyłączyć Kampanię B i zostawić tylko Kampanię A',
+              'Zostawić obie kampanie bez zmian',
+              'Przenieść większą część budżetu z Kampanii A do Kampanii B i dalej ją obserwować',
+              'Wyłączyć obie kampanie i wrócić tylko do postów organicznych'
+            ],
+            correctAnswer: 2,
+            feedback: 'Dokładnie tak – Kampania B ma lepsze wyniki (wyższy CTR, niższy koszt kliknięcia, więcej zapytań), więc przeniesienie budżetu z Kampanii A do Kampanii B jest najbardziej rozsądnym krokiem.'
+          },
+          {
+            id: 'q4',
+            type: 'choice',
+            question: 'Dlaczego przy optymalizacji strony / reklamy warto zmieniać jeden ważny element na raz (np. najpierw nagłówek, potem grafikę, potem grupę docelową)?',
+            options: [
+              'Żeby mieć więcej pracy',
+              'Dzięki temu możesz lepiej zrozumieć, która konkretna zmiana poprawiła wyniki',
+              'Bo narzędzia reklamowe nie pozwalają zmienić kilku elementów',
+              'Żeby dane w raportach wyglądały bardziej skomplikowanie'
+            ],
+            correctAnswer: 1,
+            feedback: 'Dokładnie tak – wprowadzanie jednej zmiany na raz pozwala na precyzyjne określenie, która konkretna zmiana wpłynęła na poprawę wyników, co ułatwia dalszą optymalizację.'
           }
         ]
       },
@@ -1796,17 +2725,379 @@ Po 2 tygodniach:
         id: '6.3',
         moduleId: '6',
         title: 'Praktyczne ćwiczenia i warsztaty',
-        intro: 'Praktyczne ćwiczenia i warsztaty pozwalają na zastosowanie zdobytej wiedzy w rzeczywistych sytuacjach. To moment na utrwalenie umiejętności i przygotowanie się do samodzielnego działania.',
-        whyImportant: 'Teoria bez praktyki ma ograniczoną wartość. Ćwiczenia praktyczne pozwalają na zrozumienie, jak zastosować wiedzę w realnych sytuacjach biznesowych i budują pewność siebie.',
-        practicalExample: 'Podczas warsztatów uczestnicy mogą stworzyć własną kampanię reklamową, przeanalizować wyniki i wprowadzić optymalizacje, co daje praktyczne doświadczenie w działaniu.',
+        intro: `Ta część szkolenia ma przenieść wszystko z poziomu „rozumiem w teorii" na poziom „potrafię zastosować u siebie w firmie".
+
+Pracujemy na realnych przykładach – najlepiej z Twojej działalności – i krok po kroku:
+
+• porządkujemy to, co robisz w marketingu,
+
+• wyciągamy wnioski z danych,
+
+• projektujemy konkretne działania na najbliższe tygodnie.`,
+        whyImportant: [
+          {
+            title: 'Prawdziwe zrozumienie',
+            description: 'Dopiero przy pracy na własnych przykładach pojawia się prawdziwe zrozumienie („aha, u mnie to działa tak…")',
+            points: [],
+            icon: 'understand'
+          },
+          {
+            title: 'Podejmowanie decyzji',
+            description: 'Konkretne ćwiczenia zmuszają do podjęcia pierwszych decyzji (co poprawić, co wyłączyć, w co zainwestować)',
+            points: [],
+            icon: 'target'
+          },
+          {
+            title: 'Plan działania',
+            description: 'Po warsztacie masz nie tylko „wiedzę z kursu", ale zarys planu działania dopasowanego do Twojej sytuacji',
+            points: [],
+            icon: 'goal'
+          }
+        ],
+        whyImportantFooter: 'Teoria bez praktyki ma ograniczoną wartość. Dopiero gdy przełożysz pojęcia na własne kanały, własnych klientów i własne liczby, podejmiesz pierwsze decyzje na bazie danych i zapiszesz konkretny plan na 30 dni, zaczyna się realna zmiana w biznesie. Ta część ma Ci w tym pomóc – w prostych, wykonalnych krokach.',
         quiz: [
           {
-            id: 'q1',
+            id: 'exercise1',
+            type: 'multi-task',
+            question: 'Ćwiczenie 1: Mapa działań marketingowych „tu i teraz"',
+            subTasks: [
+              {
+                id: 'ex1-1',
+                title: '1. Lista kanałów',
+                description: 'Wypisz wszystkie kanały, z których REALNIE korzystasz (nawet jeśli nieregularnie)',
+                fieldType: 'text-multiple',
+                fieldOptions: {
+                  multipleFields: [
+                    { label: 'Kanał 1', placeholder: 'np. strona internetowa' },
+                    { label: 'Kanał 2', placeholder: 'np. Facebook / Instagram' },
+                    { label: 'Kanał 3', placeholder: 'np. Google Maps' },
+                    { label: 'Kanał 4', placeholder: 'np. płatne reklamy' },
+                    { label: 'Kanał 5', placeholder: 'np. działania offline' }
+                  ]
+                }
+              },
+              {
+                id: 'ex1-2',
+                title: '2. Kanał do rozwoju',
+                description: 'Wybierz 1 kanał, który zamierzasz rozwijać (ma potencjał i sens)',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'Wpisz nazwę kanału, który zamierzasz rozwijać...'
+                }
+              },
+              {
+                id: 'ex1-3',
+                title: '3. Kanał do ograniczenia',
+                description: 'Wybierz 1 kanał do ograniczenia / przetestowania inaczej',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'Wpisz nazwę kanału, który ograniczysz...'
+                }
+              },
+              {
+                id: 'ex1-4',
+                title: '4. Kanał do odłożenia',
+                description: 'Wybierz 1 kanał, którym przestajesz się przejmować w najbliższych 30 dniach',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'Wpisz nazwę kanału, który odkładasz...'
+                }
+              }
+            ]
+          },
+          {
+            id: 'exercise2',
+            type: 'multi-task',
+            question: 'Ćwiczenie 2: Analiza przykładowej kampanii – praca na liczbach',
+            subTasks: [
+              {
+                id: 'ex2-1',
+                title: '1. Wprowadź dane kampanii',
+                description: 'Jeśli masz już jakąkolwiek kampanię (Facebook/Instagram/Google) – wpisz swoje dane. Jeśli nie – możesz użyć przykładowych liczb.',
+                fieldType: 'text-multiple',
+                fieldOptions: {
+                  multipleFields: [
+                    { label: 'Liczba wyświetleń (Impressions)', placeholder: 'np. 5000' },
+                    { label: 'Liczba kliknięć (Clicks)', placeholder: 'np. 150' },
+                    { label: 'Budżet wydany (PLN)', placeholder: 'np. 300' },
+                    { label: 'Liczba zapytań/rezerwacji (Leads)', placeholder: 'np. 10' }
+                  ]
+                }
+              },
+              {
+                id: 'ex2-2',
+                title: '2. Ocena CTR',
+                description: 'Jak oceniasz CTR tej kampanii?',
+                fieldType: 'choice',
+                fieldOptions: {
+                  choices: ['Bardzo słaby', 'Przeciętny', 'Dobry / bardzo dobry']
+                }
+              },
+              {
+                id: 'ex2-3',
+                title: '3. Ocena kosztu kliknięcia (CPC)',
+                description: 'Jak oceniasz koszt kliknięcia (CPC) w kontekście Twojej branży i lokalizacji?',
+                fieldType: 'choice',
+                fieldOptions: {
+                  choices: ['Zdecydowanie za wysoki', 'Akceptowalny', 'Bardzo dobry']
+                }
+              },
+              {
+                id: 'ex2-4',
+                title: '4. Największy problem kampanii',
+                description: 'Co jest największym problemem tej kampanii?',
+                fieldType: 'choice',
+                fieldOptions: {
+                  choices: [
+                    'Ludzie nie klikają (słaba kreacja / komunikat)',
+                    'Ludzie klikają, ale nie ma zapytań (strona docelowa / oferta)',
+                    'Trudno powiedzieć – za mało danych'
+                  ]
+                }
+              },
+              {
+                id: 'ex2-5',
+                title: '5. Podsumowanie',
+                description: 'Podsumuj: co działa, a co wymaga poprawy?',
+                fieldType: 'textarea',
+                fieldOptions: {
+                  placeholder: 'Napisz krótkie podsumowanie...'
+                }
+              },
+              {
+                id: 'ex2-6',
+                title: '6. Jedna decyzja optymalizacyjna',
+                description: 'Wybierz jedno działanie, które wdrożysz jako pierwsze:',
+                fieldType: 'choice',
+                fieldOptions: {
+                  choices: [
+                    'Zmiana kreacji (grafika / tekst)',
+                    'Zmiana grupy docelowej',
+                    'Zmiana strony docelowej',
+                    'Zmiana budżetu / harmonogramu',
+                    'Wstrzymanie tej kampanii i test innej'
+                  ]
+                }
+              },
+              {
+                id: 'ex2-7',
+                title: '7. Uzasadnienie decyzji',
+                description: 'Dlaczego właśnie to działanie?',
+                fieldType: 'textarea',
+                fieldOptions: {
+                  placeholder: 'Krótko uzasadnij swoją decyzję...'
+                }
+              }
+            ]
+          },
+          {
+            id: 'exercise3',
+            type: 'multi-task',
+            question: 'Ćwiczenie 3: Szybki audyt strony docelowej',
+            subTasks: [
+              {
+                id: 'ex3-1',
+                title: '1. Adres strony docelowej',
+                description: 'Podaj adres strony, na którą kierujesz ruch z reklam (np. podstrona z ofertą)',
+                fieldType: 'url',
+                fieldOptions: {
+                  placeholder: 'https://...'
+                }
+              },
+              {
+                id: 'ex3-2',
+                title: '2. Checklista pierwszego ekranu',
+                description: 'Zaznacz, czy na pierwszym ekranie (bez przewijania) użytkownik widzi wyraźnie:',
+                fieldType: 'multichoice',
+                fieldOptions: {
+                  choices: [
+                    'Co dokładnie oferujesz',
+                    'Dla kogo jest oferta',
+                    'Jaki jest orientacyjny zakres / cena',
+                    'Co ma zrobić dalej (zadzwonić, wypełnić formularz, sprawdzić dostępność)'
+                  ]
+                }
+              },
+              {
+                id: 'ex3-3',
+                title: '3. Elementy ułatwiające kontakt',
+                description: 'Zaznacz elementy, które są obecne na stronie:',
+                fieldType: 'multichoice',
+                fieldOptions: {
+                  choices: [
+                    'Numer telefonu jest klikalny na telefonie',
+                    'Przycisk "Zadzwoń"/"Napisz" jest widoczny bez przewijania',
+                    'Formularz nie jest przesadnie długi',
+                    'Są podstawowe informacje: lokalizacja, godziny, parking (jeśli istotne)'
+                  ]
+                }
+              },
+              {
+                id: 'ex3-4',
+                title: '4. Zmiana 1',
+                description: 'Zapisz pierwszą konkretną zmianę, którą możesz wdrożyć w ciągu tygodnia',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'np. dodanie dużego przycisku "Zadzwoń teraz"'
+                }
+              },
+              {
+                id: 'ex3-5',
+                title: '5. Zmiana 2',
+                description: 'Zapisz drugą konkretną zmianę',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'np. skrócenie formularza'
+                }
+              },
+              {
+                id: 'ex3-6',
+                title: '6. Zmiana 3',
+                description: 'Zapisz trzecią konkretną zmianę',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'np. dopisanie 3 najczęstszych pytań i odpowiedzi'
+                }
+              },
+              {
+                id: 'ex3-7',
+                title: '7. Planowany termin wdrożenia',
+                description: 'Kiedy planujesz wdrożyć te zmiany? (wybierz konkretną datę)',
+                fieldType: 'date',
+                fieldOptions: {}
+              }
+            ]
+          },
+          {
+            id: 'exercise4',
+            type: 'multi-task',
+            question: 'Ćwiczenie 4: Plan optymalizacji na 30 dni',
+            subTasks: [
+              {
+                id: 'ex4-1',
+                title: '1. Wybór priorytetów',
+                description: 'Wybierz maksymalnie 3 priorytety (zaznacz wszystkie, które dotyczą Twojej sytuacji):',
+                fieldType: 'multichoice',
+                fieldOptions: {
+                  choices: [
+                    'Poprawa wyników jednej konkretnej kampanii',
+                    'Poprawa strony docelowej',
+                    'Uporządkowanie wizytówki Google (opinie, zdjęcia, opis)',
+                    'Poprawa komunikacji w social media (czas odpowiedzi, regularność)',
+                    'Inne (napisz poniżej)'
+                  ]
+                }
+              },
+              {
+                id: 'ex4-1-other',
+                title: 'Priorytet - Inne',
+                description: 'Jeśli wybrałeś "Inne", napisz swój priorytet:',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'Opisz swój priorytet...'
+                }
+              },
+              {
+                id: 'ex4-2',
+                title: 'Priorytet 1 - Konkretne działanie',
+                description: 'Co dokładnie zrobisz? (np. "zmieniam nagłówek i grafikę w kampanii X")',
+                fieldType: 'textarea',
+                fieldOptions: {
+                  placeholder: 'Opisz konkretne działanie...'
+                }
+              },
+              {
+                id: 'ex4-3',
+                title: 'Priorytet 1 - Jak zmierzysz?',
+                description: 'Jaki wskaźnik sprawdzisz za 30 dni? (np. CTR, liczba wiadomości, liczba telefonów)',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'np. wyższy CTR, więcej wiadomości...'
+                }
+              },
+              {
+                id: 'ex4-4',
+                title: 'Priorytet 1 - Planowany termin realizacji',
+                description: 'Kiedy planujesz wdrożyć to działanie? (wybierz datę)',
+                fieldType: 'date',
+                fieldOptions: {}
+              },
+              {
+                id: 'ex4-5',
+                title: 'Priorytet 2 - Konkretne działanie',
+                description: 'Jeśli masz drugi priorytet - co dokładnie zrobisz?',
+                fieldType: 'textarea',
+                fieldOptions: {
+                  placeholder: 'Opisz konkretne działanie (lub zostaw puste, jeśli masz tylko jeden priorytet)...'
+                }
+              },
+              {
+                id: 'ex4-6',
+                title: 'Priorytet 2 - Jak zmierzysz?',
+                description: 'Jaki wskaźnik sprawdzisz za 30 dni?',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'np. więcej zapytań...'
+                }
+              },
+              {
+                id: 'ex4-7',
+                title: 'Priorytet 2 - Planowany termin realizacji',
+                description: 'Kiedy planujesz wdrożyć to działanie? (wybierz datę)',
+                fieldType: 'date',
+                fieldOptions: {}
+              },
+              {
+                id: 'ex4-8',
+                title: 'Priorytet 3 - Konkretne działanie',
+                description: 'Jeśli masz trzeci priorytet - co dokładnie zrobisz?',
+                fieldType: 'textarea',
+                fieldOptions: {
+                  placeholder: 'Opisz konkretne działanie (lub zostaw puste, jeśli masz mniej niż 3 priorytety)...'
+                }
+              },
+              {
+                id: 'ex4-9',
+                title: 'Priorytet 3 - Jak zmierzysz?',
+                description: 'Jaki wskaźnik sprawdzisz za 30 dni?',
+                fieldType: 'text',
+                fieldOptions: {
+                  placeholder: 'np. więcej opinii...'
+                }
+              },
+              {
+                id: 'ex4-10',
+                title: 'Priorytet 3 - Planowany termin realizacji',
+                description: 'Kiedy planujesz wdrożyć to działanie? (wybierz datę)',
+                fieldType: 'date',
+                fieldOptions: {}
+              },
+              {
+                id: 'ex4-11',
+                title: 'Mały "commitment"',
+                description: 'Jednym zdaniem: Co jest dla Ciebie najważniejszym celem na najbliższe 30 dni w marketingu?',
+                fieldType: 'textarea',
+                fieldOptions: {
+                  placeholder: 'Napisz swój główny cel jednym zdaniem...'
+                }
+              }
+            ]
+          },
+          {
+            id: 'summary-q1',
             type: 'open',
-            question: 'Dlaczego praktyczne ćwiczenia są ważne w procesie uczenia się marketingu?',
-            keywords: ['praktyka', 'doświadczenie', 'zastosowanie', 'umiejętności', 'pewność'],
-            hint: 'Pomyśl o różnicy między wiedzą teoretyczną a umiejętnością zastosowania jej w praktyce...',
-            feedback: 'Dokładnie tak – praktyczne ćwiczenia pozwalają na zastosowanie wiedzy w rzeczywistych sytuacjach, budowanie doświadczenia i zwiększanie pewności siebie w działaniu.'
+            question: 'Jakie dwa konkretne działania optymalizacyjne wdrożysz w swojej firmie w ciągu najbliższych 30 dni? Napisz, co zrobisz i w jakim kanale (np. reklama, strona, social media).',
+            keywords: ['działania', 'optymalizacja', 'plan', 'wdrożenie', '30 dni', 'kanał', 'reklama', 'strona', 'social media'],
+            hint: 'Pomyśl o ćwiczeniach, które wykonałeś/aś – które z nich możesz zastosować w swojej firmie? Co konkretnie zrobisz i gdzie?',
+            feedback: 'Dobrze! Masz już konkretny plan działań. Pamiętaj, że najważniejsze to zacząć od małych, konkretnych kroków.'
+          },
+          {
+            id: 'summary-q2',
+            type: 'open',
+            question: 'Po czym poznasz, że te działania miały sens? Jakie liczby lub sygnały będą dla Ciebie dowodem, że idziesz w dobrą stronę?',
+            keywords: ['pomiar', 'wskaźniki', 'efekty', 'liczby', 'sygnały', 'dowód', 'wyniki', 'metryki'],
+            hint: 'Pomyśl o konkretnych wskaźnikach, które możesz zmierzyć – np. liczba zapytań, CTR, koszt pozyskania klienta, liczba telefonów.',
+            feedback: 'Świetnie! Mierzenie efektów jest kluczowe. Wróć do tego planu za miesiąc i sprawdź, co udało Ci się zrealizować i jakie są efekty.'
           }
         ]
       }

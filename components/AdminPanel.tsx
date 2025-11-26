@@ -635,7 +635,7 @@ export const AdminPanel: React.FC = () => {
                           </div>
                         )}
                         
-                        <div className="grid md:grid-cols-2 gap-4">
+                        <div className="grid md:grid-cols-2 gap-4 mb-6">
                           <div>
                             <p className="text-sm text-gray-400 mb-1">Ukończone lekcje</p>
                             <p className="text-2xl font-bold text-white">
@@ -649,6 +649,81 @@ export const AdminPanel: React.FC = () => {
                             </p>
                           </div>
                         </div>
+
+                        {/* Przycisk "Zakończ Kurs" */}
+                        {currentUserProgress.percentage === 100 && (
+                          <div className="mt-6 pt-6 border-t border-white/10">
+                            <button
+                              onClick={async () => {
+                                if (!selectedUser) return;
+                                if (!confirm('Czy na pewno chcesz oznaczyć kurs jako gotowy do zakończenia? Użytkownik zobaczy ekran końcowy z formularzem certyfikatu.')) return;
+                                
+                                try {
+                                  setActionLoading(true);
+                                  
+                                  // Sprawdź, czy użytkownik ma już rekord w course_certificates
+                                  const { data: existingCert } = await supabase
+                                    .from('course_certificates')
+                                    .select('id')
+                                    .eq('user_id', selectedUser)
+                                    .maybeSingle();
+                                  
+                                  if (!existingCert) {
+                                    // Utwórz rekord z flagą course_ready_to_complete
+                                    const { error } = await supabase
+                                      .from('course_certificates')
+                                      .insert({
+                                        user_id: selectedUser,
+                                        full_name: '',
+                                        company_name: '',
+                                        email: currentUserProgress.userEmail,
+                                        course_ready_to_complete: true
+                                      });
+                                    
+                                    if (error) throw error;
+                                  } else {
+                                    // Zaktualizuj istniejący rekord
+                                    const { error } = await supabase
+                                      .from('course_certificates')
+                                      .update({
+                                        course_ready_to_complete: true
+                                      })
+                                      .eq('user_id', selectedUser);
+                                    
+                                    if (error) throw error;
+                                  }
+                                  
+                                  setAlertModal({
+                                    isOpen: true,
+                                    title: 'Sukces',
+                                    message: 'Kurs został oznaczony jako gotowy do zakończenia. Użytkownik zobaczy ekran końcowy z formularzem certyfikatu.',
+                                    type: 'success'
+                                  });
+                                } catch (error: any) {
+                                  console.error('Błąd oznaczania kursu:', error);
+                                  setAlertModal({
+                                    isOpen: true,
+                                    title: 'Błąd',
+                                    message: 'Wystąpił błąd podczas oznaczania kursu: ' + (error.message || 'Nieznany błąd'),
+                                    type: 'error'
+                                  });
+                                } finally {
+                                  setActionLoading(false);
+                                }
+                              }}
+                              disabled={actionLoading}
+                              className="w-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                              </svg>
+                              {actionLoading ? 'Oznaczanie...' : 'Zakończ Kurs'}
+                            </button>
+                            <p className="text-xs text-gray-400 mt-2 text-center">
+                              Oznaczy kurs jako gotowy do zakończenia. Użytkownik zobaczy ekran końcowy z formularzem certyfikatu.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     );
                   })()}

@@ -6,6 +6,7 @@ import { trainingModules, findLesson, getTotalLessons, getNextLesson, getPreviou
 import type { QuizQuestion } from '../config/trainingModules';
 import { CustomRadio } from './CustomRadio';
 import { UserMenu } from './UserMenu';
+import { CourseCompletionScreen } from './CourseCompletionScreen';
 
 // Ikony jako proste komponenty SVG
 const ChartIcon = ({ className }: { className?: string }) => (
@@ -95,10 +96,39 @@ export const TrainingPage: React.FC = () => {
   const [refreshingQuiz, setRefreshingQuiz] = useState(false);
   const [isPanelHidden, setIsPanelHidden] = useState(false);
   const [checklistChecked, setChecklistChecked] = useState<{ [itemId: string]: boolean }>({});
+  const [openDatePickers, setOpenDatePickers] = useState<{ [subTaskId: string]: boolean }>({});
+  const [showCompletionScreen, setShowCompletionScreen] = useState(false);
+  const [courseReadyToComplete, setCourseReadyToComplete] = useState(false);
+  const [canCompleteCourse, setCanCompleteCourse] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const autoSaveTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
+  
+  // Zamknij kalendarze po kliknięciu poza nimi
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.date-picker-container')) {
+        setOpenDatePickers({});
+      }
+    };
+    
+    if (Object.keys(openDatePickers).length > 0) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openDatePickers]);
 
-  const currentLesson = findLesson(currentLessonId);
+  const currentLesson = currentLessonId === 'completion' ? null : findLesson(currentLessonId);
   const currentModule = currentLesson ? trainingModules.find(m => m.id === currentLesson.moduleId) : undefined;
+  
+  // AUTO-SAVE WYŁĄCZONY - zapis tylko po kliknięciu "Zapisz odpowiedź"
+  
+  // AUTO-SAVE WYŁĄCZONY - zapis tylko po kliknięciu "Zapisz odpowiedź"
+  
+  // AUTO-SAVE WYŁĄCZONY - zapis tylko po kliknięciu "Prześlij odpowiedź" dla pytań otwartych
 
   // Automatyczne przewijanie do góry przy zmianie lekcji i resetowanie checklisty
   useEffect(() => {
@@ -164,6 +194,63 @@ export const TrainingPage: React.FC = () => {
     }
   }, [currentLessonId, user]);
 
+  // Sprawdź czy kurs jest gotowy do zakończenia (tylko dla lekcji 6.3 - sprawdź czy summary-q1 i summary-q2 są zatwierdzone)
+  useEffect(() => {
+    const checkCourseCompletion = async () => {
+      if (!user || loading) return;
+
+      try {
+        // Sprawdź status kursu
+        const { data: certificateData } = await supabase
+          .from('course_certificates')
+          .select('course_ready_to_complete, course_completed')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        const isReadyToComplete = certificateData?.course_ready_to_complete || false;
+        const isAlreadyCompleted = certificateData?.course_completed || false;
+
+        // Jeśli kurs jest gotowy do zakończenia lub już zakończony, ustaw flagi
+        if (isReadyToComplete || isAlreadyCompleted) {
+          setCourseReadyToComplete(true);
+          // Jeśli użytkownik już wypełnił formularz, upewnij się, że ekran jest dostępny w menu
+          // Nie ustawiaj automatycznie currentLessonId - pozwól użytkownikowi kliknąć w menu
+        }
+
+        // Sprawdź, czy jesteśmy w lekcji 6.3 i czy dwa ostatnie pytania są zatwierdzone
+        if (currentLessonId === '6.3' && !isAlreadyCompleted && !isReadyToComplete) {
+          const { data: finalResponses } = await supabase
+            .from('training_responses')
+            .select('status, question_code')
+            .eq('user_id', user.id)
+            .eq('step_code', '6.3')
+            .in('question_code', ['summary-q1', 'summary-q2']);
+
+          const bothFinalQuestionsApproved = finalResponses?.length === 2 && 
+            finalResponses.every(r => r.status === 'approved');
+
+          setCanCompleteCourse(bothFinalQuestionsApproved);
+          
+          // Zaktualizuj też quizResults i responseStatuses dla tych pytań
+          if (finalResponses) {
+            finalResponses.forEach(response => {
+              if (response.status === 'approved') {
+                setQuizResults(prev => ({ ...prev, [response.question_code]: 'approved' }));
+                setResponseStatuses(prev => ({ ...prev, [response.question_code]: 'approved' }));
+              }
+            });
+          }
+        } else if (currentLessonId !== 'completion') {
+          setCanCompleteCourse(false);
+        }
+      } catch (error) {
+        console.error('Błąd sprawdzania ukończenia kursu:', error);
+      }
+    };
+
+    checkCourseCompletion();
+  }, [user, loading, currentLessonId, responseStatuses]);
+
   const loadUnlockedModules = async () => {
     if (!user) return;
 
@@ -188,23 +275,33 @@ export const TrainingPage: React.FC = () => {
   // Sprawdź czy można przejść dalej
   useEffect(() => {
     if (currentLesson) {
-      const allQuizCompleted = currentLesson.quiz.every(q => {
-        if (q.type === 'choice') {
-          const result = quizResults[q.id];
-          return result === 'correct';
-        } else if (q.type === 'multi-task' && q.subTasks) {
-          // Dla zadań z podzadaniami sprawdź czy wszystkie podzadania są zatwierdzone
-          return q.subTasks.every(subTask => {
-            const subTaskResult = quizSubTaskResults[subTask.id];
-            return subTaskResult === 'approved';
-          });
-        } else {
-          const result = quizResults[q.id];
-          // Dla pytań otwartych - można przejść dalej tylko jeśli są zatwierdzone
+      // Dla lekcji 6.3 - tylko dwa ostatnie pytania (summary-q1, summary-q2) muszą być zatwierdzone
+      if (currentLesson.id === '6.3') {
+        const finalQuestionsApproved = ['summary-q1', 'summary-q2'].every(questionId => {
+          const result = quizResults[questionId];
           return result === 'approved';
-        }
-      });
-      setCanProceed(allQuizCompleted && currentLesson.quiz.length > 0);
+        });
+        setCanProceed(finalQuestionsApproved);
+      } else {
+        // Dla innych lekcji - sprawdź wszystkie pytania
+        const allQuizCompleted = currentLesson.quiz.every(q => {
+          if (q.type === 'choice') {
+            const result = quizResults[q.id];
+            return result === 'correct';
+          } else if (q.type === 'multi-task' && q.subTasks) {
+            // Dla zadań z podzadaniami sprawdź czy wszystkie podzadania są zatwierdzone
+            return q.subTasks.every(subTask => {
+              const subTaskResult = quizSubTaskResults[subTask.id];
+              return subTaskResult === 'approved';
+            });
+          } else {
+            const result = quizResults[q.id];
+            // Dla pytań otwartych - można przejść dalej tylko jeśli są zatwierdzone
+            return result === 'approved';
+          }
+        });
+        setCanProceed(allQuizCompleted && currentLesson.quiz.length > 0);
+      }
     }
   }, [currentLesson, quizResults, quizSubTaskResults]);
 
@@ -227,6 +324,12 @@ export const TrainingPage: React.FC = () => {
         .eq('user_id', user.id);
 
       if (responsesError) throw responsesError;
+      
+      console.log('📥 ŁADOWANIE PROGRESU - Wszystkie odpowiedzi użytkownika:', {
+        totalResponses: responsesData?.length || 0,
+        responsesFor63: responsesData?.filter(r => r.step_code === '6.3').length || 0,
+        responsesFor63Details: responsesData?.filter(r => r.step_code === '6.3') || []
+      });
 
       // Przetwórz dane do lokalnego stanu
       const progressData: TrainingProgress = {};
@@ -292,119 +395,112 @@ export const TrainingPage: React.FC = () => {
 
       // Załaduj odpowiedzi quizów dla aktualnej lekcji
       if (currentLesson) {
+        console.log('🔄 Ładowanie odpowiedzi dla lekcji:', currentLesson.id, {
+          totalResponses: responsesData?.length || 0,
+          responsesForLesson: responsesData?.filter(r => 
+            r.module_code === `modul_${currentLesson.moduleId}` &&
+            r.step_code === currentLesson.id
+          ).length || 0
+        });
+        
         const lessonResponses: { [questionId: string]: string | number } = {};
         const lessonStatuses: { [questionId: string]: 'pending' | 'approved' | 'rejected' } = {};
         const lessonResults: { [questionId: string]: 'correct' | 'incorrect' | 'pending' | 'approved' | 'rejected' | null } = {};
         
+        // Najpierw załaduj wszystkie odpowiedzi dla subTasks
         currentLesson.quiz.forEach(q => {
-          const response = responsesData?.find(r => 
-            r.module_code === `modul_${currentLesson.moduleId}` &&
-            r.step_code === currentLesson.id &&
-            r.question_code === q.id
-          );
-          if (response) {
-            // Konwertuj odpowiedź na właściwy typ (number dla choice, string dla open)
-            const answerValue = q.type === 'choice' 
-              ? Number(response.answer_text) 
-              : String(response.answer_text || '');
-            lessonResponses[q.id] = answerValue;
-            
-            // Dla pytań otwartych sprawdź status
-            if (q.type === 'open') {
-              const status = (response as any).status || 'pending';
-              lessonStatuses[q.id] = status;
-              lessonResults[q.id] = status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'pending';
-              
-              if ((response as any).admin_feedback) {
-                setQuizFeedback(prev => ({
-                  ...prev,
-                  [q.id]: (response as any).admin_feedback
-                }));
-              }
-            } else if (q.type === 'multi-task' && q.subTasks) {
-              // Dla zadań z podzadaniami - ładowanie odpowiedzi dla każdego podzadania
-              // Sprawdź najpierw, czy istnieje stara odpowiedź z question_code = q.id (dla kompatybilności wstecznej)
-              const oldResponse = responsesData?.find(r => 
+          if (q.type === 'multi-task' && q.subTasks) {
+            q.subTasks.forEach(subTask => {
+              const subTaskResponse = responsesData?.find(r => 
                 r.module_code === `modul_${currentLesson.moduleId}` &&
                 r.step_code === currentLesson.id &&
-                r.question_code === q.id
+                r.question_code === subTask.id
               );
               
-              // Jeśli istnieje stara odpowiedź, logujemy to (ale nie używamy jej, bo teraz mamy podzadania)
-              if (oldResponse) {
-                console.log('⚠️ Znaleziono starą odpowiedź dla pytania', q.id, '- ignorujemy, bo teraz mamy podzadania');
-              }
-              
-              q.subTasks.forEach(subTask => {
-                console.log('🔍 Szukam odpowiedzi dla podzadania:', {
-                  subTaskId: subTask.id,
-                  moduleCode: `modul_${currentLesson.moduleId}`,
-                  stepCode: currentLesson.id,
-                  allResponses: responsesData?.filter(r => 
-                    r.module_code === `modul_${currentLesson.moduleId}` &&
-                    r.step_code === currentLesson.id
-                  )
+              if (subTaskResponse && subTaskResponse.answer_text) {
+                const subTaskAnswer = String(subTaskResponse.answer_text);
+                console.log('✅ ŁADUJĘ odpowiedź dla subTask:', { 
+                  subTaskId: subTask.id, 
+                  answer: subTaskAnswer,
+                  status: (subTaskResponse as any).status
                 });
+                lessonResponses[subTask.id] = subTaskAnswer;
                 
-                const subTaskResponse = responsesData?.find(r => 
-                  r.module_code === `modul_${currentLesson.moduleId}` &&
-                  r.step_code === currentLesson.id &&
-                  r.question_code === subTask.id
-                );
-                
-                if (subTaskResponse) {
-                  console.log('✅ Znaleziono odpowiedź dla podzadania:', subTask.id, subTaskResponse);
-                  const subTaskAnswer = String(subTaskResponse.answer_text || '');
-                  setQuizSubTaskAnswers(prev => {
-                    const updated = { ...prev, [subTask.id]: subTaskAnswer };
-                    console.log('📝 Zaktualizowano quizSubTaskAnswers:', updated);
-                    return updated;
-                  });
-                  
-                  const subTaskStatus = (subTaskResponse as any).status || 'pending';
-                  setQuizSubTaskResults(prev => {
-                    const updated = { 
-                      ...prev, 
-                      [subTask.id]: subTaskStatus === 'approved' ? 'approved' : subTaskStatus === 'rejected' ? 'rejected' : 'pending' 
-                    };
-                    console.log('📊 Zaktualizowano quizSubTaskResults:', updated);
-                    return updated;
-                  });
-                  
-                  if ((subTaskResponse as any).admin_feedback) {
-                    setQuizSubTaskFeedback(prev => ({
-                      ...prev,
-                      [subTask.id]: (subTaskResponse as any).admin_feedback
-                    }));
-                  }
-                } else {
-                  console.log('❌ Brak odpowiedzi dla podzadania:', subTask.id, 'w lekcji', currentLesson.id);
-                }
-              });
-            } else {
-              // Dla pytań zamkniętych sprawdź czy odpowiedź jest poprawna
-              const isCorrect = checkQuizAnswer(q, answerValue);
-              if (isCorrect) {
-                lessonResults[q.id] = 'correct';
-                // Ustaw feedback dla poprawnej odpowiedzi
-                setQuizFeedback(prev => ({
-                  ...prev,
-                  [q.id]: q.feedback || 'Odpowiedź poprawna!'
-                }));
+                const subTaskStatus = (subTaskResponse as any).status || 'pending';
+                lessonStatuses[subTask.id] = subTaskStatus;
+                lessonResults[subTask.id] = subTaskStatus === 'approved' ? 'approved' : subTaskStatus === 'rejected' ? 'rejected' : 'pending';
               } else {
-                lessonResults[q.id] = 'incorrect';
-                // Ustaw hint dla niepoprawnej odpowiedzi
-                setQuizFeedback(prev => ({
-                  ...prev,
-                  [q.id]: q.hint || 'Spróbuj ująć to inaczej.'
-                }));
+                console.log('❌ Brak odpowiedzi dla subTask:', subTask.id);
+              }
+            });
+          } else {
+            const response = responsesData?.find(r => 
+              r.module_code === `modul_${currentLesson.moduleId}` &&
+              r.step_code === currentLesson.id &&
+              r.question_code === q.id
+            );
+            if (response) {
+              // Konwertuj odpowiedź na właściwy typ (number dla choice, string dla open)
+              const answerValue = q.type === 'choice' 
+                ? Number(response.answer_text) 
+                : String(response.answer_text || '');
+              lessonResponses[q.id] = answerValue;
+              
+              // Dla pytań otwartych sprawdź status
+              if (q.type === 'open') {
+                const status = (response as any).status || 'pending';
+                lessonStatuses[q.id] = status;
+                lessonResults[q.id] = status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'pending';
+                
+                if ((response as any).admin_feedback) {
+                  setQuizFeedback(prev => ({
+                    ...prev,
+                    [q.id]: (response as any).admin_feedback
+                  }));
+                }
               }
             }
           }
         });
+        
+        // Ustaw wszystkie odpowiedzi naraz
+        console.log('📦 Ustawiam wszystkie odpowiedzi:', lessonResponses);
         setQuizAnswers(lessonResponses);
+        
+        // Dla subTasks ustaw w quizSubTaskAnswers
+        const subTaskAnswers: { [subTaskId: string]: string } = {};
+        const subTaskResults: { [subTaskId: string]: 'pending' | 'approved' | 'rejected' | null } = {};
+        const subTaskStatuses: { [subTaskId: string]: 'pending' | 'approved' | 'rejected' } = {};
+        
+        currentLesson.quiz.forEach(q => {
+          if (q.type === 'multi-task' && q.subTasks) {
+            q.subTasks.forEach(subTask => {
+              const answer = lessonResponses[subTask.id];
+              const status = lessonStatuses[subTask.id];
+              if (answer !== undefined) {
+                subTaskAnswers[subTask.id] = String(answer);
+                subTaskResults[subTask.id] = lessonResults[subTask.id] || null;
+                if (status) {
+                  subTaskStatuses[subTask.id] = status;
+                }
+              }
+            });
+          }
+        });
+        
+        if (Object.keys(subTaskAnswers).length > 0) {
+          console.log('📦 Ustawiam odpowiedzi subTasks:', subTaskAnswers);
+          console.log('📦 Ustawiam wyniki subTasks:', subTaskResults);
+          setQuizSubTaskAnswers(subTaskAnswers);
+          setQuizSubTaskResults(subTaskResults);
+        } else {
+          console.warn('⚠️ Brak odpowiedzi subTasks do załadowania - wszystkie pola są puste');
+        }
+        
         setResponseStatuses(lessonStatuses);
         setQuizResults(lessonResults);
+        
+        console.log('✅ Zakończono ładowanie odpowiedzi dla lekcji:', currentLesson.id);
       }
 
       setLoading(false);
@@ -698,23 +794,84 @@ export const TrainingPage: React.FC = () => {
     setQuizFeedback(prev => ({ ...prev, [questionId]: 'Odpowiedź została przesłana i oczekuje na weryfikację.' }));
   };
 
+  // Funkcja do automatycznego zatwierdzania odpowiedzi w ćwiczeniach interaktywnych
+  const shouldAutoApproveSubTask = (questionId: string, subTaskId: string, answer: string): boolean => {
+    if (!currentLesson) return false;
+    
+    const question = currentLesson.quiz.find(q => q.id === questionId);
+    if (!question || question.type !== 'multi-task' || !question.subTasks) return false;
+    
+    const subTask = question.subTasks.find(st => st.id === subTaskId);
+    if (!subTask) return false;
+    
+    // Jeśli odpowiedź jest pusta, nie zatwierdzamy
+    if (!answer || answer.trim() === '') return false;
+    
+    // Dla pól typu choice - zatwierdzamy automatycznie (użytkownik wybrał opcję)
+    if (subTask.fieldType === 'choice') return true;
+    
+    // Dla pól typu multichoice - zatwierdzamy jeśli wybrano przynajmniej jedną opcję
+    if (subTask.fieldType === 'multichoice') {
+      const selectedChoices = answer.split(',').filter(c => c);
+      return selectedChoices.length > 0;
+    }
+    
+    // Dla pól typu text-multiple - zatwierdzamy jeśli wszystkie pola są wypełnione
+    if (subTask.fieldType === 'text-multiple') {
+      const answers = answer.split('|||');
+      const allFilled = answers.every(a => a && a.trim() !== '');
+      return allFilled;
+    }
+    
+    // Dla pozostałych pól (text, textarea, number, url, date) - zatwierdzamy jeśli jest wypełnione
+    if (['text', 'textarea', 'number', 'url', 'date'].includes(subTask.fieldType || '')) {
+      return answer.trim() !== '';
+    }
+    
+    return false;
+  };
+
   const handleSubmitSubTaskAnswer = async (questionId: string, subTaskId: string) => {
     const answer = quizSubTaskAnswers[subTaskId];
-    if (!answer || answer === '') return;
+    if (!answer || answer === '') {
+      console.warn('⚠️ Próba zapisania pustej odpowiedzi:', { questionId, subTaskId });
+      return;
+    }
 
-    console.log('💾 Zapisuję odpowiedź na podzadanie:', { questionId, subTaskId, answer, currentLesson: currentLesson?.id });
+    console.log('💾 Zapisuję odpowiedź na podzadanie:', { 
+      questionId, 
+      subTaskId, 
+      answer, 
+      currentLesson: currentLesson?.id,
+      userId: user?.id,
+      moduleCode: currentLesson ? `modul_${currentLesson.moduleId}` : null,
+      stepCode: currentLesson?.id
+    });
     
-    // Zapisz odpowiedź jako odpowiedź na pytanie z identyfikatorem podzadania
-    await saveQuizResponse(questionId, answer, 'pending', subTaskId);
-    
-    // Odśwież dane z bazy, żeby upewnić się, że wszystko jest zsynchronizowane
-    await loadProgress();
-    
-    setQuizSubTaskResults(prev => ({ ...prev, [subTaskId]: 'pending' }));
-    setQuizSubTaskFeedback(prev => ({ ...prev, [subTaskId]: 'Odpowiedź została przesłana i oczekuje na weryfikację.' }));
-    
-    console.log('✅ Odpowiedź na podzadanie zapisana:', subTaskId);
+    try {
+      // WSZYSTKIE subTasks są automatycznie zatwierdzane (approved) - tylko dwa ostatnie pytania otwarte (summary-q1, summary-q2) wymagają zatwierdzenia
+      // Dla wszystkich subTasks ustawiamy status 'approved'
+      const status = 'approved';
+      
+      // Zapisz odpowiedź jako odpowiedź na pytanie z identyfikatorem podzadania
+      await saveQuizResponse(questionId, answer, status, subTaskId);
+      
+      // Wszystkie subTasks są automatycznie zatwierdzane
+      setQuizSubTaskResults(prev => ({ ...prev, [subTaskId]: 'approved' }));
+      setQuizSubTaskFeedback(prev => ({ ...prev, [subTaskId]: 'Odpowiedź została zapisana i zatwierdzona.' }));
+      
+      console.log('✅ Odpowiedź na podzadanie zapisana i zatwierdzona:', subTaskId);
+      
+      // Odśwież dane z bazy natychmiast, żeby upewnić się, że wszystko jest zsynchronizowane
+      await loadProgress();
+    } catch (error) {
+      console.error('❌ BŁĄD zapisywania odpowiedzi subTask:', error);
+      alert('Wystąpił błąd podczas zapisywania odpowiedzi. Sprawdź konsolę przeglądarki.');
+    }
   };
+  
+  // BLUR ZAPIS WYŁĄCZONY - zapis tylko po kliknięciu "Zapisz odpowiedź"
+  // Funkcja handleSubTaskBlur została usunięta - nie jest już potrzebna
 
   const handleChangeOpenAnswer = (questionId: string) => {
     // Resetuj status, żeby użytkownik mógł zmienić odpowiedź
@@ -815,6 +972,58 @@ export const TrainingPage: React.FC = () => {
       setCanProceed(false);
       await loadProgress();
       // Przewijanie do góry jest obsługiwane przez useEffect przy zmianie currentLessonId
+    }
+  };
+
+  const handleCompleteCourse = async () => {
+    if (!user || !currentLesson) return;
+
+    try {
+      // Oznacz kurs jako gotowy do zakończenia
+      const { error: updateError } = await supabase
+        .from('course_certificates')
+        .upsert({
+          user_id: user.id,
+          course_ready_to_complete: true,
+          email: user.email || ''
+        }, {
+          onConflict: 'user_id'
+        });
+
+      if (updateError) {
+        console.error('Błąd oznaczania kursu jako gotowy:', updateError);
+        alert('Wystąpił błąd podczas zakończenia kursu. Spróbuj ponownie.');
+        return;
+      }
+
+      // Ustaw postęp na 100% - oznacz wszystkie lekcje jako ukończone
+      for (const module of trainingModules) {
+        for (const lesson of module.lessons) {
+          if (!progress[lesson.id]?.completed) {
+            await saveProgress(lesson.id, true);
+          }
+        }
+      }
+
+      // Ustaw postęp na 100% - oznacz wszystkie lekcje jako ukończone
+      for (const module of trainingModules) {
+        for (const lesson of module.lessons) {
+          if (!progress[lesson.id]?.completed) {
+            await saveProgress(lesson.id, true);
+          }
+        }
+      }
+      
+      // Pokaż ekran końcowy - ustaw currentLessonId na 'completion' i flagi
+      setCurrentLessonId('completion');
+      setCourseReadyToComplete(true);
+      setShowCompletionScreen(true);
+      
+      // Odśwież postęp po ustawieniu flag (ale nie resetuj currentLessonId)
+      await loadProgress();
+    } catch (error) {
+      console.error('Błąd zakończenia kursu:', error);
+      alert('Wystąpił błąd podczas zakończenia kursu. Spróbuj ponownie.');
     }
   };
 
@@ -1063,6 +1272,7 @@ export const TrainingPage: React.FC = () => {
     return unlockedModules.has(moduleId);
   };
 
+
   return (
     <div className="min-h-screen bg-[#101820] text-white">
 
@@ -1247,12 +1457,52 @@ export const TrainingPage: React.FC = () => {
                 </div>
               );
             })}
+            
+            {/* Ekran końcowy kursu */}
+            {courseReadyToComplete && (
+              <div className="mt-8 pt-8 border-t border-white/10">
+                <button
+                  onClick={() => {
+                    setCurrentLessonId('completion');
+                    setShowCompletionScreen(true);
+                    setCourseReadyToComplete(true);
+                  }}
+                  className={`
+                    w-full text-left px-5 py-3 rounded-xl transition-all duration-300 relative
+                    ${currentLessonId === 'completion'
+                      ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-semibold shadow-lg shadow-[#fee715]/30 transform scale-[1.02]'
+                      : 'bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 border-2 border-[#fee715]/30 text-[#fee715] hover:bg-gradient-to-r hover:from-[#fee715]/30 hover:to-[#00C9A7]/30'
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#fee715] flex items-center justify-center">
+                      <svg className="w-3 h-3 text-[#101820]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium truncate">
+                        Zakończenie kursu
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Główny obszar treści - przeprojektowany */}
         <div ref={contentRef} className="flex-1 overflow-y-auto bg-gradient-to-b from-[#101820] to-[#0B1218]">
-          {currentLesson && currentModule ? (
+          {currentLessonId === 'completion' ? (
+            <CourseCompletionScreen 
+              onComplete={async () => {
+                // Po zakończeniu odśwież postęp - ekran pozostaje widoczny
+                await loadProgress();
+              }}
+            />
+          ) : currentLesson && currentModule ? (
             <div className="container mx-auto px-6 md:px-12 py-10 max-w-5xl">
               {/* Karta lekcji z lepszym designem */}
               <div className="bg-gradient-to-br from-white/5 via-white/5 to-white/3 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
@@ -1478,6 +1728,236 @@ export const TrainingPage: React.FC = () => {
                           <div className="bg-gradient-to-br from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-6">
                             <div className="text-gray-200 leading-relaxed text-lg whitespace-pre-line">
                               {currentLesson.customerPath}
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                    </>
+                  )}
+
+                  {/* Scenariusze automatyzacji */}
+                  {currentLesson.automationScenarios && currentLesson.automationScenarios.length > 0 && (
+                    <>
+                      <div className="border-t border-white/10"></div>
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
+                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                            Automatyzacja – przykładowe scenariusze
+                          </h3>
+                        </div>
+                        {currentLesson.automationScenariosIntro && (
+                          <div className="pl-4 mb-6">
+                            <p className="text-gray-300 text-lg leading-relaxed">
+                              {currentLesson.automationScenariosIntro}
+                            </p>
+                          </div>
+                        )}
+                        <div className="pl-4 grid gap-6 md:grid-cols-2">
+                          {currentLesson.automationScenarios.map((scenario, index) => {
+                            const IconComponent = getIcon(scenario.icon);
+                            return (
+                              <div
+                                key={scenario.id}
+                                className="bg-gradient-to-br from-white/5 to-white/3 border border-white/10 rounded-xl p-6 hover:border-[#fee715]/30 transition-all duration-300 hover:shadow-xl hover:shadow-[#fee715]/10"
+                              >
+                                <div className="flex items-start gap-4 mb-4">
+                                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30 flex items-center justify-center">
+                                    <div className="text-[#fee715]">
+                                      {IconComponent}
+                                    </div>
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <h4 className="font-[Montserrat] text-xl font-bold text-white">
+                                        {scenario.title}
+                                      </h4>
+                                    </div>
+                                    {scenario.timeline && (
+                                      <div className="mb-2">
+                                        <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#fee715]/10 border border-[#fee715]/30 rounded-lg text-[#fee715] text-sm font-semibold">
+                                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                          </svg>
+                                          {scenario.timeline}
+                                        </span>
+                                      </div>
+                                    )}
+                                    <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+                                      {scenario.description}
+                                    </p>
+                                  </div>
+                                </div>
+                                {scenario.points && scenario.points.length > 0 && (
+                                  <div className="space-y-2 pl-16">
+                                    {scenario.points.map((point, pointIndex) => (
+                                      <div key={pointIndex} className="flex items-start gap-2">
+                                        <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#fee715] mt-2"></div>
+                                        <p className="text-gray-300 text-sm leading-relaxed">
+                                          {point}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    </>
+                  )}
+
+                  {/* Analiza problemów - Jak dedukować, co jest nie tak */}
+                  {currentLesson.problemAnalyses && currentLesson.problemAnalyses.length > 0 && (
+                    <>
+                      <div className="border-t border-white/10"></div>
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
+                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                            Jak „dedukować", co jest nie tak – proste schematy
+                          </h3>
+                        </div>
+                        <div className="pl-4 space-y-6">
+                          {currentLesson.problemAnalyses.map((problem, index) => {
+                            const IconComponent = getIcon(problem.icon);
+                            return (
+                              <div
+                                key={problem.id}
+                                className="bg-gradient-to-br from-white/5 to-white/3 border border-white/10 rounded-xl p-6 hover:border-[#fee715]/30 transition-all duration-300"
+                              >
+                                <div className="flex items-start gap-4 mb-6">
+                                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30 flex items-center justify-center">
+                                    <div className="text-[#fee715]">
+                                      {IconComponent}
+                                    </div>
+                                  </div>
+                                  <h4 className="font-[Montserrat] text-xl font-bold text-white flex-1">
+                                    {problem.title}
+                                  </h4>
+                                </div>
+                                
+                                <div className="space-y-4 pl-16">
+                                  {/* Dane */}
+                                  <div>
+                                    <div className="flex items-center gap-2 mb-3">
+                                      <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+                                      <h5 className="font-[Montserrat] font-semibold text-blue-300 text-sm uppercase tracking-wide">
+                                        Dane z kampanii / analityki
+                                      </h5>
+                                    </div>
+                                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 space-y-2">
+                                      {problem.data.map((item, itemIndex) => (
+                                        <div key={itemIndex} className="flex items-start gap-2">
+                                          <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-blue-400 mt-2"></div>
+                                          <p className="text-gray-200 text-sm leading-relaxed">
+                                            {item}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Interpretacja */}
+                                  <div>
+                                    <div className="flex items-center gap-2 mb-3">
+                                      <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                      <h5 className="font-[Montserrat] font-semibold text-yellow-300 text-sm uppercase tracking-wide">
+                                        Co to może oznaczać
+                                      </h5>
+                                    </div>
+                                    <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 space-y-2">
+                                      {problem.interpretation.map((item, itemIndex) => (
+                                        <div key={itemIndex} className="flex items-start gap-2">
+                                          <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-yellow-400 mt-2"></div>
+                                          <p className="text-gray-200 text-sm leading-relaxed">
+                                            {item}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Rozwiązania */}
+                                  <div>
+                                    <div className="flex items-center gap-2 mb-3">
+                                      <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                                      <h5 className="font-[Montserrat] font-semibold text-green-300 text-sm uppercase tracking-wide">
+                                        Co możesz przetestować
+                                      </h5>
+                                    </div>
+                                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 space-y-2">
+                                      {problem.solutions.map((item, itemIndex) => (
+                                        <div key={itemIndex} className="flex items-start gap-2">
+                                          <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-green-400 mt-2"></div>
+                                          <p className="text-gray-200 text-sm leading-relaxed">
+                                            {item}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    </>
+                  )}
+
+                  {/* Schemat decyzyjny */}
+                  {currentLesson.decisionSteps && currentLesson.decisionSteps.length > 0 && (
+                    <>
+                      <div className="border-t border-white/10"></div>
+                      <section className="space-y-6">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
+                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                            Prosty schemat decyzyjny – jak pracować z danymi
+                          </h3>
+                        </div>
+                        <div className="pl-4">
+                          <div className="relative">
+                            {/* Linia łącząca kroki */}
+                            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#fee715] via-[#00C9A7] to-[#fee715] opacity-30"></div>
+                            
+                            <div className="space-y-6">
+                              {currentLesson.decisionSteps.map((step, index) => {
+                                const IconComponent = getIcon(step.icon);
+                                const isLast = index === currentLesson.decisionSteps!.length - 1;
+                                return (
+                                  <div key={step.id} className="relative flex items-start gap-4">
+                                    {/* Punkt na linii */}
+                                    <div className="relative z-10 flex-shrink-0 w-16 h-16 rounded-full bg-gradient-to-br from-[#fee715] to-[#00C9A7] border-4 border-[#101820] flex items-center justify-center shadow-lg">
+                                      <span className="font-[Montserrat] font-bold text-[#101820] text-lg">
+                                        {step.step}
+                                      </span>
+                                    </div>
+                                    
+                                    <div className="flex-1 pt-2">
+                                      <div className="bg-gradient-to-br from-white/5 to-white/3 border border-white/10 rounded-xl p-6 hover:border-[#fee715]/30 transition-all duration-300">
+                                        <div className="flex items-start gap-4 mb-3">
+                                          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30 flex items-center justify-center">
+                                            <div className="text-[#fee715]">
+                                              {IconComponent}
+                                            </div>
+                                          </div>
+                                          <div className="flex-1">
+                                            <h4 className="font-[Montserrat] text-xl font-bold text-white mb-2">
+                                              {step.title}
+                                            </h4>
+                                            <p className="text-gray-300 leading-relaxed">
+                                              {step.description}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
                             </div>
                           </div>
                         </div>
@@ -1924,9 +2404,135 @@ export const TrainingPage: React.FC = () => {
                               <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30 flex items-center justify-center">
                                 <span className="font-[Montserrat] font-bold text-[#fee715]">{qIndex + 1}</span>
                               </div>
-                              <h4 className="font-[Montserrat] text-xl font-bold text-white leading-relaxed flex-1 whitespace-pre-line">
-                                {question.question}
-                              </h4>
+                              <div className="flex-1">
+                                <h4 className="font-[Montserrat] text-xl font-bold text-white leading-relaxed mb-4 whitespace-pre-line">
+                                  {question.question}
+                                </h4>
+                                
+                                {/* Specjalne renderowanie dla pytań z obliczeniami */}
+                                {question.type === 'open' && question.isCalculation && question.calculationData && question.formula && (
+                                  <div className="bg-gradient-to-br from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-6 mb-4">
+                                    <div className="space-y-4">
+                                      {/* Dane do obliczenia */}
+                                      <div>
+                                        <h5 className="font-[Montserrat] font-semibold text-[#fee715] mb-3 text-sm uppercase tracking-wide">
+                                          Dane:
+                                        </h5>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                          {question.calculationData.map((data, idx) => (
+                                            <div key={idx} className="bg-white/5 border border-white/10 rounded-lg p-3">
+                                              <p className="text-gray-300 text-sm mb-1">{data.label}</p>
+                                              <p className="text-white font-bold text-lg">{data.value.toLocaleString('pl-PL')}</p>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                      
+                                      {/* Wzór */}
+                                      <div className="pt-4 border-t border-[#fee715]/20">
+                                        <h5 className="font-[Montserrat] font-semibold text-[#00C9A7] mb-2 text-sm uppercase tracking-wide">
+                                          Wzór:
+                                        </h5>
+                                        <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                                          <p className="text-white font-mono text-lg font-semibold">
+                                            {question.formula}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      
+                                      {/* Podpowiedź */}
+                                      {question.hint && (
+                                        <div className="pt-2">
+                                          <p className="text-gray-300 text-sm italic">
+                                            💡 {question.hint}
+                                          </p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Specjalne renderowanie dla pytań z danymi kampanii Facebook */}
+                                {question.campaignData && Array.isArray(question.campaignData) && (
+                                  <div className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-6 mb-6 border border-white/10">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                      {question.campaignData.map((campaign, idx: number) => {
+                                        // Kampania B (idx 1) ma lepsze wyniki - używamy zielonego (#00C9A7)
+                                        // Kampania A (idx 0) ma gorsze wyniki - używamy bardziej neutralnego koloru
+                                        const isBetterCampaign = idx === 1;
+                                        return (
+                                          <div 
+                                            key={idx}
+                                            className={`bg-gradient-to-br rounded-xl p-6 border-2 shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl ${
+                                              isBetterCampaign
+                                                ? 'from-[#00C9A7]/20 to-[#00C9A7]/10 border-[#00C9A7]/40' 
+                                                : 'from-gray-500/20 to-gray-600/20 border-gray-400/30'
+                                            }`}
+                                          >
+                                            <div className="flex items-center justify-between mb-5">
+                                              <h5 className={`font-[Montserrat] text-xl font-bold ${
+                                                isBetterCampaign ? 'text-[#00C9A7]' : 'text-gray-300'
+                                              }`}>
+                                                {campaign.name}
+                                              </h5>
+                                              <div className={`w-3 h-3 rounded-full shadow-lg ${
+                                                isBetterCampaign ? 'bg-[#00C9A7]' : 'bg-gray-400'
+                                              }`}></div>
+                                            </div>
+                                            
+                                            <div className="space-y-4">
+                                              {/* CTR */}
+                                              <div className="bg-white/5 rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                                                <div className="flex items-center justify-between mb-2">
+                                                  <span className="text-gray-300 text-sm font-medium uppercase tracking-wide">CTR</span>
+                                                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                  </svg>
+                                                </div>
+                                                <p className={`text-3xl font-bold ${
+                                                  isBetterCampaign ? 'text-[#00C9A7]' : 'text-gray-300'
+                                                }`}>
+                                                  {campaign.ctr}
+                                                </p>
+                                              </div>
+
+                                              {/* Koszt kliknięcia */}
+                                              <div className="bg-white/5 rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                                                <div className="flex items-center justify-between mb-2">
+                                                  <span className="text-gray-300 text-sm font-medium uppercase tracking-wide">Koszt kliknięcia</span>
+                                                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                  </svg>
+                                                </div>
+                                                <p className={`text-3xl font-bold ${
+                                                  isBetterCampaign ? 'text-[#00C9A7]' : 'text-gray-300'
+                                                }`}>
+                                                  {campaign.costPerClick}
+                                                </p>
+                                              </div>
+
+                                              {/* Zapytania */}
+                                              <div className="bg-white/5 rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-colors">
+                                                <div className="flex items-center justify-between mb-2">
+                                                  <span className="text-gray-300 text-sm font-medium uppercase tracking-wide">Zapytania</span>
+                                                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                                                  </svg>
+                                                </div>
+                                                <p className={`text-2xl font-bold ${
+                                                  isBetterCampaign ? 'text-[#00C9A7]' : 'text-gray-300'
+                                                }`}>
+                                                  {campaign.inquiries}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
                             </div>
 
                             {question.type === 'choice' && question.options ? (
@@ -1973,6 +2579,17 @@ export const TrainingPage: React.FC = () => {
                                     allResults: quizSubTaskResults
                                   });
                                   
+                                  // Warunek dla pola "Inne" - pokaż tylko jeśli w ex4-1 jest zaznaczona opcja "Inne" (index 4)
+                                  if (subTask.id === 'ex4-1-other') {
+                                    const ex4_1Answer = quizSubTaskAnswers['ex4-1'] || '';
+                                    const selectedChoices = ex4_1Answer.split(',').filter(c => c);
+                                    const isOtherSelected = selectedChoices.includes('4'); // "Inne" to ostatnia opcja (index 4)
+                                    
+                                    if (!isOtherSelected) {
+                                      return null; // Nie renderuj pola jeśli "Inne" nie jest zaznaczone
+                                    }
+                                  }
+                                  
                                   return (
                                   <div key={subTask.id} className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-6 border border-white/10">
                                     <div className="mb-4">
@@ -1983,30 +2600,499 @@ export const TrainingPage: React.FC = () => {
                                         {subTask.description}
                                       </p>
                                     </div>
-                                    <textarea
-                                      value={quizSubTaskAnswers[subTask.id] || ''}
-                                      onChange={(e) => setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: e.target.value }))}
-                                      placeholder="Napisz swoją odpowiedź tutaj..."
-                                      disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
-                                      className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] min-h-[100px] text-lg leading-relaxed transition-all duration-300 ${
-                                        quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'
-                                          ? 'border-white/20 opacity-70 cursor-not-allowed'
-                                          : 'border-white/10'
-                                      }`}
-                                    />
+                                    {/* Renderowanie różnych typów pól */}
+                                    {subTask.fieldType === 'text' && (
+                                      <input
+                                        type="text"
+                                        value={quizSubTaskAnswers[subTask.id] || ''}
+                                        onChange={(e) => setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: e.target.value }))}
+                                        placeholder={subTask.fieldOptions?.placeholder || "Wpisz odpowiedź..."}
+                                        disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
+                                        className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] text-lg transition-all duration-300 ${
+                                          quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'
+                                            ? 'border-white/20 opacity-70 cursor-not-allowed'
+                                            : 'border-white/10'
+                                        }`}
+                                      />
+                                    )}
                                     
-                                    {/* Status dla podzadania */}
-                                    {quizSubTaskResults[subTask.id] === 'pending' && (
-                                      <div className="mt-4 bg-yellow-500/20 border-2 border-yellow-500/50 rounded-xl p-4 flex items-center gap-3">
-                                        <svg className="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    {(!subTask.fieldType || subTask.fieldType === 'textarea') && (
+                                      <textarea
+                                        value={quizSubTaskAnswers[subTask.id] || ''}
+                                        onChange={(e) => setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: e.target.value }))}
+                                        placeholder={subTask.fieldOptions?.placeholder || "Napisz swoją odpowiedź tutaj..."}
+                                        disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
+                                        className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] min-h-[100px] text-lg leading-relaxed transition-all duration-300 ${
+                                          quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'
+                                            ? 'border-white/20 opacity-70 cursor-not-allowed'
+                                            : 'border-white/10'
+                                        }`}
+                                      />
+                                    )}
+                                    
+                                    {subTask.fieldType === 'number' && (
+                                      <input
+                                        type="number"
+                                        value={quizSubTaskAnswers[subTask.id] || ''}
+                                        onChange={(e) => setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: e.target.value }))}
+                                        placeholder={subTask.fieldOptions?.placeholder || "Wpisz liczbę..."}
+                                        min={subTask.fieldOptions?.min}
+                                        max={subTask.fieldOptions?.max}
+                                        step={subTask.fieldOptions?.step}
+                                        disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
+                                        className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] text-lg transition-all duration-300 ${
+                                          quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'
+                                            ? 'border-white/20 opacity-70 cursor-not-allowed'
+                                            : 'border-white/10'
+                                        }`}
+                                      />
+                                    )}
+                                    
+                                    {subTask.fieldType === 'url' && (
+                                      <input
+                                        type="url"
+                                        value={quizSubTaskAnswers[subTask.id] || ''}
+                                        onChange={(e) => setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: e.target.value }))}
+                                        placeholder={subTask.fieldOptions?.placeholder || "https://..."}
+                                        disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
+                                        className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] text-lg transition-all duration-300 ${
+                                          quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'
+                                            ? 'border-white/20 opacity-70 cursor-not-allowed'
+                                            : 'border-white/10'
+                                        }`}
+                                      />
+                                    )}
+                                    
+                                    {subTask.fieldType === 'date' && (() => {
+                                      const isOpen = openDatePickers[subTask.id] || false;
+                                      const selectedDate = quizSubTaskAnswers[subTask.id] || '';
+                                      
+                                      const formatDateForDisplay = (dateStr: string) => {
+                                        if (!dateStr) return '';
+                                        const date = new Date(dateStr + 'T00:00:00');
+                                        return date.toLocaleDateString('pl-PL', {
+                                          day: 'numeric',
+                                          month: 'long',
+                                          year: 'numeric'
+                                        });
+                                      };
+                                      
+                                      const formatDateForInput = (date: Date) => {
+                                        const year = date.getFullYear();
+                                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                                        const day = String(date.getDate()).padStart(2, '0');
+                                        return `${year}-${month}-${day}`;
+                                      };
+                                      
+                                      const getCalendarDays = () => {
+                                        const currentDate = selectedDate ? new Date(selectedDate + 'T00:00:00') : new Date();
+                                        const year = currentDate.getFullYear();
+                                        const month = currentDate.getMonth();
+                                        
+                                        const firstDay = new Date(year, month, 1);
+                                        const lastDay = new Date(year, month + 1, 0);
+                                        const daysInMonth = lastDay.getDate();
+                                        const startingDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Poniedziałek = 0
+                                        
+                                        const days = [];
+                                        
+                                        // Dni z poprzedniego miesiąca
+                                        const prevMonthLastDay = new Date(year, month, 0).getDate();
+                                        for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+                                          days.push({
+                                            day: prevMonthLastDay - i,
+                                            isCurrentMonth: false,
+                                            date: new Date(year, month - 1, prevMonthLastDay - i)
+                                          });
+                                        }
+                                        
+                                        // Dni z bieżącego miesiąca
+                                        for (let day = 1; day <= daysInMonth; day++) {
+                                          days.push({
+                                            day,
+                                            isCurrentMonth: true,
+                                            date: new Date(year, month, day)
+                                          });
+                                        }
+                                        
+                                        // Dni z następnego miesiąca (do wypełnienia siatki)
+                                        const remainingDays = 42 - days.length;
+                                        for (let day = 1; day <= remainingDays; day++) {
+                                          days.push({
+                                            day,
+                                            isCurrentMonth: false,
+                                            date: new Date(year, month + 1, day)
+                                          });
+                                        }
+                                        
+                                        return { days, year, month };
+                                      };
+                                      
+                                      const calendarData = getCalendarDays();
+                                      const monthNames = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+                                      const dayNames = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nie'];
+                                      
+                                      const handleDateSelect = (date: Date) => {
+                                        const dateStr = formatDateForInput(date);
+                                        setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: dateStr }));
+                                        setOpenDatePickers(prev => ({ ...prev, [subTask.id]: false }));
+                                      };
+                                      
+                                      const navigateMonth = (direction: number) => {
+                                        const currentDate = selectedDate ? new Date(selectedDate + 'T00:00:00') : new Date();
+                                        const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + direction, 1);
+                                        setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: formatDateForInput(newDate) }));
+                                      };
+                                      
+                                      const selectToday = () => {
+                                        handleDateSelect(new Date());
+                                      };
+                                      
+                                      const clearDate = () => {
+                                        setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: '' }));
+                                        setOpenDatePickers(prev => ({ ...prev, [subTask.id]: false }));
+                                      };
+                                      
+                                      return (
+                                        <div className="relative date-picker-container">
+                                          <button
+                                            type="button"
+                                            onClick={() => !quizSubTaskResults[subTask.id] && setOpenDatePickers(prev => ({ ...prev, [subTask.id]: !isOpen }))}
+                                            disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
+                                            className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-left flex items-center justify-between transition-all duration-300 ${
+                                              quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'
+                                                ? 'border-white/20 opacity-70 cursor-not-allowed'
+                                                : selectedDate
+                                                ? 'border-[#fee715]/50 hover:border-[#fee715]'
+                                                : 'border-white/10 hover:border-[#fee715]/50'
+                                            }`}
+                                          >
+                                            <span className={`text-lg ${selectedDate ? 'text-white' : 'text-gray-400'}`}>
+                                              {selectedDate ? formatDateForDisplay(selectedDate) : 'Kliknij, aby wybrać datę'}
+                                            </span>
+                                            <svg className={`w-6 h-6 transition-colors duration-300 ${selectedDate ? 'text-[#fee715]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                          </button>
+                                          
+                                          {isOpen && !quizSubTaskResults[subTask.id] && (
+                                            <div className="absolute z-50 mt-2 bg-[#18232F] border-2 border-[#fee715]/30 rounded-xl shadow-2xl p-6 w-full max-w-sm">
+                                              {/* Header kalendarza */}
+                                              <div className="flex items-center justify-between mb-4">
+                                                <button
+                                                  onClick={() => navigateMonth(-1)}
+                                                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                                                >
+                                                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                                  </svg>
+                                                </button>
+                                                <h3 className="font-[Montserrat] font-bold text-white text-lg">
+                                                  {monthNames[calendarData.month]} {calendarData.year}
+                                                </h3>
+                                                <button
+                                                  onClick={() => navigateMonth(1)}
+                                                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                                                >
+                                                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                  </svg>
+                                                </button>
+                                              </div>
+                                              
+                                              {/* Dni tygodnia */}
+                                              <div className="grid grid-cols-7 gap-1 mb-2">
+                                                {dayNames.map((day, idx) => (
+                                                  <div key={idx} className="text-center text-xs font-semibold text-gray-400 py-2">
+                                                    {day}
+                                                  </div>
+                                                ))}
+                                              </div>
+                                              
+                                              {/* Kalendarz */}
+                                              <div className="grid grid-cols-7 gap-1">
+                                                {calendarData.days.map((dayObj, idx) => {
+                                                  const isSelected = selectedDate && formatDateForInput(dayObj.date) === selectedDate;
+                                                  const isToday = formatDateForInput(dayObj.date) === formatDateForInput(new Date());
+                                                  
+                                                  return (
+                                                    <button
+                                                      key={idx}
+                                                      onClick={() => dayObj.isCurrentMonth && handleDateSelect(dayObj.date)}
+                                                      disabled={!dayObj.isCurrentMonth}
+                                                      className={`aspect-square rounded-lg text-sm font-medium transition-all duration-200 ${
+                                                        !dayObj.isCurrentMonth
+                                                          ? 'text-gray-600 cursor-not-allowed'
+                                                          : isSelected
+                                                          ? 'bg-gradient-to-br from-[#fee715] to-[#00C9A7] text-[#101820] font-bold shadow-lg'
+                                                          : isToday
+                                                          ? 'bg-white/10 text-[#fee715] border-2 border-[#fee715]/50 hover:bg-white/20'
+                                                          : 'text-white hover:bg-white/10'
+                                                      }`}
+                                                    >
+                                                      {dayObj.day}
+                                                    </button>
+                                                  );
+                                                })}
+                                              </div>
+                                              
+                                              {/* Przyciski akcji */}
+                                              <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
+                                                <button
+                                                  onClick={clearDate}
+                                                  className="flex-1 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg text-white text-sm font-medium transition-colors"
+                                                >
+                                                  Wyczyść
+                                                </button>
+                                                <button
+                                                  onClick={selectToday}
+                                                  className="flex-1 px-4 py-2 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] rounded-lg text-sm font-bold transition-all hover:shadow-lg hover:shadow-[#fee715]/30"
+                                                >
+                                                  Dzisiaj
+                                                </button>
+                                              </div>
+                                            </div>
+                                          )}
+                                          
+                                          {!quizSubTaskAnswers[subTask.id] && !quizSubTaskResults[subTask.id] && !isOpen && (
+                                            <p className="mt-2 text-sm text-gray-400 flex items-center gap-2">
+                                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                              </svg>
+                                              Kliknij w pole, aby otworzyć kalendarz i wybrać datę
+                                            </p>
+                                          )}
+                                        </div>
+                                      );
+                                    })()}
+                                    
+                                    {subTask.fieldType === 'choice' && subTask.fieldOptions?.choices && (
+                                      <div className="space-y-3">
+                                        {subTask.fieldOptions.choices.map((choice, choiceIndex) => (
+                                          <CustomRadio
+                                            key={choiceIndex}
+                                            id={`${subTask.id}-${choiceIndex}`}
+                                            name={subTask.id}
+                                            value={choiceIndex}
+                                            checked={Number(quizSubTaskAnswers[subTask.id]) === choiceIndex}
+                                            onChange={async (value) => {
+                                              const newAnswer = String(value);
+                                              setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: newAnswer }));
+                                              // Automatyczne zapisanie i zatwierdzenie dla pól wyboru
+                                              if (question.id && !quizSubTaskResults[subTask.id] && !user) return;
+                                              // Użyj setTimeout aby upewnić się, że stan jest zaktualizowany
+                                              setTimeout(async () => {
+                                                if (question.id) {
+                                                  const autoApprove = shouldAutoApproveSubTask(question.id, subTask.id, newAnswer);
+                                                  const status = autoApprove ? 'approved' : 'pending';
+                                                  await saveQuizResponse(question.id, newAnswer, status, subTask.id);
+                                                  await loadProgress();
+                                                  if (autoApprove) {
+                                                    setQuizSubTaskResults(prev => ({ ...prev, [subTask.id]: 'approved' }));
+                                                    setQuizSubTaskFeedback(prev => ({ ...prev, [subTask.id]: 'Odpowiedź została automatycznie zatwierdzona.' }));
+                                                  }
+                                                }
+                                              }, 100);
+                                            }}
+                                            label={choice}
+                                            disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
+                                          />
+                                        ))}
+                                      </div>
+                                    )}
+                                    
+                                    {subTask.fieldType === 'multichoice' && subTask.fieldOptions?.choices && (
+                                      <div className="space-y-4">
+                                        <div className="space-y-3">
+                                          {subTask.fieldOptions.choices.map((choice, choiceIndex) => {
+                                            const selectedChoices = (quizSubTaskAnswers[subTask.id] || '').split(',').filter(c => c);
+                                            const isChecked = selectedChoices.includes(String(choiceIndex));
+                                            
+                                            return (
+                                              <label
+                                                key={choiceIndex}
+                                                className={`flex items-center gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all duration-300 group ${
+                                                  isChecked
+                                                    ? 'bg-gradient-to-r from-[#fee715]/15 to-[#00C9A7]/15 border-[#fee715]/60 shadow-lg shadow-[#fee715]/20'
+                                                    : 'bg-white/5 border-white/10 hover:border-[#fee715]/30 hover:bg-white/10'
+                                                } ${quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved' ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                              >
+                                                {/* Custom checkbox */}
+                                                <div className="relative flex-shrink-0">
+                                                  <input
+                                                    type="checkbox"
+                                                    checked={isChecked}
+                                                    onChange={(e) => {
+                                                      // Tylko aktualizuj lokalny stan, bez automatycznego zapisywania
+                                                      const current = (quizSubTaskAnswers[subTask.id] || '').split(',').filter(c => c);
+                                                      if (e.target.checked) {
+                                                        current.push(String(choiceIndex));
+                                                      } else {
+                                                        const index = current.indexOf(String(choiceIndex));
+                                                        if (index > -1) current.splice(index, 1);
+                                                      }
+                                                      const newAnswer = current.join(',');
+                                                      setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: newAnswer }));
+                                                    }}
+                                                    disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
+                                                    className="sr-only"
+                                                  />
+                                                  <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
+                                                    isChecked
+                                                      ? 'bg-gradient-to-br from-[#fee715] to-[#00C9A7] border-[#fee715] shadow-lg shadow-[#fee715]/40'
+                                                      : 'bg-white/10 border-white/30 group-hover:border-[#fee715]/50'
+                                                  }`}>
+                                                    {isChecked && (
+                                                      <svg className="w-4 h-4 text-[#101820] font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                      </svg>
+                                                    )}
+                                                  </div>
+                                                </div>
+                                                <span className={`text-white font-medium flex-1 transition-colors duration-300 ${
+                                                  isChecked ? 'text-[#fee715]' : ''
+                                                }`}>{choice}</span>
+                                              </label>
+                                            );
+                                          })}
+                                        </div>
+                                        
+                                        {/* Przyciski akcji dla multichoice - tylko jeśli odpowiedź nie jest jeszcze zatwierdzona */}
+                                        {!quizSubTaskResults[subTask.id] && (
+                                          <div className="flex gap-3 pt-2">
+                                            <button
+                                              onClick={async () => {
+                                                const answer = quizSubTaskAnswers[subTask.id];
+                                                if (!answer || answer === '') {
+                                                  alert('Proszę zaznaczyć przynajmniej jedną opcję.');
+                                                  return;
+                                                }
+                                                if (question.id) {
+                                                  const autoApprove = shouldAutoApproveSubTask(question.id, subTask.id, answer);
+                                                  const status = autoApprove ? 'approved' : 'pending';
+                                                  await saveQuizResponse(question.id, answer, status, subTask.id);
+                                                  await loadProgress();
+                                                  if (autoApprove) {
+                                                    setQuizSubTaskResults(prev => ({ ...prev, [subTask.id]: 'approved' }));
+                                                    setQuizSubTaskFeedback(prev => ({ ...prev, [subTask.id]: 'Odpowiedź została automatycznie zatwierdzona.' }));
+                                                  } else {
+                                                    setQuizSubTaskResults(prev => ({ ...prev, [subTask.id]: 'pending' }));
+                                                    setQuizSubTaskFeedback(prev => ({ ...prev, [subTask.id]: 'Odpowiedź została przesłana i oczekuje na weryfikację.' }));
+                                                  }
+                                                }
+                                              }}
+                                              disabled={!quizSubTaskAnswers[subTask.id] || quizSubTaskAnswers[subTask.id] === ''}
+                                              className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-2 px-6 rounded-lg hover:shadow-xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
+                                            >
+                                              Zatwierdź
+                                            </button>
+                                            <button
+                                              onClick={() => {
+                                                setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: '' }));
+                                              }}
+                                              className="bg-white/10 text-white font-[Montserrat] font-semibold py-2 px-6 rounded-lg hover:bg-white/20 border border-white/20 transition-all duration-300 text-sm"
+                                            >
+                                              Restart
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
+                                    
+                                    {subTask.fieldType === 'text-multiple' && subTask.fieldOptions?.multipleFields && (
+                                      <div className="space-y-4">
+                                        {subTask.fieldOptions.multipleFields.map((field, fieldIndex) => {
+                                          const fieldKey = `${subTask.id}_field_${fieldIndex}`;
+                                          const answers = (quizSubTaskAnswers[subTask.id] || '').split('|||');
+                                          
+                                          return (
+                                            <div key={fieldIndex}>
+                                              <label className="block text-gray-300 text-sm font-medium mb-2">
+                                                {field.label}
+                                              </label>
+                                              <input
+                                                type="text"
+                                                value={answers[fieldIndex] || ''}
+                                                onChange={(e) => {
+                                                  const newAnswers = [...answers];
+                                                  newAnswers[fieldIndex] = e.target.value;
+                                                  setQuizSubTaskAnswers(prev => ({ ...prev, [subTask.id]: newAnswers.join('|||') }));
+                                                }}
+                                                placeholder={field.placeholder || "Wpisz..."}
+                                                disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
+                                                className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] text-lg transition-all duration-300 ${
+                                                  quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'
+                                                    ? 'border-white/20 opacity-70 cursor-not-allowed'
+                                                    : 'border-white/10'
+                                                }`}
+                                              />
+                                            </div>
+                                          );
+                                        })}
+                                        
+                                        {/* Automatyczne obliczenia dla ćwiczenia 2 (analiza kampanii) */}
+                                        {subTask.id === 'ex2-1' && (() => {
+                                          const answers = (quizSubTaskAnswers[subTask.id] || '').split('|||');
+                                          const impressions = parseFloat(answers[0]?.replace(/[^\d,.-]/g, '').replace(',', '.') || '0');
+                                          const clicks = parseFloat(answers[1]?.replace(/[^\d,.-]/g, '').replace(',', '.') || '0');
+                                          const budget = parseFloat(answers[2]?.replace(/[^\d,.-]/g, '').replace(',', '.') || '0');
+                                          const leads = parseFloat(answers[3]?.replace(/[^\d,.-]/g, '').replace(',', '.') || '0');
+                                          
+                                          const ctr = impressions > 0 ? ((clicks / impressions) * 100).toFixed(2) : null;
+                                          const cpc = clicks > 0 ? (budget / clicks).toFixed(2) : null;
+                                          const cpl = leads > 0 ? (budget / leads).toFixed(2) : null;
+                                          
+                                          if (impressions > 0 && clicks > 0 && budget > 0) {
+                                            return (
+                                              <div className="mt-6 bg-gradient-to-br from-[#fee715]/10 to-[#00C9A7]/10 border-2 border-[#fee715]/30 rounded-xl p-6">
+                                                <h6 className="font-[Montserrat] text-lg font-bold text-[#fee715] mb-4">
+                                                  📊 Automatyczne obliczenia:
+                                                </h6>
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                  <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                                                    <p className="text-gray-300 text-sm mb-1">CTR</p>
+                                                    <p className="text-2xl font-bold text-[#00C9A7]">{ctr}%</p>
+                                                    <p className="text-xs text-gray-400 mt-1">
+                                                      CTR = (kliknięcia / wyświetlenia) × 100%
+                                                    </p>
+                                                  </div>
+                                                  <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                                                    <p className="text-gray-300 text-sm mb-1">CPC</p>
+                                                    <p className="text-2xl font-bold text-[#00C9A7]">{cpc} zł</p>
+                                                    <p className="text-xs text-gray-400 mt-1">
+                                                      CPC = budżet / kliknięcia
+                                                    </p>
+                                                  </div>
+                                                  {leads > 0 && (
+                                                    <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                                                      <p className="text-gray-300 text-sm mb-1">Koszt pozyskania leada</p>
+                                                      <p className="text-2xl font-bold text-[#00C9A7]">{cpl} zł</p>
+                                                      <p className="text-xs text-gray-400 mt-1">
+                                                        CPL = budżet / liczba zapytań
+                                                      </p>
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            );
+                                          }
+                                          return null;
+                                        })()}
+                                      </div>
+                                    )}
+                                    
+                                    {/* Status dla podzadania - subTasks są auto-zatwierdzane, więc nie pokazujemy "Oczekiwanie na sprawdzenie" */}
+                                    {quizSubTaskResults[subTask.id] === 'approved' && (
+                                      <div className="mt-4 bg-green-500/20 border-2 border-green-500/50 rounded-xl p-4 flex items-center gap-3">
+                                        <svg className="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
                                         <div className="flex-1">
-                                          <p className="text-yellow-200 font-semibold text-sm">Oczekiwanie na sprawdzenie</p>
+                                          <p className="text-green-200 font-semibold text-sm">Odpowiedź zapisana</p>
                                         </div>
                                         <button
                                           onClick={() => handleChangeSubTaskAnswer(subTask.id)}
-                                          className="px-3 py-1.5 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/50 rounded-lg text-yellow-200 text-xs font-semibold transition-all duration-300"
+                                          className="px-3 py-1.5 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 rounded-lg text-green-200 text-xs font-semibold transition-all duration-300"
                                         >
                                           Zmień
                                         </button>
@@ -2021,9 +3107,15 @@ export const TrainingPage: React.FC = () => {
                                         <div className="flex-1">
                                           <p className="text-green-200 font-semibold text-sm mb-1">Zatwierdzone</p>
                                           {quizSubTaskFeedback[subTask.id] && (
-                                            <p className="text-green-300/80 text-xs">{quizSubTaskFeedback[subTask.id]}</p>
+                                            <p className="text-green-300/80 text-xs mb-2">{quizSubTaskFeedback[subTask.id]}</p>
                                           )}
                                         </div>
+                                        <button
+                                          onClick={() => handleChangeSubTaskAnswer(subTask.id)}
+                                          className="px-3 py-1.5 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 rounded-lg text-green-200 text-xs font-semibold transition-all duration-300"
+                                        >
+                                          Zmień
+                                        </button>
                                       </div>
                                     )}
                                     
@@ -2047,15 +3139,16 @@ export const TrainingPage: React.FC = () => {
                                       </div>
                                     )}
                                     
-                                    {/* Przycisk zapisu dla podzadania */}
-                                    {!quizSubTaskResults[subTask.id] && (
+                                    {/* Przycisk zapisu dla podzadania - tylko dla pól które nie mają własnych przycisków (np. multichoice ma własne) */}
+                                    {/* Przycisk jest zawsze widoczny - można zmienić odpowiedź nawet po zatwierdzeniu */}
+                                    {subTask.fieldType !== 'multichoice' && (
                                       <div className="mt-4">
                                         <button
                                           onClick={() => handleSubmitSubTaskAnswer(question.id, subTask.id)}
                                           disabled={!quizSubTaskAnswers[subTask.id] || quizSubTaskAnswers[subTask.id] === ''}
                                           className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-2 px-4 rounded-lg hover:shadow-xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm"
                                         >
-                                          Zapisz odpowiedź
+                                          {quizSubTaskResults[subTask.id] === 'approved' ? 'Zapisz zmiany' : 'Zapisz odpowiedź'}
                                         </button>
                                       </div>
                                     )}
@@ -2065,20 +3158,161 @@ export const TrainingPage: React.FC = () => {
                               </div>
                             ) : (
                               <div className="pl-14 space-y-4">
-                                <textarea
-                                  value={quizAnswers[question.id] || ''}
-                                  onChange={(e) => handleQuizAnswer(question.id, e.target.value)}
-                                  placeholder="Napisz swoją odpowiedź tutaj..."
-                                  disabled={quizResults[question.id] === 'pending' || quizResults[question.id] === 'approved'}
-                                  className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] min-h-[120px] text-lg leading-relaxed transition-all duration-300 ${
-                                    quizResults[question.id] === 'pending' || quizResults[question.id] === 'approved'
-                                      ? 'border-white/20 opacity-70 cursor-not-allowed'
-                                      : 'border-white/10'
-                                  }`}
-                                />
+                                {/* Pytanie z obliczeniem - input numeryczny */}
+                                {question.isCalculation && question.correctNumericAnswer !== undefined ? (
+                                  <div className="space-y-4">
+                                    <div className="bg-gradient-to-br from-[#fee715]/5 to-[#00C9A7]/5 border border-[#fee715]/20 rounded-xl p-6">
+                                      <div className="flex flex-col md:flex-row md:items-center gap-4">
+                                        <label className="font-[Montserrat] font-semibold text-white text-lg flex-shrink-0">
+                                          Twoja odpowiedź:
+                                        </label>
+                                        <div className="flex-1 max-w-xs">
+                                          <div className="relative">
+                                            <input
+                                              type="number"
+                                              step="0.1"
+                                              min="0"
+                                              max="100"
+                                              value={quizAnswers[question.id] || ''}
+                                              onChange={(e) => {
+                                                const value = e.target.value;
+                                                handleQuizAnswer(question.id, value);
+                                                // Resetuj wynik jeśli użytkownik zmienia odpowiedź
+                                                if (quizResults[question.id] === 'incorrect' || quizResults[question.id] === 'correct') {
+                                                  setQuizResults(prev => ({ ...prev, [question.id]: null }));
+                                                }
+                                              }}
+                                              onBlur={async (e) => {
+                                                const value = e.target.value;
+                                                // Automatyczne sprawdzanie odpowiedzi po opuszczeniu pola
+                                                if (value && !isNaN(parseFloat(value))) {
+                                                  const userAnswer = parseFloat(value);
+                                                  const correctAnswer = question.correctNumericAnswer!;
+                                                  const tolerance = 0.15; // Tolerancja dla zaokrągleń (0.1 + margines)
+                                                  
+                                                  if (Math.abs(userAnswer - correctAnswer) <= tolerance) {
+                                                    // Odpowiedź poprawna
+                                                    await saveQuizResponse(question.id, userAnswer, 'approved');
+                                                    setQuizResults(prev => ({ ...prev, [question.id]: 'correct' }));
+                                                    setQuizFeedback(prev => ({ ...prev, [question.id]: question.feedback || 'Dobrze!' }));
+                                                  } else {
+                                                    // Odpowiedź niepoprawna - nie zapisujemy, tylko pokazujemy że jest błędna
+                                                    setQuizResults(prev => ({ ...prev, [question.id]: 'incorrect' }));
+                                                  }
+                                                }
+                                              }}
+                                              placeholder="0.0"
+                                              disabled={quizResults[question.id] === 'correct' || quizResults[question.id] === 'approved'}
+                                              className={`w-full bg-white/5 border-2 rounded-xl px-6 py-5 pr-12 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] text-2xl font-bold text-center transition-all duration-300 ${
+                                                quizResults[question.id] === 'correct' || quizResults[question.id] === 'approved'
+                                                  ? 'border-green-500/50 bg-green-500/10'
+                                                  : quizResults[question.id] === 'incorrect'
+                                                  ? 'border-red-500/50 bg-red-500/10'
+                                                  : 'border-white/10 hover:border-[#fee715]/30'
+                                              }`}
+                                            />
+                                            <span className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xl">%</span>
+                                          </div>
+                                        </div>
+                                        {/* Przycisk reset */}
+                                        {(quizAnswers[question.id] || quizResults[question.id]) && (
+                                          <button
+                                            onClick={() => {
+                                              setQuizAnswers(prev => ({ ...prev, [question.id]: '' }));
+                                              setQuizResults(prev => ({ ...prev, [question.id]: null }));
+                                              setQuizFeedback(prev => {
+                                                const newFeedback = { ...prev };
+                                                delete newFeedback[question.id];
+                                                return newFeedback;
+                                              });
+                                            }}
+                                            className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white text-sm font-semibold transition-all duration-300 flex items-center gap-2 flex-shrink-0"
+                                          >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            </svg>
+                                            Reset
+                                          </button>
+                                        )}
+                                      </div>
+                                      <p className="text-gray-400 text-sm mt-3 text-center md:text-left">
+                                        Wpisz wynik procentowy z dokładnością do jednego miejsca po przecinku (np. 3,5)
+                                      </p>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <textarea
+                                      value={quizAnswers[question.id] || ''}
+                                      onChange={(e) => handleQuizAnswer(question.id, e.target.value)}
+                                      placeholder="Napisz swoją odpowiedź tutaj..."
+                                      disabled={quizResults[question.id] === 'pending' || quizResults[question.id] === 'approved'}
+                                      className={`w-full bg-white/5 border-2 rounded-xl px-6 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] min-h-[120px] text-lg leading-relaxed transition-all duration-300 ${
+                                        quizResults[question.id] === 'pending' || quizResults[question.id] === 'approved'
+                                          ? 'border-white/20 opacity-70 cursor-not-allowed'
+                                          : 'border-white/10'
+                                      }`}
+                                    />
+                                    
+                                    {/* Przycisk zatwierdzania dla każdego pytania otwartego osobno */}
+                                    {!quizResults[question.id] && question.type === 'open' && (
+                                      <div className="mt-4">
+                                        <button
+                                          onClick={() => handleSubmitOpenAnswer(question.id)}
+                                          disabled={!quizAnswers[question.id] || quizAnswers[question.id] === ''}
+                                          className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:shadow-xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                                        >
+                                          Prześlij odpowiedź
+                                        </button>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
                                 
+                                {/* Status dla pytań z obliczeniami - komunikat o poprawnej odpowiedzi */}
+                                {question.isCalculation && quizResults[question.id] === 'correct' && (
+                                  <div className="bg-green-500/20 border-2 border-green-500/50 rounded-xl p-5 flex items-start gap-4">
+                                    <svg className="w-7 h-7 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div className="flex-1">
+                                      <p className="text-green-200 font-semibold text-lg mb-2">✓ Poprawna odpowiedź!</p>
+                                      {quizFeedback[question.id] && (
+                                        <p className="text-green-300/90 text-base leading-relaxed">{quizFeedback[question.id]}</p>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Status dla pytań z obliczeniami - komunikat o niepoprawnej odpowiedzi */}
+                                {question.isCalculation && quizResults[question.id] === 'incorrect' && (
+                                  <div className="bg-red-500/20 border-2 border-red-500/50 rounded-xl p-5 flex items-start gap-4">
+                                    <svg className="w-7 h-7 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div className="flex-1">
+                                      <p className="text-red-200 font-semibold text-lg mb-2">Niepoprawna odpowiedź</p>
+                                      <p className="text-red-300/90 text-base leading-relaxed mb-3">
+                                        {question.hint && `💡 ${question.hint}`}
+                                      </p>
+                                      <button
+                                        onClick={() => {
+                                          setQuizResults(prev => ({ ...prev, [question.id]: null }));
+                                          setQuizAnswers(prev => ({ ...prev, [question.id]: '' }));
+                                        }}
+                                        className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-200 text-sm font-semibold transition-all duration-300 flex items-center gap-2"
+                                      >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                        Spróbuj ponownie
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+
                                 {/* Status dla pytań otwartych */}
-                                {quizResults[question.id] === 'pending' && (
+                                {!question.isCalculation && quizResults[question.id] === 'pending' && (
                                   <div className="bg-yellow-500/20 border-2 border-yellow-500/50 rounded-xl p-4 flex items-center gap-3">
                                     <svg className="w-6 h-6 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -2174,13 +3408,10 @@ export const TrainingPage: React.FC = () => {
                           </div>
                         ))}
 
+                        {/* Wspólny przycisk tylko dla pytań zamkniętych */}
                         <div className="pl-14 pt-4">
                           {(() => {
-                            const hasOpenQuestions = currentLesson.quiz.some(q => q.type === 'open');
                             const hasChoiceQuestions = currentLesson.quiz.some(q => q.type === 'choice');
-                            const allOpenSubmitted = currentLesson.quiz
-                              .filter(q => q.type === 'open')
-                              .every(q => quizResults[q.id] === 'pending' || quizResults[q.id] === 'approved' || quizResults[q.id] === 'rejected');
                             const allChoiceCorrect = currentLesson.quiz
                               .filter(q => q.type === 'choice')
                               .every(q => quizResults[q.id] === 'correct');
@@ -2190,22 +3421,6 @@ export const TrainingPage: React.FC = () => {
                             const hasIncorrectChoices = currentLesson.quiz
                               .filter(q => q.type === 'choice')
                               .some(q => quizResults[q.id] === 'incorrect');
-                            
-                            // Jeśli są pytania otwarte i nie wszystkie są przesłane
-                            if (hasOpenQuestions && !allOpenSubmitted) {
-                              const openQuestion = currentLesson.quiz.find(q => q.type === 'open' && !quizResults[q.id]);
-                              if (openQuestion) {
-                                return (
-                                  <button
-                                    onClick={() => handleSubmitOpenAnswer(openQuestion.id)}
-                                    disabled={!quizAnswers[openQuestion.id] || quizAnswers[openQuestion.id] === ''}
-                                    className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-4 px-8 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                                  >
-                                    Prześlij odpowiedź
-                                  </button>
-                                );
-                              }
-                            }
                             
                             // Jeśli są pytania zamknięte i nie wszystkie są poprawne (lub nie sprawdzone)
                             if (hasChoiceQuestions && (!allChoiceCorrect || hasUncheckedChoices)) {
@@ -2218,21 +3433,6 @@ export const TrainingPage: React.FC = () => {
                                   Sprawdź odpowiedź
                                 </button>
                               );
-                            }
-                            
-                            // Jeśli są oba typy pytań
-                            if (hasOpenQuestions && hasChoiceQuestions) {
-                              if (!allChoiceCorrect || hasUncheckedChoices) {
-                                return (
-                                  <button
-                                    onClick={handleCheckQuiz}
-                                    disabled={hasIncorrectChoices && !hasUncheckedChoices}
-                                    className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-4 px-8 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                                  >
-                                    Sprawdź odpowiedź
-                                  </button>
-                                );
-                              }
                             }
                             
                             return null;
@@ -2275,16 +3475,28 @@ export const TrainingPage: React.FC = () => {
                           {refreshingQuiz ? 'Odświeżanie...' : 'Odśwież'}
                         </button>
                       )}
-                      <button
-                        onClick={handleNext}
-                        disabled={!getNextLesson(currentLesson.id) || (currentLesson.quiz.length > 0 && !canProceed)}
-                        className="flex items-center gap-2 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-none"
-                      >
-                        Dalej
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
+                      {currentLesson.id === '6.3' && canCompleteCourse ? (
+                        <button
+                          onClick={handleCompleteCourse}
+                          className="flex items-center gap-2 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                          </svg>
+                          Zakończ Kurs
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleNext}
+                          disabled={!getNextLesson(currentLesson.id) || (currentLesson.quiz.length > 0 && !canProceed)}
+                          className="flex items-center gap-2 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-none"
+                        >
+                          Dalej
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
