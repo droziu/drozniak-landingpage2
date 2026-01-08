@@ -1,0 +1,233 @@
+FORMULARZ DIAGNOZY BIZNESOWEJ - DORADZTWO ZEF
+================================================
+
+KROK 1: START
+-------------
+Tytuł: Usługa: Doradztwo Biznesowe oraz Doboru Narzędzi AI
+
+Opis: Narzędzie zbudowane na potrzeby usługi doradczej, aby przeanalizować sytuację firmy, sposób działania, marketing oraz potencjał wykorzystania nowych technologii (w tym AI). Odpowiedzi posłużą do przygotowania raportu doradczego i konkretnych rekomendacji.
+
+Przycisk: Rozpocznij diagnozę
+
+
+KROK 2: DANE PODSTAWOWE I PROFIL FIRMY
+--------------------------------------
+
+1. Nazwa firmy / obiektu
+   Placeholder: Wpisz nazwę firmy lub obiektu
+
+2. Lokalizacja głównej działalności (miasto / region)
+   Placeholder: Np. Kraków, Małopolska
+
+3. Jakie są główne typy usług, które obecnie Państwo oferują?
+   Placeholder: Np. noclegi, restauracja, konferencje, SPA, imprezy okolicznościowe
+
+4. Jaka jest skala działalności?
+   Opcje:
+   - 1–5 osób / mikro firma
+   - 6–20 osób
+   - 21–50 osób
+   - powyżej 50 osób
+   - trudno powiedzieć / zmienne
+
+5. Jak wygląda sezonowość działalności?
+   Opcje:
+   - Raczej całoroczna, bez wyraźnych szczytów
+   - Silnie sezonowa (np. głównie sezon zimowy / letni)
+   - Mieszana (sezon + większa aktywność w wybranych okresach)
+   - Trudno powiedzieć
+
+6. Czy w ostatnich 2–3 latach profil działalności się zmieniał lub planują Państwo zmiany?
+   Placeholder: Opisz planowane zmiany lub zmiany z ostatnich lat
+
+
+KROK 3: KLIENCI I OFERTA
+------------------------
+
+1. Jakie są główne grupy klientów?
+   Opcje (checkbox):
+   - turyści indywidualni
+   - rodziny z dziećmi
+   - grupy zorganizowane (np. wycieczki)
+   - klienci biznesowi (konferencje, szkolenia)
+   - lokalni mieszkańcy
+   - Inne
+   Placeholder dla "Inne": Doprecyzuj inne grupy klientów
+
+2. Co jest główną przewagą / wyróżnikiem Państwa oferty na tle konkurencji?
+   Placeholder: Opisz, co wyróżnia Państwa ofertę
+
+3. Jakie są kluczowe produkty/usługi, na których najbardziej Państwu zależy?
+   Placeholder: Np. pakiety pobytowe, eventy, gastronomia
+
+4. Jakie są obecnie największe wyzwania związane z pozyskiwaniem i utrzymaniem klientów?
+   Placeholder: Opisz główne wyzwania
+
+
+KROK 4: MARKETING ONLINE I SPRZEDAŻ
+-----------------------------------
+
+1. Z jakich kanałów marketingu online korzystają Państwo obecnie?
+   Opcje (checkbox):
+   - strona internetowa
+   - Facebook
+   - Instagram
+   - Google Moja Firma / opinie w Google
+   - Booking / inne OTA
+   - e-mail marketing / newsletter
+   - reklamy płatne (Facebook Ads / Google Ads)
+   - Inne
+   Placeholder dla "Inne": Doprecyzuj inne kanały
+
+2. Regularność działań marketingowych (skala 1-10)
+   Lewa etykieta: 1 = działania sporadyczne / nieregularne
+   Prawa etykieta: 10 = zaplanowany, stały marketing
+
+3. Czy obecnie prowadzą Państwo płatne kampanie reklamowe online?
+   Opcje:
+   - Tak, regularnie
+   - Tak, okazjonalnie / sezonowo
+   - Nie, ale kiedyś prowadziliśmy
+   - Nie, nigdy
+
+4. Skąd obecnie pochodzi najwięcej nowych klientów? (jeśli wiedzą Państwo)
+   Placeholder: Np. polecenia, Booking, Facebook
+
+5. Jakie są największe problemy lub ograniczenia w marketingu online z Państwa perspektywy?
+   Placeholder: Opisz główne problemy
+
+
+KROK 5: PROCESY, NARZĘDZIA I ORGANIZACJA
+-----------------------------------------
+
+1. Jak w tej chwili wygląda proces obsługi zapytań i rezerwacji?
+   Placeholder: Np. zapytanie → odpowiedź → potwierdzenie → płatność
+
+2. Z jakich narzędzi/systemów korzystają Państwo w codziennej pracy?
+   Placeholder: np. system rezerwacyjny, kalendarz, Excel, system do faktur, notatniki, inne narzędzia
+
+3. Które czynności zajmują obecnie najwięcej czasu organizacyjnego w tygodniu?
+   Placeholder: Opisz, co zajmuje najwięcej czasu
+
+4. Czy w firmie są już spisane procedury / standardy obsługi?
+   Opcje:
+   - Tak, w formie dokumentów
+   - Częściowo / nieformalnie
+   - Nie, wszystko raczej "w głowie"
+
+5. Czy są obszary, które w Pana/Pani odczuciu są 'chaotyczne' lub łatwo o pomyłki?
+   Placeholder: Opisz obszary wymagające poprawy
+
+
+KROK 6: DANE I ANALITYKA
+-------------------------
+
+1. Jakie dane o działalności są obecnie regularnie zbierane i analizowane?
+   Opcje (checkbox):
+   - obłożenie pokoi / miejsc
+   - przychody wg okresów
+   - źródła rezerwacji
+   - efekty kampanii marketingowych
+   - opinie / oceny klientów
+   - Inne
+   Placeholder dla "Inne": Doprecyzuj inne dane
+
+2. Z jakich narzędzi do analityki Państwo korzystają (jeśli w ogóle)?
+   Placeholder: Np. Google Analytics, raporty z systemu rezerwacyjnego, własne arkusze
+
+3. Dane vs intuicja (skala 1-10)
+   Lewa etykieta: 1 = głównie intuicja
+   Prawa etykieta: 10 = głównie twarde dane
+
+4. Jakich informacji analitycznych najbardziej Państwu brakuje?
+   Placeholder: Opisz, jakich danych brakuje
+
+
+KROK 7: SZTUCZNA INTELIGENCJA I AUTOMATYZACJA
+----------------------------------------------
+
+1. Czy ktoś w firmie korzysta już z narzędzi AI?
+   Opcje:
+   - Tak, regularnie
+   - Tak, sporadycznie
+   - Nie, jeszcze nie
+
+2. W jakich obszarach intuicyjnie widzi Pan/Pani największy potencjał wykorzystania AI?
+   Opcje (checkbox):
+   - tworzenie i redagowanie tekstów (oferty, maile, posty)
+   - tworzenie grafik / materiałów promocyjnych
+   - analiza danych i raporty
+   - automatyczna obsługa zapytań / chatbot
+   - automatyzacja prostych zadań (integracje między systemami)
+   - Inne
+   Placeholder dla "Inne": Doprecyzuj inne obszary
+
+3. Jakie ma Pan/Pani główne obawy lub wątpliwości związane z AI?
+   Placeholder: Opisz obawy lub wątpliwości
+
+4. Czy są konkretne procesy, które chciał(a)by Pan/Pani w przyszłości zautomatyzować lub uprościć?
+   Placeholder: Opisz procesy do automatyzacji
+
+
+KROK 8: PRIORYTETY I PODSUMOWANIE ODPOWIEDZI
+---------------------------------------------
+
+1. Problem 1 (najważniejszy)
+   Placeholder: Opisz najważniejszy problem
+
+2. Problem 2
+   Placeholder: Opisz drugi problem
+
+3. Problem 3
+   Placeholder: Opisz trzeci problem
+
+4. Jakie są główne cele na najbliższe 12 miesięcy?
+   Placeholder: Opisz główne cele
+
+5. Jakie rezultaty uzna Pan/Pani za sukces po zakończeniu tego projektu?
+   Placeholder: Opisz kryteria sukcesu
+
+---
+
+TEKSTY POMOCNICZE
+-----------------
+
+Przycisk "Skopiuj odpowiedzi": Skopiuj odpowiedzi
+Przycisk "Wyślij mailem": Wyślij mailem
+Tekst pod przyciskami: Te odpowiedzi będą stanowiły podstawę do przygotowania raportu doradczego i rekomendacji.
+
+Przycisk nawigacji "Wstecz": Wstecz
+Przycisk nawigacji "Dalej": Dalej
+Tekst końcowy: Diagnoza zakończona
+
+Komunikat sukcesu kopiowania: Odpowiedzi zostały skopiowane do schowka!
+Komunikat błędu kopiowania: Nie udało się skopiować. Spróbuj zaznaczyć tekst ręcznie.
+Komunikat sukcesu emaila: Podsumowanie zostało wysłane mailem!
+Komunikat błędu emaila: Nie udało się wysłać emaila. Spróbuj ponownie.
+
+---
+
+TYTUŁY KROKÓW (w sidebarze)
+----------------------------
+1. Start
+2. Dane podstawowe
+3. Klienci i oferta
+4. Marketing online
+5. Procesy i narzędzia
+6. Dane i analityka
+7. AI i automatyzacja
+8. Priorytety
+
+---
+
+TYTUŁY KROKÓW (w głównej sekcji)
+---------------------------------
+1. Start
+2. Dane podstawowe i profil firmy
+3. Klienci i oferta
+4. Marketing online i sprzedaż
+5. Procesy, narzędzia i organizacja
+6. Dane i analityka
+7. Sztuczna inteligencja i automatyzacja
+8. Priorytety i podsumowanie
+

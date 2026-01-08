@@ -12,6 +12,7 @@ import { PortfolioRedlin } from './components/PortfolioRedlin';
 import { PortfolioPasw } from './components/PortfolioPasw';
 import { SzkoleniaPage } from './components/SzkoleniaPage';
 import { DoradztwoHotelIrys } from './components/DoradztwoHotelIrys';
+import { DoradztwoZef } from './components/DoradztwoZef';
 import { LoginPage } from './components/LoginPage';
 import { TrainingPage } from './components/TrainingPage';
 import { AdminPanel } from './components/AdminPanel';
@@ -40,8 +41,7 @@ const AppContent: React.FC<{
   // Sprawdź czy jesteśmy na subdomenie panelu
   const isPanelSubdomain = typeof window !== 'undefined' && 
     (window.location.hostname === 'panel.drozniak.pl' || 
-     window.location.hostname.startsWith('panel.') ||
-     window.location.hostname === 'localhost'); // Dla lokalnego developmentu
+     window.location.hostname.startsWith('panel.'));
   // Sprawdź czy jesteśmy na ścieżkach panelu (dla lokalnego developmentu)
   const isPanelRoute = isPanelSubdomain || 
     location.pathname === '/login' || 
@@ -51,6 +51,7 @@ const AppContent: React.FC<{
     location.pathname.startsWith('/panel') ||
     location.pathname.startsWith('/admin') ||
     location.pathname.startsWith('/profile');
+  
 
   return (
     <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
@@ -103,6 +104,7 @@ const AppContent: React.FC<{
             <Route path="/portfolio-pasw" element={<PortfolioPasw />} />
             <Route path="/szkolenia" element={<SzkoleniaPage />} />
             <Route path="/doradztwo-hotel-irys" element={<DoradztwoHotelIrys />} />
+            <Route path="/doradztwo-zef" element={<DoradztwoZef />} />
             <Route path="/login" element={<LoginPage />} />
             <Route
               path="/panel"

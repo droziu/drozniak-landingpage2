@@ -26,12 +26,12 @@ export default async function handler(
     }
 
     // Prepare email content
-    const emailSubject = `Nowa diagnoza biznesowa - Doradztwo Hotel Irys`;
+    const emailSubject = `Nowa diagnoza biznesowa - Doradztwo Zef`;
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
         <div style="background-color: #101820; color: white; padding: 30px; border-radius: 10px 10px 0 0;">
           <h1 style="margin: 0; font-size: 24px; color: #fee715;">Nowa diagnoza biznesowa</h1>
-          <p style="margin: 10px 0 0 0; color: #00C9A7; font-size: 14px;">Doradztwo Hotel Irys</p>
+          <p style="margin: 10px 0 0 0; color: #00C9A7; font-size: 14px;">Doradztwo Zef - rozwój usług cateringowych</p>
         </div>
         <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
           <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; border-left: 4px solid #fee715; margin-bottom: 20px;">
@@ -67,9 +67,23 @@ export default async function handler(
     });
 
     if (!resendResponse.ok) {
-      const errorData = await resendResponse.json();
-      console.error('Resend API error:', errorData);
-      return response.status(500).json({ error: 'Failed to send email' });
+      let errorMessage = 'Failed to send email';
+      try {
+        const contentType = resendResponse.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await resendResponse.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } else {
+          const text = await resendResponse.text();
+          if (text) {
+            errorMessage = text;
+          }
+        }
+      } catch (parseError) {
+        console.error('Error parsing Resend API error response:', parseError);
+      }
+      console.error('Resend API error:', errorMessage);
+      return response.status(500).json({ error: errorMessage });
     }
 
     return response.status(200).json({ success: true });
