@@ -105,6 +105,7 @@ export const TrainingPage: React.FC = () => {
   const [courseReadyToComplete, setCourseReadyToComplete] = useState(false);
   const [canCompleteCourse, setCanCompleteCourse] = useState(false);
   const [notification, setNotification] = useState<{ message: string; lessonId: string; questionId: string } | null>(null);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const autoSaveTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
   
@@ -125,6 +126,33 @@ export const TrainingPage: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [openDatePickers]);
+
+  // Mobile: blokuj przewijanie tła, gdy otwarty jest "Spis"
+  useEffect(() => {
+    if (!isMobileNavOpen) return;
+
+    const body = document.body;
+    const scrollY = window.scrollY;
+
+    // Lock scroll without jumping (works well on iOS too)
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+    body.style.overflow = 'hidden';
+
+    return () => {
+      const y = body.style.top ? Math.abs(parseInt(body.style.top, 10)) : scrollY;
+      body.style.position = '';
+      body.style.top = '';
+      body.style.left = '';
+      body.style.right = '';
+      body.style.width = '';
+      body.style.overflow = '';
+      window.scrollTo(0, y);
+    };
+  }, [isMobileNavOpen]);
 
   // Załaduj moduły kursu gdy kurs jest dostępny
   useEffect(() => {
@@ -1410,6 +1438,168 @@ export const TrainingPage: React.FC = () => {
     }
   };
 
+  const sidebarBody = (
+    <div className="p-4 md:p-6 space-y-5 md:space-y-6">
+      {modules.map((module) => {
+        const moduleLessons = module.lessons;
+        const completedModuleLessons = moduleLessons.filter(l => isLessonCompleted(l.id)).length;
+        const moduleProgress = (completedModuleLessons / moduleLessons.length) * 100;
+        const isModuleUnlocked = isModuleAccessible(module.id);
+
+        return (
+          <div key={module.id} className="mb-8">
+            {/* Nagłówek modułu */}
+            <div
+              className={`flex items-center gap-3 mb-3 md:mb-4 px-3 md:px-4 py-2.5 md:py-3 rounded-xl border transition-all duration-300 ${
+                isModuleUnlocked ? 'bg-white/5 border-white/10' : 'bg-white/5 border-gray-700/50 opacity-60'
+              }`}
+            >
+              {!isModuleUnlocked && (
+                <div className="flex-shrink-0">
+                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                </div>
+              )}
+              <div
+                className={`flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-lg border ${
+                  isModuleUnlocked
+                    ? 'bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border-[#fee715]/30'
+                    : 'bg-gray-700/30 border-gray-600/50'
+                }`}
+              >
+                <div className={isModuleUnlocked ? 'text-[#fee715]' : 'text-gray-500'}>{getIcon(module.icon)}</div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className={`font-[Montserrat] font-bold text-xs md:text-sm truncate ${isModuleUnlocked ? 'text-white' : 'text-gray-500'}`}>
+                  Moduł {module.id}
+                </h3>
+                <p className={`text-[11px] md:text-xs leading-tight truncate ${isModuleUnlocked ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {module.title}
+                </p>
+              </div>
+              <div className={`text-[11px] md:text-xs ${isModuleUnlocked ? 'text-gray-500' : 'text-gray-600'}`}>
+                {completedModuleLessons}/{moduleLessons.length}
+              </div>
+            </div>
+
+            {/* Pasek postępu modułu (mobile-first, bez zmiany desktop) */}
+            <div className="mb-3 px-4">
+              <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] transition-all duration-500"
+                  style={{ width: `${isModuleUnlocked ? moduleProgress : 0}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Lista lekcji */}
+            <div className="space-y-2">
+              {module.lessons.map((lesson) => {
+                const isActive = lesson.id === currentLessonId;
+                const isCompleted = isLessonCompleted(lesson.id);
+                const isAvailable = isModuleUnlocked && isLessonAvailable(lesson.id);
+                const isLocked = !isAvailable && !isActive;
+
+                return (
+                  <button
+                    key={lesson.id}
+                    onClick={async () => {
+                      await handleLessonClick(lesson.id);
+                      setIsMobileNavOpen(false);
+                    }}
+                    disabled={isLocked}
+                    className={`
+                      w-full text-left px-4 md:px-5 py-2.5 md:py-3 rounded-xl transition-all duration-300 relative
+                      ${isActive
+                        ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-semibold shadow-lg shadow-[#fee715]/30 transform scale-[1.02]'
+                        : isCompleted
+                        ? 'bg-[#00C9A7]/10 border-2 border-[#00C9A7]/30 text-[#00C9A7] hover:bg-[#00C9A7]/20 hover:border-[#00C9A7]/50'
+                        : isAvailable
+                        ? 'bg-white/5 border-2 border-transparent text-gray-300 hover:bg-white/10 hover:text-white hover:border-white/20'
+                        : 'bg-white/5 border-2 border-transparent text-gray-500 opacity-60 cursor-not-allowed'
+                      }
+                      ${isLocked ? 'cursor-not-allowed' : 'cursor-pointer'}
+                    `}
+                  >
+                    <div className="flex items-center gap-3">
+                      {isCompleted ? (
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#00C9A7] flex items-center justify-center">
+                          <svg className="w-3 h-3 text-[#101820]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                      ) : isLocked ? (
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gray-600 flex items-center justify-center">
+                          <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                            />
+                          </svg>
+                        </div>
+                      ) : (
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-400" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium truncate">
+                          {lesson.id} {lesson.title}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Ekran końcowy kursu */}
+      {courseReadyToComplete && (
+        <div className="mt-8 pt-8 border-t border-white/10">
+          <button
+            onClick={() => {
+              setCurrentLessonId('completion');
+              setShowCompletionScreen(true);
+              setCourseReadyToComplete(true);
+              setIsMobileNavOpen(false);
+            }}
+            className={`
+              w-full text-left px-5 py-3 rounded-xl transition-all duration-300 relative
+              ${currentLessonId === 'completion'
+                ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-semibold shadow-lg shadow-[#fee715]/30 transform scale-[1.02]'
+                : 'bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 border-2 border-[#fee715]/30 text-[#fee715] hover:bg-gradient-to-r hover:from-[#fee715]/30 hover:to-[#00C9A7]/30'}
+            `}
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#fee715] flex items-center justify-center">
+                <svg className="w-3 h-3 text-[#101820]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                  />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium truncate">Zakończenie szkolenia</div>
+              </div>
+            </div>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-[#101820] text-white">
       
@@ -1447,67 +1637,145 @@ export const TrainingPage: React.FC = () => {
       {/* Header z postępem - przeprojektowany */}
       {!isPanelHidden && (
         <div className="sticky top-0 z-40 bg-gradient-to-b from-[#101820] via-[#101820]/98 to-[#101820]/95 backdrop-blur-xl border-b border-white/10 shadow-lg">
-        <div className="container mx-auto px-6 md:px-8 py-6">
-          <div className="flex justify-between items-start mb-6">
-            <div className="flex-1">
-              <h1 className="font-[Montserrat] text-2xl md:text-3xl font-bold mb-2">
-                <span className="bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
-                  Social Boost: Sztuka Marketingu Online
-                </span>
-              </h1>
-              <div className="flex items-center gap-6 mt-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30">
-                    <svg className="w-5 h-5 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+          <div className="container mx-auto px-4 md:px-8 py-4 md:py-6">
+            {/* Mobile header */}
+            <div className="md:hidden">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">Kurs</div>
+                  <div className="font-[Montserrat] font-bold text-base leading-snug truncate">
+                    <span className="bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
+                      Social Boost
+                    </span>
                   </div>
-                  <div>
-                    <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">Postęp kursu</div>
-                    <div className="text-lg font-[Montserrat] font-bold text-white">
-                      {completedLessons} <span className="text-gray-400 font-normal">/ {totalLessons} lekcji</span>
+                  {currentLesson && (
+                    <div className="mt-1 text-sm text-gray-300 truncate">
+                      Lekcja <span className="text-[#fee715] font-semibold">{currentLesson.id}</span> — {currentLesson.title}
                     </div>
-                  </div>
+                  )}
                 </div>
-                <div className="flex-1 max-w-md">
-                  <div className="relative bg-white/10 rounded-full h-3 overflow-hidden shadow-inner">
-                    <div
-                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] rounded-full transition-all duration-500 shadow-lg"
-                      style={{ width: `${(completedLessons / totalLessons) * 100}%` }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-400 mt-2 text-right">
-                    {Math.round((completedLessons / totalLessons) * 100)}% ukończone
-                  </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsMobileNavOpen(true)}
+                    className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-sm font-[Montserrat] font-semibold text-gray-200"
+                    aria-label="Otwórz spis treści"
+                  >
+                    Spis
+                  </button>
+                  <UserMenu onPasswordChange={() => setShowPasswordModal(true)} onProfileClick={() => navigate('/profile')} />
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
+                  <span>Postęp</span>
+                  <span className="text-gray-300 font-semibold">
+                    {completedLessons}/{totalLessons} • {Math.round((completedLessons / totalLessons) * 100)}%
+                  </span>
+                </div>
+                <div className="relative bg-white/10 rounded-full h-2 overflow-hidden shadow-inner">
+                  <div
+                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] rounded-full transition-all duration-500 shadow-lg"
+                    style={{ width: `${(completedLessons / totalLessons) * 100}%` }}
+                  />
                 </div>
               </div>
             </div>
-            <div className="ml-6 flex items-center gap-3">
-              <button
-                onClick={() => setIsPanelHidden(true)}
-                className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-sm font-[Montserrat] font-semibold text-gray-300 hover:text-white flex items-center gap-2"
-                title="Tryb pełnego ekranu"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                </svg>
-                Tryb pełnego ekranu
-              </button>
-              <UserMenu 
-                onPasswordChange={() => setShowPasswordModal(true)}
-                onProfileClick={() => navigate('/profile')}
-              />
+
+            {/* Desktop header (bez zmian w układzie) */}
+            <div className="hidden md:block">
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex-1">
+                  <h1 className="font-[Montserrat] text-2xl md:text-3xl font-bold mb-2">
+                    <span className="bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
+                      Social Boost: Sztuka Marketingu Online
+                    </span>
+                  </h1>
+                  <div className="flex items-center gap-6 mt-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30">
+                        <svg className="w-5 h-5 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">Postęp kursu</div>
+                        <div className="text-lg font-[Montserrat] font-bold text-white">
+                          {completedLessons} <span className="text-gray-400 font-normal">/ {totalLessons} lekcji</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex-1 max-w-md">
+                      <div className="relative bg-white/10 rounded-full h-3 overflow-hidden shadow-inner">
+                        <div
+                          className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] rounded-full transition-all duration-500 shadow-lg"
+                          style={{ width: `${(completedLessons / totalLessons) * 100}%` }}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-400 mt-2 text-right">
+                        {Math.round((completedLessons / totalLessons) * 100)}% ukończone
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="ml-6 flex items-center gap-3">
+                  <button
+                    onClick={() => setIsPanelHidden(true)}
+                    className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-sm font-[Montserrat] font-semibold text-gray-300 hover:text-white flex items-center gap-2"
+                    title="Tryb pełnego ekranu"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
+                    Tryb pełnego ekranu
+                  </button>
+                  <UserMenu onPasswordChange={() => setShowPasswordModal(true)} onProfileClick={() => navigate('/profile')} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       )}
 
-      <div className={`flex ${isPanelHidden ? 'h-screen' : 'h-[calc(100vh-180px)]'}`}>
-        {/* Sidebar - przeprojektowany */}
-        <div className={`w-72 md:w-80 bg-gradient-to-b from-[#18232F] to-[#101820] border-r border-white/10 overflow-y-auto ${isPanelHidden ? 'h-screen' : ''}`}>
+      {/* Mobile: drawer ze spisem treści */}
+      {isMobileNavOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <button
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setIsMobileNavOpen(false)}
+            aria-label="Zamknij spis treści"
+          />
+          <div className="absolute inset-x-0 bottom-0 h-[92vh] bg-gradient-to-b from-[#18232F] to-[#101820] border-t border-white/10 rounded-t-2xl shadow-2xl overflow-hidden flex flex-col">
+            <div className="px-4 py-4 border-b border-white/10 flex items-center justify-between">
+              <div>
+                <div className="text-xs text-gray-400 uppercase tracking-wide">Spis treści</div>
+                <div className="font-[Montserrat] font-bold text-white">Moduły i lekcje</div>
+              </div>
+              <button
+                onClick={() => setIsMobileNavOpen(false)}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors text-gray-300"
+                aria-label="Zamknij"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] touch-pan-y">
+              {sidebarBody}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className={`flex flex-col md:flex ${isPanelHidden ? 'md:h-screen' : 'md:h-[calc(100vh-180px)]'}`}>
+        {/* Sidebar - desktop (bez zmian), mobile ukryty */}
+        <div
+          className={`hidden md:block w-72 md:w-80 bg-gradient-to-b from-[#18232F] to-[#101820] border-r border-white/10 overflow-y-auto ${
+            isPanelHidden ? 'h-screen' : ''
+          }`}
+        >
           {/* Button to show header when hidden - in sidebar */}
           {isPanelHidden && (
             <div className="p-4 border-b border-white/10">
@@ -1522,147 +1790,11 @@ export const TrainingPage: React.FC = () => {
               </button>
             </div>
           )}
-          <div className="p-6 space-y-6">
-            {modules.map((module, moduleIndex) => {
-              const moduleLessons = module.lessons;
-              const completedModuleLessons = moduleLessons.filter(l => isLessonCompleted(l.id)).length;
-              const moduleProgress = (completedModuleLessons / moduleLessons.length) * 100;
-              const isModuleUnlocked = isModuleAccessible(module.id);
-              
-              return (
-                <div key={module.id} className="mb-8">
-                  {/* Nagłówek modułu */}
-                  <div className={`flex items-center gap-3 mb-4 px-4 py-3 rounded-xl border transition-all duration-300 ${
-                    isModuleUnlocked
-                      ? 'bg-white/5 border-white/10'
-                      : 'bg-white/5 border-gray-700/50 opacity-60'
-                  }`}>
-                    {!isModuleUnlocked && (
-                      <div className="flex-shrink-0">
-                        <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                      </div>
-                    )}
-                    <div className={`flex items-center justify-center w-10 h-10 rounded-lg border ${
-                      isModuleUnlocked
-                        ? 'bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border-[#fee715]/30'
-                        : 'bg-gray-700/30 border-gray-600/50'
-                    }`}>
-                      <div className={isModuleUnlocked ? 'text-[#fee715]' : 'text-gray-500'}>
-                        {getIcon(module.icon)}
-                      </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className={`font-[Montserrat] font-bold text-sm truncate ${
-                        isModuleUnlocked ? 'text-white' : 'text-gray-500'
-                      }`}>
-                        Moduł {module.id}
-                      </h3>
-                      <p className={`text-xs truncate ${
-                        isModuleUnlocked ? 'text-gray-400' : 'text-gray-600'
-                      }`}>{module.title}</p>
-                    </div>
-                    <div className={`text-xs ${
-                      isModuleUnlocked ? 'text-gray-500' : 'text-gray-600'
-                    }`}>
-                      {completedModuleLessons}/{moduleLessons.length}
-                    </div>
-                  </div>
-                  
-                  {/* Lista lekcji */}
-                  <div className="space-y-2">
-                    {module.lessons.map((lesson, lessonIndex) => {
-                      const isActive = lesson.id === currentLessonId;
-                      const isCompleted = isLessonCompleted(lesson.id);
-                      const isAvailable = isModuleUnlocked && isLessonAvailable(lesson.id);
-                      const isLocked = !isAvailable && !isActive;
-                      
-                      return (
-                        <button
-                          key={lesson.id}
-                          onClick={() => handleLessonClick(lesson.id)}
-                          disabled={isLocked}
-                          className={`
-                            w-full text-left px-5 py-3 rounded-xl transition-all duration-300 relative
-                            ${isActive
-                              ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-semibold shadow-lg shadow-[#fee715]/30 transform scale-[1.02]'
-                              : isCompleted
-                              ? 'bg-[#00C9A7]/10 border-2 border-[#00C9A7]/30 text-[#00C9A7] hover:bg-[#00C9A7]/20 hover:border-[#00C9A7]/50'
-                              : isAvailable
-                              ? 'bg-white/5 border-2 border-transparent text-gray-300 hover:bg-white/10 hover:text-white hover:border-white/20'
-                              : 'bg-white/5 border-2 border-transparent text-gray-500 opacity-60 cursor-not-allowed'
-                            }
-                            ${isLocked ? 'cursor-not-allowed' : 'cursor-pointer'}
-                          `}
-                        >
-                          <div className="flex items-center gap-3">
-                            {isCompleted ? (
-                              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#00C9A7] flex items-center justify-center">
-                                <svg className="w-3 h-3 text-[#101820]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                </svg>
-                              </div>
-                            ) : isLocked ? (
-                              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gray-600 flex items-center justify-center">
-                                <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                              </div>
-                            ) : (
-                              <div className="flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-400"></div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                              <div className="text-sm font-medium truncate">
-                                {lesson.id} {lesson.title}
-                              </div>
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-            
-            {/* Ekran końcowy kursu */}
-            {courseReadyToComplete && (
-              <div className="mt-8 pt-8 border-t border-white/10">
-                <button
-                  onClick={() => {
-                    setCurrentLessonId('completion');
-                    setShowCompletionScreen(true);
-                    setCourseReadyToComplete(true);
-                  }}
-                  className={`
-                    w-full text-left px-5 py-3 rounded-xl transition-all duration-300 relative
-                    ${currentLessonId === 'completion'
-                      ? 'bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-semibold shadow-lg shadow-[#fee715]/30 transform scale-[1.02]'
-                      : 'bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 border-2 border-[#fee715]/30 text-[#fee715] hover:bg-gradient-to-r hover:from-[#fee715]/30 hover:to-[#00C9A7]/30'
-                    }
-                  `}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-5 h-5 rounded-full bg-[#fee715] flex items-center justify-center">
-                      <svg className="w-3 h-3 text-[#101820]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                      </svg>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate">
-                        Zakończenie szkolenia
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            )}
-          </div>
+          {sidebarBody}
         </div>
 
         {/* Główny obszar treści - przeprojektowany */}
-        <div ref={contentRef} className="flex-1 overflow-y-auto bg-gradient-to-b from-[#101820] to-[#0B1218]">
+        <div ref={contentRef} className="flex-1 md:overflow-y-auto bg-gradient-to-b from-[#101820] to-[#0B1218]">
           {currentLessonId === 'completion' ? (
             <CourseCompletionScreen 
               onComplete={async () => {
@@ -1671,18 +1803,18 @@ export const TrainingPage: React.FC = () => {
               }}
             />
           ) : currentLesson && currentModule ? (
-            <div className="container mx-auto px-6 md:px-12 py-10 max-w-5xl">
+            <div className="container mx-auto px-4 md:px-12 py-6 md:py-10 max-w-5xl pb-28 md:pb-0">
               {/* Karta lekcji z lepszym designem */}
               <div className="bg-gradient-to-br from-white/5 via-white/5 to-white/3 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
                 {/* Nagłówek lekcji z gradientem */}
-                <div className="bg-gradient-to-r from-[#fee715]/10 via-[#00C9A7]/10 to-[#fee715]/10 border-b border-white/10 px-8 py-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="px-3 py-1 rounded-lg bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30">
-                      <span className="text-xs font-[Montserrat] font-bold text-[#fee715] uppercase tracking-wide">
+                <div className="bg-gradient-to-r from-[#fee715]/10 via-[#00C9A7]/10 to-[#fee715]/10 border-b border-white/10 px-4 md:px-8 py-5 md:py-6">
+                  <div className="flex items-center gap-3 mb-3 min-w-0">
+                    <div className="flex-shrink-0 px-3 py-1 rounded-lg bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30">
+                      <span className="text-xs font-[Montserrat] font-bold text-[#fee715] uppercase tracking-wide whitespace-nowrap">
                         Moduł {currentModule.id}
                       </span>
                     </div>
-                    <span className="text-sm text-gray-400">{currentModule.title}</span>
+                    <span className="text-sm text-gray-400 min-w-0 truncate">{currentModule.title}</span>
                   </div>
                   <h2 className="font-[Montserrat] text-3xl md:text-4xl font-bold text-white leading-tight">
                     <span className="text-[#fee715]">{currentLesson.id}</span> {currentLesson.title}
@@ -1690,7 +1822,7 @@ export const TrainingPage: React.FC = () => {
                 </div>
 
                 {/* Treść lekcji z lepszymi odstępami */}
-                <div className="px-8 py-10 space-y-10">
+                <div className="px-4 md:px-8 py-8 md:py-10 space-y-10">
                   {/* Wprowadzenie */}
                   <section className="space-y-4">
                     <div className="flex items-center gap-3 mb-4">
@@ -2557,8 +2689,8 @@ export const TrainingPage: React.FC = () => {
 
                 {/* Quiz - przeprojektowany */}
                 {currentLesson.quiz.length > 0 && (
-                  <div className="border-t-2 border-white/10 bg-gradient-to-br from-white/5 to-white/3">
-                    <div className="px-8 py-8">
+                <div className="border-t-2 border-white/10 bg-gradient-to-br from-white/5 to-white/3">
+                    <div className="px-4 md:px-8 py-7 md:py-8">
                       <div className="flex items-center gap-3 mb-8">
                         <div className="w-1 h-10 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
                         <h3 className="font-[Montserrat] text-3xl font-bold text-white">
@@ -2567,7 +2699,7 @@ export const TrainingPage: React.FC = () => {
                       </div>
                       <div className="space-y-8">
                         {currentLesson.quiz.map((question, qIndex) => (
-                          <div key={question.id} className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-8 border border-white/10 shadow-lg">
+                          <div key={question.id} className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-5 md:p-8 border border-white/10 shadow-lg">
                             <div className="flex items-start gap-4 mb-6">
                               <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 border border-[#fee715]/30 flex items-center justify-center">
                                 <span className="font-[Montserrat] font-bold text-[#fee715]">{qIndex + 1}</span>
@@ -2704,7 +2836,7 @@ export const TrainingPage: React.FC = () => {
                             </div>
 
                             {question.type === 'choice' && question.options ? (
-                              <div className="pl-14 space-y-4">
+                              <div className="pl-0 md:pl-14 space-y-4">
                                 <div className="space-y-3">
                                   {question.options.map((option, index) => (
                                     <CustomRadio
@@ -2734,7 +2866,7 @@ export const TrainingPage: React.FC = () => {
                                 )}
                               </div>
                             ) : question.type === 'multi-task' && question.subTasks ? (
-                              <div className="pl-14 space-y-6">
+                              <div className="pl-0 md:pl-14 space-y-6">
                                 {question.subTasks.map((subTask, subTaskIndex) => {
                                   // Debug: sprawdź stan dla tego podzadania
                                   const currentAnswer = quizSubTaskAnswers[subTask.id];
@@ -3325,7 +3457,7 @@ export const TrainingPage: React.FC = () => {
                                 })}
                               </div>
                             ) : (
-                              <div className="pl-14 space-y-4">
+                              <div className="pl-0 md:pl-14 space-y-4">
                                 {/* Pytanie z obliczeniem - input numeryczny */}
                                 {question.isCalculation && question.correctNumericAnswer !== undefined ? (
                                   <div className="space-y-4">
@@ -3591,7 +3723,7 @@ export const TrainingPage: React.FC = () => {
                 )}
 
                 {/* Przyciski nawigacji - przeprojektowane */}
-                <div className="border-t-2 border-white/10 bg-white/5 px-8 py-6">
+                <div className="hidden md:block border-t-2 border-white/10 bg-white/5 px-8 py-6">
                   <div className="flex justify-between items-center">
                     <button
                       onClick={handlePrevious}
@@ -3659,6 +3791,65 @@ export const TrainingPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile: sticky pasek nawigacji (bez wpływu na desktop) */}
+      {currentLessonId !== 'completion' && currentLesson && currentModule && (
+        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-[#101820]/95 backdrop-blur-xl border-t border-white/10">
+          <div className="px-4 py-3 flex items-center justify-between gap-3">
+            <button
+              onClick={handlePrevious}
+              disabled={!getPreviousLessonInModules(currentLesson.id)}
+              className="flex items-center gap-2 bg-white/10 text-white font-[Montserrat] font-bold py-3 px-4 rounded-xl hover:bg-white/20 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Wstecz
+            </button>
+
+            <div className="flex items-center gap-2">
+              {currentLesson.quiz.length > 0 && (
+                <button
+                  onClick={handleRefreshQuiz}
+                  disabled={refreshingQuiz}
+                  className="px-3 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-gray-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Sprawdź czy są aktualizacje w odpowiedziach (feedback, zatwierdzenie)"
+                  aria-label={refreshingQuiz ? 'Sprawdzanie statusu odpowiedzi' : 'Sprawdź status odpowiedzi'}
+                >
+                  <svg className={`w-5 h-5 ${refreshingQuiz ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                </button>
+              )}
+
+              {currentLesson.id === '6.3' && canCompleteCourse ? (
+                <button
+                  onClick={handleCompleteCourse}
+                  className="flex items-center gap-2 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-4 rounded-xl shadow-lg"
+                >
+                  Zakończ
+                </button>
+              ) : (
+                <button
+                  onClick={handleNext}
+                  disabled={!getNextLessonInModules(currentLesson.id) || (currentLesson.id === '6.3' && !canProceed)}
+                  className="flex items-center gap-2 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-4 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Dalej
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal zmiany hasła */}
       {showPasswordModal && (
