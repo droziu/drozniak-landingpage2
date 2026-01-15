@@ -129,6 +129,13 @@ export const TrainingPage: React.FC = () => {
 
   // Mobile: blokuj przewijanie tła, gdy otwarty jest "Spis"
   useEffect(() => {
+    // Guard: only lock scroll on mobile widths
+    const isDesktop = typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches;
+    if (isDesktop) {
+      if (isMobileNavOpen) setIsMobileNavOpen(false);
+      return;
+    }
+
     if (!isMobileNavOpen) return;
 
     const body = document.body;
@@ -153,6 +160,18 @@ export const TrainingPage: React.FC = () => {
       window.scrollTo(0, y);
     };
   }, [isMobileNavOpen]);
+
+  // Jeśli użytkownik zmieni rozmiar na desktop, zamknij "Spis" i odblokuj scroll
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const media = window.matchMedia('(min-width: 768px)');
+    const onChange = () => {
+      if (media.matches) setIsMobileNavOpen(false);
+    };
+    onChange();
+    media.addEventListener?.('change', onChange);
+    return () => media.removeEventListener?.('change', onChange);
+  }, []);
 
   // Załaduj moduły kursu gdy kurs jest dostępny
   useEffect(() => {
@@ -1769,7 +1788,7 @@ export const TrainingPage: React.FC = () => {
         </div>
       )}
 
-      <div className={`flex flex-col md:flex ${isPanelHidden ? 'md:h-screen' : 'md:h-[calc(100vh-180px)]'}`}>
+      <div className={`flex flex-col md:flex-row ${isPanelHidden ? 'md:h-screen' : 'md:h-[calc(100vh-180px)]'}`}>
         {/* Sidebar - desktop (bez zmian), mobile ukryty */}
         <div
           className={`hidden md:block w-72 md:w-80 bg-gradient-to-b from-[#18232F] to-[#101820] border-r border-white/10 overflow-y-auto ${
