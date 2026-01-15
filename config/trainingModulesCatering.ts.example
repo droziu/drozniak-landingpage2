@@ -1,0 +1,148 @@
+// =========================================
+// PRZYKŁADOWY SZABLON - Kurs dla Catering
+// =========================================
+// Skopiuj ten plik jako trainingModulesCatering.ts
+// i zmień treść zgodnie z potrzebami
+
+// Importuj typy z głównego pliku
+import type {
+  Module,
+  Lesson,
+  QuizQuestion,
+  KeyElement,
+  PracticalExample
+} from './trainingModules';
+
+// Eksportuj moduły dla kursu catering
+export const trainingModulesCatering: Module[] = [
+  {
+    id: '1',
+    title: 'Podstawy marketingu online dla catering',
+    icon: 'chart',
+    lessons: [
+      {
+        id: '1.1',
+        moduleId: '1',
+        title: 'Wprowadzenie do marketingu cyfrowego dla catering',
+        intro: `Marketing cyfrowy dla firm cateringowych to wszystkie działania, które pomagają Twojej firmie zostać zauważoną, zbudować zaufanie i pozyskiwać klientów z pomocą internetu.
+
+Dla większości klientów cateringowych pierwszy kontakt wygląda tak:
+• szukają cateringu w Google lub na Facebooku,
+• przeglądają menu, opinie, zdjęcia potraw,
+• porównują ceny i oferty,
+• dzwonią lub piszą wiadomość, aby zamówić.
+
+Jeśli nie ma Cię w tych miejscach – w praktyce nie istniejesz w świadomości dużej części rynku.`,
+        whyImportant: `Marketing cyfrowy jest kluczowy dla catering, ponieważ:
+• Klienci szukają cateringu online – eventy firmowe, imprezy prywatne, codzienne obiady.
+• Porównują oferty – cena, menu, opinie, zdjęcia potraw.
+• Decyzję często podejmują jeszcze przed kontaktem z Tobą – na podstawie tego, co widzą w sieci.
+
+Dobre podstawy marketingu online pozwalają:
+• przyciągać więcej zapytań bez zwiększania liczby godzin na telefonie,
+• lepiej wykorzystywać sezonowość (np. święta, imprezy firmowe),
+• bardziej świadomie decydować, w co warto inwestować, a co jest stratą czasu i pieniędzy.`,
+        customerPath: `Jak wygląda ścieżka klienta cateringu w internecie:
+
+1. Zauważenie – ktoś widzi reklamę, post, opinię znajomego, wynik w Google.
+2. Zainteresowanie – wchodzi na stronę, profil na Facebooku / Instagramie, czyta opinie, przegląda menu.
+3. Rozważanie – porównuje Twoją ofertę z innymi (cena, menu, opinie, dostępność).
+4. Decyzja – dzwoni, pisze wiadomość, składa zamówienie online.
+5. Doświadczenie – otrzymuje catering, testuje jakość.
+6. Powrót / polecenie – zostawia opinię, wraca przy kolejnej okazji albo poleca znajomym.
+
+Marketing online nie jest tylko „robieniem postów" – to świadome projektowanie tej ścieżki tak, żeby jak najwięcej osób dochodziło do kroku 4 i 6.`,
+        quiz: [
+          {
+            id: 'q1',
+            type: 'open',
+            question: 'Jakie są główne kanały, przez które klienci mogą znaleźć Twój catering online? (wymień przynajmniej 3)',
+            keywords: ['google', 'facebook', 'instagram', 'strona', 'opinie', 'rekomendacje'],
+            hint: 'Pomyśl o miejscach, gdzie klienci szukają cateringu: Google, Facebook, Instagram, strony internetowe, opinie, rekomendacje znajomych.',
+            feedback: 'Świetnie! Klienci mogą znaleźć catering przez wiele kanałów - Google, Facebook, Instagram, stronę internetową, opinie, rekomendacje znajomych. Ważne, żeby być widocznym w jak największej liczbie tych miejsc.'
+          },
+          {
+            id: 'q2',
+            type: 'choice',
+            question: 'Który etap ścieżki klienta jest najważniejszy dla pozyskania nowego klienta?',
+            options: [
+              'Zauważenie - klient musi najpierw zobaczyć ofertę',
+              'Zainteresowanie - klient musi być zainteresowany ofertą',
+              'Rozważanie - klient musi porównać ofertę z konkurencją',
+              'Decyzja - klient musi zdecydować się na zamówienie'
+            ],
+            correctAnswer: 0,
+            hint: 'Bez zauważenia nie ma możliwości, żeby klient przeszedł do kolejnych etapów.',
+            feedback: 'Zgadza się! Bez zauważenia nie ma możliwości, żeby klient przeszedł do kolejnych etapów. Dlatego tak ważne jest, żeby być widocznym w internecie.'
+          }
+        ]
+      },
+      // Dodaj więcej lekcji tutaj...
+      // {
+      //   id: '1.2',
+      //   moduleId: '1',
+      //   title: 'Następna lekcja...',
+      //   ...
+      // }
+    ]
+  },
+  // Dodaj więcej modułów tutaj...
+  // {
+  //   id: '2',
+  //   title: 'Moduł 2: ...',
+  //   icon: 'rocket',
+  //   lessons: [...]
+  // }
+];
+
+// Eksportuj również funkcje pomocnicze (jeśli są używane w TrainingPage)
+export const findLesson = (lessonId: string): Lesson | undefined => {
+  for (const module of trainingModulesCatering) {
+    const lesson = module.lessons.find(l => l.id === lessonId);
+    if (lesson) return lesson;
+  }
+  return undefined;
+};
+
+export const getTotalLessons = (): number => {
+  return trainingModulesCatering.reduce((sum, module) => sum + module.lessons.length, 0);
+};
+
+export const getNextLesson = (currentLessonId: string): Lesson | null => {
+  for (let i = 0; i < trainingModulesCatering.length; i++) {
+    const module = trainingModulesCatering[i];
+    const lessonIndex = module.lessons.findIndex(l => l.id === currentLessonId);
+    
+    if (lessonIndex !== -1) {
+      // Następna lekcja w tym samym module
+      if (lessonIndex < module.lessons.length - 1) {
+        return module.lessons[lessonIndex + 1];
+      }
+      // Następna lekcja w następnym module
+      if (i < trainingModulesCatering.length - 1) {
+        return trainingModulesCatering[i + 1].lessons[0];
+      }
+    }
+  }
+  return null;
+};
+
+export const getPreviousLesson = (currentLessonId: string): Lesson | null => {
+  for (let i = 0; i < trainingModulesCatering.length; i++) {
+    const module = trainingModulesCatering[i];
+    const lessonIndex = module.lessons.findIndex(l => l.id === currentLessonId);
+    
+    if (lessonIndex !== -1) {
+      // Poprzednia lekcja w tym samym module
+      if (lessonIndex > 0) {
+        return module.lessons[lessonIndex - 1];
+      }
+      // Poprzednia lekcja w poprzednim module
+      if (i > 0) {
+        const prevModule = trainingModulesCatering[i - 1];
+        return prevModule.lessons[prevModule.lessons.length - 1];
+      }
+    }
+  }
+  return null;
+};

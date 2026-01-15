@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useCourse } from '../hooks/useCourse';
 import { supabase } from '../lib/supabase';
-import { trainingModules, findLesson, getTotalLessons, getNextLesson, getPreviousLesson } from '../config/trainingModules';
-import type { QuizQuestion } from '../config/trainingModules';
+import { trainingModules } from '../config/trainingModules';
+import type { QuizQuestion, Module } from '../config/trainingModules';
+import { loadCourseModules } from '../utils/courseLoader';
 import { CustomRadio } from './CustomRadio';
 import { UserMenu } from './UserMenu';
 import { CourseCompletionScreen } from './CourseCompletionScreen';
@@ -74,10 +76,12 @@ interface TrainingProgress {
 
 export const TrainingPage: React.FC = () => {
   const { user, loading: authLoading, signOut, updatePassword } = useAuth();
+  const { course, loading: courseLoading } = useCourse();
   const navigate = useNavigate();
   const [currentLessonId, setCurrentLessonId] = useState<string>('1.1');
   const [progress, setProgress] = useState<TrainingProgress>({});
   const [loading, setLoading] = useState(true);
+  const [modules, setModules] = useState<Module[]>([]);
   const [quizAnswers, setQuizAnswers] = useState<{ [questionId: string]: string | number }>({});
   const [quizSubTaskAnswers, setQuizSubTaskAnswers] = useState<{ [subTaskId: string]: string }>({});
   const [quizResults, setQuizResults] = useState<{ [questionId: string]: 'correct' | 'incorrect' | 'pending' | 'approved' | 'rejected' | null }>({});
@@ -100,6 +104,7 @@ export const TrainingPage: React.FC = () => {
   const [showCompletionScreen, setShowCompletionScreen] = useState(false);
   const [courseReadyToComplete, setCourseReadyToComplete] = useState(false);
   const [canCompleteCourse, setCanCompleteCourse] = useState(false);
+  const [notification, setNotification] = useState<{ message: string; lessonId: string; questionId: string } | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const autoSaveTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({});
   
@@ -121,8 +126,67 @@ export const TrainingPage: React.FC = () => {
     };
   }, [openDatePickers]);
 
-  const currentLesson = currentLessonId === 'completion' ? null : findLesson(currentLessonId);
-  const currentModule = currentLesson ? trainingModules.find(m => m.id === currentLesson.moduleId) : undefined;
+  // Załaduj moduły kursu gdy kurs jest dostępny
+  useEffect(() => {
+    if (course) {
+      const loadedModules = loadCourseModules(course.config_path);
+      setModules(loadedModules);
+    } else if (!courseLoading) {
+      // Jeśli nie ma kursu, użyj domyślnych modułów (fallback)
+      setModules(trainingModules);
+    }
+  }, [course, courseLoading]);
+
+  // Funkcje pomocnicze do pracy z modułami
+  const findLessonInModules = (lessonId: string) => {
+    for (const module of modules) {
+      const lesson = module.lessons.find(l => l.id === lessonId);
+      if (lesson) return lesson;
+    }
+    return undefined;
+  };
+
+  const getNextLessonInModules = (currentLessonId: string) => {
+    for (let i = 0; i < modules.length; i++) {
+      const module = modules[i];
+      const lessonIndex = module.lessons.findIndex(l => l.id === currentLessonId);
+      
+      if (lessonIndex !== -1) {
+        if (lessonIndex < module.lessons.length - 1) {
+          return module.lessons[lessonIndex + 1];
+        }
+        if (i < modules.length - 1) {
+          return modules[i + 1].lessons[0];
+        }
+      }
+    }
+    return null;
+  };
+
+  const getPreviousLessonInModules = (currentLessonId: string) => {
+    for (let i = 0; i < modules.length; i++) {
+      const module = modules[i];
+      const lessonIndex = module.lessons.findIndex(l => l.id === currentLessonId);
+      
+      if (lessonIndex !== -1) {
+        if (lessonIndex > 0) {
+          return module.lessons[lessonIndex - 1];
+        }
+        if (i > 0) {
+          const prevModule = modules[i - 1];
+          return prevModule.lessons[prevModule.lessons.length - 1];
+        }
+      }
+    }
+    return null;
+  };
+
+  const getTotalLessonsInModules = () => {
+    return modules.reduce((sum, module) => sum + module.lessons.length, 0);
+  };
+
+  const currentLesson = currentLessonId === 'completion' ? null : findLessonInModules(currentLessonId);
+  const currentModule = currentLesson ? modules.find(m => m.id === currentLesson.moduleId) : undefined;
   
   // AUTO-SAVE WYŁĄCZONY - zapis tylko po kliknięciu "Zapisz odpowiedź"
   
@@ -156,11 +220,11 @@ export const TrainingPage: React.FC = () => {
 
   // Załaduj postęp z Supabase
   useEffect(() => {
-    if (user) {
+    if (user && course) {
       loadProgress();
       loadUnlockedModules();
       
-      // Subskrybuj zmiany w odpowiedziach (dla pytań otwartych)
+      // Subskrybuj zmiany w odpowiedziach (dla pytań otwartych i feedbacku)
       const channel = supabase
         .channel('training_responses_changes')
         .on(
@@ -172,10 +236,28 @@ export const TrainingPage: React.FC = () => {
             filter: `user_id=eq.${user.id}`,
           },
           (payload) => {
-            // Odśwież postęp gdy odpowiedź zostanie zweryfikowana
-            if (payload.new.status === 'approved' || payload.new.status === 'rejected') {
+            // Odśwież postęp gdy odpowiedź zostanie zweryfikowana LUB gdy dodano feedback
+            if (payload.new.status === 'approved' || payload.new.status === 'rejected' || payload.new.admin_feedback) {
               loadProgress();
               loadUnlockedModules();
+              
+              // Jeśli dodano feedback, pokaż powiadomienie
+              if (payload.new.admin_feedback && payload.old?.admin_feedback !== payload.new.admin_feedback) {
+                // Sprawdź czy jesteśmy w odpowiedniej lekcji
+                const response = payload.new;
+                const currentModuleCode = currentLesson ? `modul_${currentLesson.moduleId}` : null;
+                if (currentModuleCode === response.module_code && currentLessonId === response.step_code) {
+                  // Jesteśmy w tej lekcji - odśwież odpowiedzi
+                  handleRefreshQuiz();
+                } else {
+                  // Nie jesteśmy w tej lekcji - pokaż powiadomienie i przekieruj
+                  setNotification({
+                    message: `Masz nowy feedback od administratora w lekcji ${response.step_code}.`,
+                    lessonId: response.step_code,
+                    questionId: response.question_code
+                  });
+                }
+              }
             }
           }
         )
@@ -185,19 +267,19 @@ export const TrainingPage: React.FC = () => {
         supabase.removeChannel(channel);
       };
     }
-  }, [user]);
+  }, [user, course]);
 
   // Załaduj postęp gdy zmienia się lekcja
   useEffect(() => {
-    if (user && currentLessonId) {
+    if (user && course && currentLessonId) {
       loadProgress();
     }
-  }, [currentLessonId, user]);
+  }, [currentLessonId, user, course]);
 
   // Sprawdź czy kurs jest gotowy do zakończenia (tylko dla lekcji 6.3 - sprawdź czy summary-q1 i summary-q2 są zatwierdzone)
   useEffect(() => {
     const checkCourseCompletion = async () => {
-      if (!user || loading) return;
+      if (!user || !course || loading) return;
 
       try {
         // Sprawdź status kursu
@@ -205,6 +287,7 @@ export const TrainingPage: React.FC = () => {
           .from('course_certificates')
           .select('course_ready_to_complete, course_completed')
           .eq('user_id', user.id)
+          .eq('course_id', course.id)
           .maybeSingle();
 
         const isReadyToComplete = certificateData?.course_ready_to_complete || false;
@@ -223,6 +306,7 @@ export const TrainingPage: React.FC = () => {
             .from('training_responses')
             .select('status, question_code')
             .eq('user_id', user.id)
+            .eq('course_id', course.id)
             .eq('step_code', '6.3')
             .in('question_code', ['summary-q1', 'summary-q2']);
 
@@ -249,16 +333,17 @@ export const TrainingPage: React.FC = () => {
     };
 
     checkCourseCompletion();
-  }, [user, loading, currentLessonId, responseStatuses]);
+  }, [user, course, loading, currentLessonId, responseStatuses]);
 
   const loadUnlockedModules = async () => {
-    if (!user) return;
+    if (!user || !course) return;
 
     try {
       const { data, error } = await supabase
         .from('module_unlocks')
         .select('module_id')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .eq('course_id', course.id);
 
       if (error) throw error;
 
@@ -283,37 +368,44 @@ export const TrainingPage: React.FC = () => {
         });
         setCanProceed(finalQuestionsApproved);
       } else {
-        // Dla innych lekcji - sprawdź wszystkie pytania
-        const allQuizCompleted = currentLesson.quiz.every(q => {
+        // Dla innych lekcji - można przejść dalej jeśli:
+        // 1. Pytania zamknięte są poprawne LUB przesłane (pending/approved)
+        // 2. Pytania otwarte są przesłane (pending/approved) - nie wymagamy zatwierdzenia
+        // 3. Podzadania są przesłane (pending/approved) - nie wymagamy zatwierdzenia
+        const allQuizSubmitted = currentLesson.quiz.every(q => {
           if (q.type === 'choice') {
             const result = quizResults[q.id];
-            return result === 'correct';
+            // Można przejść dalej jeśli odpowiedź jest poprawna LUB przesłana
+            return result === 'correct' || result === 'pending' || result === 'approved';
           } else if (q.type === 'multi-task' && q.subTasks) {
-            // Dla zadań z podzadaniami sprawdź czy wszystkie podzadania są zatwierdzone
+            // Dla zadań z podzadaniami - sprawdź czy wszystkie podzadania są przesłane
             return q.subTasks.every(subTask => {
               const subTaskResult = quizSubTaskResults[subTask.id];
-              return subTaskResult === 'approved';
+              // Można przejść dalej jeśli podzadanie jest przesłane (pending/approved)
+              return subTaskResult === 'pending' || subTaskResult === 'approved';
             });
           } else {
             const result = quizResults[q.id];
-            // Dla pytań otwartych - można przejść dalej tylko jeśli są zatwierdzone
-            return result === 'approved';
+            // Dla pytań otwartych - można przejść dalej jeśli są przesłane (pending/approved)
+            return result === 'pending' || result === 'approved';
           }
         });
-        setCanProceed(allQuizCompleted && currentLesson.quiz.length > 0);
+        // Można przejść dalej jeśli wszystkie pytania są przesłane LUB nie ma pytań
+        setCanProceed((allQuizSubmitted && currentLesson.quiz.length > 0) || currentLesson.quiz.length === 0);
       }
     }
   }, [currentLesson, quizResults, quizSubTaskResults]);
 
   const loadProgress = async () => {
-    if (!user) return;
+    if (!user || !course) return;
 
     try {
       // Załaduj postęp modułów
       const { data: trainingData, error: trainingError } = await supabase
         .from('training_progress')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .eq('course_id', course.id);
 
       if (trainingError) throw trainingError;
 
@@ -321,7 +413,8 @@ export const TrainingPage: React.FC = () => {
       const { data: responsesData, error: responsesError } = await supabase
         .from('training_responses')
         .select('*')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .eq('course_id', course.id);
 
       if (responsesError) throw responsesError;
       
@@ -334,7 +427,7 @@ export const TrainingPage: React.FC = () => {
       // Przetwórz dane do lokalnego stanu
       const progressData: TrainingProgress = {};
       
-      trainingModules.forEach(module => {
+      modules.forEach(module => {
         module.lessons.forEach(lesson => {
           const moduleProgress = trainingData?.find(
             p => p.module_code === `modul_${module.id}` && p.last_step_code === lesson.id
@@ -348,17 +441,19 @@ export const TrainingPage: React.FC = () => {
             );
           });
 
-          // Sprawdź czy wszystkie pytania mają odpowiedzi i czy są poprawne/zatwierdzone
-          const allQuizCompleted = lesson.quiz.length > 0 && lesson.quiz.every(q => {
+          // Sprawdź czy wszystkie pytania mają odpowiedzi (dla postępu na bieżąco)
+          // Postęp jest liczony nawet jeśli odpowiedź jest pending - admin widzi to na bieżąco
+          const allQuizSubmitted = lesson.quiz.length > 0 && lesson.quiz.every(q => {
             if (q.type === 'multi-task' && q.subTasks) {
-              // Dla zadań z podzadaniami sprawdź czy wszystkie podzadania są zatwierdzone
+              // Dla zadań z podzadaniami sprawdź czy wszystkie podzadania są przesłane
               return q.subTasks.every(subTask => {
                 const subTaskResponse = responsesData?.find(r => 
                   r.module_code === `modul_${module.id}` &&
                   r.step_code === lesson.id &&
                   r.question_code === subTask.id
                 );
-                return subTaskResponse && (subTaskResponse as any).status === 'approved';
+                // Uznaj za przesłane jeśli jest odpowiedź (pending/approved/rejected)
+                return subTaskResponse && subTaskResponse.answer_text;
               });
             } else {
               const response = responsesData?.find(r => 
@@ -368,18 +463,23 @@ export const TrainingPage: React.FC = () => {
               );
               if (!response) return false;
               
-              // Dla pytań zamkniętych sprawdź czy odpowiedź jest poprawna
+              // Dla pytań zamkniętych sprawdź czy odpowiedź jest poprawna LUB przesłana
               if (q.type === 'choice') {
                 // Konwertuj odpowiedź na number dla pytań zamkniętych
                 const answerValue = Number(response.answer_text);
                 const isCorrect = checkQuizAnswer(q, answerValue);
-                return isCorrect;
+                // Uznaj za przesłane jeśli odpowiedź jest poprawna LUB jest odpowiedź (dla postępu)
+                return isCorrect || response.answer_text;
               } else {
-                // Dla pytań otwartych sprawdź czy są zatwierdzone
-                return (response as any).status === 'approved';
+                // Dla pytań otwartych - uznaj za przesłane jeśli jest odpowiedź (pending/approved/rejected)
+                return response.answer_text && ((response as any).status === 'pending' || (response as any).status === 'approved' || (response as any).status === 'rejected');
               }
             }
           });
+          
+          // Dla wyświetlania postępu - lekcja jest "ukończona" jeśli wszystkie odpowiedzi są przesłane
+          // (nie wymagamy zatwierdzenia dla postępu - admin widzi na bieżąco)
+          const allQuizCompleted = allQuizSubmitted;
 
           // Lekcja jest ukończona jeśli wszystkie quizy są ukończone
           const isCompleted = allQuizCompleted;
@@ -446,8 +546,24 @@ export const TrainingPage: React.FC = () => {
                 : String(response.answer_text || '');
               lessonResponses[q.id] = answerValue;
               
-              // Dla pytań otwartych sprawdź status
-              if (q.type === 'open') {
+              // Dla pytań zamkniętych sprawdź czy odpowiedź jest poprawna
+              if (q.type === 'choice') {
+                const isCorrect = checkQuizAnswer(q, answerValue);
+                lessonResults[q.id] = isCorrect ? 'correct' : 'incorrect';
+                // Ustaw feedback dla pytań zamkniętych
+                if (isCorrect) {
+                  setQuizFeedback(prev => ({
+                    ...prev,
+                    [q.id]: q.feedback || 'Odpowiedź poprawna!'
+                  }));
+                } else {
+                  setQuizFeedback(prev => ({
+                    ...prev,
+                    [q.id]: q.hint || 'Spróbuj ponownie.'
+                  }));
+                }
+              } else if (q.type === 'open') {
+                // Dla pytań otwartych sprawdź status
                 const status = (response as any).status || 'pending';
                 lessonStatuses[q.id] = status;
                 lessonResults[q.id] = status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'pending';
@@ -511,13 +627,13 @@ export const TrainingPage: React.FC = () => {
   };
 
   const saveProgress = async (lessonId: string, completed: boolean) => {
-    if (!user || !currentLesson) return;
+    if (!user || !currentLesson || !course) return;
 
     try {
       const moduleCode = `modul_${currentLesson.moduleId}`;
       
       // Oblicz procent ukończenia modułu
-      const moduleLessons = trainingModules.find(m => m.id === currentLesson.moduleId)?.lessons || [];
+      const moduleLessons = modules.find(m => m.id === currentLesson.moduleId)?.lessons || [];
       const completedLessonsInModule = moduleLessons.filter(l => {
         const prev = progress[l.id];
         return prev?.completed || l.id === lessonId;
@@ -529,6 +645,7 @@ export const TrainingPage: React.FC = () => {
         .from('training_progress')
         .upsert({
           user_id: user.id,
+          course_id: course.id,
           module_code: moduleCode,
           status: completed && percentage === 100 ? 'completed' : 'in_progress',
           last_step_code: lessonId,
@@ -536,7 +653,7 @@ export const TrainingPage: React.FC = () => {
           completed_at: completed && percentage === 100 ? new Date().toISOString() : null,
           module_completed: completed && percentage === 100,
         }, {
-          onConflict: 'user_id,module_code'
+          onConflict: 'user_id,course_id,module_code'
         });
 
       if (progressError) {
@@ -545,7 +662,7 @@ export const TrainingPage: React.FC = () => {
       }
 
       // Sprawdź czy quiz jest ukończony
-      const lesson = trainingModules
+      const lesson = modules
         .find(m => m.id === currentLesson.moduleId)
         ?.lessons.find(l => l.id === lessonId);
       
@@ -556,6 +673,7 @@ export const TrainingPage: React.FC = () => {
           .from('training_responses')
           .select('*')
           .eq('user_id', user.id)
+          .eq('course_id', course.id)
           .eq('module_code', moduleCode)
           .eq('step_code', lessonId);
         
@@ -613,7 +731,7 @@ export const TrainingPage: React.FC = () => {
   };
 
   const saveQuizResponse = async (questionId: string, answer: string | number, status: 'pending' | 'approved' = 'pending', subTaskId?: string) => {
-    if (!user || !currentLesson) return;
+    if (!user || !currentLesson || !course) return;
 
     try {
       const moduleCode = `modul_${currentLesson.moduleId}`;
@@ -644,13 +762,14 @@ export const TrainingPage: React.FC = () => {
         .from('training_responses')
         .upsert({
           user_id: user.id,
+          course_id: course.id,
           module_code: moduleCode,
           step_code: currentLesson.id,
           question_code: questionCode,
           answer_text: String(answer),
           status: finalStatus,
         }, {
-          onConflict: 'user_id,module_code,step_code,question_code'
+          onConflict: 'user_id,course_id,module_code,step_code,question_code'
         })
         .select();
 
@@ -942,8 +1061,9 @@ export const TrainingPage: React.FC = () => {
     await loadProgress();
     await loadUnlockedModules();
 
-    const nextLesson = getNextLesson(currentLesson.id);
+    const nextLesson = getNextLessonInModules(currentLesson.id);
     if (nextLesson) {
+      await ensureModuleUnlocked(nextLesson.moduleId);
       setCurrentLessonId(nextLesson.id);
       setQuizAnswers({});
       setQuizSubTaskAnswers({});
@@ -960,7 +1080,7 @@ export const TrainingPage: React.FC = () => {
 
   const handlePrevious = async () => {
     if (!currentLesson) return;
-    const prevLesson = getPreviousLesson(currentLesson.id);
+    const prevLesson = getPreviousLessonInModules(currentLesson.id);
     if (prevLesson) {
       setCurrentLessonId(prevLesson.id);
       setQuizAnswers({});
@@ -976,7 +1096,7 @@ export const TrainingPage: React.FC = () => {
   };
 
   const handleCompleteCourse = async () => {
-    if (!user || !currentLesson) return;
+    if (!user || !currentLesson || !course) return;
 
     try {
       // Oznacz kurs jako gotowy do zakończenia
@@ -984,10 +1104,11 @@ export const TrainingPage: React.FC = () => {
         .from('course_certificates')
         .upsert({
           user_id: user.id,
+          course_id: course.id,
           course_ready_to_complete: true,
           email: user.email || ''
         }, {
-          onConflict: 'user_id'
+          onConflict: 'user_id,course_id'
         });
 
       if (updateError) {
@@ -997,16 +1118,7 @@ export const TrainingPage: React.FC = () => {
       }
 
       // Ustaw postęp na 100% - oznacz wszystkie lekcje jako ukończone
-      for (const module of trainingModules) {
-        for (const lesson of module.lessons) {
-          if (!progress[lesson.id]?.completed) {
-            await saveProgress(lesson.id, true);
-          }
-        }
-      }
-
-      // Ustaw postęp na 100% - oznacz wszystkie lekcje jako ukończone
-      for (const module of trainingModules) {
+      for (const module of modules) {
         for (const lesson of module.lessons) {
           if (!progress[lesson.id]?.completed) {
             await saveProgress(lesson.id, true);
@@ -1028,7 +1140,7 @@ export const TrainingPage: React.FC = () => {
   };
 
   const handleRefreshQuiz = async () => {
-    if (!currentLesson || !user) return;
+    if (!currentLesson || !user || !course) return;
     
     setRefreshingQuiz(true);
     try {
@@ -1037,6 +1149,7 @@ export const TrainingPage: React.FC = () => {
         .from('training_responses')
         .select('*')
         .eq('user_id', user.id)
+        .eq('course_id', course.id)
         .eq('module_code', `modul_${currentLesson.moduleId}`)
         .eq('step_code', currentLesson.id);
 
@@ -1178,23 +1291,16 @@ export const TrainingPage: React.FC = () => {
     }
   };
 
-  const handleLessonClick = (lessonId: string) => {
+  const handleLessonClick = async (lessonId: string) => {
     // Sprawdź czy lekcja jest dostępna przed przejściem
-    const lesson = findLesson(lessonId);
+    const lesson = findLessonInModules(lessonId);
     if (!lesson) return;
     
-    // Sprawdź czy moduł jest odblokowany
-    if (!unlockedModules.has(lesson.moduleId)) {
-      // Moduł jest zablokowany - nie pozwól na przejście
+    if (!isLessonAvailable(lessonId)) {
       return;
     }
-    
-    // Sprawdź czy poprzednia lekcja jest ukończona (jeśli istnieje)
-    const prevLesson = getPreviousLesson(lessonId);
-    if (prevLesson && !isLessonCompleted(prevLesson.id)) {
-      // Poprzednia lekcja nie jest ukończona - nie pozwól na przejście
-      return;
-    }
+
+    await ensureModuleUnlocked(lesson.moduleId);
     
     // Jeśli lekcja jest dostępna, przejdź do niej
     setCurrentLessonId(lessonId);
@@ -1213,7 +1319,7 @@ export const TrainingPage: React.FC = () => {
     return progress[lessonId]?.completed || false;
   };
 
-  if (authLoading || loading) {
+  if (authLoading || loading || courseLoading) {
     return (
       <div className="min-h-screen bg-[#101820] flex items-center justify-center">
         <div className="text-white text-lg">Ładowanie...</div>
@@ -1225,56 +1331,118 @@ export const TrainingPage: React.FC = () => {
     return null;
   }
 
-  const totalLessons = getTotalLessons();
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-[#101820] flex items-center justify-center">
+        <div className="text-white text-lg">Brak przypisanego kursu. Skontaktuj się z administratorem.</div>
+      </div>
+    );
+  }
+
+  const totalLessons = getTotalLessonsInModules();
   const completedLessons = getCompletedLessonsCount();
 
   // Sprawdź które lekcje są dostępne (można kliknąć)
   const isLessonAvailable = (lessonId: string): boolean => {
     if (lessonId === currentLessonId) return true;
-    
-    // Sprawdź czy moduł jest odblokowany
-    const lesson = findLesson(lessonId);
+
+    const lesson = findLessonInModules(lessonId);
     if (!lesson) return false;
-    
-    // Jeśli moduł nie jest odblokowany, lekcja nie jest dostępna
-    if (!unlockedModules.has(lesson.moduleId)) {
-      return false;
-    }
-    
-    // Sprawdź czy poprzednia lekcja jest ukończona
-    const prevLesson = getPreviousLesson(lessonId);
-    
-    // Jeśli nie ma poprzedniej lekcji, to jest pierwsza lekcja w całym kursie (1.1)
-    // Ta lekcja jest zawsze dostępna, jeśli moduł jest odblokowany (co już sprawdziliśmy)
-    if (!prevLesson) {
-      return lesson.moduleId === '1'; // Tylko pierwsza lekcja w module 1 jest zawsze dostępna
-    }
-    
-    // Sprawdź czy poprzednia lekcja jest ukończona
-    // Jeśli poprzednia lekcja jest w innym module, sprawdź czy poprzedni moduł jest ukończony
-    if (prevLesson.moduleId !== lesson.moduleId) {
-      // Przechodzimy do nowego modułu - sprawdź czy poprzedni moduł jest w pełni ukończony
-      const prevModule = trainingModules.find(m => m.id === prevLesson.moduleId);
-      if (prevModule) {
-        const allPrevModuleLessonsCompleted = prevModule.lessons.every(l => isLessonCompleted(l.id));
-        if (!allPrevModuleLessonsCompleted) {
-          return false; // Poprzedni moduł nie jest w pełni ukończony
-        }
-      }
-    }
-    
-    // Sprawdź czy poprzednia lekcja jest ukończona
-    return isLessonCompleted(prevLesson.id);
+
+    // Jeśli moduł jest odblokowany, wszystkie jego lekcje są dostępne
+    return isModuleAccessible(lesson.moduleId);
   };
 
   // Sprawdź czy moduł jest odblokowany
-  const isModuleUnlocked = (moduleId: string): boolean => {
-    return unlockedModules.has(moduleId);
+  const isModuleAccessible = (moduleId: string): boolean => {
+    if (unlockedModules.has(moduleId)) return true;
+
+    const moduleIndex = modules.findIndex(m => m.id === moduleId);
+    if (moduleIndex === -1) return false;
+
+    const module = modules[moduleIndex];
+    if (module.lessons.some(lesson => progress[lesson.id]?.completed)) {
+      return true;
+    }
+
+    // Jeśli wszystkie poprzednie moduły są ukończone, odblokuj ten moduł
+    for (let i = 0; i < moduleIndex; i++) {
+      const prevModule = modules[i];
+      const prevCompleted = prevModule.lessons.every(lesson => progress[lesson.id]?.completed);
+      if (!prevCompleted) return false;
+    }
+
+    return true;
+  };
+
+  const ensureModuleUnlocked = async (moduleId: string) => {
+    if (!user || !course) return;
+    if (unlockedModules.has(moduleId)) return;
+
+    // Od razu odblokuj lokalnie, żeby UI było responsywne
+    setUnlockedModules(prev => new Set(prev).add(moduleId));
+
+    const { error } = await supabase.from('module_unlocks').insert({
+      user_id: user.id,
+      course_id: course.id,
+      module_id: moduleId,
+      unlocked_by: 'system'
+    });
+
+    if (error && error.code !== '23505') {
+      console.error('Błąd odblokowania modułu:', error);
+    }
   };
 
 
+  // Obsługa powiadomienia o feedbacku
+  const handleNotificationClick = () => {
+    if (notification) {
+      setCurrentLessonId(notification.lessonId);
+      setNotification(null);
+      // Przewiń do pytania z feedbackiem (opcjonalnie)
+      setTimeout(() => {
+        const questionElement = document.getElementById(`question-${notification.questionId}`);
+        if (questionElement) {
+          questionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 500);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#101820] text-white">
+      
+      {/* Powiadomienie o feedbacku */}
+      {notification && (
+        <div className="fixed top-4 right-4 z-50 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] rounded-xl p-4 shadow-2xl max-w-md animate-slide-in">
+          <div className="flex items-start gap-3">
+            <svg className="w-6 h-6 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <div className="flex-1">
+              <p className="font-bold mb-1">Nowy feedback!</p>
+              <p className="text-sm">{notification.message}</p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleNotificationClick}
+                className="px-4 py-2 bg-[#101820] hover:bg-[#101820]/90 rounded-lg font-semibold text-sm transition-colors"
+              >
+                Przejdź
+              </button>
+              <button
+                onClick={() => setNotification(null)}
+                className="px-2 py-2 hover:bg-[#101820]/20 rounded-lg transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Header z postępem - przeprojektowany */}
       {!isPanelHidden && (
@@ -1355,11 +1523,11 @@ export const TrainingPage: React.FC = () => {
             </div>
           )}
           <div className="p-6 space-y-6">
-            {trainingModules.map((module, moduleIndex) => {
+            {modules.map((module, moduleIndex) => {
               const moduleLessons = module.lessons;
               const completedModuleLessons = moduleLessons.filter(l => isLessonCompleted(l.id)).length;
               const moduleProgress = (completedModuleLessons / moduleLessons.length) * 100;
-              const isModuleUnlocked = unlockedModules.has(module.id);
+              const isModuleUnlocked = isModuleAccessible(module.id);
               
               return (
                 <div key={module.id} className="mb-8">
@@ -2552,8 +2720,8 @@ export const TrainingPage: React.FC = () => {
                                   ))}
                                 </div>
                                 
-                                {/* Przycisk sprawdzenia odpowiedzi dla pytań zamkniętych */}
-                                {!quizResults[question.id] && (
+                                {/* Przycisk sprawdzenia odpowiedzi dla pytań zamkniętych - tylko jeśli odpowiedź nie jest jeszcze sprawdzona */}
+                                {!quizResults[question.id] && quizAnswers[question.id] !== undefined && (
                                   <div className="pt-4">
                                     <button
                                       onClick={() => handleCheckSingleAnswer(question.id)}
@@ -3255,14 +3423,15 @@ export const TrainingPage: React.FC = () => {
                                     />
                                     
                                     {/* Przycisk zatwierdzania dla każdego pytania otwartego osobno */}
-                                    {!quizResults[question.id] && question.type === 'open' && (
+                                    {/* Nie pokazuj przycisku jeśli odpowiedź jest już zatwierdzona */}
+                                    {question.type === 'open' && quizResults[question.id] !== 'approved' && (
                                       <div className="mt-4">
                                         <button
                                           onClick={() => handleSubmitOpenAnswer(question.id)}
-                                          disabled={!quizAnswers[question.id] || quizAnswers[question.id] === ''}
+                                          disabled={!quizAnswers[question.id] || quizAnswers[question.id] === '' || quizResults[question.id] === 'pending'}
                                           className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:shadow-xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                                         >
-                                          Prześlij odpowiedź
+                                          {quizResults[question.id] === 'pending' ? 'Oczekuje na weryfikację...' : 'Prześlij odpowiedź'}
                                         </button>
                                       </div>
                                     )}
@@ -3311,15 +3480,15 @@ export const TrainingPage: React.FC = () => {
                                   </div>
                                 )}
 
-                                {/* Status dla pytań otwartych */}
-                                {!question.isCalculation && quizResults[question.id] === 'pending' && (
+                                {/* Status dla pytań otwartych - oczekiwanie na zatwierdzenie */}
+                                {!question.isCalculation && question.type === 'open' && quizResults[question.id] === 'pending' && (
                                   <div className="bg-yellow-500/20 border-2 border-yellow-500/50 rounded-xl p-4 flex items-center gap-3">
                                     <svg className="w-6 h-6 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     <div className="flex-1">
-                                      <p className="text-yellow-200 font-semibold mb-1">Oczekiwanie na sprawdzenie</p>
-                                      <p className="text-yellow-300/80 text-sm">Twoja odpowiedź została przesłana i oczekuje na weryfikację przez administratora.</p>
+                                      <p className="text-yellow-200 font-semibold mb-1">Oczekiwanie na zatwierdzenie</p>
+                                      <p className="text-yellow-300/80 text-sm">Twoja odpowiedź została przesłana i oczekuje na weryfikację przez administratora. Możesz przejść dalej.</p>
                                     </div>
                                     <button
                                       onClick={() => handleChangeOpenAnswer(question.id)}
@@ -3330,7 +3499,8 @@ export const TrainingPage: React.FC = () => {
                                   </div>
                                 )}
                                 
-                                {quizResults[question.id] === 'approved' && (
+                                {/* Status dla pytań otwartych - odpowiedź zatwierdzona */}
+                                {!question.isCalculation && question.type === 'open' && quizResults[question.id] === 'approved' && (
                                   <div className="bg-green-500/20 border-2 border-green-500/50 rounded-xl p-4 flex items-start gap-3">
                                     <svg className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -3341,10 +3511,17 @@ export const TrainingPage: React.FC = () => {
                                         <p className="text-green-300/80 text-sm">{quizFeedback[question.id]}</p>
                                       )}
                                     </div>
+                                    <button
+                                      onClick={() => handleChangeOpenAnswer(question.id)}
+                                      className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 rounded-lg text-green-200 text-sm font-semibold transition-all duration-300"
+                                    >
+                                      Zmień odpowiedź
+                                    </button>
                                   </div>
                                 )}
                                 
-                                {quizResults[question.id] === 'rejected' && (
+                                {/* Status dla pytań otwartych - odpowiedź wymaga poprawy */}
+                                {!question.isCalculation && question.type === 'open' && quizResults[question.id] === 'rejected' && (
                                   <div className="bg-red-500/20 border-2 border-red-500/50 rounded-xl p-4 flex items-start gap-3">
                                     <svg className="w-6 h-6 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -3408,36 +3585,6 @@ export const TrainingPage: React.FC = () => {
                           </div>
                         ))}
 
-                        {/* Wspólny przycisk tylko dla pytań zamkniętych */}
-                        <div className="pl-14 pt-4">
-                          {(() => {
-                            const hasChoiceQuestions = currentLesson.quiz.some(q => q.type === 'choice');
-                            const allChoiceCorrect = currentLesson.quiz
-                              .filter(q => q.type === 'choice')
-                              .every(q => quizResults[q.id] === 'correct');
-                            const hasUncheckedChoices = currentLesson.quiz
-                              .filter(q => q.type === 'choice')
-                              .some(q => !quizResults[q.id]);
-                            const hasIncorrectChoices = currentLesson.quiz
-                              .filter(q => q.type === 'choice')
-                              .some(q => quizResults[q.id] === 'incorrect');
-                            
-                            // Jeśli są pytania zamknięte i nie wszystkie są poprawne (lub nie sprawdzone)
-                            if (hasChoiceQuestions && (!allChoiceCorrect || hasUncheckedChoices)) {
-                              return (
-                                <button
-                                  onClick={handleCheckQuiz}
-                                  disabled={hasIncorrectChoices && !hasUncheckedChoices}
-                                  className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-4 px-8 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                                >
-                                  Sprawdź odpowiedź
-                                </button>
-                              );
-                            }
-                            
-                            return null;
-                          })()}
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -3448,7 +3595,7 @@ export const TrainingPage: React.FC = () => {
                   <div className="flex justify-between items-center">
                     <button
                       onClick={handlePrevious}
-                      disabled={!getPreviousLesson(currentLesson.id)}
+                      disabled={!getPreviousLessonInModules(currentLesson.id)}
                       className="flex items-center gap-2 bg-white/10 text-white font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:bg-white/20 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white/10"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3463,6 +3610,7 @@ export const TrainingPage: React.FC = () => {
                           onClick={handleRefreshQuiz}
                           disabled={refreshingQuiz}
                           className="flex items-center gap-2 text-gray-400 text-sm hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Sprawdź czy są aktualizacje w odpowiedziach (feedback, zatwierdzenie)"
                         >
                           <svg 
                             className={`w-4 h-4 ${refreshingQuiz ? 'animate-spin' : ''}`}
@@ -3472,7 +3620,7 @@ export const TrainingPage: React.FC = () => {
                           >
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                           </svg>
-                          {refreshingQuiz ? 'Odświeżanie...' : 'Odśwież'}
+                          {refreshingQuiz ? 'Sprawdzanie...' : 'Sprawdź status odpowiedzi'}
                         </button>
                       )}
                       {currentLesson.id === '6.3' && canCompleteCourse ? (
@@ -3488,7 +3636,7 @@ export const TrainingPage: React.FC = () => {
                       ) : (
                         <button
                           onClick={handleNext}
-                          disabled={!getNextLesson(currentLesson.id) || (currentLesson.quiz.length > 0 && !canProceed)}
+                          disabled={!getNextLessonInModules(currentLesson.id) || (currentLesson.id === '6.3' && !canProceed)}
                           className="flex items-center gap-2 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-none"
                         >
                           Dalej
