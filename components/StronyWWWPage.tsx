@@ -457,25 +457,6 @@ export const StronyWWWPage: React.FC = () => {
                            </div>
                          </div>
 
-                         {/* Testimonial 5 - Bartosz Nosiadek with photo */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
-                           <div className="flex items-start space-x-4">
-                             <img 
-                               src="/images/c3.jpg" 
-                               alt="Bartosz Nosiadek" 
-                               className="w-12 h-12 rounded-full object-cover flex-shrink-0"
-                               width="48"
-                               height="48"
-                               loading="eager"
-                             />
-                             <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Bartosz Nosiadek</h4>
-                               <p className="text-gray-400 text-xs mb-3">CEO, Fibra Nieruchomości</p>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Zdecydowanie polecam! Profesjonalizm na każdym etapie."</p>
-                             </div>
-                           </div>
-                         </div>
-
                          {/* Testimonial 6 - Kaja Lewandowska with icon */}
                          <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
@@ -590,25 +571,6 @@ export const StronyWWWPage: React.FC = () => {
                            </div>
                          </div>
 
-                         {/* Testimonial 5 - Bartosz Nosiadek with photo */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
-                           <div className="flex items-start space-x-4">
-                             <img 
-                               src="/images/c3.jpg" 
-                               alt="Bartosz Nosiadek" 
-                               className="w-12 h-12 rounded-full object-cover flex-shrink-0"
-                               width="48"
-                               height="48"
-                               loading="eager"
-                             />
-                             <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Bartosz Nosiadek</h4>
-                               <p className="text-gray-400 text-xs mb-3">CEO, Fibra Nieruchomości</p>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Zdecydowanie polecam! Profesjonalizm na każdym etapie."</p>
-                             </div>
-                           </div>
-                         </div>
-
                          {/* Testimonial 6 - Kaja Lewandowska with icon */}
                          <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
                            <div className="flex items-start space-x-4">
@@ -680,8 +642,6 @@ export const StronyWWWPage: React.FC = () => {
                   <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Tour & Holiday</span>
                   <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
                   <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Commerce Hero</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Grupa Fibra</span>
                   <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
                   <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Dietana</span>
                   <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>

@@ -109,8 +109,6 @@ export const Hero: React.FC = () => {
                   <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
                   <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Commerce Hero</span>
                   <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Grupa Fibra</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
                   <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Dietana</span>
                   <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
                   <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Redlin</span>
