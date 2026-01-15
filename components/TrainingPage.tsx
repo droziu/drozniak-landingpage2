@@ -1388,6 +1388,9 @@ export const TrainingPage: React.FC = () => {
 
   const totalLessons = getTotalLessonsInModules();
   const completedLessons = getCompletedLessonsCount();
+  const isCourseEffectivelyComplete = courseReadyToComplete || showCompletionScreen || currentLessonId === 'completion' || canCompleteCourse;
+  const displayCompletedLessons = isCourseEffectivelyComplete ? totalLessons : completedLessons;
+  const displayCompletionPercent = totalLessons > 0 ? Math.round((displayCompletedLessons / totalLessons) * 100) : 0;
 
   // Sprawdź które lekcje są dostępne (można kliknąć)
   const isLessonAvailable = (lessonId: string): boolean => {
@@ -1521,7 +1524,12 @@ export const TrainingPage: React.FC = () => {
             <div className="space-y-2">
               {module.lessons.map((lesson) => {
                 const isActive = lesson.id === currentLessonId;
-                const isCompleted = isLessonCompleted(lesson.id);
+                const isCompleted =
+                  isLessonCompleted(lesson.id) ||
+                  courseReadyToComplete ||
+                  showCompletionScreen ||
+                  currentLessonId === 'completion' ||
+                  canCompleteCourse;
                 const isAvailable = isModuleUnlocked && isLessonAvailable(lesson.id);
                 const isLocked = !isAvailable && !isActive;
 
@@ -1688,13 +1696,13 @@ export const TrainingPage: React.FC = () => {
                 <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
                   <span>Postęp</span>
                   <span className="text-gray-300 font-semibold">
-                    {completedLessons}/{totalLessons} • {Math.round((completedLessons / totalLessons) * 100)}%
+                    {displayCompletedLessons}/{totalLessons} • {displayCompletionPercent}%
                   </span>
                 </div>
                 <div className="relative bg-white/10 rounded-full h-2 overflow-hidden shadow-inner">
                   <div
                     className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] rounded-full transition-all duration-500 shadow-lg"
-                    style={{ width: `${(completedLessons / totalLessons) * 100}%` }}
+                    style={{ width: `${displayCompletionPercent}%` }}
                   />
                 </div>
               </div>
@@ -1719,7 +1727,7 @@ export const TrainingPage: React.FC = () => {
                       <div>
                         <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">Postęp kursu</div>
                         <div className="text-lg font-[Montserrat] font-bold text-white">
-                          {completedLessons} <span className="text-gray-400 font-normal">/ {totalLessons} lekcji</span>
+                          {displayCompletedLessons} <span className="text-gray-400 font-normal">/ {totalLessons} lekcji</span>
                         </div>
                       </div>
                     </div>
@@ -1727,13 +1735,13 @@ export const TrainingPage: React.FC = () => {
                       <div className="relative bg-white/10 rounded-full h-3 overflow-hidden shadow-inner">
                         <div
                           className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] rounded-full transition-all duration-500 shadow-lg"
-                          style={{ width: `${(completedLessons / totalLessons) * 100}%` }}
+                          style={{ width: `${displayCompletionPercent}%` }}
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
                         </div>
                       </div>
                       <div className="text-xs text-gray-400 mt-2 text-right">
-                        {Math.round((completedLessons / totalLessons) * 100)}% ukończone
+                        {displayCompletionPercent}% ukończone
                       </div>
                     </div>
                   </div>
