@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
+import { useCourse } from '../hooks/useCourse';
 
 interface CourseCompletionScreenProps {
   onComplete: () => void;
@@ -9,6 +10,7 @@ interface CourseCompletionScreenProps {
 
 export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ onComplete }) => {
   const { user } = useAuth();
+  const { course } = useCourse();
   const [formData, setFormData] = useState({
     fullName: '',
     companyName: '',
@@ -23,6 +25,7 @@ export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
+  const [calendarStyle, setCalendarStyle] = useState<React.CSSProperties>({});
   
   // Zamknij kalendarz po kliknięciu poza nim
   useEffect(() => {
@@ -53,9 +56,59 @@ export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ 
     };
   }, [isDatePickerOpen]);
 
+  // Utrzymuj kalendarz "przyklejony" do pola (bez uciekania przy scrollu)
+  useEffect(() => {
+    if (!isDatePickerOpen) return;
+
+    const updatePosition = () => {
+      const anchor = datePickerRef.current;
+      const popover = calendarRef.current;
+      if (!anchor || !popover) return;
+
+      const anchorRect = anchor.getBoundingClientRect();
+      const popRect = popover.getBoundingClientRect();
+
+      const margin = 8;
+      const minLeft = 12;
+      const maxLeft = window.innerWidth - popRect.width - 12;
+
+      // Domyślnie pod polem
+      let top = anchorRect.bottom + margin;
+      // Jeśli brakuje miejsca na dole, pokaż nad polem
+      if (top + popRect.height > window.innerHeight - 12) {
+        top = anchorRect.top - popRect.height - margin;
+      }
+      // Clamp do viewportu
+      top = Math.max(12, Math.min(top, window.innerHeight - popRect.height - 12));
+
+      let left = anchorRect.left;
+      left = Math.max(minLeft, Math.min(left, maxLeft));
+
+      setCalendarStyle({
+        position: 'fixed',
+        zIndex: 99999,
+        top: `${top}px`,
+        left: `${left}px`,
+        width: '400px',
+        maxWidth: '90vw'
+      });
+    };
+
+    // Po pierwszym renderze popovera złap jego wymiary
+    const raf = requestAnimationFrame(updatePosition);
+
+    window.addEventListener('scroll', updatePosition, true);
+    window.addEventListener('resize', updatePosition);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', updatePosition, true);
+      window.removeEventListener('resize', updatePosition);
+    };
+  }, [isDatePickerOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user || !course) return;
 
     setLoading(true);
     setError(null);
@@ -83,6 +136,7 @@ export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ 
         .from('course_certificates')
         .upsert({
           user_id: user.id,
+          course_id: course.id,
           full_name: formData.fullName.trim(),
           company_name: formData.companyName.trim(),
           email: formData.email.trim(),
@@ -91,7 +145,7 @@ export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ 
           additional_question: formData.additionalQuestion.trim() || null,
           submitted_at: new Date().toISOString()
         }, {
-          onConflict: 'user_id'
+          onConflict: 'user_id,course_id'
         });
 
       if (insertError) {
@@ -108,7 +162,8 @@ export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ 
           course_completed: true,
           course_completed_at: new Date().toISOString()
         })
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .eq('course_id', course.id);
 
       if (updateError) {
         console.error('Błąd oznaczania szkolenia jako zakończone:', updateError);
@@ -395,14 +450,7 @@ export const CourseCompletionScreen: React.FC<CourseCompletionScreenProps> = ({ 
                           <div 
                             ref={calendarRef}
                             className="fixed bg-[#18232F] border-2 border-[#fee715]/30 rounded-xl shadow-2xl p-6"
-                            style={{
-                              zIndex: 99999,
-                              top: datePickerRef.current ? `${datePickerRef.current.getBoundingClientRect().bottom + window.scrollY + 8}px` : '50%',
-                              left: datePickerRef.current ? `${datePickerRef.current.getBoundingClientRect().left + window.scrollX}px` : '50%',
-                              transform: datePickerRef.current ? 'none' : 'translate(-50%, -50%)',
-                              width: '400px',
-                              maxWidth: '90vw'
-                            }}
+                            style={Object.keys(calendarStyle).length ? calendarStyle : { zIndex: 99999 }}
                           >
                             {/* Header kalendarza */}
                             <div className="flex items-center justify-between mb-4">
