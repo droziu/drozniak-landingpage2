@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { supabase } from '../lib/supabase';
 import { AlertModal } from './AlertModal';
+import { LoadingState } from './LoadingState';
 
 interface UserProfileData {
   company_name: string | null;
@@ -144,132 +145,103 @@ export const UserProfile: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#101820] flex items-center justify-center">
-        <div className="text-white text-lg">Ładowanie...</div>
-      </div>
-    );
+    return <LoadingState variant="fullscreen" label="Ładowanie profilu…" />;
   }
 
   return (
     <div className="min-h-screen bg-[#101820] text-white">
-      <div className="container mx-auto px-6 py-8 max-w-4xl">
-        <div className="mb-8">
+      <div className="container mx-auto px-4 py-6 max-w-2xl">
+        <div className="mb-6">
           <button
             onClick={() => navigate('/panel')}
-            className="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+            className="mb-4 flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Powrót do kursu
+            Powrót do panelu
           </button>
-          <h1 className="font-[Montserrat] text-4xl font-bold mb-2">
+          <h1 className="font-[Montserrat] text-xl font-bold mb-1">
             <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
               Mój Profil
             </span>
           </h1>
-          <p className="text-gray-400">Zarządzaj swoimi danymi</p>
+          <p className="text-gray-400 text-sm">Zarządzaj swoimi danymi</p>
         </div>
 
-        <form onSubmit={handleSave} className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-8 border-2 border-white/10">
-          <div className="space-y-6">
-            {/* Email (tylko do odczytu) */}
+        <form onSubmit={handleSave} className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-5 border border-white/10">
+          <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email
-              </label>
+              <label className="block text-xs font-medium text-gray-400 mb-1">Email</label>
               <input
                 type="email"
                 value={profileData.email || user?.email || ''}
                 disabled
                 readOnly
-                className="w-full bg-white/10 border-2 border-white/20 rounded-lg px-4 py-3 text-white cursor-not-allowed"
-                style={{ opacity: 0.8 }}
+                className="w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-sm text-gray-400"
               />
-              <p className="text-xs text-gray-400 mt-1">Email nie może być zmieniony</p>
             </div>
-
-            {/* Nazwa firmy */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Nazwa firmy
-              </label>
+              <label className="block text-xs font-medium text-gray-400 mb-1">Nazwa firmy</label>
               <input
                 type="text"
                 value={profileData.company_name || ''}
                 onChange={(e) => setProfileData(prev => ({ ...prev, company_name: e.target.value }))}
-                placeholder="Wprowadź nazwę firmy"
-                className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] transition-all"
+                placeholder="Nazwa firmy"
+                className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]"
               />
             </div>
-
-            {/* Imię i Nazwisko */}
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Imię
-                </label>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Imię</label>
                 <input
                   type="text"
                   value={profileData.first_name || ''}
                   onChange={(e) => setProfileData(prev => ({ ...prev, first_name: e.target.value }))}
-                  placeholder="Wprowadź imię"
-                  className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] transition-all"
+                  placeholder="Imię"
+                  className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Nazwisko
-                </label>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Nazwisko</label>
                 <input
                   type="text"
                   value={profileData.last_name || ''}
                   onChange={(e) => setProfileData(prev => ({ ...prev, last_name: e.target.value }))}
-                  placeholder="Wprowadź nazwisko"
-                  className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] transition-all"
+                  placeholder="Nazwisko"
+                  className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]"
                 />
               </div>
             </div>
-
-            {/* Telefon */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Telefon
-              </label>
+              <label className="block text-xs font-medium text-gray-400 mb-1">Telefon</label>
               <input
                 type="tel"
                 value={profileData.phone || ''}
                 onChange={(e) => setProfileData(prev => ({ ...prev, phone: e.target.value }))}
-                placeholder="Wprowadź numer telefonu"
-                className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] transition-all"
+                placeholder="Telefon"
+                className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]"
               />
             </div>
-
-            {/* Notatki/Cele biznesowe */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Notatki / Cele biznesowe
-              </label>
+              <label className="block text-xs font-medium text-gray-400 mb-1">Notatki / Cele biznesowe</label>
               <textarea
                 value={profileData.notes || ''}
                 onChange={(e) => setProfileData(prev => ({ ...prev, notes: e.target.value }))}
-                placeholder="Wprowadź swoje cele biznesowe, notatki lub inne informacje..."
-                rows={6}
-                className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] transition-all resize-none"
+                placeholder="Notatki..."
+                rows={4}
+                className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715] resize-none"
               />
             </div>
-
-            {/* Przycisk zapisz */}
-            <div className="flex justify-end pt-4">
+            <div className="flex justify-end pt-2">
               <button
                 type="submit"
                 disabled={saving}
-                className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-8 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="px-4 py-2 bg-[#fee715] text-[#101820] text-sm font-semibold rounded-lg hover:bg-[#fee715]/90 disabled:opacity-50"
               >
                 {saving ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <span className="flex items-center gap-2 text-sm">
+                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>

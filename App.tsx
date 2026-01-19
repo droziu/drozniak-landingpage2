@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom';
 import { Header } from './components/Header';
 import { MainPage } from './components/MainPage';
 import { AIStrategyPage } from './components/AIStrategyPage';
@@ -14,8 +14,8 @@ import { SzkoleniaPage } from './components/SzkoleniaPage';
 import { DoradztwoHotelIrys } from './components/DoradztwoHotelIrys';
 import { DoradztwoZef } from './components/DoradztwoZef';
 import { LoginPage } from './components/LoginPage';
-import { TrainingPage } from './components/TrainingPage';
 import { AdminPanel } from './components/AdminPanel';
+import { ClientPanel } from './components/ClientPanel';
 import { UserProfile } from './components/UserProfile';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { PanelRoot } from './components/PanelRoot';
@@ -26,6 +26,24 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { SchemaMarkup } from './components/SchemaMarkup';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { LoadingState } from './components/LoadingState';
+import { TrainingPage } from './components/TrainingPage';
+import { PublicProposalView } from './components/PublicProposalView';
+import { PDFProposalView } from './components/PDFProposalView';
+
+// Tryb pełnoekranowy kursu (bez sidebara panelu, z przyciskiem X)
+const TrainingPageStandalone: React.FC = () => {
+  const { courseId } = useParams<{ courseId: string }>();
+  return <TrainingPage courseId={courseId || null} standalone />;
+};
+
+// Lazy load FunnelBuilder (duży komponent z React Flow)
+// FunnelBuilder ma named export, więc musimy go przekonwertować na default dla lazy()
+const FunnelBuilder = lazy(() => 
+  import('./components/FunnelBuilder').then(module => ({
+    default: module.FunnelBuilder
+  }))
+);
 
 // Komponent do sprawdzania czy jesteśmy w panelu
 const AppContent: React.FC<{
@@ -52,6 +70,16 @@ const AppContent: React.FC<{
     location.pathname.startsWith('/admin') ||
     location.pathname.startsWith('/profile');
   
+  // Debug - można usunąć później
+  if (typeof window !== 'undefined' && location.pathname === '/') {
+    console.log('App routing debug:', { 
+      hostname: window.location.hostname, 
+      pathname: location.pathname, 
+      isPanelSubdomain, 
+      isPanelRoute 
+    });
+  }
+  
 
   return (
     <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
@@ -64,31 +92,19 @@ const AppContent: React.FC<{
           <>
             <Route path="/" element={<PanelRoot />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/panel"
-              element={
-                <ProtectedRoute>
-                  <TrainingPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminPanel />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <UserProfile />
-                </ProtectedRoute>
-              }
-            />
-            {/* Przekieruj wszystkie inne ścieżki do logowania */}
+            <Route path="/p/:token" element={<PublicProposalView />} />
+            <Route path="/o/:slug" element={<PDFProposalView />} />
+            <Route path="/panel/marketing/:id" element={<ProtectedRoute><Suspense fallback={<LoadingState variant="fullscreen" label="Ładowanie lejka…" />}><FunnelBuilder /></Suspense></ProtectedRoute>} />
+            <Route path="/panel/courses/:courseId" element={<ProtectedRoute><TrainingPageStandalone /></ProtectedRoute>} />
+            <Route path="/panel/*" element={<ProtectedRoute><ClientPanel /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/marketing" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/marketing/:id" element={<ProtectedRoute><Suspense fallback={<LoadingState variant="fullscreen" label="Ładowanie lejka…" />}><FunnelBuilder /></Suspense></ProtectedRoute>} />
+            <Route path="/admin/clients" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/panel-clients" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/proposals" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/proposals/*" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (
@@ -106,30 +122,19 @@ const AppContent: React.FC<{
             <Route path="/doradztwo-hotel-irys" element={<DoradztwoHotelIrys />} />
             <Route path="/doradztwo-zef" element={<DoradztwoZef />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/panel"
-              element={
-                <ProtectedRoute>
-                  <TrainingPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminPanel />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <UserProfile />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/p/:token" element={<PublicProposalView />} />
+            <Route path="/o/:slug" element={<PDFProposalView />} />
+            <Route path="/panel/marketing/:id" element={<ProtectedRoute><Suspense fallback={<LoadingState variant="fullscreen" label="Ładowanie lejka…" />}><FunnelBuilder /></Suspense></ProtectedRoute>} />
+            <Route path="/panel/courses/:courseId" element={<ProtectedRoute><TrainingPageStandalone /></ProtectedRoute>} />
+            <Route path="/panel/*" element={<ProtectedRoute><ClientPanel /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/marketing" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/marketing/:id" element={<ProtectedRoute><Suspense fallback={<LoadingState variant="fullscreen" label="Ładowanie lejka…" />}><FunnelBuilder /></Suspense></ProtectedRoute>} />
+            <Route path="/admin/clients" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/panel-clients" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/proposals" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/admin/proposals/*" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
           </>
         )}
       </Routes>

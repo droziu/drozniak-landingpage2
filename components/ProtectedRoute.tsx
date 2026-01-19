@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { LoadingState } from './LoadingState';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -12,11 +13,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   console.log('ProtectedRoute - loading:', loading, 'user:', user?.email || 'brak użytkownika', 'pathname:', window.location.pathname);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#101820] flex items-center justify-center">
-        <div className="text-white text-lg">Ładowanie...</div>
-      </div>
-    );
+    return <LoadingState variant="fullscreen" label="Ładowanie…" />;
   }
 
   if (!user) {

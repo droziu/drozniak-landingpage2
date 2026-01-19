@@ -13,9 +13,13 @@
     "@supabase/supabase-js": "^2.39.0",
     "@types/react-router-dom": "^5.3.3",
     "@vercel/node": "^5.5.9",
+    "@xyflow/react": "^12.10.0",
+    "phosphor-react": "^1.4.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.3"
+    "react-router-dom": "^7.9.3",
+    "reactflow": "^11.11.4",
+    "simple-icons": "^16.6.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

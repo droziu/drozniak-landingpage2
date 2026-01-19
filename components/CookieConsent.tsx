@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CustomCheckbox } from './CustomCheckbox';
 
 interface CookieConsentProps {
   onAccept: (preferences: { necessary: boolean; performance: boolean; analytics: boolean }) => void;
@@ -56,34 +57,29 @@ export const CookieConsent: React.FC<CookieConsentProps> = ({ onAccept }) => {
               Używamy plików cookies, aby zapewnić najlepsze doświadczenie na naszej stronie. 
               Niektóre są niezbędne do działania strony, inne pomagają nam analizować ruch i personalizować treści.
             </p>
-            <div className="space-y-1">
-              <label className="flex items-center space-x-2 text-xs text-gray-300">
-                <input 
-                  type="checkbox" 
-                  checked={preferences.necessary} 
-                  disabled 
-                  className="w-3 h-3 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-1"
-                />
-                <span>Niezbędne (zawsze włączone)</span>
-              </label>
-              <label className="flex items-center space-x-2 text-xs text-gray-300">
-                <input 
-                  type="checkbox" 
-                  checked={preferences.performance}
-                  onChange={(e) => setPreferences(prev => ({ ...prev, performance: e.target.checked }))}
-                  className="w-3 h-3 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-1"
-                />
-                <span>Wydajność (Calendly, zewnętrzne narzędzia)</span>
-              </label>
-              <label className="flex items-center space-x-2 text-xs text-gray-300">
-                <input 
-                  type="checkbox" 
-                  checked={preferences.analytics}
-                  onChange={(e) => setPreferences(prev => ({ ...prev, analytics: e.target.checked }))}
-                  className="w-3 h-3 text-[#fee715] bg-gray-800 border-gray-600 rounded focus:ring-[#fee715] focus:ring-1"
-                />
-                <span>Analityka (Google Analytics, śledzenie)</span>
-              </label>
+            <div className="space-y-2">
+              <CustomCheckbox
+                checked={preferences.necessary}
+                onChange={() => {}}
+                disabled
+                label="Niezbędne (zawsze włączone)"
+                size="sm"
+                labelClassName="text-xs text-gray-300"
+              />
+              <CustomCheckbox
+                checked={preferences.performance}
+                onChange={(v) => setPreferences((prev) => ({ ...prev, performance: v }))}
+                label="Wydajność (Calendly, zewnętrzne narzędzia)"
+                size="sm"
+                labelClassName="text-xs text-gray-300"
+              />
+              <CustomCheckbox
+                checked={preferences.analytics}
+                onChange={(v) => setPreferences((prev) => ({ ...prev, analytics: v }))}
+                label="Analityka (Google Analytics, śledzenie)"
+                size="sm"
+                labelClassName="text-xs text-gray-300"
+              />
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2">

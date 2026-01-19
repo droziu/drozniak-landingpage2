@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { LoginPage } from './LoginPage';
-import { TrainingPage } from './TrainingPage';
+import { LoadingState } from './LoadingState';
 
 /**
  * Komponent głównej ścieżki dla panelu klienta
@@ -18,11 +18,7 @@ export const PanelRoot: React.FC = () => {
   console.log('PanelRoot - loading:', loading, 'user:', user?.email || 'brak użytkownika');
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#101820] flex items-center justify-center">
-        <div className="text-white text-lg">Ładowanie...</div>
-      </div>
-    );
+    return <LoadingState variant="fullscreen" label="Ładowanie…" />;
   }
 
   if (user) {

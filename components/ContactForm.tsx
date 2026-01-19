@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { CustomCheckbox } from './CustomCheckbox';
 
 interface FormData {
   name: string;
@@ -270,25 +271,29 @@ export const ContactForm: React.FC = () => {
 
       {/* Row 4: Privacy (left) | Submit (right) */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-        <div className="flex items-start space-x-3 flex-1">
-          <input
-            type="checkbox"
+        <div className="flex-1">
+          <CustomCheckbox
             id="privacy"
             name="privacy"
             checked={formData.privacy}
-            onChange={handleInputChange}
-            className={`mt-1 w-4 h-4 rounded border focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300 ${
-              errors.privacy ? 'border-red-500' : 'border-white/20 focus:border-[#fee715]'
-            }`}
+            onChange={(v) => {
+              setFormData((prev) => ({ ...prev, privacy: v }));
+              setErrors((prev) => ({ ...prev, privacy: undefined }));
+            }}
+            error={!!errors.privacy}
+            align="start"
+            label={
+              <>
+                Akceptuję przetwarzanie danych w celu odpowiedzi na wiadomość.
+                <br />
+                <a href="/polityka-prywatnosci" className="text-[#fee715] hover:text-white transition-colors">
+                  Polityka prywatności
+                </a>
+              </>
+            }
+            labelClassName="text-sm text-gray-300 leading-relaxed"
             aria-describedby={errors.privacy ? 'privacy-error' : undefined}
           />
-          <label htmlFor="privacy" className="text-sm text-gray-300 leading-relaxed">
-            Akceptuję przetwarzanie danych w celu odpowiedzi na wiadomość.
-            <br />
-            <a href="/polityka-prywatnosci" className="text-[#fee715] hover:text-white transition-colors">
-              Polityka prywatności
-            </a>
-          </label>
         </div>
         {errors.privacy && (
           <p id="privacy-error" className="text-sm text-red-400 md:hidden" role="alert">

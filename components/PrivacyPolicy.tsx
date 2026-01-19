@@ -1,4 +1,5 @@
 import React from 'react';
+import { Envelope, Phone } from 'phosphor-react';
 
 export const PrivacyPolicy: React.FC = () => {
   return (
@@ -30,8 +31,8 @@ export const PrivacyPolicy: React.FC = () => {
                   <p>ul. Krzycka 107/19, 53-019 Wrocław</p>
                   <p>NIP: 6332237557 | REGON: 368769391</p>
                   <p className="mt-4"><strong className="text-white">Kontakt:</strong></p>
-                  <p>📧 <a href="mailto:stanislaw@drozniak.com" className="text-[#fee715] hover:underline">stanislaw@drozniak.com</a></p>
-                  <p>📞 <a href="tel:+48792491196" className="text-[#fee715] hover:underline">+48 792 491 196</a></p>
+                  <p className="flex items-center gap-2"><Envelope size={16} weight="regular" /> <a href="mailto:stanislaw@drozniak.com" className="text-[#fee715] hover:underline">stanislaw@drozniak.com</a></p>
+                  <p className="flex items-center gap-2"><Phone size={16} weight="regular" /> <a href="tel:+48792491196" className="text-[#fee715] hover:underline">+48 792 491 196</a></p>
                 </div>
               </div>
             </section>
@@ -79,6 +80,24 @@ export const PrivacyPolicy: React.FC = () => {
                     <li>Dane: e-mail, data zapisu, aktywności newsletterowe.</li>
                     <li>Cel: przesyłanie treści i informacji marketingowych — tylko po wyrażeniu zgody.</li>
                     <li>System: MailerLite UAB.</li>
+                  </ul>
+                </li>
+                <li className="mb-4">
+                  <strong className="text-white">Baza danych i backend (Supabase)</strong>
+                  <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
+                    <li>
+                      Dane: dane podane w formularzach (np. imię, e-mail, telefon), dane dotyczące rezerwacji/zakupów
+                      (np. identyfikatory transakcji, statusy), dane techniczne związane z funkcjonowaniem serwisu
+                      (np. logi zdarzeń, identyfikatory sesji — jeśli występują).
+                    </li>
+                    <li>
+                      Cel: przechowywanie danych niezbędnych do działania strony i usług (np. obsługa zapytań, zapisów,
+                      procesów zakupowych), prowadzenie działań operacyjnych (np. realizacja usług/kursów, komunikacja
+                      z użytkownikiem), zapewnienie bezpieczeństwa oraz integralności systemu.
+                    </li>
+                    <li>
+                      System: Supabase (Supabase Inc. / dostawca infrastruktury chmurowej w ramach usługi).
+                    </li>
                   </ul>
                 </li>
                 <li className="mb-4">

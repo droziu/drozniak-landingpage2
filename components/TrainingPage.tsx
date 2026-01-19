@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useCourse } from '../hooks/useCourse';
+import { useCourseById } from '../hooks/useCourseById';
 import { supabase } from '../lib/supabase';
 import { trainingModules } from '../config/trainingModules';
 import type { QuizQuestion, Module } from '../config/trainingModules';
@@ -9,6 +10,7 @@ import { loadCourseModules } from '../utils/courseLoader';
 import { CustomRadio } from './CustomRadio';
 import { UserMenu } from './UserMenu';
 import { CourseCompletionScreen } from './CourseCompletionScreen';
+import { LoadingState } from './LoadingState';
 
 // Ikony jako proste komponenty SVG
 const ChartIcon = ({ className }: { className?: string }) => (
@@ -74,9 +76,18 @@ interface TrainingProgress {
   };
 }
 
-export const TrainingPage: React.FC = () => {
+interface TrainingPageProps {
+  embedded?: boolean;
+  courseId?: string | null;
+  standalone?: boolean;
+}
+
+export const TrainingPage: React.FC<TrainingPageProps> = ({ embedded = false, courseId = null, standalone = false }) => {
   const { user, loading: authLoading, signOut, updatePassword } = useAuth();
-  const { course, loading: courseLoading } = useCourse();
+  const byId = useCourseById(courseId || null);
+  const byList = useCourse();
+  const course = courseId ? byId.course : byList.course;
+  const courseLoading = courseId ? byId.loading : byList.loading;
   const navigate = useNavigate();
   const [currentLessonId, setCurrentLessonId] = useState<string>('1.1');
   const [progress, setProgress] = useState<TrainingProgress>({});
@@ -1367,11 +1378,7 @@ export const TrainingPage: React.FC = () => {
   };
 
   if (authLoading || loading || courseLoading) {
-    return (
-      <div className="min-h-screen bg-[#101820] flex items-center justify-center">
-        <div className="text-white text-lg">Ładowanie...</div>
-      </div>
-    );
+    return <LoadingState variant="fullscreen" label="Ładowanie kursu…" />;
   }
 
   if (!user) {
@@ -1381,7 +1388,7 @@ export const TrainingPage: React.FC = () => {
   if (!course) {
     return (
       <div className="min-h-screen bg-[#101820] flex items-center justify-center">
-        <div className="text-white text-lg">Brak przypisanego kursu. Skontaktuj się z administratorem.</div>
+        <div className="text-white text-sm">Brak przypisanego kursu. Skontaktuj się z administratorem.</div>
       </div>
     );
   }
@@ -1628,7 +1635,7 @@ export const TrainingPage: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#101820] text-white">
+    <div className={embedded ? "bg-[#101820] text-white" : "min-h-screen bg-[#101820] text-white"}>
       
       {/* Powiadomienie o feedbacku */}
       {notification && (
@@ -1661,8 +1668,8 @@ export const TrainingPage: React.FC = () => {
         </div>
       )}
 
-      {/* Header z postępem - przeprojektowany */}
-      {!isPanelHidden && (
+      {/* Header z postępem - przeprojektowany (tylko gdy nie embedded) */}
+      {!embedded && !isPanelHidden && (
         <div className="sticky top-0 z-40 bg-gradient-to-b from-[#101820] via-[#101820]/98 to-[#101820]/95 backdrop-blur-xl border-b border-white/10 shadow-lg">
           <div className="container mx-auto px-4 md:px-8 py-4 md:py-6">
             {/* Mobile header */}
@@ -1682,6 +1689,16 @@ export const TrainingPage: React.FC = () => {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
+                  {standalone && (
+                    <button
+                      onClick={() => navigate('/panel/courses')}
+                      className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-gray-300"
+                      title="Zamknij i wróć do listy kursów"
+                      aria-label="Zamknij"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  )}
                   <button
                     onClick={() => setIsMobileNavOpen(true)}
                     className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-sm font-[Montserrat] font-semibold text-gray-200"
@@ -1712,7 +1729,7 @@ export const TrainingPage: React.FC = () => {
             <div className="hidden md:block">
               <div className="flex justify-between items-start mb-6">
                 <div className="flex-1">
-                  <h1 className="font-[Montserrat] text-2xl md:text-3xl font-bold mb-2">
+                  <h1 className="font-[Montserrat] text-lg md:text-xl font-bold mb-2">
                     <span className="bg-gradient-to-r from-[#fee715] via-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
                       Social Boost: Sztuka Marketingu Online
                     </span>
@@ -1747,16 +1764,27 @@ export const TrainingPage: React.FC = () => {
                   </div>
                 </div>
                 <div className="ml-6 flex items-center gap-3">
-                  <button
-                    onClick={() => setIsPanelHidden(true)}
-                    className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-sm font-[Montserrat] font-semibold text-gray-300 hover:text-white flex items-center gap-2"
-                    title="Tryb pełnego ekranu"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                    </svg>
-                    Tryb pełnego ekranu
-                  </button>
+                  {standalone ? (
+                    <button
+                      onClick={() => navigate('/panel/courses')}
+                      className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-sm font-[Montserrat] font-semibold text-gray-300 hover:text-white flex items-center gap-2"
+                      title="Zamknij i wróć do listy kursów"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                      Zamknij
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setIsPanelHidden(true)}
+                      className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-sm font-[Montserrat] font-semibold text-gray-300 hover:text-white flex items-center gap-2"
+                      title="Tryb pełnego ekranu"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l-5 5m11 5l-5-5m5 5v-4m0 4h-4" />
+                      </svg>
+                      Tryb pełnego ekranu
+                    </button>
+                  )}
                   <UserMenu onPasswordChange={() => setShowPasswordModal(true)} onProfileClick={() => navigate('/profile')} />
                 </div>
               </div>
@@ -1765,8 +1793,8 @@ export const TrainingPage: React.FC = () => {
         </div>
       )}
 
-      {/* Mobile: drawer ze spisem treści */}
-      {isMobileNavOpen && (
+      {/* Mobile: drawer ze spisem treści (tylko gdy nie embedded) */}
+      {!embedded && isMobileNavOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           <button
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -1796,8 +1824,9 @@ export const TrainingPage: React.FC = () => {
         </div>
       )}
 
-      <div className={`flex flex-col md:flex-row ${isPanelHidden ? 'md:h-screen' : 'md:h-[calc(100vh-180px)]'}`}>
-        {/* Sidebar - desktop (bez zmian), mobile ukryty */}
+      <div className={`flex flex-col md:flex-row ${embedded ? '' : isPanelHidden ? 'md:h-screen' : 'md:h-[calc(100vh-180px)]'}`}>
+        {/* Sidebar - desktop (tylko gdy nie embedded), mobile ukryty */}
+        {!embedded && (
         <div
           className={`hidden md:block w-72 md:w-80 bg-gradient-to-b from-[#18232F] to-[#101820] border-r border-white/10 overflow-y-auto ${
             isPanelHidden ? 'h-screen' : ''
@@ -1819,6 +1848,7 @@ export const TrainingPage: React.FC = () => {
           )}
           {sidebarBody}
         </div>
+        )}
 
         {/* Główny obszar treści - przeprojektowany */}
         <div ref={contentRef} className="flex-1 md:overflow-y-auto bg-gradient-to-b from-[#101820] to-[#0B1218]">
@@ -1830,7 +1860,11 @@ export const TrainingPage: React.FC = () => {
               }}
             />
           ) : currentLesson && currentModule ? (
-            <div className="container mx-auto px-4 md:px-12 py-6 md:py-10 max-w-5xl pb-28 md:pb-0">
+            <div className={`container mx-auto px-4 md:px-12 py-6 md:py-10 max-w-5xl ${
+              // Większy dolny padding, gdy mamy przyklejony pasek nawigacji (mobile zawsze, desktop w trybie standalone),
+              // żeby przyciski „Wstecz/Dalej” nie zasłaniały treści lekcji.
+              standalone ? 'pb-40 md:pb-40' : 'pb-32 md:pb-10'
+            }`}>
               {/* Karta lekcji z lepszym designem */}
               <div className="bg-gradient-to-br from-white/5 via-white/5 to-white/3 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
                 {/* Nagłówek lekcji z gradientem */}
@@ -1843,7 +1877,7 @@ export const TrainingPage: React.FC = () => {
                     </div>
                     <span className="text-sm text-gray-400 min-w-0 truncate">{currentModule.title}</span>
                   </div>
-                  <h2 className="font-[Montserrat] text-3xl md:text-4xl font-bold text-white leading-tight">
+                  <h2 className="font-[Montserrat] text-xl md:text-2xl font-bold text-white leading-tight">
                     <span className="text-[#fee715]">{currentLesson.id}</span> {currentLesson.title}
                   </h2>
                 </div>
@@ -1854,7 +1888,7 @@ export const TrainingPage: React.FC = () => {
                   <section className="space-y-4">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                      <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                      <h3 className="font-[Montserrat] text-base font-bold text-white">
                         Wprowadzenie
                       </h3>
                     </div>
@@ -1871,7 +1905,7 @@ export const TrainingPage: React.FC = () => {
                   <section className="space-y-6">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                      <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                      <h3 className="font-[Montserrat] text-base font-bold text-white">
                         Dlaczego to ważne dla Twojej firmy
                       </h3>
                     </div>
@@ -2047,7 +2081,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-4">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             Jak wygląda ścieżka klienta w internecie (prosty schemat)
                           </h3>
                         </div>
@@ -2069,7 +2103,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             Automatyzacja – przykładowe scenariusze
                           </h3>
                         </div>
@@ -2142,7 +2176,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             Jak „dedukować", co jest nie tak – proste schematy
                           </h3>
                         </div>
@@ -2241,7 +2275,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             Prosty schemat decyzyjny – jak pracować z danymi
                           </h3>
                         </div>
@@ -2299,7 +2333,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-4">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             {currentLesson.roleDescriptionTitle || 'Jaką rolę pełnią media społecznościowe w strategii marketingowej'}
                           </h3>
                         </div>
@@ -2321,7 +2355,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-6">
                         <div className="flex items-center gap-3 mb-6">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             {currentLesson.id === '1.1' 
                               ? 'Najważniejsze elementy marketingu online – w pigułce'
                               : currentLesson.id === '1.3'
@@ -2602,7 +2636,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-6">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             Przykłady praktyczne
                           </h3>
                         </div>
@@ -2642,7 +2676,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-4">
                         <div className="flex items-center gap-3 mb-4">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             {currentLesson.additionalInfoTitle || 'Czego media społecznościowe NIE robią same z siebie'}
                           </h3>
                         </div>
@@ -2664,7 +2698,7 @@ export const TrainingPage: React.FC = () => {
                       <section className="space-y-4">
                         <div className="flex items-center gap-3 mb-6">
                           <div className="w-1 h-8 bg-gradient-to-b from-[#fee715] to-[#00C9A7] rounded-full"></div>
-                          <h3 className="font-[Montserrat] text-2xl font-bold text-white">
+                          <h3 className="font-[Montserrat] text-base font-bold text-white">
                             Prosta checklista przed startem kampanii
                           </h3>
                         </div>
@@ -3264,14 +3298,14 @@ export const TrainingPage: React.FC = () => {
                                                     disabled={quizSubTaskResults[subTask.id] === 'pending' || quizSubTaskResults[subTask.id] === 'approved'}
                                                     className="sr-only"
                                                   />
-                                                  <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
+                                                  <div className={`w-5 h-5 rounded-[4px] border flex items-center justify-center transition-colors duration-200 ${
                                                     isChecked
-                                                      ? 'bg-gradient-to-br from-[#fee715] to-[#00C9A7] border-[#fee715] shadow-lg shadow-[#fee715]/40'
-                                                      : 'bg-white/10 border-white/30 group-hover:border-[#fee715]/50'
+                                                      ? 'border-[#fee715]/50 bg-[#fee715]/12'
+                                                      : 'border-white/20 bg-white/5 group-hover:border-[#fee715]/40'
                                                   }`}>
                                                     {isChecked && (
-                                                      <svg className="w-4 h-4 text-[#101820] font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                      <svg className="w-3 h-3 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M5 13l4 4L19 7" />
                                                       </svg>
                                                     )}
                                                   </div>
@@ -3819,9 +3853,9 @@ export const TrainingPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile: sticky pasek nawigacji (bez wpływu na desktop) */}
+      {/* Sticky pasek nawigacji Wstecz/Dalej: na mobile zawsze, na desktop gdy standalone (brak sidebara) */}
       {currentLessonId !== 'completion' && currentLesson && currentModule && (
-        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-[#101820]/95 backdrop-blur-xl border-t border-white/10">
+        <div className={`${standalone ? '' : 'md:hidden '}fixed inset-x-0 bottom-0 z-40 bg-[#101820]/95 backdrop-blur-xl border-t border-white/10`}>
           <div className="px-4 py-3 flex items-center justify-between gap-3">
             <button
               onClick={handlePrevious}
@@ -3883,7 +3917,7 @@ export const TrainingPage: React.FC = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center px-4">
           <div className="bg-[#18232F] border border-white/10 rounded-xl p-6 md:p-8 max-w-md w-full shadow-2xl">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="font-[Montserrat] text-2xl font-bold text-white">
+              <h2 className="font-[Montserrat] text-base font-bold text-white">
                 Zmień hasło
               </h2>
               <button
