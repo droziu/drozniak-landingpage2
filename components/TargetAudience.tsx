@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useFadeIn } from '../hooks/useFadeIn';
 
 const CheckIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
@@ -14,7 +15,7 @@ const XIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
 );
 
 const TargetAudienceItem: React.FC<{ 
-  text: string; 
+  text: React.ReactNode; 
   isPositive: boolean; 
   children: React.ReactNode;
 }> = ({ text, isPositive, children }) => {
@@ -110,7 +111,15 @@ export const TargetAudience: React.FC = () => {
                 <XIcon />
               </TargetAudienceItem>
               
-              <TargetAudienceItem isPositive={false} text="Twój biznes generuje już ponad 1 mln zł przychodu rocznie. Na tym poziomie największe efekty daje optymalizacja procesów w dużej skali — to nie jest moja specjalizacja.">
+              <TargetAudienceItem isPositive={false} text={
+                <>
+                  Jeśli prowadzisz działalność, która ma rozbudowany dział marketingu lub zatrudniasz więcej niż 10 pracowników, to ta oferta nie jest dla Ciebie. W takiej sytuacji zapraszam do{' '}
+                  <Link to="/kontakt" className="text-[#fee715] hover:text-[#00C9A7] underline transition-colors duration-300">
+                    kontaktu indywidualnego
+                  </Link>
+                  , aby opisać swoją sytuację.
+                </>
+              }>
                 <XIcon />
               </TargetAudienceItem>
               

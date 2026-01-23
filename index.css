@@ -16,7 +16,7 @@
   animation: shimmer 2s infinite;
 }
 
-/* Override React Flow styles - upewnij się że canvas ma ciemne tło */
+/* Override React Flow styles - upewnij się że sidebar ma ciemne tło */
 .react-flow__container {
   background-color: #101820 !important;
 }
@@ -24,26 +24,4 @@
 /* Upewnij się że sidebar nie ma białego tła */
 .react-flow__sidebar {
   background-color: #0a0f14 !important;
-}
-
-/* Override dla sidebaru w FunnelBuilder */
-.funnel-builder-sidebar {
-  background-color: #0a0f14 !important;
-  background: #0a0f14 !important;
-}
-
-/* Tryb zaznaczania: kursor celownik na canvasie */
-.react-flow.funnel-select-mode .react-flow__pane {
-  cursor: crosshair;
-}
-
-/* Ukryj natywne spinnerki w polach liczbowych */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
 }
