@@ -1,0 +1,3 @@
+module.exports=[71999,a=>{"use strict";function b({children:a}){return a}a.s(["default",()=>b,"metadata",0,{title:"Strony internetowe dla freelancerów",description:"Strona, która sprzedaje Twoje usługi, a nie tylko ładnie wygląda. Strony internetowe dla freelancerów projektowane pod konwersję.",robots:{index:!0,follow:!0},alternates:{canonical:"https://drozniak.pl/freelancer"}}])}];
+
+//# sourceMappingURL=strony_www_drozniak-landingpage_app_freelancer_layout_tsx_cba6f7ac._.js.map

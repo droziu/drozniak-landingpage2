@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/stanislawdrozniak/strony_www/drozniak-landingpage/app/kontakt/layout.tsx"],"sourcesContent":["import type { Metadata } from 'next';\n\nexport const metadata: Metadata = {\n  title: 'Kontakt - System pozyskiwania klientów i strony WWW',\n  description: 'Skontaktuj się w sprawie systemu pozyskiwania klientów, strony internetowej dla małej firmy lub szkolenia z AI w marketingu. Odpowiadam w 24 godziny.',\n  keywords: ['kontakt', 'system pozyskiwania klientów', 'strony www dla małych firm', 'szkolenia AI'],\n  openGraph: {\n    title: 'Kontakt - System pozyskiwania klientów i strony WWW',\n    description: 'Skontaktuj się w sprawie systemu pozyskiwania klientów, strony internetowej lub szkolenia z AI w marketingu.',\n    url: 'https://drozniak.pl/kontakt',\n  },\n  alternates: {\n    canonical: 'https://drozniak.pl/kontakt',\n  },\n};\n\nexport default function ContactLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return children;\n}\n"],"names":[],"mappings":";;;;;;AAEO,MAAM,WAAqB;IAChC,OAAO;IACP,aAAa;IACb,UAAU;QAAC;QAAW;QAAgC;QAA8B;KAAe;IACnG,WAAW;QACT,OAAO;QACP,aAAa;QACb,KAAK;IACP;IACA,YAAY;QACV,WAAW;IACb;AACF;AAEe,SAAS,cAAc,EACpC,QAAQ,EAGT;IACC,OAAO;AACT"}}]
+}

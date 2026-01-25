@@ -1,0 +1,556 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Animacja shimmer dla progress bara */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Override React Flow styles - upewnij się że sidebar ma ciemne tło */
+.react-flow__container {
+  background-color: #101820 !important;
+}
+
+/* Upewnij się że sidebar nie ma białego tła */
+.react-flow__sidebar {
+  background-color: #0a0f14 !important;
+}
+
+/* Blog styles */
+.blog-content {
+  line-height: 1.9;
+  color: #101820;
+}
+
+.blog-content * {
+  color: inherit;
+}
+
+/* Większe odstępy między wszystkimi elementami */
+.blog-content > * {
+  margin-bottom: 1.5rem;
+}
+
+.blog-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.blog-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.blog-content ul li {
+  margin-bottom: 0.75rem;
+}
+
+/* Usuń domyślne bullet points - ikony są dodawane przez HTML w blokach highlight */
+.blog-content ul li::before {
+  content: none;
+}
+
+/* Dla list w blokach highlight z ikonami - nie dodawaj dodatkowych elementów */
+.blog-content ul li.flex::before {
+  content: none;
+}
+
+/* Style dla list z ikonami (będzie obsługiwane przez custom HTML) */
+.blog-content .icon-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.blog-content .icon-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.blog-content .icon-list li::before {
+  content: none;
+}
+
+/* Lepsze odstępy dla nagłówków w artykule - równe padding góra/dół */
+.blog-content h2 {
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+.blog-content h3 {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+/* Więcej miejsca na obrazy i ikony */
+.blog-content figure {
+  margin: 4rem 0;
+}
+
+.blog-content img {
+  border-radius: 0.5rem;
+}
+
+/* Style dla list w blokach highlight z ikonami */
+.blog-content ul li.flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.blog-content ul li.flex svg {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+/* Lepsze odstępy między paragrafami */
+.blog-content p {
+  margin-bottom: 1.5rem;
+}
+
+/* Border dla separatorów - grubsze */
+.border-t-3 {
+  border-top-width: 3px;
+}
+
+/* Zaznaczenie tekstu w żółtym prostokącie - ciemny granat zamiast żółtego */
+.bg-\[#fee715\] ::selection {
+  background-color: #101820;
+  color: white;
+}
+
+.bg-\[#fee715\] ::-moz-selection {
+  background-color: #101820;
+  color: white;
+}
+
+/* Style dla linków z highlightem w blogu - czarny tekst, żółte tło, podkreślenie */
+.blog-content a.link-yellow {
+  color: #101820 !important;
+  background-color: #fee715 !important;
+  text-decoration: underline !important;
+  text-decoration-color: #101820 !important;
+  font-weight: 600 !important;
+  padding: 2px 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.blog-content a.link-yellow:hover {
+  color: #101820 !important;
+  background-color: #fee715 !important;
+  text-decoration: underline !important;
+  text-decoration-color: #101820 !important;
+  opacity: 0.9 !important;
+}
+
+/* Reset margin i padding dla h2 w bloku heading (żółty boksik) - naturalna szerokość, centrowanie jako element */
+.bg-\[#fee715\] h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+/* Reset margin i padding dla h3 w blokach highlight - symetryczny padding */
+.bg-gray-50 h3 {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Reset margin i padding dla h2 w numerowanych sekcjach - wyśrodkowanie wertykalne */
+.h-14 h2, .h-16 h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+/* Custom scrollbar for a more premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #101820;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fee715;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffd600;
+}
+
+/* Scrolling animation for companies list */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Auto-scroll animation for testimonials - CSS transform (desktop only) */
+@keyframes testimonialsScroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@media (min-width: 768px) {
+  .testimonials-scroll-desktop {
+    animation: testimonialsScroll 30s linear infinite;
+    will-change: transform;
+  }
+  
+  .testimonials-scroll-desktop.paused {
+    animation-play-state: paused;
+  }
+}
+
+/* Mobile: no animation, manual scroll only */
+@media (max-width: 767px) {
+  .testimonials-scroll-desktop {
+    animation: none;
+  }
+}
+
+/* Hide scrollbar on mobile for testimonials */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Glass effect for testimonials */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom text selection colors */
+::selection {
+  background-color: #fee715;
+  color: #101820;
+}
+
+/* Premium Benefits Section Styles */
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, rgba(16, 24, 32, 1) 0%, rgba(16, 24, 32, 0.95) 50%, rgba(16, 24, 32, 1) 100%);
+}
+
+/* Color morphing effect for smooth section transitions */
+.color-morph-bottom {
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    transparent 40%, 
+    rgba(16, 24, 32, 0.05) 55%, 
+    rgba(16, 24, 32, 0.15) 65%, 
+    rgba(13, 18, 23, 0.25) 75%, 
+    rgba(13, 18, 23, 0.4) 85%, 
+    rgba(10, 15, 20, 0.7) 92%, 
+    rgba(10, 15, 20, 1) 100%
+  );
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Premium Card Styles */
+.card-premium {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(254, 231, 21, 0.02) 0%, rgba(0, 201, 167, 0.02) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+}
+
+.card-premium:hover::before {
+  opacity: 1;
+}
+
+.card-premium:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(254, 231, 21, 0.2);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(254, 231, 21, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.card-premium:focus {
+  outline: 2px solid rgba(254, 231, 21, 0.5);
+  outline-offset: 2px;
+}
+
+.card-premium:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(254, 231, 21, 0.1);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.card-premium:hover .icon-wrapper {
+  background: rgba(254, 231, 21, 0.15);
+  transform: scale(1.05);
+}
+
+.card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  transition: all 0.3s ease;
+}
+
+.card-premium:hover .card-title {
+  background: linear-gradient(135deg, #ffffff 0%, rgba(254, 231, 21, 0.8) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Staggered animation for cards */
+.card-premium {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardReveal 0.6s ease-out forwards;
+}
+
+.card-premium:nth-child(1) { animation-delay: 0.1s; }
+.card-premium:nth-child(2) { animation-delay: 0.2s; }
+.card-premium:nth-child(3) { animation-delay: 0.3s; }
+.card-premium:nth-child(4) { animation-delay: 0.4s; }
+.card-premium:nth-child(5) { animation-delay: 0.5s; }
+.card-premium:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes cardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .card-premium {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .card-premium:hover {
+    transform: none;
+  }
+  
+  .animate-gradient {
+    animation: none;
+  }
+}
+
+/* Fade and slide up animations for hero transition */
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideUpDelay {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide-up {
+  animation: fadeSlideUp 1s ease-out 0.5s forwards;
+}
+
+.animate-fade-slide-up-delay {
+  animation: fadeSlideUpDelay 1s ease-out 1s forwards;
+}
+
+/* Conversation FAQ - Messenger Style */
+.conversation-block {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: conversationSlideIn 0.8s ease-out forwards;
+}
+
+.conversation-block:nth-child(1) { animation-delay: 0.2s; }
+.conversation-block:nth-child(2) { animation-delay: 0.4s; }
+.conversation-block:nth-child(3) { animation-delay: 0.6s; }
+.conversation-block:nth-child(4) { animation-delay: 0.8s; }
+.conversation-block:nth-child(5) { animation-delay: 1.0s; }
+.conversation-block:nth-child(6) { animation-delay: 1.2s; }
+
+@keyframes conversationSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Client Message */
+.client-message {
+  max-width: 70%;
+}
+
+.client-bubble {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px 18px 18px 4px;
+  padding: 12px 16px;
+  backdrop-filter: blur(10px);
+}
+
+/* My Message */
+.my-message {
+  max-width: 75%;
+}
+
+.my-bubble {
+  background: linear-gradient(135deg, rgba(254, 231, 21, 0.15) 0%, rgba(0, 201, 167, 0.15) 100%);
+  border: 1px solid rgba(254, 231, 21, 0.2);
+  border-radius: 18px 18px 4px 18px;
+  padding: 12px 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(254, 231, 21, 0.1);
+}
+
+/* Typing Animation */
+.typing-indicator {
+  animation: fadeIn 1s ease-out 0.5s forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+    
+::-moz-selection {
+  background-color: #fee715;
+  color: #101820;
+}
+
+/* For yellow/white text, use dark selection */
+[class*="text-[#fee715]"]::selection,
+.text-white::selection,
+.text-gray-200::selection,
+.text-gray-300::selection {
+  background-color: #101820;
+  color: #fee715;
+}
+
+[class*="text-[#fee715]"]::-moz-selection,
+.text-white::-moz-selection,
+.text-gray-200::-moz-selection,
+.text-gray-300::-moz-selection {
+  background-color: #101820;
+  color: #fee715;
+}

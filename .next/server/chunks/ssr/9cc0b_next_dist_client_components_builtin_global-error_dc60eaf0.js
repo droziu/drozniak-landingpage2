@@ -1,0 +1,3 @@
+module.exports=[51459,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(57309);a.n(d("[project]/strony_www/drozniak-landingpage/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},95019,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(57309);a.n(d("[project]/strony_www/drozniak-landingpage/node_modules/next/dist/client/components/builtin/global-error.js"))},17146,a=>{"use strict";a.i(51459);var b=a.i(95019);a.n(b)}];
+
+//# sourceMappingURL=9cc0b_next_dist_client_components_builtin_global-error_dc60eaf0.js.map

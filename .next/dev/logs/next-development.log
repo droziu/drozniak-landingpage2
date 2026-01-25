@@ -1,0 +1,23 @@
+[00:00:00.818] Server  LOG     ✓ Ready in 576ms
+[00:00:12.662] Server  WARN    Error: Route "/blog/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:00:12.681] Server  WARN    Error: Route "/blog/[slug]" used `params.slug`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:00:24.211] Server  LOG     ✓ Compiled in 164ms
+[00:00:25.067] Server  LOG     ✓ Compiled in 146ms
+[00:01:29.073] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:52.329] Server  LOG     ✓ Compiled in 292ms
+[00:06:44.634] Server  LOG     ✓ Compiled in 194ms
+[00:07:56.409] Server  LOG     ✓ Compiled in 153ms
+[00:13:58.758] Server  LOG     ✓ Compiled in 93ms
+[00:14:00.159] Server  LOG     ✓ Compiled in 323ms
+[00:14:55.040] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:14:56.467] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:02.505] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:15:23.112] Browser ERROR   uncaughtError: TypeError: Cannot destructure property 'basename' of '__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__.useContext(...)' as it is null.
+[00:16:05.500] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:16:05.519] Server  LOG     ✓ Compiled in 170ms
+[00:16:06.256] Server  ERROR   ⨯ TypeError: Cannot destructure property 'basename' of '{imported module ./stronywww/drozniak-landingpage/nodemodules/next/dist/server/route-modules/app-page/vendored/ssr/react.js}.useContext(...)' as it is null.
+[00:16:06.398] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:06.571] Browser ERROR   uncaughtError: TypeError: Cannot destructure property 'basename' of '__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__.useContext(...)' as it is null.
+[00:16:15.603] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:16:15.628] Server  LOG     ✓ Compiled in 158ms
+[00:16:16.074] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

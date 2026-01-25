@@ -1,0 +1,3 @@
+module.exports=[60493,a=>{"use strict";function b({children:a}){return a}a.s(["default",()=>b,"metadata",0,{title:"Doradztwo Biznesowe oraz Doboru Narzędzi AI - Diagnoza firmy",description:"Narzędzie do diagnozy biznesu dla firm z branży hotelowo-turystycznej. Przeanalizuj sytuację firmy, marketing oraz potencjał wykorzystania nowych technologii.",robots:{index:!1,follow:!1}}])}];
+
+//# sourceMappingURL=strony_www_drozniak-landingpage_app_doradztwo-hotel-irys_layout_tsx_5a8e2033._.js.map
