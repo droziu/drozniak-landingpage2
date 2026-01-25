@@ -15,7 +15,7 @@
   ],
   "redirects": [
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "has": [
         {
           "type": "header",
@@ -23,23 +23,23 @@
           "value": "http"
         }
       ],
-      "destination": "https://drozniak.pl/:1",
+      "destination": "https://drozniak.pl/:path*",
       "permanent": true
     },
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "has": [
         {
           "type": "host",
           "value": "www.drozniak.pl"
         }
       ],
-      "destination": "https://drozniak.pl/:1",
+      "destination": "https://drozniak.pl/:path*",
       "permanent": true
     },
     {
-      "source": "/(.+)/$",
-      "destination": "https://drozniak.pl/:1",
+      "source": "/:path+/",
+      "destination": "https://drozniak.pl/:path",
       "permanent": true
     }
   ],
