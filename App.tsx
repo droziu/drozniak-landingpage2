@@ -25,6 +25,7 @@ import { CookieConsent } from './components/CookieConsent';
 import { ScrollToTop } from './components/ScrollToTop';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
 import { SchemaMarkup } from './components/SchemaMarkup';
+import { SEOHead } from './components/SEOHead';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { LoadingState } from './components/LoadingState';
 import { TrainingPage } from './components/TrainingPage';
@@ -85,6 +86,7 @@ const AppContent: React.FC<{
 
   return (
     <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
+      {!isPanelRoute && <SEOHead />}
       {!isPanelRoute && <SchemaMarkup />}
       {!isPanelRoute && <ScrollToTop />}
       {!isPanelRoute && <Header />}

@@ -27,6 +27,9 @@ export const AIStrategyPage: React.FC<AIStrategyPageProps> = ({ cookiePreference
     keywords: 'system pozyskiwania klientów, system pozyskiwania klientów dla małych firm, jak pozyskiwać klientów jako freelancer, jak zbudować system pozyskiwania klientów, pozyskiwanie klientów z internetu',
     ogTitle: 'System pozyskiwania klientów dla małych firm i freelancerów',
     ogDescription: 'System pozyskiwania klientów dla małych firm. Strona www + narzędzia + AI. Sprawdź, jak zbudować system pozyskiwania klientów.',
+    ogImage: '/images/Drozniak_Zdjecie_Suit_2.jpg',
+    ogType: 'website',
+    canonical: 'https://drozniak.pl/system',
   });
 
   return (

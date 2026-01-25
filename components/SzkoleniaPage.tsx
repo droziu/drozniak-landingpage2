@@ -9,6 +9,9 @@ export const SzkoleniaPage: React.FC = () => {
     keywords: 'szkolenia z AI w marketingu, AI w marketingu małej firmy, automatyzacja marketingu w małej firmie, szkolenia AI w marketingu, AI w marketingu dla małych firm',
     ogTitle: 'Szkolenia z AI w marketingu dla małych firm',
     ogDescription: 'Szkolenia z AI w marketingu dla małych firm. Praktyczne zastosowania AI i automatyzacji marketingu w małej firmie.',
+    ogImage: '/images/Drozniak_Zdjecie_Suit_2.jpg',
+    ogType: 'website',
+    canonical: 'https://drozniak.pl/szkolenia',
   });
 
   // Reset scroll position to top on mount

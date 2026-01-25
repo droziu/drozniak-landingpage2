@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useBlogPosts } from '../../hooks/useBlogPosts';
+import { useSEO } from '../../hooks/useSEO';
 import { 
   MagnifyingGlass, 
   ArrowRight,
@@ -32,6 +33,18 @@ const blogTopics = [
 export const BlogList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [topicsExpanded, setTopicsExpanded] = useState(false);
+  
+  // SEO
+  useSEO({
+    title: 'Blog o marketingu dla małych firm i freelancerów | Stanisław Drożniak',
+    description: 'Blog o marketingu dla małych firm i freelancerów. Praktyczne porady o pozyskiwaniu klientów, stronach WWW, reklamach, SEO i AI w marketingu.',
+    keywords: 'blog marketing, marketing małych firm, pozyskiwanie klientów, strony www, reklamy, SEO, AI w marketingu',
+    ogTitle: 'Blog o marketingu dla małych firm i freelancerów',
+    ogDescription: 'Praktyczne porady o marketingu dla małych firm: pozyskiwanie klientów, strony WWW, reklamy, SEO i AI.',
+    ogImage: '/images/Drozniak_Zdjecie_Suit_2.jpg',
+    ogType: 'website',
+    canonical: 'https://drozniak.pl/blog',
+  });
   
   const { posts, loading: postsLoading, error } = useBlogPosts({
     search: searchQuery || undefined,

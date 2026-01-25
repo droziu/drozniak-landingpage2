@@ -9,6 +9,9 @@ export const MainPage: React.FC = () => {
     keywords: 'system pozyskiwania klientów, strony internetowe dla małych firm, strony www dla freelancerów, AI w marketingu małej firmy, automatyzacja marketingu, strategia marketingowa dla małych firm',
     ogTitle: 'System pozyskiwania klientów i strony WWW dla małych firm',
     ogDescription: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Systemy sprzedażowe, strony WWW i szkolenia z AI.',
+    ogImage: '/images/Drozniak_Zdjecie_Suit_2.jpg',
+    ogType: 'website',
+    canonical: 'https://drozniak.pl',
   });
 
   return (

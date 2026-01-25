@@ -28,6 +28,9 @@ export const StronyWWWPage: React.FC = () => {
     keywords: 'strony internetowe dla małych firm, strony www dla freelancerów, strona www dla trenera, strona internetowa dla dietetyka, strona www dla zespołu muzycznego, strony www dla małych firm',
     ogTitle: 'Strony internetowe dla małych firm i freelancerów',
     ogDescription: 'Strony www dla małych firm i freelancerów. Szybkie, nowoczesne strony projektowane pod pozyskiwanie klientów.',
+    ogImage: '/images/Drozniak_Zdjecie_Suit_2.jpg',
+    ogType: 'website',
+    canonical: 'https://drozniak.pl/strony-www',
   });
 
   const [expandedTech, setExpandedTech] = useState(false);

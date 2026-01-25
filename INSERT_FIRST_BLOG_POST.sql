@@ -1238,7 +1238,7 @@ BEGIN
     v_category_id,
     v_author_id,
     'Jak zdobyć klientów w małej firmie: prosty system w 4 krokach | Stanisław Drozniak',
-    'Praktyczny przewodnik po marketingu dla małych firm i freelancerów. Dowiedz się, jak zbudować system pozyskiwania klientów w 4 krokach: oferta, strona, pozyskiwanie i sprzedaż.',
+    'Jak zdobyć klientów w małej firmie? Zobacz prosty proces: oferta, strona WWW, pozyskiwanie i sprzedaż. Sprawdź, gdzie uciekają klienci i co poprawić.',
     ARRAY['marketing', 'pozyskiwanie klientów', 'mała firma', 'freelancer', 'sprzedaż', 'reklamy', 'marketing dla małych firm'],
     ARRAY['marketing', 'pozyskiwanie-klientów', 'mała-firma', 'freelancer', 'sprzedaż', 'reklamy'],
     'standard'

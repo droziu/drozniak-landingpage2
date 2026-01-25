@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const SchemaMarkup: React.FC = () => {
+  const location = useLocation();
+  const BASE_URL = 'https://drozniak.pl';
+
   useEffect(() => {
     // Organization Schema
     const organizationSchema = {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Stanisław Drożniak",
-      "url": "https://drozniak.com",
-      "logo": "https://drozniak.com/images/DROZNIAK_LOGO.svg",
+      "url": BASE_URL,
+      "logo": `${BASE_URL}/images/DROZNIAK_LOGO.svg`,
       "description": "System pozyskiwania klientów i strony internetowe dla małych firm i freelancerów. Szkolenia z AI w marketingu.",
       "sameAs": [
         "https://www.linkedin.com/in/stanislawdrozniak"
@@ -27,13 +31,34 @@ export const SchemaMarkup: React.FC = () => {
       "@type": "Person",
       "name": "Stanisław Drożniak",
       "jobTitle": "Marketing Specialist & Web Developer",
-      "url": "https://drozniak.com",
+      "url": BASE_URL,
       "email": "stanislaw@drozniak.com",
       "telephone": "+48-792-491-196",
       "sameAs": [
         "https://www.linkedin.com/in/stanislawdrozniak"
       ],
       "description": "Specjalista od systemów pozyskiwania klientów, stron internetowych dla małych firm i szkoleń z AI w marketingu."
+    };
+
+    // WebSite Schema
+    const websiteSchema = {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Stanisław Drożniak - Marketing i Strony WWW",
+      "url": BASE_URL,
+      "description": "System pozyskiwania klientów i strony internetowe dla małych firm i freelancerów",
+      "publisher": {
+        "@type": "Person",
+        "name": "Stanisław Drożniak"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `${BASE_URL}/blog?search={search_term_string}`
+        },
+        "query-input": "required name=search_term_string"
+      }
     };
 
     // Service Schema
@@ -99,17 +124,18 @@ export const SchemaMarkup: React.FC = () => {
     addSchema(organizationSchema, 'schema-organization');
     addSchema(personSchema, 'schema-person');
     addSchema(serviceSchema, 'schema-service');
+    addSchema(websiteSchema, 'schema-website');
 
     // Cleanup
     return () => {
-      ['schema-organization', 'schema-person', 'schema-service'].forEach(id => {
+      ['schema-organization', 'schema-person', 'schema-service', 'schema-website'].forEach(id => {
         const element = document.getElementById(id);
         if (element) {
           element.remove();
         }
       });
     };
-  }, []);
+  }, [location.pathname]);
 
   return null;
 };

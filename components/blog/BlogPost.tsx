@@ -64,9 +64,44 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
   switch (block.type) {
     case 'text':
       // Sprawdź czy tekst zawiera nagłówki h2/h3 - jeśli tak, zastosuj specjalne style
-      const textContent = block.data.text || '';
+      let textContent = block.data.text || '';
       const hasH2 = textContent.includes('<h2>') || textContent.includes('<h2 ');
       const hasH3 = textContent.includes('<h3>') || textContent.includes('<h3 ');
+      
+      // Dodaj ID do nagłówków h2 i h3 w tekście (jeśli nie mają już ID)
+      if (hasH2 || hasH3) {
+        // Dodaj ID do h2 (używając block.id + '-h2-' + index)
+        let h2Index = 0;
+        textContent = textContent.replace(/<h2([^>]*)>/gi, (match, attrs) => {
+          if (!attrs.includes('id=')) {
+            const id = `${block.id}-h2-${h2Index++}`;
+            return `<h2 id="${id}" class="scroll-mt-20"${attrs}>`;
+          }
+          // Jeśli już ma ID, dodaj tylko klasę scroll-mt-20
+          if (!attrs.includes('class=')) {
+            return `<h2 class="scroll-mt-20"${attrs}>`;
+          } else if (!attrs.includes('scroll-mt-20')) {
+            return `<h2${attrs.replace(/class="([^"]*)"/, 'class="$1 scroll-mt-20"')}>`;
+          }
+          return match;
+        });
+        
+        // Dodaj ID do h3 (używając block.id + '-h3-' + index)
+        let h3Index = 0;
+        textContent = textContent.replace(/<h3([^>]*)>/gi, (match, attrs) => {
+          if (!attrs.includes('id=')) {
+            const id = `${block.id}-h3-${h3Index++}`;
+            return `<h3 id="${id}" class="scroll-mt-20"${attrs}>`;
+          }
+          // Jeśli już ma ID, dodaj tylko klasę scroll-mt-20
+          if (!attrs.includes('class=')) {
+            return `<h3 class="scroll-mt-20"${attrs}>`;
+          } else if (!attrs.includes('scroll-mt-20')) {
+            return `<h3${attrs.replace(/class="([^"]*)"/, 'class="$1 scroll-mt-20"')}>`;
+          }
+          return match;
+        });
+      }
       
       return (
         <div
@@ -236,7 +271,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
     case 'heading':
       // Nagłówek w żółtym boksie (sharp edges, ciemny tekst, bez outline) - pasek z optycznym wyśrodkowaniem
       return (
-        <div className="my-12 md:my-16">
+        <div id={block.id} className="my-12 md:my-16 scroll-mt-20">
           <div className="max-w-6xl mx-auto">
             <div className="bg-[#fee715] px-10 md:px-16 lg:px-20 flex items-center justify-center min-h-[60px] md:min-h-[70px] py-6 md:py-7">
               <h2 
@@ -251,7 +286,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
     case 'numbered-section':
       // Numerowana sekcja z kwadratem i numerem - clean design z jasnym tłem
       return (
-        <div className="my-12 md:my-16">
+        <div id={block.id} className="my-12 md:my-16 scroll-mt-20">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-4 md:gap-6">
               {/* Kwadrat z numerem - bez outline */}
@@ -293,6 +328,9 @@ export const BlogPost: React.FC = () => {
   useEffect(() => {
     if (!post) return;
 
+    const BASE_URL = 'https://drozniak.pl';
+    const canonicalUrl = `${BASE_URL}/blog/${post.slug}`;
+
     // Update document title
     document.title = post.meta_title || post.title;
 
@@ -316,11 +354,63 @@ export const BlogPost: React.FC = () => {
       tag.setAttribute('content', content);
     };
 
+    // Update Twitter Card tags
+    const updateTwitterTag = (name: string, content: string) => {
+      let twitterTag = document.querySelector(`meta[name="${name}"]`);
+      if (!twitterTag) {
+        twitterTag = document.createElement('meta');
+        twitterTag.setAttribute('name', name);
+        document.head.appendChild(twitterTag);
+      }
+      twitterTag.setAttribute('content', content);
+    };
+
+    // Open Graph
     updateOGTag('og:title', post.meta_title || post.title);
     updateOGTag('og:description', post.meta_description || post.excerpt || '');
-    updateOGTag('og:image', post.og_image_url || post.featured_image_url || '');
+    const ogImage = post.og_image_url || post.featured_image_url || '';
+    if (ogImage) {
+      const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
+      updateOGTag('og:image', ogImageUrl);
+      updateOGTag('og:image:width', '1200');
+      updateOGTag('og:image:height', '630');
+    }
     updateOGTag('og:type', 'article');
-    updateOGTag('og:url', window.location.href);
+    updateOGTag('og:url', canonicalUrl);
+
+    // Article specific OG tags
+    if (post.published_at) {
+      updateOGTag('article:published_time', new Date(post.published_at).toISOString());
+    }
+    if (post.updated_at) {
+      updateOGTag('article:modified_time', new Date(post.updated_at).toISOString());
+    }
+    if (post.category_name) {
+      updateOGTag('article:section', post.category_name);
+    }
+    if (post.tags && post.tags.length > 0) {
+      post.tags.forEach(tag => {
+        updateOGTag('article:tag', tag);
+      });
+    }
+
+    // Twitter Cards
+    updateTwitterTag('twitter:card', 'summary_large_image');
+    updateTwitterTag('twitter:title', post.meta_title || post.title);
+    updateTwitterTag('twitter:description', post.meta_description || post.excerpt || '');
+    if (ogImage) {
+      const twitterImageUrl = ogImage.startsWith('http') ? ogImage : `${BASE_URL}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
+      updateTwitterTag('twitter:image', twitterImageUrl);
+    }
+
+    // Canonical URL
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', canonicalUrl);
 
     // Preload hero image jeśli istnieje
     if (post.featured_image_url) {
@@ -335,6 +425,99 @@ export const BlogPost: React.FC = () => {
       preloadLink.setAttribute('href', getDesktopImageUrl(post.featured_image_url));
     }
 
+    // Schema.org JSON-LD: BlogPosting
+    const blogPostingSchema = {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "description": post.meta_description || post.excerpt || '',
+      "url": canonicalUrl,
+      "datePublished": post.published_at ? new Date(post.published_at).toISOString() : undefined,
+      "dateModified": post.updated_at ? new Date(post.updated_at).toISOString() : undefined,
+      "author": {
+        "@type": "Person",
+        "name": "Stanisław Drożniak",
+        "url": BASE_URL,
+        "sameAs": [
+          "https://www.linkedin.com/in/stanislawdrozniak"
+        ]
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Stanisław Drożniak",
+        "url": BASE_URL,
+        "sameAs": [
+          "https://www.linkedin.com/in/stanislawdrozniak"
+        ]
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": canonicalUrl
+      },
+      ...(post.featured_image_url && {
+        "image": {
+          "@type": "ImageObject",
+          "url": post.featured_image_url.startsWith('http') ? post.featured_image_url : `${BASE_URL}${post.featured_image_url.startsWith('/') ? '' : '/'}${post.featured_image_url}`,
+          "width": 1200,
+          "height": 630
+        }
+      }),
+      ...(post.category_name && {
+        "articleSection": post.category_name
+      }),
+      ...(post.tags && post.tags.length > 0 && {
+        "keywords": post.tags.join(', ')
+      })
+    };
+
+    // Schema.org JSON-LD: BreadcrumbList
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Strona główna",
+          "item": BASE_URL
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": `${BASE_URL}/blog`
+        },
+        ...(post.category_name ? [{
+          "@type": "ListItem",
+          "position": 3,
+          "name": post.category_name,
+          "item": `${BASE_URL}/blog/kategoria/${post.category_slug}`
+        }] : []),
+        {
+          "@type": "ListItem",
+          "position": post.category_name ? 4 : 3,
+          "name": post.title,
+          "item": canonicalUrl
+        }
+      ]
+    };
+
+    // Add schemas to page
+    const addSchema = (schema: object, id: string) => {
+      const existing = document.getElementById(id);
+      if (existing) {
+        existing.remove();
+      }
+      const script = document.createElement('script');
+      script.id = id;
+      script.type = 'application/ld+json';
+      script.text = JSON.stringify(schema);
+      document.head.appendChild(script);
+    };
+
+    addSchema(blogPostingSchema, 'schema-blogposting');
+    addSchema(breadcrumbSchema, 'schema-breadcrumb');
+
     // Cleanup function
     return () => {
       document.title = 'Stanisław Drozniak - Marketing, Strony WWW, AI';
@@ -343,6 +526,13 @@ export const BlogPost: React.FC = () => {
       if (preloadLink) {
         preloadLink.remove();
       }
+      // Usuń schemas
+      ['schema-blogposting', 'schema-breadcrumb'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.remove();
+        }
+      });
     };
   }, [post]);
 
@@ -488,6 +678,77 @@ export const BlogPost: React.FC = () => {
 
           {/* Separator */}
           <div className="w-40 h-4 bg-[#fee715] mb-20 md:mb-24"></div>
+
+          {/* Spis treści */}
+          {(() => {
+            // Funkcja do generowania spisu treści - tylko główne sekcje (numbered-section) i podsekcje (h3)
+            const generateTableOfContents = (blocks: ContentBlock[]) => {
+              const tocItems: Array<{ id: string; title: string; type: 'numbered-section' | 'h3'; number?: number; parentId?: string }> = [];
+              let currentParentId: string | null = null;
+              
+              blocks.forEach((block) => {
+                if (block.type === 'numbered-section' && block.data.text) {
+                  currentParentId = block.id;
+                  tocItems.push({
+                    id: block.id,
+                    title: block.data.text,
+                    type: 'numbered-section',
+                    number: block.data.number
+                  });
+                } else if (block.type === 'text' && block.data.text && currentParentId) {
+                  // Wyciągnij tylko h3 z bloków tekstowych (podsekcje)
+                  const h3Matches = block.data.text.matchAll(/<h3[^>]*>(.*?)<\/h3>/gi);
+                  let h3Index = 0;
+                  for (const match of h3Matches) {
+                    const cleanText = match[1].replace(/<[^>]*>/g, '').trim();
+                    if (cleanText) {
+                      tocItems.push({
+                        id: `${block.id}-h3-${h3Index++}`,
+                        title: cleanText,
+                        type: 'h3',
+                        parentId: currentParentId
+                      });
+                    }
+                  }
+                }
+              });
+              
+              return tocItems.length > 0 ? tocItems : null;
+            };
+
+            const tocItems = post.content?.blocks ? generateTableOfContents(post.content.blocks) : null;
+
+            if (!tocItems || tocItems.length === 0) return null;
+
+            return (
+              <div className="mb-16 md:mb-20 p-8 md:p-10 bg-gray-50 border-2 border-gray-200">
+                <h3 className="text-2xl md:text-3xl font-extrabold font-[Montserrat] text-[#101820] mb-6 md:mb-8 uppercase tracking-tight">
+                  Spis treści
+                </h3>
+                <nav className="space-y-1">
+                  {tocItems.map((item) => (
+                    <a
+                      key={item.id}
+                      href={`#${item.id}`}
+                      className={`block text-base md:text-lg text-[#101820] px-4 py-2 transition-all rounded ${
+                        item.type === 'h3' 
+                          ? 'ml-6 hover:bg-[#fee715]/20' 
+                          : 'font-semibold hover:bg-[#fee715]/20'
+                      }`}
+                    >
+                      {item.type === 'numbered-section' && item.number && (
+                        <span className="text-[#101820] font-extrabold mr-2">{item.number}.</span>
+                      )}
+                      {item.type === 'h3' && (
+                        <span className="text-gray-500 mr-2">•</span>
+                      )}
+                      {item.title}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            );
+          })()}
 
           {/* Bloki treści */}
           <div className="blog-content text-[#101820]">

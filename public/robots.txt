@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /panel/
+Disallow: /login
+Disallow: /profile
+Disallow: /p/
+Disallow: /o/
+
+Sitemap: https://drozniak.pl/sitemap.xml
