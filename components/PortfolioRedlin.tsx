@@ -52,7 +52,7 @@ export const PortfolioRedlin: React.FC = () => {
     },
     {
       title: 'Rozproszona informacja o koncertach',
-      description: 'Daty, ceny, lokalizacje — wszystko było w innych miejscach. Nie istniała logiczna, przejrzysta lista wydarzeń.',
+      description: 'Daty, ceny, lokalizacje - wszystko było w innych miejscach. Nie istniała logiczna, przejrzysta lista wydarzeń.',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -70,7 +70,7 @@ export const PortfolioRedlin: React.FC = () => {
     },
     {
       title: 'Przestarzały design',
-      description: 'Layout nie oddawał charakteru zespołu i jakości koncertów — wyglądał zbyt oldschoolowo.',
+      description: 'Layout nie oddawał charakteru zespołu i jakości koncertów - wyglądał zbyt oldschoolowo.',
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
@@ -186,10 +186,10 @@ export const PortfolioRedlin: React.FC = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8">
-              — case study: strona internetowa dla zespołu muzycznego z systemem sprzedaży biletów
+              - case study: strona internetowa dla zespołu muzycznego z systemem sprzedaży biletów
             </p>
             <p className="text-xl md:text-2xl font-semibold text-white max-w-3xl mx-auto leading-relaxed mb-12 md:mb-16">
-              <strong>Strona www dla zespołu muzycznego</strong> REDLIN — <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">szybsza, nowocześniejsza</span> i zaprojektowana pod sprzedaż biletów, promocję koncertów i budowanie społeczności fanów. Przykład kompleksowej <strong>strony internetowej dla zespołu muzycznego</strong>.
+              <strong>Strona www dla zespołu muzycznego</strong> REDLIN - <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">szybsza, nowocześniejsza</span> i zaprojektowana pod sprzedaż biletów, promocję koncertów i budowanie społeczności fanów. Przykład kompleksowej <strong>strony internetowej dla zespołu muzycznego</strong>.
             </p>
           </div>
 

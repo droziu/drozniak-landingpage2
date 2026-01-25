@@ -25,3 +25,159 @@
 .react-flow__sidebar {
   background-color: #0a0f14 !important;
 }
+
+/* Blog styles */
+.blog-content {
+  line-height: 1.9;
+  color: #101820;
+}
+
+.blog-content * {
+  color: inherit;
+}
+
+/* Większe odstępy między wszystkimi elementami */
+.blog-content > * {
+  margin-bottom: 1.5rem;
+}
+
+.blog-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.blog-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.blog-content ul li {
+  margin-bottom: 0.75rem;
+}
+
+/* Usuń domyślne bullet points - ikony są dodawane przez HTML w blokach highlight */
+.blog-content ul li::before {
+  content: none;
+}
+
+/* Dla list w blokach highlight z ikonami - nie dodawaj dodatkowych elementów */
+.blog-content ul li.flex::before {
+  content: none;
+}
+
+/* Style dla list z ikonami (będzie obsługiwane przez custom HTML) */
+.blog-content .icon-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.blog-content .icon-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.blog-content .icon-list li::before {
+  content: none;
+}
+
+/* Lepsze odstępy dla nagłówków w artykule - równe padding góra/dół */
+.blog-content h2 {
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  line-height: 1.1;
+  font-weight: 900;
+}
+
+.blog-content h3 {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+/* Więcej miejsca na obrazy i ikony */
+.blog-content figure {
+  margin: 4rem 0;
+}
+
+.blog-content img {
+  border-radius: 0.5rem;
+}
+
+/* Style dla list w blokach highlight z ikonami */
+.blog-content ul li.flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.blog-content ul li.flex svg {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+/* Lepsze odstępy między paragrafami */
+.blog-content p {
+  margin-bottom: 1.5rem;
+}
+
+/* Border dla separatorów - grubsze */
+.border-t-3 {
+  border-top-width: 3px;
+}
+
+/* Zaznaczenie tekstu w żółtym prostokącie - ciemny granat zamiast żółtego */
+.bg-\[#fee715\] ::selection {
+  background-color: #101820;
+  color: white;
+}
+
+.bg-\[#fee715\] ::-moz-selection {
+  background-color: #101820;
+  color: white;
+}
+
+/* Style dla linków z highlightem w blogu - czarny tekst, żółte tło, podkreślenie */
+.blog-content a.link-yellow {
+  color: #101820 !important;
+  background-color: #fee715 !important;
+  text-decoration: underline !important;
+  text-decoration-color: #101820 !important;
+  font-weight: 600 !important;
+  padding: 2px 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.blog-content a.link-yellow:hover {
+  color: #101820 !important;
+  background-color: #fee715 !important;
+  text-decoration: underline !important;
+  text-decoration-color: #101820 !important;
+  opacity: 0.9 !important;
+}
+
+/* Reset margin i padding dla h2 w bloku heading (żółty boksik) - naturalna szerokość, centrowanie jako element */
+.bg-\[#fee715\] h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+}
+
+/* Reset margin i padding dla h3 w blokach highlight - symetryczny padding */
+.bg-gray-50 h3 {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Reset margin i padding dla h2 w numerowanych sekcjach - wyśrodkowanie wertykalne */
+.h-14 h2, .h-16 h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}

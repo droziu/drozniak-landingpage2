@@ -10,6 +10,7 @@ export const Header: React.FC = () => {
   const isStronyWWWPage = location.pathname === '/strony-www';
   const isSzkoleniaPage = location.pathname === '/szkolenia';
   const isContactPage = location.pathname === '/kontakt';
+  const isBlogPage = location.pathname.startsWith('/blog');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
@@ -36,11 +37,8 @@ export const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-50 bg-[#101820]/95 backdrop-blur-xl border-b border-white/10">
       <div className="container mx-auto px-4 md:px-6 py-2 md:py-5 flex justify-between items-center">
-        <Link to="/" className="text-xl md:text-2xl font-bold font-[Montserrat] text-[#fee715] group">
-          <div className="relative">
-            <Logo />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
-          </div>
+        <Link to="/" className="text-xl md:text-2xl font-bold font-[Montserrat] text-[#fee715]">
+          <Logo />
         </Link>
         
             {/* Professional Navigation - Hidden on mobile */}
@@ -123,6 +121,18 @@ export const Header: React.FC = () => {
               >
                 Kontakt
                 {isContactPage && (
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                )}
+              </Link>
+              
+              <Link 
+                to="/blog" 
+                className={`relative flex items-center h-16 text-sm font-medium transition-colors duration-200 ${
+                  isBlogPage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Blog
+                {isBlogPage && (
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
                 )}
               </Link>
@@ -243,6 +253,20 @@ export const Header: React.FC = () => {
               >
                 Kontakt
                 {isContactPage && (
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
+                )}
+              </Link>
+              
+              {/* Blog */}
+              <Link 
+                to="/blog" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block w-full py-3 text-center text-base font-medium transition-all duration-300 relative ${
+                  isBlogPage ? 'text-[#fee715]' : 'text-gray-300 hover:text-white'
+                }`}
+              >
+                Blog
+                {isBlogPage && (
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"></div>
                 )}
               </Link>

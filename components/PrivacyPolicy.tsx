@@ -78,7 +78,7 @@ export const PrivacyPolicy: React.FC = () => {
                   <strong className="text-white">Wysyłki newslettera (MailerLite)</strong>
                   <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
                     <li>Dane: e-mail, data zapisu, aktywności newsletterowe.</li>
-                    <li>Cel: przesyłanie treści i informacji marketingowych — tylko po wyrażeniu zgody.</li>
+                    <li>Cel: przesyłanie treści i informacji marketingowych - tylko po wyrażeniu zgody.</li>
                     <li>System: MailerLite UAB.</li>
                   </ul>
                 </li>
@@ -88,7 +88,7 @@ export const PrivacyPolicy: React.FC = () => {
                     <li>
                       Dane: dane podane w formularzach (np. imię, e-mail, telefon), dane dotyczące rezerwacji/zakupów
                       (np. identyfikatory transakcji, statusy), dane techniczne związane z funkcjonowaniem serwisu
-                      (np. logi zdarzeń, identyfikatory sesji — jeśli występują).
+                      (np. logi zdarzeń, identyfikatory sesji - jeśli występują).
                     </li>
                     <li>
                       Cel: przechowywanie danych niezbędnych do działania strony i usług (np. obsługa zapytań, zapisów,
@@ -198,11 +198,11 @@ export const PrivacyPolicy: React.FC = () => {
                 6. Czas przechowywania danych
               </h2>
               <ul className="list-disc list-inside space-y-2 text-gray-300">
-                <li><strong className="text-white">Dane z formularza kontaktowego</strong> — do 12 miesięcy po zakończeniu kontaktu.</li>
-                <li><strong className="text-white">Dane klientów</strong> — przez okres obsługi oraz do 5 lat (obowiązki podatkowe).</li>
-                <li><strong className="text-white">Dane newsletterowe</strong> — do czasu wycofania zgody.</li>
-                <li><strong className="text-white">Dane z cookies</strong> — zgodnie z czasem przechowywania ustawionym w przeglądarce lub do usunięcia.</li>
-                <li><strong className="text-white">Dane płatnicze (Stripe)</strong> — zgodnie z przepisami rozliczeniowymi i księgowymi.</li>
+                <li><strong className="text-white">Dane z formularza kontaktowego</strong> - do 12 miesięcy po zakończeniu kontaktu.</li>
+                <li><strong className="text-white">Dane klientów</strong> - przez okres obsługi oraz do 5 lat (obowiązki podatkowe).</li>
+                <li><strong className="text-white">Dane newsletterowe</strong> - do czasu wycofania zgody.</li>
+                <li><strong className="text-white">Dane z cookies</strong> - zgodnie z czasem przechowywania ustawionym w przeglądarce lub do usunięcia.</li>
+                <li><strong className="text-white">Dane płatnicze (Stripe)</strong> - zgodnie z przepisami rozliczeniowymi i księgowymi.</li>
               </ul>
             </section>
 

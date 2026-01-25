@@ -30,6 +30,8 @@ import { LoadingState } from './components/LoadingState';
 import { TrainingPage } from './components/TrainingPage';
 import { PublicProposalView } from './components/PublicProposalView';
 import { PDFProposalView } from './components/PDFProposalView';
+import { BlogList } from './components/blog/BlogList';
+import { BlogPost } from './components/blog/BlogPost';
 
 // Tryb pełnoekranowy kursu (bez sidebara panelu, z przyciskiem X)
 const TrainingPageStandalone: React.FC = () => {
@@ -121,6 +123,9 @@ const AppContent: React.FC<{
             <Route path="/szkolenia" element={<SzkoleniaPage />} />
             <Route path="/doradztwo-hotel-irys" element={<DoradztwoHotelIrys />} />
             <Route path="/doradztwo-zef" element={<DoradztwoZef />} />
+            <Route path="/blog" element={<BlogList />} />
+            <Route path="/blog/kategoria/:categorySlug" element={<BlogList />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/p/:token" element={<PublicProposalView />} />
             <Route path="/o/:slug" element={<PDFProposalView />} />

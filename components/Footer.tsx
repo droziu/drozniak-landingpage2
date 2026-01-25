@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
           <div className="md:col-span-1">
             <h4 className="font-[Montserrat] text-lg font-bold text-white mb-4">O mnie</h4>
             <p className="text-sm leading-relaxed">
-              Pomagam małym firmom i freelancerom tworzyć systemy marketingowe, które realnie zwiększają wyniki. Łączę strategię, technologię i AI, aby dostarczać rozwiązania, które po prostu działają.
+              Pomagam małym firmom i freelancerom zdobywać klientów przez lepszą ofertę, stronę internetową i reklamy. Analizuję, gdzie uciekają zapytania i sprzedaż, a potem układam cały proces tak, żeby działał w praktyce: od wejścia na stronę do kontaktu i decyzji zakupowej.
             </p>
           </div>
 

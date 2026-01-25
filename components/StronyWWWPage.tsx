@@ -744,7 +744,7 @@ export const StronyWWWPage: React.FC = () => {
                   Strony projektowane jak narzędzia sprzedaży
                 </h3>
                 <p className="card-description">
-                  Każdy projekt powstaje w oparciu o dane, psychologię decyzji i doświadczenie marketingowe. Wygląd to tylko część procesu — najważniejsze, by strona realizowała cele biznesowe.
+                  Każdy projekt powstaje w oparciu o dane, psychologię decyzji i doświadczenie marketingowe. Wygląd to tylko część procesu - najważniejsze, by strona realizowała cele biznesowe.
                 </p>
               </div>
             </article>
@@ -761,7 +761,7 @@ export const StronyWWWPage: React.FC = () => {
                   Nowoczesna technologia i błyskawiczne działanie
                 </h3>
                 <p className="card-description">
-                  Buduję w frameworkach klasy premium (Next.js, Astro, Vercel). Dzięki temu strony ładują się w ok. 1 sekundę i działają stabilnie przez lata — bez wtyczek, lagów i zbędnych aktualizacji.
+                  Buduję w frameworkach klasy premium (Next.js, Astro, Vercel). Dzięki temu strony ładują się w ok. 1 sekundę i działają stabilnie przez lata - bez wtyczek, lagów i zbędnych aktualizacji.
                 </p>
               </div>
             </article>
@@ -795,7 +795,7 @@ export const StronyWWWPage: React.FC = () => {
                   Strona uszyta na miarę Twojej marki
                 </h3>
                 <p className="card-description">
-                  Nie korzystam z gotowych szablonów ani ograniczeń WordPressa. Każdy element powstaje od zera — dopasowany do Twojej branży, stylu i odbiorcy.
+                  Nie korzystam z gotowych szablonów ani ograniczeń WordPressa. Każdy element powstaje od zera - dopasowany do Twojej branży, stylu i odbiorcy.
                 </p>
               </div>
             </article>
@@ -812,7 +812,7 @@ export const StronyWWWPage: React.FC = () => {
                   Samodzielna edycja treści po wdrożeniu
                 </h3>
                 <p className="card-description">
-                  Po uruchomieniu otrzymujesz prosty system do zmian treści i krótkie wideo-instrukcje. Pełna kontrola — bez technicznych barier.
+                  Po uruchomieniu otrzymujesz prosty system do zmian treści i krótkie wideo-instrukcje. Pełna kontrola - bez technicznych barier.
                 </p>
               </div>
             </article>
@@ -884,7 +884,7 @@ export const StronyWWWPage: React.FC = () => {
               {[
                 {
                   title: "Krótka rozmowa lub wiadomość",
-                  description: "Zaczynamy od prostego kontaktu — możesz napisać lub umówić krótką rozmowę.",
+                  description: "Zaczynamy od prostego kontaktu - możesz napisać lub umówić krótką rozmowę.",
                   details: [
                     "Na podstawie kilku pytań oceniam, czego naprawdę potrzebujesz i czy mogę pomóc.",
                     "Ty mówisz, czego chcesz. Ja tłumaczę, jak możemy to osiągnąć."
@@ -1008,7 +1008,7 @@ export const StronyWWWPage: React.FC = () => {
             <div className="mt-20 text-center">
               <p className="text-gray-300 text-lg mb-6">
                 Cały proces trwa zwykle 14–21 dni roboczych.<br />
-                <span className="whitespace-nowrap">Jesteśmy w stałym kontakcie</span> — dokładnie wiesz, co dzieje się na każdym etapie.
+                <span className="whitespace-nowrap">Jesteśmy w stałym kontakcie</span> - dokładnie wiesz, co dzieje się na każdym etapie.
               </p>
               <a 
                 href="#cta"
@@ -1038,7 +1038,7 @@ export const StronyWWWPage: React.FC = () => {
                   <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">Szybkość</span>, którą widać od razu.
                 </h2>
                 <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
-                  Im szybciej wyświetlisz kluczową treść, tym mniej osób rezygnuje. Projektuję strony tak, by pierwsze wrażenie było błyskawiczne i stabilne — nawet przy animacjach i zdjęciach w tle.
+                  Im szybciej wyświetlisz kluczową treść, tym mniej osób rezygnuje. Projektuję strony tak, by pierwsze wrażenie było błyskawiczne i stabilne - nawet przy animacjach i zdjęciach w tle.
                 </p>
               </div>
 
@@ -1089,7 +1089,7 @@ export const StronyWWWPage: React.FC = () => {
               </div>
 
               <p className="text-gray-300 leading-relaxed">
-                Jeśli projekt wymaga WordPressa — realizuję go lekko (motyw na zamówienie lub headless), bez spowalniających nakładek.
+                Jeśli projekt wymaga WordPressa - realizuję go lekko (motyw na zamówienie lub headless), bez spowalniających nakładek.
               </p>
 
               {/* Technical Details Toggle */}
@@ -1110,7 +1110,7 @@ export const StronyWWWPage: React.FC = () => {
                       <strong>Priorytety:</strong> minimalna liczba skryptów, nowoczesne formaty obrazów, odroczone ładowanie elementów „poniżej zagięcia", brak nadmiarowych wtyczek.
                     </p>
                     <p className="text-gray-300 text-sm leading-relaxed">
-                      <strong>Architektura:</strong> wykorzystuję SSG (Static Site Generation) i SSR (Server-Side Rendering), dzięki czemu kluczowe treści ładują się natychmiast — niezależnie od miejsca, urządzenia i przeglądarki.
+                      <strong>Architektura:</strong> wykorzystuję SSG (Static Site Generation) i SSR (Server-Side Rendering), dzięki czemu kluczowe treści ładują się natychmiast - niezależnie od miejsca, urządzenia i przeglądarki.
                     </p>
                   </div>
                 </div>
@@ -1244,15 +1244,15 @@ export const StronyWWWPage: React.FC = () => {
               },
               {
                 question: "Czy będę mógł coś samodzielnie zmieniać?",
-                answer: "Tak, otrzymasz prosty panel do edycji treści, zdjęć i nagłówków. Dodatkowo nagrywam krótką wideoinstrukcję, żebyś nie musiał zgadywać, co kliknąć. Nie zostawiam Cię z plikiem ZIP — zostawiam Ci stronę, którą faktycznie możesz obsłużyć."
+                answer: "Tak, otrzymasz prosty panel do edycji treści, zdjęć i nagłówków. Dodatkowo nagrywam krótką wideoinstrukcję, żebyś nie musiał zgadywać, co kliknąć. Nie zostawiam Cię z plikiem ZIP - zostawiam Ci stronę, którą faktycznie możesz obsłużyć."
               },
               {
                 question: "Ile to trwa?",
-                answer: "Zazwyczaj 2–4 tygodnie, w zależności od projektu i materiałów. Pracujemy etapami — najpierw strategia, potem projekt, potem wdrożenie. Wszystko widzisz i akceptujesz po drodze."
+                answer: "Zazwyczaj 2–4 tygodnie, w zależności od projektu i materiałów. Pracujemy etapami - najpierw strategia, potem projekt, potem wdrożenie. Wszystko widzisz i akceptujesz po drodze."
               },
               {
                 question: "Co jeśli będę chciał coś poprawić po starcie?",
-                answer: "W cenie masz poprawki, dopasowania i wsparcie po wdrożeniu. Nie kończę projektu w dniu publikacji — pomagam Ci ustawić wszystko tak, by strona działała w praktyce."
+                answer: "W cenie masz poprawki, dopasowania i wsparcie po wdrożeniu. Nie kończę projektu w dniu publikacji - pomagam Ci ustawić wszystko tak, by strona działała w praktyce."
               }
             ].map((chat, index) => (
               <div key={index} className="conversation-block">

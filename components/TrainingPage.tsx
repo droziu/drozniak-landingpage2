@@ -1684,7 +1684,7 @@ export const TrainingPage: React.FC<TrainingPageProps> = ({ embedded = false, co
                   </div>
                   {currentLesson && (
                     <div className="mt-1 text-sm text-gray-300 truncate">
-                      Lekcja <span className="text-[#fee715] font-semibold">{currentLesson.id}</span> — {currentLesson.title}
+                      Lekcja <span className="text-[#fee715] font-semibold">{currentLesson.id}</span> - {currentLesson.title}
                     </div>
                   )}
                 </div>

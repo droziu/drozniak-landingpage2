@@ -130,8 +130,8 @@ export const SzkoleniaPage: React.FC = () => {
               <br />
               <span className="text-white">dla małych firm</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-              <strong>AI w marketingu małej firmy</strong> - praktyczne zastosowania i <strong>automatyzacja marketingu w małej firmie</strong>. Kompleksowe programy szkoleniowe dostosowane do potrzeb organizacji, zespołów marketingowych i działów sprzedaży. Możliwe również szkolenia indywidualne (1:1), projektowane pod konkretne wymagania i cele biznesowe.
+            <p className="text-base md:text-lg text-gray-400 mb-8 leading-relaxed max-w-3xl mx-auto">
+              AI w marketingu małej firmy - praktyczne zastosowania i automatyzacja marketingu w małej firmie. Kompleksowe programy szkoleniowe dostosowane do potrzeb organizacji, zespołów marketingowych i działów sprzedaży. Możliwe również szkolenia indywidualne (1:1), projektowane pod konkretne wymagania i cele biznesowe.
             </p>
             <div className="flex justify-center">
               <Link
