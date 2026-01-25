@@ -1,7 +1,19 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { supabase } from '../lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 
 const BASE_URL = 'https://drozniak.pl';
+
+// Utwórz klienta Supabase bezpośrednio w API route (używając process.env dla Vercel)
+const getSupabaseClient = () => {
+  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+  const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Missing Supabase environment variables');
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey);
+};
 
 // Statyczne strony (bez trailing slash)
 const staticPages = [
@@ -21,6 +33,9 @@ export default async function handler(
   response: VercelResponse,
 ) {
   try {
+    // Utwórz klienta Supabase
+    const supabase = getSupabaseClient();
+    
     // Pobierz wszystkie opublikowane posty bloga
     const { data: blogPosts, error } = await supabase
       .from('blog_posts')
@@ -30,6 +45,7 @@ export default async function handler(
 
     if (error) {
       console.error('Błąd pobierania postów bloga:', error);
+      // Kontynuuj bez postów bloga - zwróć tylko statyczne strony
     }
 
     // Generuj XML sitemap
@@ -64,6 +80,25 @@ ${blogPosts?.map(post => {
     response.status(200).send(sitemap);
   } catch (error) {
     console.error('Błąd generowania sitemap:', error);
-    response.status(500).json({ error: 'Błąd generowania sitemap' });
+    // W przypadku błędu, zwróć przynajmniej statyczne strony
+    try {
+      const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${staticPages.map(page => {
+  const lastmod = new Date().toISOString().split('T')[0];
+  return `  <url>
+    <loc>${BASE_URL}${page.path}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`;
+}).join('\n')}
+</urlset>`;
+      response.setHeader('Content-Type', 'application/xml');
+      response.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      response.status(200).send(fallbackSitemap);
+    } catch (fallbackError) {
+      response.status(500).json({ error: 'Błąd generowania sitemap', details: error instanceof Error ? error.message : String(error) });
+    }
   }
 }

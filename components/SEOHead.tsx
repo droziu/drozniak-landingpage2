@@ -11,14 +11,10 @@ export const SEOHead: React.FC = () => {
   useEffect(() => {
     // Sprawdź czy jesteśmy w środowisku produkcyjnym
     // VERCEL_ENV może być: 'production', 'preview', 'development'
-    const vercelEnv = typeof process !== 'undefined' && process.env?.VERCEL_ENV 
-      ? process.env.VERCEL_ENV 
-      : typeof window !== 'undefined' && (window as any).__VERCEL_ENV__
-      ? (window as any).__VERCEL_ENV__
-      : null;
+    const vercelEnv = import.meta.env.VERCEL_ENV;
     
     const isProduction = vercelEnv === 'production' || 
-                         (typeof import.meta !== 'undefined' && import.meta.env?.MODE === 'production') ||
+                         (import.meta.env.MODE === 'production') ||
                          (!vercelEnv && typeof window !== 'undefined' && window.location.hostname === 'drozniak.pl');
     
     // Dodaj noindex dla staging/preview
