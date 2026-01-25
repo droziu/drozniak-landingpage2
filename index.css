@@ -19,9 +19,7 @@
 /* Override React Flow styles - upewnij się że sidebar ma ciemne tło */
 .react-flow__container {
   background-color: #101820 !important;
-}
-
-/* Upewnij się że sidebar nie ma białego tła */
+}/* Upewnij się że sidebar nie ma białego tła */
 .react-flow__sidebar {
   background-color: #0a0f14 !important;
 }

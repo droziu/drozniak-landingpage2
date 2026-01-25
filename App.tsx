@@ -11,6 +11,7 @@ import { ContactPage } from './components/ContactPage';
 import { PortfolioRedlin } from './components/PortfolioRedlin';
 import { PortfolioPasw } from './components/PortfolioPasw';
 import { SzkoleniaPage } from './components/SzkoleniaPage';
+import { ZatrudnijMniePage } from './components/ZatrudnijMniePage';
 import { DoradztwoHotelIrys } from './components/DoradztwoHotelIrys';
 import { DoradztwoZef } from './components/DoradztwoZef';
 import { LoginPage } from './components/LoginPage';
@@ -119,6 +120,7 @@ const AppContent: React.FC<{
             <Route path="/portfolio-redlin" element={<PortfolioRedlin />} />
             <Route path="/portfolio-pasw" element={<PortfolioPasw />} />
             <Route path="/szkolenia" element={<SzkoleniaPage />} />
+            <Route path="/zatrudnij-mnie" element={<ZatrudnijMniePage />} />
             <Route path="/doradztwo-hotel-irys" element={<DoradztwoHotelIrys />} />
             <Route path="/doradztwo-zef" element={<DoradztwoZef />} />
             <Route path="/login" element={<LoginPage />} />
