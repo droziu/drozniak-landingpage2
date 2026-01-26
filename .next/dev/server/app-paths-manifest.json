@@ -1,0 +1,9 @@
+{
+  "/blog/[slug]/page": "app/blog/[slug]/page.js",
+  "/blog/page": "app/blog/page.js",
+  "/kontakt/page": "app/kontakt/page.js",
+  "/page": "app/page.js",
+  "/strony-www/page": "app/strony-www/page.js",
+  "/system/page": "app/system/page.js",
+  "/szkolenia/page": "app/szkolenia/page.js"
+}

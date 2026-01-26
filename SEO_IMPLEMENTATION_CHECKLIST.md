@@ -155,7 +155,7 @@ Sprawdź w view-source następujące strony:
 1. **Noindex dla staging**: Działa automatycznie przez `SEOHead` - sprawdza `VERCEL_ENV !== 'production'`
 2. **Canonical URLs**: Automatycznie usuwają parametry i trailing slash przez `useSEO` hook
 3. **Sitemap**: Generuje się dynamicznie z bazy danych (pobiera posty z Supabase)
-4. **OG Images**: Wszystkie strony używają `/images/Drozniak_Zdjecie_Suit_2.jpg` jako domyślnego OG image
+4. **OG Images**: Wszystkie strony używają `/images/Drozniak_Zdjecie_Suit_2.webp` jako domyślnego OG image
 
 ---
 

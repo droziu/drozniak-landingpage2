@@ -41,7 +41,7 @@ export const BlogList: React.FC = () => {
     keywords: 'blog marketing, marketing małych firm, pozyskiwanie klientów, strony www, reklamy, SEO, AI w marketingu',
     ogTitle: 'Blog o marketingu dla małych firm i freelancerów',
     ogDescription: 'Praktyczne porady o marketingu dla małych firm: pozyskiwanie klientów, strony WWW, reklamy, SEO i AI.',
-    ogImage: '/images/Drozniak_Zdjecie_Suit_2.jpg',
+    ogImage: '/images/Drozniak_Zdjecie_Suit_2.webp',
     ogType: 'website',
     canonical: 'https://drozniak.pl/blog',
   });
