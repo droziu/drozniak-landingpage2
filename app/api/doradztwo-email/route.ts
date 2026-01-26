@@ -1,20 +1,13 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(
-  request: VercelRequest,
-  response: VercelResponse,
-) {
-  // Only allow POST requests
-  if (request.method !== 'POST') {
-    return response.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(request: NextRequest) {
   try {
-    const { summary } = request.body;
+    const body = await request.json();
+    const { summary } = body;
 
     // Validate required fields
     if (!summary) {
-      return response.status(400).json({ error: 'Missing summary data' });
+      return NextResponse.json({ error: 'Missing summary data' }, { status: 400 });
     }
 
     // Get Resend API key from environment variables
@@ -22,7 +15,7 @@ export default async function handler(
     
     if (!RESEND_API_KEY) {
       console.error('RESEND_API_KEY is not set');
-      return response.status(500).json({ error: 'Email service not configured' });
+      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
     }
 
     // Prepare email content
@@ -83,13 +76,12 @@ export default async function handler(
         console.error('Error parsing Resend API error response:', parseError);
       }
       console.error('Resend API error:', errorMessage);
-      return response.status(500).json({ error: errorMessage });
+      return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 
-    return response.status(200).json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Email sending error:', error);
-    return response.status(500).json({ error: 'Internal server error' });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-
