@@ -48,13 +48,7 @@
   "headers": [],
   "rewrites": {
     "beforeFiles": [],
-    "afterFiles": [
-      {
-        "source": "/sitemap.xml",
-        "destination": "/sitemap",
-        "regex": "^/sitemap\\.xml(?:/)?$"
-      }
-    ],
+    "afterFiles": [],
     "fallback": []
   },
   "dynamicRoutes": [

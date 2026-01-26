@@ -6,7 +6,7 @@ type AppRouteHandlerRoutes = "/api/contact" | "/api/course-completion-email" | "
 type PageRoutes = never
 type LayoutRoutes = "/" | "/admin" | "/blog" | "/freelancer" | "/kontakt" | "/panel" | "/polityka-prywatnosci" | "/portfolio-pasw" | "/portfolio-redlin" | "/strony-www" | "/system" | "/szkolenia"
 type RedirectRoutes = "/[...path]/" | "/[[...path]]"
-type RewriteRoutes = "/sitemap.xml"
+type RewriteRoutes = never
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes | AppRouteHandlerRoutes
 
 
@@ -39,7 +39,6 @@ interface ParamMap {
   "/portfolio-pasw": {}
   "/portfolio-redlin": {}
   "/profile": {}
-  "/sitemap.xml": {}
   "/strony-www": {}
   "/system": {}
   "/szkolenia": {}

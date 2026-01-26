@@ -302,16 +302,6 @@ self.__SERVER_FILES_MANIFEST={
       "root": "/Users/stanislawdrozniak"
     },
     "distDirRoot": ".next",
-    "_originalRewrites": {
-      "beforeFiles": [],
-      "afterFiles": [
-        {
-          "source": "/sitemap.xml",
-          "destination": "/sitemap"
-        }
-      ],
-      "fallback": []
-    },
     "_originalRedirects": [
       {
         "source": "/:path*",

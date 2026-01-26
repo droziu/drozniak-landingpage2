@@ -10,15 +10,7 @@ const nextConfig = {
       },
     ],
   },
-  // Preserve existing API routes structure
-  async rewrites() {
-    return [
-      {
-        source: '/sitemap.xml',
-        destination: '/sitemap',
-      },
-    ];
-  },
+  // Next.js automatycznie obsługuje /sitemap.xml przez app/sitemap.ts
   async redirects() {
     return [
       // HTTP to HTTPS - Next.js automatycznie wyklucza _next, api, i pliki statyczne
