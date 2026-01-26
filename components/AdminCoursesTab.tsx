@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { supabase } from '../lib/supabase';
+import { useAuth } from '@/app/hooks/useAuth';
+import { supabase } from '@/lib/supabase-client';
 import { trainingModules, findLesson } from '../config/trainingModules';
 import { AlertModal } from './AlertModal';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom'; // Not used in this component
 import { LoadingState } from './LoadingState';
 import { Phone, User } from 'phosphor-react';
 
@@ -49,7 +49,7 @@ interface TrainingResponse {
 
 export const AdminCoursesTab: React.FC = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // Not used
   const [users, setUsers] = useState<User[]>([]);
   const [userProgress, setUserProgress] = useState<UserProgress[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);

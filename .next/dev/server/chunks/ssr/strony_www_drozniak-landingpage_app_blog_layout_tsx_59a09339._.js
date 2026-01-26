@@ -26,7 +26,11 @@ const metadata = {
         url: 'https://drozniak.pl/blog',
         images: [
             {
+<<<<<<< HEAD
                 url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp',
+=======
+                url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.jpg',
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 width: 1200,
                 height: 630,
                 alt: 'Stanisław Drożniak'
@@ -38,7 +42,11 @@ const metadata = {
         title: 'Blog o marketingu dla małych firm i freelancerów',
         description: 'Praktyczne porady o marketingu dla małych firm: pozyskiwanie klientów, strony WWW, reklamy, SEO i AI.',
         images: [
+<<<<<<< HEAD
             'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'
+=======
+            'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.jpg'
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
         ]
     },
     alternates: {

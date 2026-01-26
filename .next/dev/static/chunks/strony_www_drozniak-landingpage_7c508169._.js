@@ -640,7 +640,11 @@ const AboutMe = ()=>{
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "relative bg-[#101820] rounded-2xl p-2 group-hover:scale-105 transition-transform duration-500",
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+<<<<<<< HEAD
                                             src: "/images/Drozniak_photo_suit_1.webp",
+=======
+                                            src: "/images/Drozniak_photo_suit_1.jpg",
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                             alt: "Stanisław Drożniak",
                                             className: "w-full h-auto rounded-xl object-cover group-hover:scale-105 transition-transform duration-500"
                                         }, void 0, false, {

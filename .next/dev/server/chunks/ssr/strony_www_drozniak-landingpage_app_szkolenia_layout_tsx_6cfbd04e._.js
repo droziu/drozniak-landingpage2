@@ -24,7 +24,11 @@ const metadata = {
         url: 'https://drozniak.pl/szkolenia',
         images: [
             {
+<<<<<<< HEAD
                 url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp',
+=======
+                url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.jpg',
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 width: 1200,
                 height: 630,
                 alt: 'Stanisław Drożniak'
@@ -36,7 +40,11 @@ const metadata = {
         title: 'Szkolenia z AI w marketingu dla małych firm',
         description: 'Szkolenia z AI w marketingu dla małych firm. Praktyczne zastosowania AI i automatyzacji marketingu w małej firmie.',
         images: [
+<<<<<<< HEAD
             'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'
+=======
+            'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.jpg'
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
         ]
     },
     alternates: {

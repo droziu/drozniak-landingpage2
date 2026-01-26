@@ -1,10 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    // Keep Vite files for now (panel/admin)
     "./index.html",
     "./index.tsx",
     "./App.tsx",
-    "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {},

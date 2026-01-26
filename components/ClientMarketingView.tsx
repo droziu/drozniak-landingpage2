@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import type { PanelClient } from '../hooks/useClientPanel';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase-client';
+import type { PanelClient } from '@/app/hooks/useClientPanel';
 import { LoadingState } from './LoadingState';
 
 interface FunnelRow {
@@ -16,7 +16,7 @@ interface ClientMarketingViewProps {
 }
 
 export const ClientMarketingView: React.FC<ClientMarketingViewProps> = ({ panelClient }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [funnels, setFunnels] = useState<FunnelRow[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -69,7 +69,7 @@ export const ClientMarketingView: React.FC<ClientMarketingViewProps> = ({ panelC
             <span className="text-white text-sm">{f.project_name}</span>
             <button
               type="button"
-              onClick={() => navigate(`/panel/marketing/${f.id}`)}
+              onClick={() => router.push(`/panel/marketing/${f.id}`)}
               className="text-xs text-[#00C9A7] hover:underline"
             >
               Otwórz

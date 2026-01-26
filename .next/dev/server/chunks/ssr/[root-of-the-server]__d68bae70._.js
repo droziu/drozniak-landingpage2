@@ -142,7 +142,11 @@ const metadata = {
         description: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Systemy sprzedażowe, strony WWW i szkolenia z AI.',
         images: [
             {
+<<<<<<< HEAD
                 url: `${BASE_URL}/images/Drozniak_Zdjecie_Suit_2.webp`,
+=======
+                url: `${BASE_URL}/images/Drozniak_Zdjecie_Suit_2.jpg`,
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 width: 1200,
                 height: 630,
                 alt: 'Stanisław Drożniak'
@@ -154,7 +158,11 @@ const metadata = {
         title: 'System pozyskiwania klientów i strony WWW dla małych firm',
         description: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Systemy sprzedażowe, strony WWW i szkolenia z AI.',
         images: [
+<<<<<<< HEAD
             `${BASE_URL}/images/Drozniak_Zdjecie_Suit_2.webp`
+=======
+            `${BASE_URL}/images/Drozniak_Zdjecie_Suit_2.jpg`
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
         ]
     },
     robots: {
@@ -296,6 +304,7 @@ function RootLayout({ children }) {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("head", {
                 children: [
+<<<<<<< HEAD
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("link", {
                         rel: "preconnect",
                         href: "https://fonts.googleapis.com"
@@ -313,6 +322,8 @@ function RootLayout({ children }) {
                         lineNumber: 181,
                         columnNumber: 9
                     }, this),
+=======
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
                         type: "application/ld+json",
                         dangerouslySetInnerHTML: {
@@ -321,7 +332,11 @@ function RootLayout({ children }) {
                         id: "schema-organization"
                     }, void 0, false, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
+<<<<<<< HEAD
                         lineNumber: 183,
+=======
+                        lineNumber: 180,
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
@@ -332,7 +347,11 @@ function RootLayout({ children }) {
                         id: "schema-person"
                     }, void 0, false, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
+<<<<<<< HEAD
                         lineNumber: 188,
+=======
+                        lineNumber: 185,
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
@@ -343,7 +362,11 @@ function RootLayout({ children }) {
                         id: "schema-website"
                     }, void 0, false, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
+<<<<<<< HEAD
                         lineNumber: 193,
+=======
+                        lineNumber: 190,
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
@@ -354,7 +377,11 @@ function RootLayout({ children }) {
                         id: "schema-service"
                     }, void 0, false, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
+<<<<<<< HEAD
                         lineNumber: 198,
+=======
+                        lineNumber: 195,
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                         columnNumber: 9
                     }, this)
                 ]
@@ -369,12 +396,20 @@ function RootLayout({ children }) {
                     children: children
                 }, void 0, false, {
                     fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
+<<<<<<< HEAD
                     lineNumber: 205,
+=======
+                    lineNumber: 202,
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
+<<<<<<< HEAD
                 lineNumber: 204,
+=======
+                lineNumber: 201,
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 columnNumber: 7
             }, this)
         ]

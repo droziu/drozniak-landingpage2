@@ -1,5 +1,20 @@
 {
   "app": {
+<<<<<<< HEAD
+=======
+    "[project]/strony_www/drozniak-landingpage/app/admin/[...slug]/page": [
+      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
+      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
+    ],
+    "[project]/strony_www/drozniak-landingpage/app/admin/marketing/[id]/page": [
+      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
+      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
+    ],
+    "[project]/strony_www/drozniak-landingpage/app/admin/page": [
+      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
+      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
+    ],
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
     "[project]/strony_www/drozniak-landingpage/app/blog/[slug]/page": [
       "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
       "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
@@ -12,10 +27,36 @@
       "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
       "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
     ],
+<<<<<<< HEAD
+=======
+    "[project]/strony_www/drozniak-landingpage/app/login/page": [
+      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
+      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
+    ],
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
     "[project]/strony_www/drozniak-landingpage/app/page": [
       "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
       "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
     ],
+<<<<<<< HEAD
+=======
+    "[project]/strony_www/drozniak-landingpage/app/panel/[...slug]/page": [
+      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
+      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
+    ],
+    "[project]/strony_www/drozniak-landingpage/app/panel/courses/[courseId]/page": [
+      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
+      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
+    ],
+    "[project]/strony_www/drozniak-landingpage/app/panel/page": [
+      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
+      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
+    ],
+    "[project]/strony_www/drozniak-landingpage/app/profile/page": [
+      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
+      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
+    ],
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
     "[project]/strony_www/drozniak-landingpage/app/strony-www/page": [
       "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
       "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"

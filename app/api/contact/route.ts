@@ -1,31 +1,24 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(
-  request: VercelRequest,
-  response: VercelResponse,
-) {
-  // Only allow POST requests
-  if (request.method !== 'POST') {
-    return response.status(405).json({ error: 'Method not allowed' });
-  }
-
+export async function POST(request: NextRequest) {
   try {
-    const { name, email, phone, company, message, company_website } = request.body;
+    const body = await request.json();
+    const { name, email, phone, company, message, company_website } = body;
 
     // Honeypot check
     if (company_website) {
-      return response.status(200).json({ success: true });
+      return NextResponse.json({ success: true }, { status: 200 });
     }
 
     // Validate required fields
     if (!name || !email || !message) {
-      return response.status(400).json({ error: 'Missing required fields' });
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return response.status(400).json({ error: 'Invalid email format' });
+      return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
     // Get Resend API key from environment variables
@@ -33,7 +26,7 @@ export default async function handler(
     
     if (!RESEND_API_KEY) {
       console.error('RESEND_API_KEY is not set');
-      return response.status(500).json({ error: 'Email service not configured' });
+      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
     }
 
     // Prepare email content
@@ -58,8 +51,8 @@ export default async function handler(
         'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Kontakt <noreply@drozniak.com>', // Zmień na swój zweryfikowany domenę w Resend
-        to: ['stanislaw@drozniak.com'], // Twój email
+        from: 'Kontakt <noreply@drozniak.com>',
+        to: ['stanislaw@drozniak.com'],
         reply_to: email,
         subject: emailSubject,
         html: emailHtml,
@@ -69,13 +62,12 @@ export default async function handler(
     if (!resendResponse.ok) {
       const errorData = await resendResponse.json();
       console.error('Resend API error:', errorData);
-      return response.status(500).json({ error: 'Failed to send email' });
+      return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
     }
 
-    return response.status(200).json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Contact form error:', error);
-    return response.status(500).json({ error: 'Internal server error' });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
-

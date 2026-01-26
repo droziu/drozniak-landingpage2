@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { supabase } from '../lib/supabase';
+import { useAuth } from '@/app/hooks/useAuth';
+import { supabase } from '@/lib/supabase-client';
 import { AlertModal } from './AlertModal';
 import { ConfirmModal } from './ConfirmModal';
 import { CustomSelect } from './CustomSelect';

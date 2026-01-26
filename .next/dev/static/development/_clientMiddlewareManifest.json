@@ -1,1 +1,10 @@
+<<<<<<< HEAD
 []
+=======
+[
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!_next|api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot|css|js|map)$).*))(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/((?!_next|api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|ttf|eot|css|js|map)$).*)"
+  }
+]
+>>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
