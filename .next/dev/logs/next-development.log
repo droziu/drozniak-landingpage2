@@ -1005,3 +1005,8 @@ Import trace:
 [02:36:56.198] Browser LOG     useClientPanel: grantsRes {"count":null,"data":null,"error":null,"status":200,"statusText":""}
 [02:36:56.198] Browser LOG     useClientPanel: grantsRes.data null
 [02:36:56.198] Browser LOG     useClientPanel: grantsRes.error null
+[04:59:46.784] Server  LOG     ✓ Compiled in 383ms
+[04:59:47.471] Browser WARN    GoTrueClient@sb-lkygnllsgashwloxgmax-auth-token:1 (2.84.0) 2026-01-26T14:43:49.433Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+[04:59:48.468] Browser LOG     Zmiana stanu autentykacji: TOKEN_REFRESHED stanislaw@drozniak.com
+[04:59:48.468] Browser LOG     Zmiana stanu autentykacji: TOKEN_REFRESHED stanislaw@drozniak.com
+[04:59:48.468] Browser LOG     Zmiana stanu autentykacji: TOKEN_REFRESHED stanislaw@drozniak.com

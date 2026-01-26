@@ -23,7 +23,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 ║  W Next.js zmienne dla klienta MUSZĄ mieć prefix            ║
 ║  NEXT_PUBLIC_                                                ║
 ║                                                              ║
-║  Dodaj do .env.local:                                        ║
+║  Dodaj do Vercel Environment Variables:                     ║
 ║                                                              ║
 ║  NEXT_PUBLIC_SUPABASE_URL=https://twoj-projekt.supabase.co   ║
 ║  NEXT_PUBLIC_SUPABASE_ANON_KEY=twoj-anon-key                ║
@@ -34,8 +34,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
 ╚══════════════════════════════════════════════════════════════╝
   `;
   console.error(errorMessage);
-  throw new Error('Missing Supabase environment variables. Check console for details.');
+  // Nie rzucamy błędu - pozwalamy aplikacji się załadować, ale Supabase nie będzie działać
+  // To pozwoli zobaczyć biały ekran z błędem w konsoli zamiast całkowicie zablokować aplikację
 }
 
-// Utwórz klienta Supabase dla Client Components
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Utwórz klienta Supabase dla Client Components (z fallback wartościami, żeby nie crashować)
+// Jeśli brakuje env vars, Supabase będzie zwracać błędy przy próbie użycia
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : createClient('https://placeholder.supabase.co', 'placeholder-key');
