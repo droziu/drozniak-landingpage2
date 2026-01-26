@@ -231,6 +231,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/polityka-prywatnosci/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/polityka-prywatnosci">> = Specific
+  const handler = {} as typeof import("../../../app/polityka-prywatnosci/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/portfolio-pasw/layout.tsx
 {
   type __IsExpected<Specific extends LayoutConfig<"/portfolio-pasw">> = Specific

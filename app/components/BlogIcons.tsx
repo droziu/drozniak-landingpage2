@@ -14,7 +14,9 @@ import {
   ShareNetwork,
   Globe,
   Robot,
-  ChartLine
+  ChartLine,
+  Envelope,
+  Phone
 } from 'phosphor-react';
 
 export { 
@@ -31,5 +33,7 @@ export {
   ShareNetwork,
   Globe,
   Robot,
-  ChartLine
+  ChartLine,
+  Envelope,
+  Phone
 };

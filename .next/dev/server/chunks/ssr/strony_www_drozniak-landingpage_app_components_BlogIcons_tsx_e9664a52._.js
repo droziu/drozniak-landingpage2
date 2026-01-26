@@ -17,6 +17,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$la
 var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Globe$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Globe$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/Globe.esm.js [app-ssr] (ecmascript) <export default as Globe>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Robot$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Robot$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/Robot.esm.js [app-ssr] (ecmascript) <export default as Robot>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$ChartLine$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChartLine$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/ChartLine.esm.js [app-ssr] (ecmascript) <export default as ChartLine>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Envelope$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Envelope$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/Envelope.esm.js [app-ssr] (ecmascript) <export default as Envelope>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Phone$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Phone$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/Phone.esm.js [app-ssr] (ecmascript) <export default as Phone>");
 'use client';
 ;
 ;
@@ -37,6 +39,8 @@ __turbopack_context__.s([
     ()=>__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$ChatCircle$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChatCircle$3e$__["ChatCircle"],
     "Clock",
     ()=>__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Clock$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"],
+    "Envelope",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Envelope$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Envelope$3e$__["Envelope"],
     "FileText",
     ()=>__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$FileText$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"],
     "Funnel",
@@ -47,6 +51,8 @@ __turbopack_context__.s([
     ()=>__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$MagnifyingGlass$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MagnifyingGlass$3e$__["MagnifyingGlass"],
     "Megaphone",
     ()=>__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Megaphone$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Megaphone$3e$__["Megaphone"],
+    "Phone",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Phone$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Phone$3e$__["Phone"],
     "Robot",
     ()=>__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Robot$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Robot$3e$__["Robot"],
     "ShareNetwork",
@@ -69,6 +75,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$la
 var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Globe$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Globe$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/Globe.esm.js [app-ssr] (ecmascript) <export default as Globe>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Robot$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Robot$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/Robot.esm.js [app-ssr] (ecmascript) <export default as Robot>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$ChartLine$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChartLine$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/ChartLine.esm.js [app-ssr] (ecmascript) <export default as ChartLine>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Envelope$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Envelope$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/Envelope.esm.js [app-ssr] (ecmascript) <export default as Envelope>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$phosphor$2d$react$2f$dist$2f$icons$2f$Phone$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Phone$3e$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/phosphor-react/dist/icons/Phone.esm.js [app-ssr] (ecmascript) <export default as Phone>");
 }),
 ];
 

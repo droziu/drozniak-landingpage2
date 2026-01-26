@@ -23,3 +23,6 @@
 [00:16:16.074] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [10:03:00.687] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
 [10:03:00.954] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[10:09:11.396] Server  LOG     ✓ Compiled in 908ms
+[10:09:11.397] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./strony_www/drozniak-landingpage/app/components/BlogIcons.tsx [app-client] (ecmascript) <locals> changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[10:09:12.001] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

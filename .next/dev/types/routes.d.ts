@@ -4,7 +4,7 @@
 type AppRoutes = "/" | "/blog" | "/blog/[slug]" | "/blog/kategoria/[categorySlug]" | "/freelancer" | "/kontakt" | "/polityka-prywatnosci" | "/portfolio-pasw" | "/portfolio-redlin" | "/strony-www" | "/system" | "/szkolenia"
 type AppRouteHandlerRoutes = "/api/contact" | "/api/course-completion-email" | "/api/doradztwo-email" | "/api/strony-www"
 type PageRoutes = never
-type LayoutRoutes = "/" | "/blog" | "/freelancer" | "/kontakt" | "/portfolio-pasw" | "/portfolio-redlin" | "/strony-www" | "/system" | "/szkolenia"
+type LayoutRoutes = "/" | "/blog" | "/freelancer" | "/kontakt" | "/polityka-prywatnosci" | "/portfolio-pasw" | "/portfolio-redlin" | "/strony-www" | "/system" | "/szkolenia"
 type RedirectRoutes = "/[...path]/" | "/[[...path]]"
 type RewriteRoutes = "/sitemap.xml"
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes | AppRouteHandlerRoutes
@@ -40,6 +40,7 @@ interface LayoutSlotMap {
   "/blog": never
   "/freelancer": never
   "/kontakt": never
+  "/polityka-prywatnosci": never
   "/portfolio-pasw": never
   "/portfolio-redlin": never
   "/strony-www": never

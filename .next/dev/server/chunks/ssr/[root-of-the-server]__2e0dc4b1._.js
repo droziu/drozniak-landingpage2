@@ -49,6 +49,8 @@ __turbopack_context__.s([
     ()=>ChatCircle,
     "Clock",
     ()=>Clock,
+    "Envelope",
+    ()=>Envelope,
     "FileText",
     ()=>FileText,
     "Funnel",
@@ -59,6 +61,8 @@ __turbopack_context__.s([
     ()=>MagnifyingGlass,
     "Megaphone",
     ()=>Megaphone,
+    "Phone",
+    ()=>Phone,
     "Robot",
     ()=>Robot,
     "ShareNetwork",
@@ -87,6 +91,9 @@ const ChatCircle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_ww
 const Clock = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
     throw new Error("Attempted to call Clock() from the server but Clock is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx <module evaluation>", "Clock");
+const Envelope = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
+    throw new Error("Attempted to call Envelope() from the server but Envelope is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
+}, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx <module evaluation>", "Envelope");
 const FileText = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
     throw new Error("Attempted to call FileText() from the server but FileText is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx <module evaluation>", "FileText");
@@ -102,6 +109,9 @@ const MagnifyingGlass = (0, __TURBOPACK__imported__module__$5b$project$5d2f$stro
 const Megaphone = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
     throw new Error("Attempted to call Megaphone() from the server but Megaphone is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx <module evaluation>", "Megaphone");
+const Phone = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
+    throw new Error("Attempted to call Phone() from the server but Phone is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
+}, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx <module evaluation>", "Phone");
 const Robot = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
     throw new Error("Attempted to call Robot() from the server but Robot is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx <module evaluation>", "Robot");
@@ -128,6 +138,8 @@ __turbopack_context__.s([
     ()=>ChatCircle,
     "Clock",
     ()=>Clock,
+    "Envelope",
+    ()=>Envelope,
     "FileText",
     ()=>FileText,
     "Funnel",
@@ -138,6 +150,8 @@ __turbopack_context__.s([
     ()=>MagnifyingGlass,
     "Megaphone",
     ()=>Megaphone,
+    "Phone",
+    ()=>Phone,
     "Robot",
     ()=>Robot,
     "ShareNetwork",
@@ -166,6 +180,9 @@ const ChatCircle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_ww
 const Clock = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
     throw new Error("Attempted to call Clock() from the server but Clock is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx", "Clock");
+const Envelope = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
+    throw new Error("Attempted to call Envelope() from the server but Envelope is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
+}, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx", "Envelope");
 const FileText = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
     throw new Error("Attempted to call FileText() from the server but FileText is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx", "FileText");
@@ -181,6 +198,9 @@ const MagnifyingGlass = (0, __TURBOPACK__imported__module__$5b$project$5d2f$stro
 const Megaphone = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
     throw new Error("Attempted to call Megaphone() from the server but Megaphone is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx", "Megaphone");
+const Phone = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
+    throw new Error("Attempted to call Phone() from the server but Phone is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
+}, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx", "Phone");
 const Robot = (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$server$2d$dom$2d$turbopack$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerClientReference"])(function() {
     throw new Error("Attempted to call Robot() from the server but Robot is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");
 }, "[project]/strony_www/drozniak-landingpage/app/components/BlogIcons.tsx", "Robot");
