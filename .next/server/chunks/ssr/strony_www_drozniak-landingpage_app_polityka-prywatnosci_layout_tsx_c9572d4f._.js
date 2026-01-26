@@ -1,0 +1,3 @@
+module.exports=[47914,a=>{"use strict";function b({children:a}){return a}a.s(["default",()=>b,"metadata",0,{title:"Polityka prywatności",description:"Polityka prywatności strony drozniak.pl. Informacje o przetwarzaniu danych osobowych zgodnie z RODO.",robots:{index:!0,follow:!0},alternates:{canonical:"https://drozniak.pl/polityka-prywatnosci"}}])}];
+
+//# sourceMappingURL=strony_www_drozniak-landingpage_app_polityka-prywatnosci_layout_tsx_c9572d4f._.js.map

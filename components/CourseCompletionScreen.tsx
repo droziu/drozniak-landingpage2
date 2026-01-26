@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../hooks/useAuth';
-import { useCourse } from '../hooks/useCourse';
+import { supabase } from '@/lib/supabase-client';
+import { useAuth } from '@/app/hooks/useAuth';
+import { useCourse } from '@/app/hooks/useCourse';
 
 interface CourseCompletionScreenProps {
   onComplete: () => void;

@@ -7,11 +7,11 @@ import {
   Calendar,
   User
 } from 'phosphor-react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../hooks/useAuth';
+import { supabase } from '@/lib/supabase-client';
+import { useAuth } from '@/app/hooks/useAuth';
 import { CustomSelect } from './CustomSelect';
 import { CustomCheckbox } from './CustomCheckbox';
-import { DatePickerField } from './FunnelBuilder';
+import { DatePickerField } from './DatePickerField';
 
 interface CommentFormProps {
   funnelId: string;

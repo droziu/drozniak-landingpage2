@@ -1,3 +1,0 @@
-module.exports=[63148,a=>{"use strict";function b({children:a}){return a}a.s(["default",()=>b,"metadata",0,{title:"Doradztwo Biznesowe oraz Doboru Narzędzi AI - Diagnoza firmy",description:"Narzędzie do diagnozy biznesu dla firm z branży cateringowej. Przeanalizuj sytuację firmy, marketing oraz potencjał wykorzystania nowych technologii.",robots:{index:!1,follow:!1}}])}];
-
-//# sourceMappingURL=strony_www_drozniak-landingpage_app_doradztwo-zef_layout_tsx_1ea55ff3._.js.map

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/stanislawdrozniak/strony_www/drozniak-landingpage/utils/courseLoader.ts"],"sourcesContent":["import { trainingModules } from '../config/trainingModules';\nimport { trainingModulesSocialBoost } from '../config/trainingModulesSocialBoost';\nimport type { Module } from '../config/trainingModules';\n\nexport const loadCourseModules = (configPath: string): Module[] => {\n  switch (configPath) {\n    case 'trainingModules':\n      return trainingModules;\n    case 'trainingModulesSocialBoost':\n      return trainingModulesSocialBoost;\n    default:\n      console.warn(`Unknown config path: ${configPath}, using default`);\n      return trainingModules;\n  }\n};\n"],"names":[],"mappings":";;;;AAAA;AACA;;;AAGO,MAAM,oBAAoB,CAAC;IAChC,OAAQ;QACN,KAAK;YACH,OAAO,qLAAe;QACxB,KAAK;YACH,OAAO,2MAA0B;QACnC;YACE,QAAQ,IAAI,CAAC,CAAC,qBAAqB,EAAE,WAAW,eAAe,CAAC;YAChE,OAAO,qLAAe;IAC1B;AACF"}}]
+}

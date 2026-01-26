@@ -109,6 +109,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$la
 ;
 ;
 ;
+;
 const BASE_URL = 'https://drozniak.pl';
 const metadata = {
     metadataBase: new URL(BASE_URL),
@@ -303,7 +304,7 @@ function RootLayout({ children }) {
                         id: "schema-organization"
                     }, void 0, false, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
-                        lineNumber: 179,
+                        lineNumber: 180,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
@@ -314,7 +315,7 @@ function RootLayout({ children }) {
                         id: "schema-person"
                     }, void 0, false, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
-                        lineNumber: 184,
+                        lineNumber: 185,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
@@ -325,7 +326,7 @@ function RootLayout({ children }) {
                         id: "schema-website"
                     }, void 0, false, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
-                        lineNumber: 189,
+                        lineNumber: 190,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
@@ -336,13 +337,13 @@ function RootLayout({ children }) {
                         id: "schema-service"
                     }, void 0, false, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
-                        lineNumber: 194,
+                        lineNumber: 195,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
-                lineNumber: 177,
+                lineNumber: 178,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("body", {
@@ -351,18 +352,18 @@ function RootLayout({ children }) {
                     children: children
                 }, void 0, false, {
                     fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
-                    lineNumber: 201,
+                    lineNumber: 202,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
-                lineNumber: 200,
+                lineNumber: 201,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/strony_www/drozniak-landingpage/app/layout.tsx",
-        lineNumber: 176,
+        lineNumber: 177,
         columnNumber: 5
     }, this);
 }

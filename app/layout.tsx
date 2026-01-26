@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Montserrat, Open_Sans } from 'next/font/google';
 import './globals.css';
+import '@xyflow/react/dist/style.css';
 import { LayoutClient } from './components/LayoutClient';
 
 const montserrat = Montserrat({

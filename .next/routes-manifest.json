@@ -1,0 +1,300 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "header",
+          "key": "x-forwarded-proto",
+          "value": "http"
+        }
+      ],
+      "destination": "https://drozniak.pl/:path*",
+      "statusCode": 308,
+      "regex": "^(?!/_next)(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.drozniak.pl"
+        }
+      ],
+      "destination": "https://drozniak.pl/:path*",
+      "statusCode": 308,
+      "regex": "^(?!/_next)(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+    },
+    {
+      "source": "/:path+/",
+      "destination": "/:path",
+      "statusCode": 308,
+      "regex": "^(?!/_next)(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/(?:/)?$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [
+      {
+        "source": "/sitemap.xml",
+        "destination": "/sitemap",
+        "regex": "^/sitemap\\.xml(?:/)?$"
+      }
+    ],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/admin/marketing/[id]",
+      "regex": "^/admin/marketing/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/admin/marketing/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/admin/proposals/[id]",
+      "regex": "^/admin/proposals/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/admin/proposals/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/admin/[...slug]",
+      "regex": "^/admin/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/admin/(?<nxtPslug>.+?)(?:/)?$"
+    },
+    {
+      "page": "/blog/kategoria/[categorySlug]",
+      "regex": "^/blog/kategoria/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPcategorySlug": "nxtPcategorySlug"
+      },
+      "namedRegex": "^/blog/kategoria/(?<nxtPcategorySlug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/blog/[slug]",
+      "regex": "^/blog/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/blog/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/o/[slug]",
+      "regex": "^/o/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/o/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/p/[token]",
+      "regex": "^/p/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPtoken": "nxtPtoken"
+      },
+      "namedRegex": "^/p/(?<nxtPtoken>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/panel/courses/[courseId]",
+      "regex": "^/panel/courses/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPcourseId": "nxtPcourseId"
+      },
+      "namedRegex": "^/panel/courses/(?<nxtPcourseId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/panel/marketing/[id]",
+      "regex": "^/panel/marketing/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/panel/marketing/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/panel/[...slug]",
+      "regex": "^/panel/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/panel/(?<nxtPslug>.+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/admin/proposals/new",
+      "regex": "^/admin/proposals/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/proposals/new(?:/)?$"
+    },
+    {
+      "page": "/api/contact",
+      "regex": "^/api/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/contact(?:/)?$"
+    },
+    {
+      "page": "/api/course-completion-email",
+      "regex": "^/api/course\\-completion\\-email(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/course\\-completion\\-email(?:/)?$"
+    },
+    {
+      "page": "/api/doradztwo-email",
+      "regex": "^/api/doradztwo\\-email(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/doradztwo\\-email(?:/)?$"
+    },
+    {
+      "page": "/api/strony-www",
+      "regex": "^/api/strony\\-www(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/strony\\-www(?:/)?$"
+    },
+    {
+      "page": "/blog",
+      "regex": "^/blog(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blog(?:/)?$"
+    },
+    {
+      "page": "/freelancer",
+      "regex": "^/freelancer(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/freelancer(?:/)?$"
+    },
+    {
+      "page": "/kontakt",
+      "regex": "^/kontakt(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/kontakt(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/panel",
+      "regex": "^/panel(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/panel(?:/)?$"
+    },
+    {
+      "page": "/polityka-prywatnosci",
+      "regex": "^/polityka\\-prywatnosci(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/polityka\\-prywatnosci(?:/)?$"
+    },
+    {
+      "page": "/portfolio-pasw",
+      "regex": "^/portfolio\\-pasw(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portfolio\\-pasw(?:/)?$"
+    },
+    {
+      "page": "/portfolio-redlin",
+      "regex": "^/portfolio\\-redlin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portfolio\\-redlin(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/robots.txt",
+      "regex": "^/robots\\.txt(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/robots\\.txt(?:/)?$"
+    },
+    {
+      "page": "/sitemap.xml",
+      "regex": "^/sitemap\\.xml(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/sitemap\\.xml(?:/)?$"
+    },
+    {
+      "page": "/strony-www",
+      "regex": "^/strony\\-www(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/strony\\-www(?:/)?$"
+    },
+    {
+      "page": "/system",
+      "regex": "^/system(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/system(?:/)?$"
+    },
+    {
+      "page": "/szkolenia",
+      "regex": "^/szkolenia(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/szkolenia(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/strony_www/drozniak-landingpage/middleware.ts"],"sourcesContent":["import { NextResponse, type NextRequest } from 'next/server';\n\n// Prosty middleware - przekierowania będą obsługiwane przez Client Components w layoutach\nexport async function middleware(request: NextRequest) {\n  // Na razie tylko przekazujemy request dalej\n  // Autentykacja będzie sprawdzana w Client Components (layoutach)\n  return NextResponse.next();\n}\n\nexport const config = {\n  matcher: [\n    /*\n     * Match all request paths except for the ones starting with:\n     * - _next/static (static files)\n     * - _next/image (image optimization files)\n     * - favicon.ico (favicon file)\n     * - public folder\n     * - api routes (handled separately)\n     */\n    '/((?!_next/static|_next/image|favicon.ico|.*\\\\.(?:svg|png|jpg|jpeg|gif|webp)$|api).*)',\n  ],\n};\n"],"names":[],"mappings":";;;;;;AAAA;AAAA;;AAGO,eAAe,WAAW,OAAoB;IACnD,4CAA4C;IAC5C,iEAAiE;IACjE,OAAO,yOAAY,CAAC,IAAI;AAC1B;AAEO,MAAM,SAAS;IACpB,SAAS;QACP;;;;;;;KAOC,GACD;KACD;AACH"}}]
+}

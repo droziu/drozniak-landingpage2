@@ -1,0 +1,3 @@
+{
+  "/api/course-completion-email/route": "app/api/course-completion-email/route.js"
+}

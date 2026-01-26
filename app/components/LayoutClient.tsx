@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { StickyCTA } from './StickyCTA';
@@ -11,12 +12,25 @@ interface LayoutClientProps {
 }
 
 export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
+  const pathname = usePathname();
   const [isStickyCtaVisible, setStickyCtaVisible] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState<{
     necessary: boolean;
     performance: boolean;
     analytics: boolean;
   } | null>(null);
+
+  // Sprawdź czy jesteśmy na ścieżkach panelu/admina (nie pokazuj Header/Footer)
+  const isPanelRoute = 
+    pathname === '/login' || 
+    pathname === '/panel' || 
+    pathname === '/admin' || 
+    pathname === '/profile' ||
+    pathname.startsWith('/panel/') ||
+    pathname.startsWith('/admin/') ||
+    pathname.startsWith('/profile/') ||
+    pathname.startsWith('/p/') || // Public proposals
+    pathname.startsWith('/o/'); // PDF proposals
 
   useEffect(() => {
     // Load existing cookie preferences
@@ -25,20 +39,23 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
       setCookiePreferences(JSON.parse(savedPreferences));
     }
 
-    const handleScroll = () => {
-      // Show sticky CTA after scrolling past the hero section (e.g., 800px)
-      if (window.scrollY > 800) {
-        setStickyCtaVisible(true);
-      } else {
-        setStickyCtaVisible(false);
-      }
-    };
+    // Tylko dla publicznych stron - sticky CTA
+    if (!isPanelRoute) {
+      const handleScroll = () => {
+        // Show sticky CTA after scrolling past the hero section (e.g., 800px)
+        if (window.scrollY > 800) {
+          setStickyCtaVisible(true);
+        } else {
+          setStickyCtaVisible(false);
+        }
+      };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [isPanelRoute]);
 
   const handleCookieAccept = (preferences: { necessary: boolean; performance: boolean; analytics: boolean }) => {
     setCookiePreferences(preferences);
@@ -52,11 +69,11 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
 
   return (
     <>
-      <Header />
+      {!isPanelRoute && <Header />}
       {children}
-      <Footer />
-      <StickyCTA isVisible={isStickyCtaVisible} />
-      <CookieConsent onAccept={handleCookieAccept} />
+      {!isPanelRoute && <Footer />}
+      {!isPanelRoute && <StickyCTA isVisible={isStickyCtaVisible} />}
+      {!isPanelRoute && <CookieConsent onAccept={handleCookieAccept} />}
     </>
   );
 };

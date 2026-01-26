@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../hooks/useAuth';
-import { useClientPanel } from '../hooks/useClientPanel';
+import { supabase } from '@/lib/supabase-client';
+import { useAuth } from '@/app/hooks/useAuth';
+import { useClientPanel } from '@/app/hooks/useClientPanel';
 import { LoadingState } from './LoadingState';
 import { FileText, CheckCircle, Eye } from 'phosphor-react';
 

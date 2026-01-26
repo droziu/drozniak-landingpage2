@@ -177,10 +177,42 @@ RESEND_API_KEY=twoj-resend-key
 
 ## 📝 Uwagi techniczne
 
-- **Panel/Admin:** Zostaje jako Vite SPA (nie migrowane)
+- **Panel/Admin:** ✅ **MIGROWANE DO NEXT.JS** - Pełna migracja panelu i admina do Next.js
 - **Stare komponenty:** Wykluczone z kompilacji TypeScript Next.js, ale pozostają w repo
 - **Phosphor React:** Używa Client Component (`'use client'`) ze względu na problemy z SSR
 - **ISR:** Blog posty mają revalidate 1h - nowe posty będą widoczne maksymalnie po 1 godzinie (lub po ręcznym revalidate)
+
+---
+
+## 🔄 Migracja Panelu i Admina (W TRAKCIE)
+
+### ✅ Zakończone:
+- [x] Struktura folderów (`app/login`, `app/panel`, `app/admin`, `app/profile`)
+- [x] `LoginPage` → `app/login/page.tsx`
+- [x] `ClientPanel` → `app/panel/[...slug]/page.tsx` + `app/panel/page.tsx`
+- [x] `AdminPanel` → `app/admin/[...slug]/page.tsx` + `app/admin/page.tsx`
+- [x] `UserProfile` → `app/profile/page.tsx`
+- [x] `useAuth` → `app/hooks/useAuth.ts` (Next.js compatible)
+- [x] `useClientPanel` → `app/hooks/useClientPanel.ts` (Next.js compatible)
+- [x] `useUserCourses` → `app/hooks/useUserCourses.ts` (Next.js compatible)
+- [x] `UserMenu` → `app/components/UserMenu.tsx` (Next.js compatible)
+- [x] `ClientCoursesView` → `app/components/ClientCoursesView.tsx` (Next.js compatible)
+- [x] `FunnelList` → `app/components/FunnelList.tsx` (Next.js compatible)
+- [x] `ProposalsList` → `app/components/ProposalsList.tsx` (Next.js compatible)
+- [x] `ProposalEditor` → `app/admin/proposals/[id]/page.tsx` + `app/admin/proposals/new/page.tsx`
+- [x] Layouty autentykacji (`app/panel/layout.tsx`, `app/admin/layout.tsx`)
+
+### ✅ Zakończone (pełna migracja):
+- [x] `TrainingPage` → `app/panel/courses/[courseId]/page.tsx` ✅
+- [x] `FunnelBuilder` → `app/panel/marketing/[id]/page.tsx` i `app/admin/marketing/[id]/page.tsx` ✅
+- [x] `PublicProposalView` → `app/p/[token]/page.tsx` ✅
+- [x] `PDFProposalView` → `app/o/[slug]/page.tsx` ✅
+- [x] `useCourse` → `app/hooks/useCourse.ts` ✅
+- [x] `useCourseById` → `app/hooks/useCourseById.ts` ✅
+
+### ✅ Uwagi:
+- `AdminCoursesTab` - nie używa `navigate()`, więc może pozostać w `components/` (działa z Next.js)
+- Wszystkie komponenty panelu i admina zostały zmigrowane do Next.js
 
 ---
 
