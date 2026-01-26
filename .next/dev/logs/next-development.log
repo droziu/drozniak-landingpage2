@@ -1010,3 +1010,5 @@ Import trace:
 [04:59:48.468] Browser LOG     Zmiana stanu autentykacji: TOKEN_REFRESHED stanislaw@drozniak.com
 [04:59:48.468] Browser LOG     Zmiana stanu autentykacji: TOKEN_REFRESHED stanislaw@drozniak.com
 [04:59:48.468] Browser LOG     Zmiana stanu autentykacji: TOKEN_REFRESHED stanislaw@drozniak.com
+[05:07:29.256] Server  LOG     ✓ Compiled in 39ms
+[05:08:37.138] Server  LOG     ✓ Compiled in 738ms
