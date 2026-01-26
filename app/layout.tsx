@@ -66,12 +66,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: `${BASE_URL}/images/Drozniak_Favicon.svg`, type: 'image/svg+xml' },
-      { url: `${BASE_URL}/images/Drozniak_Favicon_96x96.png`, sizes: '96x96', type: 'image/png' },
-      { url: `${BASE_URL}/images/Drozniak_Favicon_176x176.png`, sizes: '176x176', type: 'image/png' },
+      { url: '/images/Drozniak_Favicon.svg', type: 'image/svg+xml' },
+      { url: '/images/Drozniak_Favicon_96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/images/Drozniak_Favicon_176x176.png', sizes: '176x176', type: 'image/png' },
     ],
     apple: [
-      { url: `${BASE_URL}/images/Drozniak_Favicon_176x176.png`, sizes: '180x180', type: 'image/png' },
+      { url: '/images/Drozniak_Favicon_176x176.png', sizes: '180x180', type: 'image/png' },
     ],
   },
 };

@@ -21,7 +21,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // HTTP to HTTPS
+      // HTTP to HTTPS - Next.js automatycznie wyklucza _next, api, i pliki statyczne
       {
         source: '/:path*',
         has: [

@@ -33,27 +33,33 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
     pathname.startsWith('/o/'); // PDF proposals
 
   useEffect(() => {
-    // Load existing cookie preferences
-    const savedPreferences = localStorage.getItem('cookieConsent');
-    if (savedPreferences) {
-      setCookiePreferences(JSON.parse(savedPreferences));
-    }
-
-    // Tylko dla publicznych stron - sticky CTA
-    if (!isPanelRoute) {
-      const handleScroll = () => {
-        // Show sticky CTA after scrolling past the hero section (e.g., 800px)
-        if (window.scrollY > 800) {
-          setStickyCtaVisible(true);
-        } else {
-          setStickyCtaVisible(false);
+    try {
+      // Load existing cookie preferences
+      if (typeof window !== 'undefined') {
+        const savedPreferences = localStorage.getItem('cookieConsent');
+        if (savedPreferences) {
+          setCookiePreferences(JSON.parse(savedPreferences));
         }
-      };
 
-      window.addEventListener('scroll', handleScroll);
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-      };
+        // Tylko dla publicznych stron - sticky CTA
+        if (!isPanelRoute) {
+          const handleScroll = () => {
+            // Show sticky CTA after scrolling past the hero section (e.g., 800px)
+            if (window.scrollY > 800) {
+              setStickyCtaVisible(true);
+            } else {
+              setStickyCtaVisible(false);
+            }
+          };
+
+          window.addEventListener('scroll', handleScroll);
+          return () => {
+            window.removeEventListener('scroll', handleScroll);
+          };
+        }
+      }
+    } catch (error) {
+      console.error('Error in LayoutClient useEffect:', error);
     }
   }, [isPanelRoute]);
 
