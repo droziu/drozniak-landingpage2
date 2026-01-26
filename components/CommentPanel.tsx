@@ -14,7 +14,7 @@ import {
   WarningCircle,
   ChatCircleDots
 } from 'phosphor-react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/lib/supabase-client';
 import { CustomSelect } from './CustomSelect';
 
 interface CommentThread {
@@ -41,6 +41,7 @@ interface CommentPanelProps {
   onClose: () => void;
   onJumpToAnchor: (anchorType: 'node' | 'edge' | 'region', anchorId?: string, regionCoords?: { x: number; y: number; width: number; height: number }) => void;
   onThreadClick?: (threadId: string) => void;
+  refreshTrigger?: number;
 }
 
 export const CommentPanel: React.FC<CommentPanelProps> = ({ 

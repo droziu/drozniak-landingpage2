@@ -1,0 +1,4 @@
+# Ignore Vite files to prevent Vercel from detecting Vite
+vite.config.ts
+index.html
+dist/

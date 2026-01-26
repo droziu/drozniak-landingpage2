@@ -220,7 +220,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
       return (
         <div
           dangerouslySetInnerHTML={{ __html: block.data.html || '' }}
-          style={block.data.css ? { cssText: block.data.css } : undefined}
+          style={block.data.css ? ({ cssText: block.data.css } as React.CSSProperties) : undefined}
         />
       );
 
@@ -668,7 +668,7 @@ export const BlogPost: React.FC = () => {
                 onError={(e) => {
                   // Fallback do oryginalnego URL jeśli przekształcony nie działa
                   const target = e.target as HTMLImageElement;
-                  if (target.src !== post.featured_image_url) {
+                  if (post.featured_image_url && target.src !== post.featured_image_url) {
                     target.src = post.featured_image_url;
                   }
                 }}

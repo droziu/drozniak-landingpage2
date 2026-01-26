@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/stanislawdrozniak/strony_www/drozniak-landingpage/app/admin/page.tsx"],"sourcesContent":["'use client';\n\nimport { useEffect } from 'react';\nimport { useRouter } from 'next/navigation';\n\nexport default function AdminRootPage() {\n  const router = useRouter();\n\n  useEffect(() => {\n    // Przekieruj do domyślnej zakładki (courses)\n    router.replace('/admin/courses');\n  }, [router]);\n\n  return null;\n}\n"],"names":[],"mappings":";;;;AAEA;AACA;AAHA;;;AAKe,SAAS;IACtB,MAAM,SAAS,IAAA,wLAAS;IAExB,IAAA,2PAAS,EAAC;QACR,6CAA6C;QAC7C,OAAO,OAAO,CAAC;IACjB,GAAG;QAAC;KAAO;IAEX,OAAO;AACT"}}]
+}

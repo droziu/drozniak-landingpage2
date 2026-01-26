@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/strony-www/layout,_N_T_/strony-www/page,_N_T_/strony-www"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/strony-www/__PAGE__",
+    "/strony-www",
+    "/_index",
+    "/_head"
+  ]
+}

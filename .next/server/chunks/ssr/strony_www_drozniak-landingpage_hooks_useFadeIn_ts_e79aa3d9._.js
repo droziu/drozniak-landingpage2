@@ -1,0 +1,3 @@
+module.exports=[90520,a=>{"use strict";var b=a.i(70994);a.s(["useFadeIn",0,()=>{let[a,c]=(0,b.useState)(!1),d=(0,b.useRef)(null);return(0,b.useEffect)(()=>{let a=new IntersectionObserver(b=>{b.forEach(b=>{b.isIntersecting&&(c(!0),a.unobserve(b.target))})},{threshold:.1}),b=d.current;return b&&a.observe(b),()=>{b&&a.unobserve(b)}},[]),{ref:d,className:`transition-opacity duration-500 ease-in-out ${a?"opacity-100":"opacity-0"}`}}])}];
+
+//# sourceMappingURL=strony_www_drozniak-landingpage_hooks_useFadeIn_ts_e79aa3d9._.js.map
