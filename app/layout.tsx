@@ -3,6 +3,7 @@ import { Montserrat, Open_Sans } from 'next/font/google';
 import './globals.css';
 import '@xyflow/react/dist/style.css';
 import { LayoutClient } from './components/LayoutClient';
+import { Analytics } from '@vercel/analytics/next';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -205,6 +206,7 @@ export default function RootLayout({
         <LayoutClient>
           {children}
         </LayoutClient>
+        <Analytics />
       </body>
     </html>
   );
