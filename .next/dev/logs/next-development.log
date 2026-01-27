@@ -140,3 +140,315 @@ Import traces:
 [01:52:03.019] Server  LOG     ✓ Compiled in 322ms
 [01:52:04.421] Server  LOG     ✓ Compiled in 597ms
 [02:15:49.123] Server  LOG     ✓ Compiled in 534ms
+[02:17:36.346] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.349] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.355] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.360] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.365] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.367] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.372] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.375] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.379] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.382] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.383] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.385] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.386] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.392] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.396] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.397] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.399] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.400] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.403] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.403] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:17:36.521] Browser ERROR   ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
+Module not found: Can't resolve '@vercel/analytics/next'
+  4 | import '@xyflow/react/dist/style.css';
+  5 | import { LayoutClient } from './components/LayoutClient';
+> 6 | import { Analytics } from '@vercel/analytics/next';
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 |
+  8 | const montserrat = Montserrat({
+  9 |   subsets: ['latin'],
+
+https://nextjs.org/docs/messages/module-not-found
+[02:21:10.054] Server  LOG     ✓ Compiled in 608ms

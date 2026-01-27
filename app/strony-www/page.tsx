@@ -832,7 +832,7 @@ export default function StronyWWWPage() {
               </div>
               <div className="card-content">
                 <h3 id="card-1-title" className="card-title">
-                  1) Premium od pierwszego wrażenia
+                  Premium od pierwszego wrażenia
                 </h3>
                 <p className="card-description">
                   Projektuję stronę tak, by od razu budowała zaufanie do marki: typografia, proporcje, hierarchia treści, detale. To standard, który czuć natychmiast i który podnosi postrzeganą wartość Twojej oferty.
@@ -849,7 +849,7 @@ export default function StronyWWWPage() {
               </div>
               <div className="card-content">
                 <h3 id="card-2-title" className="card-title">
-                  2) Treść i układ, które prowadzą do działania
+                  Treść i układ, które prowadzą do działania
                 </h3>
                 <p className="card-description">
                   Struktura strony wynika z procesu decyzyjnego klienta, a nie z szablonu. Użytkownik szybko rozumie, co oferujesz, dla kogo to jest i jaki ma zrobić następny krok.
@@ -866,7 +866,7 @@ export default function StronyWWWPage() {
               </div>
               <div className="card-content">
                 <h3 id="card-3-title" className="card-title">
-                  3) Błyskawiczne działanie na telefonie
+                  Błyskawiczne działanie na telefonie
                 </h3>
                 <p className="card-description">
                   Strona ładuje się błyskawicznie i działa płynnie na mobile, bez ciężaru typowego dla gotowych systemów. To przekłada się na większą liczbę osób, które realnie docierają do oferty i kontaktu.
@@ -883,7 +883,7 @@ export default function StronyWWWPage() {
               </div>
               <div className="card-content">
                 <h3 id="card-4-title" className="card-title">
-                  4) SEO na poziomie, bo masz pełną kontrolę
+                  SEO na poziomie, bo masz pełną kontrolę
                 </h3>
                 <p className="card-description">
                   W rozwiązaniach premium masz kontrolę nad strukturą, kodem, szybkością i każdym elementem strony. To baza pod SEO, której nie da się uzyskać w tym samym standardzie, gdy strona jest zależna od motywu i wtyczek.
@@ -900,7 +900,7 @@ export default function StronyWWWPage() {
               </div>
               <div className="card-content">
                 <h3 id="card-5-title" className="card-title">
-                  5) Gotowa na landing page'e, kampanie i sprzedaż
+                  Gotowa na landing page'e, kampanie i sprzedaż
                 </h3>
                 <p className="card-description">
                   Strona jest przygotowana pod rozwój marketingu: landing page'e, lead magnety, sprzedaż kursu, nowe usługi i segmenty klientów. Dzięki temu nie wracasz do punktu wyjścia przy każdej nowej inicjatywie.
@@ -917,7 +917,7 @@ export default function StronyWWWPage() {
               </div>
               <div className="card-content">
                 <h3 id="card-6-title" className="card-title">
-                  6) Architektura klasy enterprise
+                  Architektura klasy enterprise
                 </h3>
                 <p className="card-description">
                   Buduję w podejściu i technologii stosowanej przez globalne marki, które wymagają najwyższej jakości wydajności i stabilności. To standard używany m.in. w projektach takich jak Nike, OpenAI czy Netflix Jobs.
