@@ -1,24 +1,7 @@
 {
-<<<<<<< HEAD
   "/blog/[slug]/page": "app/blog/[slug]/page.js",
   "/blog/page": "app/blog/page.js",
-  "/kontakt/page": "app/kontakt/page.js",
   "/page": "app/page.js",
-=======
-  "/admin/[...slug]/page": "app/admin/[...slug]/page.js",
-  "/admin/marketing/[id]/page": "app/admin/marketing/[id]/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/blog/[slug]/page": "app/blog/[slug]/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/kontakt/page": "app/kontakt/page.js",
-  "/login/page": "app/login/page.js",
-  "/page": "app/page.js",
-  "/panel/[...slug]/page": "app/panel/[...slug]/page.js",
-  "/panel/courses/[courseId]/page": "app/panel/courses/[courseId]/page.js",
-  "/panel/page": "app/panel/page.js",
-  "/profile/page": "app/profile/page.js",
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
   "/strony-www/page": "app/strony-www/page.js",
-  "/system/page": "app/system/page.js",
-  "/szkolenia/page": "app/szkolenia/page.js"
+  "/system/page": "app/system/page.js"
 }

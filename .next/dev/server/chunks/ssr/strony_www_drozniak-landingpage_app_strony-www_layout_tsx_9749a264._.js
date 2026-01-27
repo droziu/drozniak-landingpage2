@@ -8,9 +8,11 @@ __turbopack_context__.s([
     "metadata",
     ()=>metadata
 ]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/strony_www/drozniak-landingpage/node_modules/next/dist/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js [app-rsc] (ecmascript)");
+;
 const metadata = {
-    title: 'Strony internetowe dla małych firm i freelancerów',
-    description: 'Strony www dla małych firm i freelancerów. Strona internetowa dla trenera, dietetyka, zespołu muzycznego. Szybkie, nowoczesne strony projektowane pod pozyskiwanie klientów.',
+    title: 'Strony internetowe dla firm i freelancerów',
+    description: 'Premium jakość, błyskawiczne, dopracowane i przygotowane pod pozyskiwanie klientów - projekt szyty na miarę. Strony www dla małych firm i freelancerów.',
     keywords: [
         'strony internetowe dla małych firm',
         'strony www dla freelancerów',
@@ -25,11 +27,7 @@ const metadata = {
         url: 'https://drozniak.pl/strony-www',
         images: [
             {
-<<<<<<< HEAD
                 url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp',
-=======
-                url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.jpg',
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 width: 1200,
                 height: 630,
                 alt: 'Stanisław Drożniak'
@@ -38,22 +36,203 @@ const metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Strony internetowe dla małych firm i freelancerów',
-        description: 'Strony www dla małych firm i freelancerów. Szybkie, nowoczesne strony projektowane pod pozyskiwanie klientów.',
+        title: 'Strony internetowe dla firm i freelancerów',
+        description: 'Premium jakość, błyskawiczne, dopracowane i przygotowane pod pozyskiwanie klientów - projekt szyty na miarę.',
         images: [
-<<<<<<< HEAD
             'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'
-=======
-            'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.jpg'
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
         ]
     },
     alternates: {
         canonical: 'https://drozniak.pl/strony-www'
     }
 };
+// FAQ Schema.org JSON-LD for SEO
+const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+        {
+            '@type': 'Question',
+            name: 'Czy to strona na WordPressie?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Nie. Nie korzystam z WordPressa ani gotowych kreatorów. Tworzę strony w oparciu o nowoczesne frameworki webowe (takie jak Next.js czy Astro) i infrastrukturę Vercel. Dzięki temu kod jest lekki, stabilny i błyskawiczny, a strona ładuje się w około 1 sekundę - bez potrzeby ciągłych aktualizacji czy martwienia się o wtyczki. WordPress to dobry wybór dla blogów, ale jeśli chcesz stronę, która sprzedaje, działa szybko i nie wymaga opieki technicznej, potrzebujesz nowoczesnego rozwiązania.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Ile to kosztuje?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Prosty landing page zaczyna się od 2500 zł netto, a większość standardowych stron mieści się w przedziale 3500 - 6000 zł. W tej cenie otrzymujesz stronę, która pracuje na Twoje wyniki - jest szybka, zoptymalizowana i zaprojektowana pod konwersję. Pracuję bez pośredników i zespołów projektowych - wszystko tworzę sam, od strategii po wdrożenie. Dzięki temu płacisz za jakość i skuteczność, nie za strukturę agencji i wewnętrzne koszty.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Czym Twoje strony różnią się od innych wykonawców?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Łączę marketing, design i technologię w jeden spójny proces. Nie buduję stron "na oko" - każda decyzja, od układu po kolor, wynika z wiedzy o zachowaniach użytkowników i zasadach konwersji. Mam za sobą lata doświadczenia w marketingu oraz certyfikaty m.in. z Adobe, Meta i University of California, dzięki czemu rozumiem, jak połączyć estetykę z psychologią decyzji. Dlatego moje strony nie tylko dobrze wyglądają - one po prostu działają skutecznie.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Czy będę mógł coś samodzielnie zmieniać?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Tak, otrzymasz prosty panel do edycji treści, zdjęć i nagłówków. Dodatkowo nagrywam krótką wideoinstrukcję, żebyś nie musiał zgadywać, co kliknąć. Nie zostawiam Cię z plikiem ZIP - zostawiam Ci stronę, którą faktycznie możesz obsłużyć.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Ile to trwa?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Zazwyczaj 2–4 tygodnie, w zależności od projektu i materiałów. Pracujemy etapami - najpierw strategia, potem projekt, potem wdrożenie. Wszystko widzisz i akceptujesz po drodze.'
+            }
+        },
+        {
+            '@type': 'Question',
+            name: 'Co jeśli będę chciał coś poprawić po starcie?',
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'W cenie masz poprawki, dopasowania i wsparcie po wdrożeniu. Nie kończę projektu w dniu publikacji - pomagam Ci ustawić wszystko tak, by strona działała w praktyce.'
+            }
+        }
+    ]
+};
+// Reviews Schema.org JSON-LD for SEO
+const reviewsSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Strony internetowe dla firm i freelancerów',
+    provider: {
+        '@type': 'Person',
+        name: 'Stanisław Drożniak',
+        url: 'https://drozniak.pl'
+    },
+    aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '5',
+        reviewCount: '8'
+    },
+    review: [
+        {
+            '@type': 'Review',
+            author: {
+                '@type': 'Person',
+                name: 'Brent Peterson',
+                jobTitle: 'CEO, Wagento'
+            },
+            reviewBody: 'Świetna obsługa i błyskawiczny czas realizacji. Zdecydowanie polecam współpracę.',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5'
+            }
+        },
+        {
+            '@type': 'Review',
+            author: {
+                '@type': 'Person',
+                name: 'Russell Garner'
+            },
+            reviewBody: 'Stanisław trafił w dziesiątkę. Zrozumiał wizję, był zaangażowany i dowiózł efekt, który przerósł oczekiwania.',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5'
+            }
+        },
+        {
+            '@type': 'Review',
+            author: {
+                '@type': 'Person',
+                name: 'Kalen Jordan',
+                jobTitle: 'Co-Founder, Commerce Hero'
+            },
+            reviewBody: 'Stanislaw is awesome! Reliable and great work.',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5'
+            }
+        },
+        {
+            '@type': 'Review',
+            author: {
+                '@type': 'Person',
+                name: 'Michał Fus'
+            },
+            reviewBody: 'Szybka realizacja, dopracowany każdy detal, pełen profesjonalizm.',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5'
+            }
+        },
+        {
+            '@type': 'Review',
+            author: {
+                '@type': 'Person',
+                name: 'Kaja Lewandowska'
+            },
+            reviewBody: 'Efekt mnie zaskoczył. Z czystym sumieniem polecam współpracę.',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5'
+            }
+        },
+        {
+            '@type': 'Review',
+            author: {
+                '@type': 'Person',
+                name: 'Damian Lewandowski'
+            },
+            reviewBody: 'Indywidualne podejście i pełen profesjonalizm.',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5'
+            }
+        },
+        {
+            '@type': 'Review',
+            author: {
+                '@type': 'Person',
+                name: 'Jarosław Babiuch'
+            },
+            reviewBody: 'Z niczego potrafi zrobić coś. Efekt końcowy – pozytywne zaskoczenie.',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5'
+            }
+        }
+    ]
+};
 function StronyWWWLayout({ children }) {
-    return children;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
+                type: "application/ld+json",
+                dangerouslySetInnerHTML: {
+                    __html: JSON.stringify(faqSchema)
+                },
+                id: "schema-faq"
+            }, void 0, false, {
+                fileName: "[project]/strony_www/drozniak-landingpage/app/strony-www/layout.tsx",
+                lineNumber: 199,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("script", {
+                type: "application/ld+json",
+                dangerouslySetInnerHTML: {
+                    __html: JSON.stringify(reviewsSchema)
+                },
+                id: "schema-reviews"
+            }, void 0, false, {
+                fileName: "[project]/strony_www/drozniak-landingpage/app/strony-www/layout.tsx",
+                lineNumber: 204,
+                columnNumber: 7
+            }, this),
+            children
+        ]
+    }, void 0, true);
 }
 }),
 ];

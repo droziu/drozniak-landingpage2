@@ -35,11 +35,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$la
 const Logo = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
         src: "/images/LOGO_DROZNIAK.svg",
         alt: "Drozniak Logo",
-<<<<<<< HEAD
         width: 120,
         height: 28,
-=======
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
         className: "h-6 md:h-7 w-auto"
     }, void 0, false, {
         fileName: "[project]/strony_www/drozniak-landingpage/components/icons/Logo.tsx",
@@ -270,44 +267,29 @@ const Header = ()=>{
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         onClick: toggleMobileMenu,
-<<<<<<< HEAD
                         "aria-label": isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu',
                         "aria-expanded": isMobileMenuOpen,
-=======
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                         className: "md:hidden relative w-10 h-10 flex flex-col justify-center items-center space-y-1 group",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: `w-6 h-0.5 bg-[#fee715] transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`
                             }, void 0, false, {
                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                 lineNumber: 150,
-=======
-                                lineNumber: 148,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: `w-6 h-0.5 bg-[#fee715] transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`
                             }, void 0, false, {
                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                 lineNumber: 151,
-=======
-                                lineNumber: 149,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: `w-6 h-0.5 bg-[#fee715] transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`
                             }, void 0, false, {
                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                 lineNumber: 152,
-=======
-                                lineNumber: 150,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
@@ -339,21 +321,13 @@ const Header = ()=>{
                                         className: "absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"
                                     }, void 0, false, {
                                         fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                         lineNumber: 171,
-=======
-                                        lineNumber: 169,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                 lineNumber: 162,
-=======
-                                lineNumber: 160,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -375,41 +349,25 @@ const Header = ()=>{
                                                     d: "M19 9l-7 7-7-7"
                                                 }, void 0, false, {
                                                     fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                                     lineNumber: 194,
-=======
-                                                    lineNumber: 192,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                                     columnNumber: 21
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                                 lineNumber: 186,
-=======
-                                                lineNumber: 184,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                                 columnNumber: 19
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             (isSystemPage || isStronyWWWPage || isSzkoleniaPage) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"
                                             }, void 0, false, {
                                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                                 lineNumber: 197,
-=======
-                                                lineNumber: 195,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                                 columnNumber: 21
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                         lineNumber: 177,
-=======
-                                        lineNumber: 175,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                         columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0)),
                                     isMobileServicesOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -425,11 +383,7 @@ const Header = ()=>{
                                                 children: "Strony WWW"
                                             }, void 0, false, {
                                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                                 lineNumber: 204,
-=======
-                                                lineNumber: 202,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                                 columnNumber: 21
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -442,11 +396,7 @@ const Header = ()=>{
                                                 children: "Systemy sprzedażowe"
                                             }, void 0, false, {
                                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                                 lineNumber: 218,
-=======
-                                                lineNumber: 216,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                                 columnNumber: 21
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -459,31 +409,19 @@ const Header = ()=>{
                                                 children: "Szkolenia dla firm"
                                             }, void 0, false, {
                                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                                 lineNumber: 232,
-=======
-                                                lineNumber: 230,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                                 columnNumber: 21
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                         lineNumber: 203,
-=======
-                                        lineNumber: 201,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                 lineNumber: 176,
-=======
-                                lineNumber: 174,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -496,21 +434,13 @@ const Header = ()=>{
                                         className: "absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"
                                     }, void 0, false, {
                                         fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                         lineNumber: 260,
-=======
-                                        lineNumber: 258,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                 lineNumber: 251,
-=======
-                                lineNumber: 249,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -523,49 +453,29 @@ const Header = ()=>{
                                         className: "absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-gradient-to-r from-transparent via-[#fee715] to-transparent"
                                     }, void 0, false, {
                                         fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                         lineNumber: 274,
-=======
-                                        lineNumber: 272,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                                 lineNumber: 265,
-=======
-                                lineNumber: 263,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                         lineNumber: 160,
-=======
-                        lineNumber: 158,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                         columnNumber: 13
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                     lineNumber: 159,
-=======
-                    lineNumber: 157,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                     columnNumber: 11
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/Header.tsx",
-<<<<<<< HEAD
                 lineNumber: 158,
-=======
-                lineNumber: 156,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0))
         ]
@@ -601,11 +511,7 @@ const Footer = ()=>{
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "md:col-span-1",
                         children: [
-<<<<<<< HEAD
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-=======
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 className: "font-[Montserrat] text-lg font-bold text-white mb-4",
                                 children: "O mnie"
                             }, void 0, false, {
@@ -672,11 +578,7 @@ const Footer = ()=>{
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "md:col-span-1 md:text-right",
                         children: [
-<<<<<<< HEAD
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-=======
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                                 className: "font-[Montserrat] text-lg font-bold text-white mb-4",
                                 children: "Kontakt"
                             }, void 0, false, {
@@ -1094,34 +996,12 @@ const LayoutClient = ({ children })=>{
     const isPanelRoute = pathname === '/login' || pathname === '/panel' || pathname === '/admin' || pathname === '/profile' || pathname.startsWith('/panel/') || pathname.startsWith('/admin/') || pathname.startsWith('/profile/') || pathname.startsWith('/p/') || // Public proposals
     pathname.startsWith('/o/'); // PDF proposals
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-<<<<<<< HEAD
         try {
             // Load existing cookie preferences
             if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
             ;
         } catch (error) {
             console.error('Error in LayoutClient useEffect:', error);
-=======
-        // Load existing cookie preferences
-        const savedPreferences = localStorage.getItem('cookieConsent');
-        if (savedPreferences) {
-            setCookiePreferences(JSON.parse(savedPreferences));
-        }
-        // Tylko dla publicznych stron - sticky CTA
-        if (!isPanelRoute) {
-            const handleScroll = ()=>{
-                // Show sticky CTA after scrolling past the hero section (e.g., 800px)
-                if (window.scrollY > 800) {
-                    setStickyCtaVisible(true);
-                } else {
-                    setStickyCtaVisible(false);
-                }
-            };
-            window.addEventListener('scroll', handleScroll);
-            return ()=>{
-                window.removeEventListener('scroll', handleScroll);
-            };
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
         }
     }, [
         isPanelRoute
@@ -1138,43 +1018,27 @@ const LayoutClient = ({ children })=>{
         children: [
             !isPanelRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$Header$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Header"], {}, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/LayoutClient.tsx",
-<<<<<<< HEAD
                 lineNumber: 78,
-=======
-                lineNumber: 72,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 columnNumber: 25
             }, ("TURBOPACK compile-time value", void 0)),
             children,
             !isPanelRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$Footer$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Footer"], {}, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/LayoutClient.tsx",
-<<<<<<< HEAD
                 lineNumber: 80,
-=======
-                lineNumber: 74,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 columnNumber: 25
             }, ("TURBOPACK compile-time value", void 0)),
             !isPanelRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$StickyCTA$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["StickyCTA"], {
                 isVisible: isStickyCtaVisible
             }, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/LayoutClient.tsx",
-<<<<<<< HEAD
                 lineNumber: 81,
-=======
-                lineNumber: 75,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 columnNumber: 25
             }, ("TURBOPACK compile-time value", void 0)),
             !isPanelRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$CookieConsent$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CookieConsent"], {
                 onAccept: handleCookieAccept
             }, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/LayoutClient.tsx",
-<<<<<<< HEAD
                 lineNumber: 82,
-=======
-                lineNumber: 76,
->>>>>>> 1f9da5b628419450df5e4f3a3df649a263f57eee
                 columnNumber: 25
             }, ("TURBOPACK compile-time value", void 0))
         ]

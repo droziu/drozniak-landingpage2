@@ -230,6 +230,25 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
         </div>
       );
 
+    case 'cta':
+      return (
+        <div className="my-16 md:my-20 text-center py-10 md:py-12 px-10 md:px-12 bg-gray-50 border-2 border-gray-200 flex flex-col items-center justify-center">
+          <p className="text-xl md:text-2xl font-extrabold text-[#101820] mb-6 leading-[1.6] m-0">{block.data.ctaText}</p>
+          {block.data.ctaLink && (
+            <a
+              href={block.data.ctaLink}
+              className={`inline-block px-8 py-4 font-extrabold text-lg transition-colors border-2 ${
+                block.data.ctaStyle === 'primary'
+                  ? 'bg-[#fee715] border-[#fee715] text-[#101820] hover:bg-[#101820] hover:text-[#fee715] hover:border-[#101820]'
+                  : 'bg-transparent border-[#fee715] text-[#fee715] hover:bg-[#fee715] hover:text-[#101820]'
+              }`}
+            >
+              Dowiedz się więcej
+            </a>
+          )}
+        </div>
+      );
+
     default:
       return null;
   }

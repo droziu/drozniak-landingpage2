@@ -178,19 +178,10 @@ BEGIN
         }
       },
       {
-        "type": "cta",
-        "id": "cta-landing-page",
-        "data": {
-          "ctaText": "Jeśli chcesz, mogę zbudować Ci taki landing page, stworzony pod konwersję - szybki, konkretny i z jasnym CTA.",
-          "ctaLink": "https://drozniak.pl/strony-www",
-          "ctaStyle": "primary"
-        }
-      },
-      {
         "type": "text",
         "id": "section-1-8",
         "data": {
-          "text": "<p>Warto też pamiętać o jednej rzeczy. Ten kolejny krok nie musi od razu oznaczać dużego zobowiązania. W usługach często lepiej działa mały mostek. Krótkie, niezobowiązujące zapytanie. Prosta wiadomość. Umówienie rozmowy. Klient wchodzi w proces etapami, a nie jest stawiany przed decyzją „kup teraz\" przy pierwszym kontakcie.</p>",
+          "text": "<p>Warto też pamiętać o jednej rzeczy. Ten kolejny krok nie musi od razu oznaczać dużego zobowiązania. W usługach często lepiej działa mały \"mostek\": np. krótkie, niezobowiązujące zapytanie, prosta wiadomość albo umówienie rozmowy. Klient wchodzi w proces etapami, a nie jest stawiany przed decyzją „kup teraz\" przy pierwszym kontakcie.</p>",
           "alignment": "left"
         }
       },
@@ -218,7 +209,7 @@ BEGIN
         "type": "text",
         "id": "section-2-1",
         "data": {
-          "text": "<p>Więle osób myśli o marketingu jak o zestawie osobnych rzeczy. Tu reklamy, tu strona, tu social media, tu sprzedaż. Coś tam poustawiałem, coś działa, coś się dzieje, tylko efekt końcowy jest słaby.</p>",
+          "text": "<p>Wiele osób myśli o marketingu jak o zestawie osobnych rzeczy. Tu reklamy, tu strona, tu social media, tu sprzedaż. Coś tam poustawiałem, coś działa, coś się dzieje, tylko efekt końcowy jest słaby.</p>",
           "alignment": "left"
         }
       },
@@ -295,6 +286,15 @@ BEGIN
         }
       },
       {
+        "type": "cta",
+        "id": "cta-system",
+        "data": {
+          "ctaText": "Chciałbyś pozyskiwać więcej klientów w swojej firmie?",
+          "ctaLink": "/system",
+          "ctaStyle": "primary"
+        }
+      },
+      {
         "type": "text",
         "id": "section-2-11",
         "data": {
@@ -327,7 +327,7 @@ BEGIN
         "type": "text",
         "id": "section-3-2",
         "data": {
-          "text": "<p>To jest też miejsce, w którym bardzo łatwo o prosty błąd. Myślisz: „moja usługa jest dobra, ludzie będą chcieli\". Tylko że klient nie kupuje Twojej jakości technicznej. Klient kupuje rozwiązanie swojego problemu. Jeśli on nie widzi jasno, że to jest rozwiązanie akurat jego problemu, to nawet bardzo dobra usługa będzie wyglądała jak jedna z wielu.</p>",
+          "text": "<p>To jest też miejsce, w którym bardzo łatwo o prosty błąd. Myślisz: „moja usługa jest dobra, ludzie będą chcieli\". Tylko że klient nie kupuje Twojej \"jakości\": on kupuje rozwiązanie swojego problemu. Jeśli on nie widzi jasno, że to jest rozwiązanie akurat jego problemu, to nawet bardzo dobra usługa będzie wyglądała jak jedna z wielu.</p>",
           "alignment": "left"
         }
       },
@@ -351,7 +351,7 @@ BEGIN
         "type": "text",
         "id": "section-3-5",
         "data": {
-          "text": "<p>Wyobraź sobie, że robisz strony internetowe i na swojej stronie piszesz coś w stylu: „zajmuję się rzeczami związanymi z internetem i komputerami\". Na pierwszy rzut oka brzmi to szeroko, a szeroko może się wydawać bezpiecznie. Teoretycznie łapiesz wszystko i wszystkich, bo przecież prawie każdy ma komputer, prawie każdy używa internetu.</p>",
+          "text": "<p>Wyobraź sobie, że robisz strony internetowe i na stronie Twoja oferta brzmi: „zajmuję się rzeczami związanymi z internetem i komputerami\". Super, prawda? Bardzo szeroka oferta, a szeroko to chyba dobrze? Teoretycznie łapiesz wszystko i wszystkich, bo przecież prawie każdy ma komputer i prawie każdy używa internetu. Myślę, że większość osób zgodzi się, że taka oferta brzmi po prostu słabo i nie do końca wiadomo z czym się można do Ciebie zgłosić.</p>",
           "alignment": "left"
         }
       },
@@ -359,7 +359,7 @@ BEGIN
         "type": "text",
         "id": "section-3-6",
         "data": {
-          "text": "<p>Tylko że klient, który realnie ma zapłacić, nie szuka „rzeczy związanych z internetem\". On ma konkretny problem. Chce stronę, która wygląda profesjonalnie. Chce stronę, która działa na telefonie. Chce stronę, która pomaga zdobywać zapytania. Czasem chce stronę, która ładuje się szybko, bo wie, że ludzie uciekają, kiedy wszystko trwa za długo. I kiedy taka osoba widzi opis „internet i komputery\", to ma wrażenie, że to jest zbyt ogólne. Nie wie, czy trafiła do kogoś, kto robi dokładnie to, czego ona potrzebuje.</p>",
+          "text": "<p>Klienci mają zazwyczaj bardzo konkretny potrzeby i problemy. Załóżmy, że szuka strony. Chce stronę, która wygląda profesjonalnie. Chce stronę, która działa na telefonie. Chce stronę, która pomaga zdobywać zapytania. Czasem chce stronę, która ładuje się szybko, bo wie, że ludzie uciekają, kiedy wszystko trwa za długo. I kiedy taka osoba widzi opis „internet i komputery\", to ma wrażenie, że to jest zbyt ogólne. Nie wie, czy trafiła do kogoś, kto robi dokładnie to, czego ona potrzebuje.</p>",
           "alignment": "left"
         }
       },
@@ -383,7 +383,7 @@ BEGIN
         "type": "text",
         "id": "section-3-9",
         "data": {
-          "text": "<p>To właśnie dlatego często lepiej działa komunikat typu: „robię strony dla firm usługowych\", „robię strony, które mają prowadzić do zapytań\", „robię szybkie strony, które nie tracą ludzi na telefonie\", niż ogólne „zajmuję się internetem\". Nawet jeśli technicznie umiałbyś zrobić wszystko, klient nie kupuje „możliwości\", tylko kupuje pewność, że dostanie coś dopasowanego.</p>",
+          "text": "<p>To właśnie dlatego często lepiej działa komunikat typu: „robię strony dla firm usługowych\", „robię strony, które mają prowadzić do zapytań\", „robię szybkie strony, które nie tracą ludzi na telefonie\", niż ogólne „zajmuję się internetem\". Nawet jeśli technicznie umiałbyś zrobić wszystko, klient nie kupuje „możliwości\", tylko kupuje pewność, że dostanie coś dopasowanego. To oczywiście bardzo przerysowany przykład, ale myślę, że dobrze ilustruje problem złudnej szerokości i \"bezpieczeństwa\", które ma nam zapewnić.</p>",
           "alignment": "left"
         }
       },
@@ -399,7 +399,7 @@ BEGIN
         "type": "text",
         "id": "section-3-11",
         "data": {
-          "text": "<p>Więle ofert wygląda jak lista: „mam doświadczenie\", „działam kompleksowo\", „indywidualne podejście\", „szybka realizacja\". Problem w tym, że klient z tego niewiele wynosi. To są hasła, które brzmią dobrze, ale bez kontekstu nie rozwiązują żadnego problemu.</p>",
+          "text": "<p>Wiele ofert wygląda jak lista: „mam doświadczenie\", „działam kompleksowo\", „indywidualne podejście\", „szybka realizacja\". Problem w tym, że klient z tego niewiele wynosi. To są hasła, które brzmią dobrze, ale bez kontekstu nie rozwiązują żadnego problemu.</p>",
           "alignment": "left"
         }
       },
@@ -455,7 +455,7 @@ BEGIN
         "type": "text",
         "id": "section-3-18",
         "data": {
-          "text": "<p>Na koniec prosty test, który naprawdę pomaga. Spróbuj odpowiedzieć na pytanie w jednym zdaniu:</p><p><strong>Komu pomagam, w czym i jaki będzie efekt?</strong></p><p>Jeśli to zdanie wychodzi ogólnie, typu „pomagam firmom w marketingu\", to klient też będzie miał wrażenie, że to jest ogólne. Jeśli wychodzi konkretnie, cała reszta robi się łatwiejsza. Łatwiej napisać stronę. Łatwiej zrobić reklamy. Łatwiej dostawać lepsze zapytania.</p>",
+          "text": "<p>Na koniec prosty test, który może pomóc w szybkim sprawdzeniu jakości oferty. Spróbuj odpowiedzieć na pytanie w jednym zdaniu:</p><p><strong>Komu pomagam, w czym i jaki będzie efekt?</strong></p><p>Jeśli to zdanie wychodzi ogólnie, typu „pomagam firmom w marketingu\", to klient też będzie miał wrażenie, że to jest ogólne. Jeśli wychodzi konkretnie, cała reszta robi się łatwiejsza. Łatwiej napisać stronę. Łatwiej zrobić reklamy. Łatwiej dostawać lepsze zapytania.</p>",
           "alignment": "left"
         }
       },
@@ -516,7 +516,7 @@ BEGIN
         "type": "text",
         "id": "section-4-5",
         "data": {
-          "text": "<p>Pierwszy ekran strony, czyli to, co widać bez przewijania, ma wykonać prostą robotę. Klient ma zobaczyć, czy to jest temat dla niego, bez konieczności czytania ściany tekstu i doszukiwania się szczegółów. Jedno zdanie, dwa zdania, prosto. Co robisz, dla kogo i jaki jest efekt.</p>",
+          "text": "<p>Pierwszy ekran strony, czyli to, co widać bez przewijania, ma jedno zadanie. Klient ma zobaczyć, czy to jest temat dla niego, bez konieczności czytania ściany tekstu i doszukiwania się szczegółów. Jedno zdanie, dwa zdania, prosto. Co robisz, dla kogo i jaki jest efekt.</p>",
           "alignment": "left"
         }
       },
@@ -540,7 +540,7 @@ BEGIN
         "type": "text",
         "id": "section-4-8",
         "data": {
-          "text": "<p>Jeśli ktoś trafia do Ciebie z reklamy, to on ma w głowie jakąś obietnicę. Widział konkretny komunikat. Kliknął z konkretnego powodu. Jeżeli po wejściu na stronę widzi coś zupełnie innego, odpada.</p>",
+          "text": "<p>Jeśli ktoś trafia do Ciebie z reklamy, to on ma w głowie jakąś obietnicę. Widział konkretny komunikat i kliknął z konkretnego powodu. Jeżeli po wejściu na stronę widzi coś zupełnie innego, odpada.</p>",
           "alignment": "left"
         }
       },
@@ -548,7 +548,7 @@ BEGIN
         "type": "text",
         "id": "section-4-9",
         "data": {
-          "text": "<p>To jest bardzo częsty problem. Reklama jest konkretna, a strona jest ogólna. Albo reklama mówi o jednym problemie, a strona zaczyna od historii firmy i „naszej misji\". To nie znaczy, że historia firmy jest zła, tylko że ona nie jest pierwszą rzeczą, której szuka klient w tym momencie.</p>",
+          "text": "<p>To jest bardzo częsty problem. Reklama jest konkretna, a strona jest ogólna. Albo reklama mówi o jednym problemie, a strona zaczyna od historii firmy i „naszej misji\". To nie oznacza, że historia firmy jest zła, tylko umówmy się - nie jest to pierwsza rzecz, której szuka klient w tym momencie.</p>",
           "alignment": "left"
         }
       },
@@ -572,7 +572,7 @@ BEGIN
         "type": "text",
         "id": "section-4-12",
         "data": {
-          "text": "<p>W usługach klient kupuje spokój. Nawet jeśli Twoja oferta jest logiczna, klient nadal potrzebuje dowodów. Przykłady prac, realizacje, opinie, krótkie case study, pokazanie procesu. To są rzeczy, które pomagają mu podjąć decyzję.</p>",
+          "text": "<p>Psychologia zakupowa to bardzo szerokie i trudne zagadnienie, ale jedna rzecz jest bardzo oczywista dla każdego, kto kiedykolwiek sprzedawał w internecie: podstawą jest zaufanie. W skrócie: klient musi wierzyć, że zrobisz to, co mówisz, że zrobisz. Musi uwierzyć, że Twoja usługa po prostu mu się opłaca. Nawet jeśli Twoja oferta jest logiczna, klient nadal potrzebuje dowodów. Przykłady prac, realizacje, opinie, krótkie case study, pokazanie procesu. To są rzeczy, które pomagają mu podjąć decyzję.</p>",
           "alignment": "left"
         }
       },
@@ -596,7 +596,7 @@ BEGIN
         "type": "text",
         "id": "section-4-15",
         "data": {
-          "text": "<h3>Kolejny krok: klient ma nie tylko rozumieć, ale też łatwo przejść dalej</h3>",
+          "text": "<h3>Czy ułatwiasz klientowi zrobienie kolejnego kroku?</h3>",
           "alignment": "left"
         }
       },
@@ -612,7 +612,7 @@ BEGIN
         "type": "text",
         "id": "section-4-17",
         "data": {
-          "text": "<p>I tu jest bardzo ważna rzecz. Ten krok powinien być dopasowany do sytuacji klienta. Jeśli to jest usługa za kilka tysięcy złotych, to często najlepszym kolejnym krokiem nie jest „kup teraz\", tylko mały mostek. Krótkie zapytanie, prosta wiadomość, umówienie rozmowy bez presji. Coś, co nie wymaga od razu dużej decyzji.</p>",
+          "text": "<p>I tu jest bardzo ważna rzecz. Ten krok powinien być dopasowany do sytuacji klienta. Jeśli to jest usługa za kilka tysięcy złotych, to często najlepszym kolejnym krokiem nie jest „kup teraz\", tylko mały mostek. Krótkie zapytanie, prosta wiadomość, umówienie rozmowy bez presji. Coś, co nie wymaga od razu dużej decyzji. Prosty przykład: salon samochodowy. Nawet jeśli aktualnie szukasz samochodu, to trudno wyobrazić sobie sytuację, w której wyskakuje Ci na Facebook''u reklama nowego Porshe, przechodzisz na stronę, a tam cena: 500 tysięcy złotych i przycisk \\\"Dodaj do koszyka\\\". Najczęściej salony proponują na początku dużo mniejszy krok: darmowa wycena leasingu, darmowa jazda próbna, poproś o ofertę itp.</p>",
           "alignment": "left"
         }
       },
@@ -646,6 +646,15 @@ BEGIN
         "data": {
           "text": "<p>To są rzeczy, które łatwo przeoczyć, jeśli sam budowałeś stronę głównie na laptopie i zakładałeś, że „u mnie działa, więc jest okej\". Klient ogląda to inaczej. On ma 30 otwartych kart i sekundę cierpliwości.</p>",
           "alignment": "left"
+        }
+      },
+      {
+        "type": "cta",
+        "id": "cta-strony-www",
+        "data": {
+          "ctaText": "Potrzebujesz szybkiej, profesjonalnej strony, nastawionej na zapytania?",
+          "ctaLink": "/strony-www",
+          "ctaStyle": "primary"
         }
       },
       {
@@ -697,7 +706,7 @@ BEGIN
         "type": "text",
         "id": "section-5-4",
         "data": {
-          "text": "<p>To jest pytanie, które ludzie wpisują w Google dokładnie tak: „skąd brać klientów w małej firmie\" albo „jak pozyskać klientów jako freelancer\". I odpowiedź nie brzmi „z Facebooka\" albo „z Google\". Brzmi: to zależy od tego, czy klient szuka Cię aktywnie, czy dopiero uświadamia sobie, że w ogóle ma problem.</p>",
+          "text": "<p>W mojej branży, potencjalni klienci wpisują w Google najczęściej coś w stylu: „skąd brać klientów w małej firmie\" albo „jak pozyskać klientów jako freelancer\". Odpowiedź na te pytania jest oczywiście bardziej złożona niż np. „z Facebooka\" albo „z Google\", ale zawężenie \"idealnej\" platformy bardzo nas do niej zbliża. Dlaczego? Bo to zależy od tego, czy klient szuka Cię aktywnie, czy dopiero uświadamia sobie, że w ogóle ma problem.</p>",
           "alignment": "left"
         }
       },
@@ -705,7 +714,7 @@ BEGIN
         "type": "text",
         "id": "section-5-5",
         "data": {
-          "text": "<p>Są branże i usługi, gdzie klient jest w trybie „szukam teraz\". Wpisuje w Google konkretną frazę, porównuje kilka opcji, chce podjąć decyzję w miarę szybko. Wtedy Google i SEO mają ogromny sens, bo łapiesz ludzi z wysoką intencją.</p>",
+          "text": "<p>Są branże i usługi, gdzie klient jest w trybie „szukam teraz\". Wpisuje w Google konkretną frazę, porównuje kilka opcji, chce podjąć decyzję w miarę szybko. Wtedy Google i SEO mają ogromny sens, bo łapiesz ludzi z wysoką intencją. Szczególnie istotne jest to w przypadku lokalnych biznesów. Na przykład osoby szukające fryzjera, w pierwszej kolejności będą patrzyli na lokalizację. Zadbanie chociażby o dobrze zoptymalizowaną wizytówkę w Google i opinie to absolutna podstawa, żeby ludzie wpisujący \"Fryzjer [Miasto]\" w ogóle Cię zauważyli. Wyższe pozycjonowanie w wyszukiwarkach jest zazwyczaj dużo łatwiejsze w przypadku lokalnych biznesów, ponieważ wolumen zapytań jest znacznie niższy, a więc i konkurencja mniejsza.</p>",
           "alignment": "left"
         }
       },
@@ -785,7 +794,7 @@ BEGIN
         "type": "text",
         "id": "section-5-15",
         "data": {
-          "text": "<p>Jeśli reklama stawia konkretny problem, to pierwsze, co klient ma zobaczyć po kliknięciu, to kontynuacja tego samego tematu. W tym samym języku. W tym samym stylu. Bez wrażenia, że reklama była „na siłę\", a strona to osobna historia.</p>",
+          "text": "<p>Jeśli reklama stawia konkretny problem, to pierwsze, co klient ma zobaczyć po kliknięciu, to kontynuacja tego samego tematu. W tym samym języku. W tym samym stylu. Bez wrażenia, że reklama i strona to dwie osobne historie.</p>",
           "alignment": "left"
         }
       },
@@ -793,7 +802,7 @@ BEGIN
         "type": "text",
         "id": "section-5-16",
         "data": {
-          "text": "<p>To jest prosty test. Jeśli w reklamie mówisz: „Twoja strona nie przynosi zapytań\", to po wejściu klient nie powinien lądować na stronie, która zaczyna od „Witamy na stronie firmy X działającej od 2012 roku\". On ma od razu zobaczyć: okej, to jest o mnie, to jest mój problem, to jest dla mnie.</p>",
+          "text": "<p>Jeśli w reklamie mówisz: „Twoje social media nie działają\", to po wejściu klient nie powinien lądować na stronie, która zaczyna od „Witamy na stronie firmy Parówex działającej od 2012 roku\". On ma od razu zobaczyć: \"rzeczywiście, to dokładnie opisuje mój problem - co mogę z tym zrobić?\"</p>",
           "alignment": "left"
         }
       },
@@ -878,7 +887,7 @@ BEGIN
         "type": "text",
         "id": "section-6-1",
         "data": {
-          "text": "<p>Więle firm traci klientów nie na etapie reklamy, tylko dużo później, kiedy ktoś już zrobił ten krok i się odezwał. To jest o tyle bolesne, że w tym momencie masz już kogoś, kto poświęcił czas, przeczytał ofertę i wykonał działanie. To nie jest przypadkowa osoba z ulicy. Tylko że samo „odezwał się\" jeszcze nic nie gwarantuje.</p>",
+          "text": "<p>Wiele firm traci klientów nie na etapie reklamy, tylko dużo później, kiedy ktoś już zrobił ten krok i się odezwał. To jest o tyle bolesne, że w tym momencie masz już kogoś, kto poświęcił czas, przeczytał ofertę i wykonał działanie. To nie jest przypadkowa osoba z ulicy. Tylko że samo „odezwał się\" jeszcze nic nie gwarantuje.</p>",
           "alignment": "left"
         }
       },
@@ -910,7 +919,7 @@ BEGIN
         "type": "text",
         "id": "section-6-5",
         "data": {
-          "text": "<p>Nie chodzi o to, żeby być pod telefonem 24/7. Chodzi o to, żeby mieć prosty standard. Jeśli ktoś pisze, dostaje odpowiedź tego samego dnia. Jeśli nie możesz od razu wejść w szczegóły, wystarczy krótka wiadomość: widzę, dziękuję, wrócę do tego o tej i o tej godzinie. To robi ogromną różnicę, bo klient czuje, że temat jest zaopiekowany.</p>",
+          "text": "<p>Nie musisz od razu być pod telefonem 24/7, ale dobrze by było mieć prosty standard. Jeśli ktoś pisze, dostaje odpowiedź tego samego dnia. Jeśli nie możesz od razu wejść w szczegóły, wystarczy krótka wiadomość: widzę, dziękuję, wrócę do tego o tej i o tej godzinie. To robi ogromną różnicę, bo klient czuje, że temat jest zaopiekowany.</p>",
           "alignment": "left"
         }
       },
@@ -1022,7 +1031,7 @@ BEGIN
         "type": "text",
         "id": "section-6-19",
         "data": {
-          "text": "<p>Więle osób próbuje „sprzedać więcej\", bo to brzmi jak szybki zysk. Tylko że w usługach to łatwo zepsuć. Jeśli klient ma poczucie, że dostał coś niepotrzebnego albo że został do czegoś namówiony, to tracisz dużo więcej niż te dodatkowe pieniądze. Tracisz zaufanie i polecenia.</p>",
+          "text": "<p>Wiele osób próbuje „sprzedać więcej\", bo to brzmi jak szybki zysk. Tylko że w usługach to łatwo zepsuć. Jeśli klient ma poczucie, że dostał coś niepotrzebnego albo że został do czegoś namówiony, to tracisz dużo więcej niż te dodatkowe pieniądze. Tracisz zaufanie i polecenia.</p>",
           "alignment": "left"
         }
       },
@@ -1062,7 +1071,7 @@ BEGIN
         "type": "text",
         "id": "section-6-24",
         "data": {
-          "text": "<p>Więle osób nie poleci Cię nie dlatego, że nie chce, tylko dlatego, że nie ma okazji albo o tym nie pomyśli. Jedno zdanie w dobrym momencie potrafi zmienić bardzo dużo.</p>",
+          "text": "<p>Wiele osób nie poleci Cię nie dlatego, że nie chce, tylko dlatego, że nie ma okazji albo o tym nie pomyśli. Jedno zdanie w dobrym momencie potrafi zmienić bardzo dużo.</p>",
           "alignment": "left"
         }
       },
@@ -1094,7 +1103,7 @@ BEGIN
         "type": "text",
         "id": "section-6-28",
         "data": {
-          "text": "<p>Tu nie chodzi o rozbudowane tabelki. Chodzi o to, żebyś nie działał na zasadzie „wydaje mi się\", tylko widział, gdzie dokładnie to się rozjeżdża.</p>",
+          "text": "<p>Ale zanim zaczniesz budować 20-stronicowego Excela i robić licencjat z Business Intelligence: tutaj chodzi tylko o to, żebyś nie działał na zasadzie „wydaje mi się\", tylko widział, gdzie dokładnie to się rozjeżdża.</p>",
           "alignment": "left"
         }
       },
@@ -1155,7 +1164,7 @@ BEGIN
         "type": "text",
         "id": "section-7-6",
         "data": {
-          "text": "<h3>Sprzedaż i obsługa</h3><p>Więle firm traci klientów już po tym, jak ktoś się odezwał. Szybkość odpowiedzi, jasny proces, prowadzenie klienta krok po kroku, dobre doświadczenie ze współpracy i polecenia. To jest element, który potrafi zrobić największą różnicę w wynikach, nawet bez zwiększania budżetu.</p>",
+          "text": "<h3>Sprzedaż i obsługa</h3><p>Wiele firm traci klientów już po tym, jak ktoś się odezwał. Szybkość odpowiedzi, jasny proces, prowadzenie klienta krok po kroku, dobre doświadczenie ze współpracy i polecenia. To jest element, który potrafi zrobić największą różnicę w wynikach, nawet bez zwiększania budżetu.</p>",
           "alignment": "left"
         }
       },

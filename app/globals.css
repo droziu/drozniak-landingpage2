@@ -218,6 +218,25 @@
   animation-play-state: paused;
 }
 
+/* Endless scroll animation for companies - seamless loop */
+@keyframes scrollInfinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-infinite {
+  animation: scrollInfinite 40s linear infinite;
+  width: fit-content;
+}
+
+.animate-scroll-infinite:hover {
+  animation-play-state: paused;
+}
+
 /* Auto-scroll animation for testimonials - CSS transform (desktop only) */
 @keyframes testimonialsScroll {
   0% {

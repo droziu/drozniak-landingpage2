@@ -242,7 +242,7 @@ export default function StronyWWWPage() {
     };
   }, []);
 
-  // Endless scroll for mobile testimonials (manual scroll)
+  // Endless scroll for mobile testimonials (manual scroll) - optimized for smooth scrolling
   useEffect(() => {
     const container = testimonialsContainerRef.current;
     const content = testimonialsContentRef.current;
@@ -253,29 +253,70 @@ export default function StronyWWWPage() {
     const checkMobile = () => window.innerWidth < 768;
     if (!checkMobile()) return; // Only on mobile
 
+    let isAdjusting = false;
+    let lastScrollTop = 0;
+    let scrollTimeout: NodeJS.Timeout | null = null;
+
     const handleScroll = () => {
-      if (!checkMobile()) return; // Exit if resized to desktop
+      if (!checkMobile() || isAdjusting) return; // Exit if resized to desktop or already adjusting
       
       const scrollTop = container.scrollTop;
       const scrollHeight = content.scrollHeight;
-      const clientHeight = container.clientHeight;
       const midpoint = scrollHeight / 2;
-      const threshold = 50; // Threshold for reset
+      const threshold = 150; // Increased threshold for smoother transitions
+      const scrollDelta = Math.abs(scrollTop - lastScrollTop);
 
-      // Endless loop: when reaching near the end of first half, reset to beginning
-      if (scrollTop >= midpoint - threshold) {
-        // Reset to equivalent position in first half
-        container.scrollTop = scrollTop - midpoint;
-      } else if (scrollTop <= threshold) {
-        // If scrolled near top, jump to equivalent position in second half for seamless upward scroll
-        container.scrollTop = midpoint + scrollTop;
+      // Only adjust if user is actively scrolling (not during programmatic scroll)
+      if (scrollDelta < 5) {
+        lastScrollTop = scrollTop;
+        return;
       }
+
+      lastScrollTop = scrollTop;
+
+      // Clear any pending timeout
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+
+      // Debounce adjustments to prevent rapid resets
+      scrollTimeout = setTimeout(() => {
+        // Endless loop: when reaching near the end of first half, reset to beginning
+        if (scrollTop >= midpoint - threshold && scrollTop < midpoint) {
+          isAdjusting = true;
+          const newPosition = scrollTop - midpoint;
+          // Use scrollTo for smoother transition
+          container.scrollTo({
+            top: newPosition,
+            behavior: 'auto' // Instant but smooth
+          });
+          lastScrollTop = newPosition;
+          setTimeout(() => {
+            isAdjusting = false;
+          }, 100);
+        } else if (scrollTop <= threshold && scrollTop >= 0) {
+          isAdjusting = true;
+          const newPosition = midpoint + scrollTop;
+          // Use scrollTo for smoother transition
+          container.scrollTo({
+            top: newPosition,
+            behavior: 'auto' // Instant but smooth
+          });
+          lastScrollTop = newPosition;
+          setTimeout(() => {
+            isAdjusting = false;
+          }, 100);
+        }
+      }, 50); // Small debounce to prevent rapid adjustments
     };
 
     container.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       container.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
     };
   }, []);
 
@@ -289,11 +330,11 @@ export default function StronyWWWPage() {
             {/* Left Column - Sticky on desktop */}
             <div className="md:sticky md:top-32 h-fit">
               <h1 className="font-[Montserrat] text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight text-white">
-                Strona www bez <span className="text-[#fee715]">kompromisów</span>.
+                Strony internetowe <span className="text-[#fee715]">dla firm i freelancerów</span>
               </h1>
               
               <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
-                Projekt na zamówienie. Błyskawicznie szybkie w działaniu. Zaprojektowane pod cele Twojej firmy z uwzględnieniem strategii marketingowych. Tworzę <strong>strony www dla małych firm i freelancerów</strong>, które pomagają w <strong>pozyskiwaniu klientów</strong>.
+                Premium jakość, błyskawiczne, dopracowane i przygotowane pod pozyskiwanie klientów - projekt szyty na miarę.
               </p>
 
               {/* 3 Pills */}
@@ -301,22 +342,22 @@ export default function StronyWWWPage() {
                 <div className="flex items-start space-x-3">
                   <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex-shrink-0 mt-1"></div>
                   <div>
+                    <p className="text-white font-semibold mb-1">Szybkość, którą widać od razu</p>
+                    <p className="text-sm text-gray-400">Strona ładuje się błyskawicznie - również na telefonie.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex-shrink-0 mt-1"></div>
+                  <div>
+                    <p className="text-white font-semibold mb-1">Gotowa pod SEO i pozyskiwanie klientów</p>
+                    <p className="text-sm text-gray-400">Struktura, treści i CTA zaprojektowane pod sprzedaż, wyszukiwarki oraz modele AI.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex-shrink-0 mt-1"></div>
+                  <div>
                     <p className="text-white font-semibold mb-1">Strona szyta na miarę</p>
-                    <p className="text-sm text-gray-400">Nie korzystam z szablonów</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex-shrink-0 mt-1"></div>
-                  <div>
-                    <p className="text-white font-semibold mb-1">Szybkie w działaniu</p>
-                    <p className="text-sm text-gray-400">Tworzę strony w oparciu o nowoczesne technologie</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex-shrink-0 mt-1"></div>
-                  <div>
-                    <p className="text-white font-semibold mb-1">Prosta edycja po wdrożeniu</p>
-                    <p className="text-sm text-gray-400">Przejrzysta instrukcja i dostęp</p>
+                    <p className="text-sm text-gray-400">Projekt dopasowany do Twojej oferty i branży - nie kolejny szablon.</p>
                   </div>
                 </div>
               </div>
@@ -337,7 +378,7 @@ export default function StronyWWWPage() {
                 </a>
                 <a 
                   href="#case"
-                  className="border border-white/20 text-white font-medium py-4 px-8 rounded-lg text-center hover:bg-white/5 transition-colors duration-300"
+                  className="border border-white/20 text-white font-medium py-4 px-8 rounded-lg text-center hover:bg-[#fee715] hover:text-[#101820] hover:border-[#fee715] transition-colors duration-300"
                 >
                   Zobacz realizacje →
                 </a>
@@ -345,14 +386,14 @@ export default function StronyWWWPage() {
 
               {/* Trust Line */}
               <p className="text-sm text-gray-500">
-                Dla małych i średnich firm oraz freelancerów.
+                Cena od 2500 zł netto
               </p>
             </div>
 
             {/* Right Column - Testimonials */}
-            <div className="md:sticky md:top-32 h-fit">
+            <section className="md:sticky md:top-32 h-fit" itemScope itemType="https://schema.org/Review">
               {/* Section title - above the testimonials */}
-              <h3 className="text-white font-semibold text-lg mb-6">Co mówią osoby, z którymi współpracowałem</h3>
+              <h2 className="text-white font-semibold text-lg mb-6" itemProp="name">Co mówią osoby, z którymi współpracowałem</h2>
               
               <div className="relative">
               {/* Gradient fade-out overlays - extended */}
@@ -366,7 +407,9 @@ export default function StronyWWWPage() {
                        style={{ 
                          maxHeight: 'calc(60vh - 1px)',
                          scrollbarWidth: 'none',
-                         msOverflowStyle: 'none'
+                         msOverflowStyle: 'none',
+                         WebkitOverflowScrolling: 'touch',
+                         scrollBehavior: 'auto'
                        }}
                        onMouseEnter={() => {
                          if (window.innerWidth >= 768) {
@@ -382,9 +425,10 @@ export default function StronyWWWPage() {
                        <div 
                          ref={testimonialsContentRef}
                          className={`space-y-4 pr-4 testimonials-scroll-desktop ${isHovering ? 'paused' : ''}`}
+                         style={{ willChange: 'transform' }}
                        >
                          {/* Testimonial 1 - Brent Peterson with photo */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <article className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} itemScope itemType="https://schema.org/Review">
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c1.jpg" 
@@ -393,17 +437,21 @@ export default function StronyWWWPage() {
                                width="48"
                                height="48"
                                loading="eager"
+                               itemProp="image"
                              />
                              <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Brent Peterson</h4>
-                               <p className="text-gray-400 text-xs mb-3">CEO, Wagento</p>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Świetna obsługa i błyskawiczny czas realizacji. Zdecydowanie polecam współpracę."</p>
+                               <div itemScope itemType="https://schema.org/Person" itemProp="author">
+                                 <h4 className="text-white font-semibold text-sm" itemProp="name">Brent Peterson</h4>
+                                 <p className="text-gray-400 text-xs mb-3" itemProp="jobTitle">CEO, Wagento</p>
+                               </div>
+                               <p className="text-gray-300 text-sm leading-relaxed" itemProp="reviewBody">„Świetna obsługa i błyskawiczny czas realizacji. Zdecydowanie polecam współpracę."</p>
+                               <meta itemProp="itemReviewed" itemScope itemType="https://schema.org/Service" content="Strony internetowe dla firm i freelancerów" />
                              </div>
                            </div>
-                         </div>
+                         </article>
 
                          {/* Testimonial 2 - Russell Garner with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <article className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} itemScope itemType="https://schema.org/Review">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -411,14 +459,17 @@ export default function StronyWWWPage() {
                                </svg>
                              </div>
                              <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Russell Garner</h4>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Stanisław trafił w dziesiątkę. Zrozumiał wizję, był zaangażowany i dowiózł efekt, który przerósł oczekiwania."</p>
+                               <div itemScope itemType="https://schema.org/Person" itemProp="author">
+                                 <h4 className="text-white font-semibold text-sm" itemProp="name">Russell Garner</h4>
+                               </div>
+                               <p className="text-gray-300 text-sm leading-relaxed" itemProp="reviewBody">„Stanisław trafił w dziesiątkę. Zrozumiał wizję, był zaangażowany i dowiózł efekt, który przerósł oczekiwania."</p>
+                               <meta itemProp="itemReviewed" itemScope itemType="https://schema.org/Service" content="Strony internetowe dla firm i freelancerów" />
                              </div>
                            </div>
-                         </div>
+                         </article>
 
                          {/* Testimonial 3 - Kalen Jordan with photo */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <article className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} itemScope itemType="https://schema.org/Review">
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c2.jpg" 
@@ -427,17 +478,21 @@ export default function StronyWWWPage() {
                                width="48"
                                height="48"
                                loading="eager"
+                               itemProp="image"
                              />
                              <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Kalen Jordan</h4>
-                               <p className="text-gray-400 text-xs mb-3">Co-Founder, Commerce Hero</p>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Stanislaw is awesome! Reliable and great work."</p>
+                               <div itemScope itemType="https://schema.org/Person" itemProp="author">
+                                 <h4 className="text-white font-semibold text-sm" itemProp="name">Kalen Jordan</h4>
+                                 <p className="text-gray-400 text-xs mb-3" itemProp="jobTitle">Co-Founder, Commerce Hero</p>
+                               </div>
+                               <p className="text-gray-300 text-sm leading-relaxed" itemProp="reviewBody">„Stanislaw is awesome! Reliable and great work."</p>
+                               <meta itemProp="itemReviewed" itemScope itemType="https://schema.org/Service" content="Strony internetowe dla firm i freelancerów" />
                              </div>
                            </div>
-                         </div>
+                         </article>
 
                          {/* Testimonial 4 - Michał Fus with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <article className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} itemScope itemType="https://schema.org/Review">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -445,14 +500,17 @@ export default function StronyWWWPage() {
                                </svg>
                              </div>
                              <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Michał Fus</h4>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Szybka realizacja, dopracowany każdy detal, pełen profesjonalizm."</p>
+                               <div itemScope itemType="https://schema.org/Person" itemProp="author">
+                                 <h4 className="text-white font-semibold text-sm" itemProp="name">Michał Fus</h4>
+                               </div>
+                               <p className="text-gray-300 text-sm leading-relaxed" itemProp="reviewBody">„Szybka realizacja, dopracowany każdy detal, pełen profesjonalizm."</p>
+                               <meta itemProp="itemReviewed" itemScope itemType="https://schema.org/Service" content="Strony internetowe dla firm i freelancerów" />
                              </div>
                            </div>
-                         </div>
+                         </article>
 
                          {/* Testimonial 6 - Kaja Lewandowska with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <article className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} itemScope itemType="https://schema.org/Review">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -460,14 +518,17 @@ export default function StronyWWWPage() {
                                </svg>
                              </div>
                              <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Kaja Lewandowska</h4>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Efekt mnie zaskoczył. Z czystym sumieniem polecam współpracę."</p>
+                               <div itemScope itemType="https://schema.org/Person" itemProp="author">
+                                 <h4 className="text-white font-semibold text-sm" itemProp="name">Kaja Lewandowska</h4>
+                               </div>
+                               <p className="text-gray-300 text-sm leading-relaxed" itemProp="reviewBody">„Efekt mnie zaskoczył. Z czystym sumieniem polecam współpracę."</p>
+                               <meta itemProp="itemReviewed" itemScope itemType="https://schema.org/Service" content="Strony internetowe dla firm i freelancerów" />
                              </div>
                            </div>
-                         </div>
+                         </article>
 
                          {/* Testimonial 7 - Damian Lewandowski with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <article className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} itemScope itemType="https://schema.org/Review">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -475,14 +536,17 @@ export default function StronyWWWPage() {
                                </svg>
                              </div>
                              <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Damian Lewandowski</h4>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Indywidualne podejście i pełen profesjonalizm."</p>
+                               <div itemScope itemType="https://schema.org/Person" itemProp="author">
+                                 <h4 className="text-white font-semibold text-sm" itemProp="name">Damian Lewandowski</h4>
+                               </div>
+                               <p className="text-gray-300 text-sm leading-relaxed" itemProp="reviewBody">„Indywidualne podejście i pełen profesjonalizm."</p>
+                               <meta itemProp="itemReviewed" itemScope itemType="https://schema.org/Service" content="Strony internetowe dla firm i freelancerów" />
                              </div>
                            </div>
-                         </div>
+                         </article>
 
                          {/* Testimonial 8 - Jarosław Babiuch with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <article className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} itemScope itemType="https://schema.org/Review">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -490,15 +554,18 @@ export default function StronyWWWPage() {
                                </svg>
                              </div>
                              <div className="flex-1">
-                               <h4 className="text-white font-semibold text-sm">Jarosław Babiuch</h4>
-                               <p className="text-gray-300 text-sm leading-relaxed">„Z niczego potrafi zrobić coś. Efekt końcowy – pozytywne zaskoczenie."</p>
+                               <div itemScope itemType="https://schema.org/Person" itemProp="author">
+                                 <h4 className="text-white font-semibold text-sm" itemProp="name">Jarosław Babiuch</h4>
+                               </div>
+                               <p className="text-gray-300 text-sm leading-relaxed" itemProp="reviewBody">„Z niczego potrafi zrobić coś. Efekt końcowy – pozytywne zaskoczenie."</p>
+                               <meta itemProp="itemReviewed" itemScope itemType="https://schema.org/Service" content="Strony internetowe dla firm i freelancerów" />
                              </div>
                            </div>
-                         </div>
+                         </article>
 
-                         {/* Duplicate for seamless loop */}
+                         {/* Duplicate for seamless loop - hidden from bots */}
                          {/* Testimonial 1 - Brent Peterson with photo */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} aria-hidden="true">
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c1.jpg" 
@@ -517,7 +584,7 @@ export default function StronyWWWPage() {
                          </div>
 
                          {/* Testimonial 2 - Russell Garner with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} aria-hidden="true">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -532,7 +599,7 @@ export default function StronyWWWPage() {
                          </div>
 
                          {/* Testimonial 3 - Kalen Jordan with photo */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} aria-hidden="true">
                            <div className="flex items-start space-x-4">
                              <img 
                                src="/images/c2.jpg" 
@@ -551,7 +618,7 @@ export default function StronyWWWPage() {
                          </div>
 
                          {/* Testimonial 4 - Michał Fus with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} aria-hidden="true">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -566,7 +633,7 @@ export default function StronyWWWPage() {
                          </div>
 
                          {/* Testimonial 6 - Kaja Lewandowska with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} aria-hidden="true">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -581,7 +648,7 @@ export default function StronyWWWPage() {
                          </div>
 
                          {/* Testimonial 7 - Damian Lewandowski with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} aria-hidden="true">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -596,7 +663,7 @@ export default function StronyWWWPage() {
                          </div>
 
                          {/* Testimonial 8 - Jarosław Babiuch with icon */}
-                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }}>
+                         <div className="bg-white/5 border border-white/10 rounded-xl p-6" style={{ willChange: 'auto' }} aria-hidden="true">
                            <div className="flex items-start space-x-4">
                              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] flex items-center justify-center flex-shrink-0">
                                <svg className="w-6 h-6 text-[#101820]" fill="currentColor" viewBox="0 0 20 20">
@@ -612,7 +679,7 @@ export default function StronyWWWPage() {
                        </div>
                      </div>
               </div>
-            </div>
+            </section>
           </div>
         </div>
       </section>
@@ -622,31 +689,65 @@ export default function StronyWWWPage() {
         <div className="container mx-auto text-center px-4">
           <p className="text-gray-500 uppercase tracking-widest text-xs md:text-sm mb-6">Pracowałem już z</p>
           <div className="overflow-hidden">
-            <div className="flex animate-scroll space-x-8 md:space-x-12">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex space-x-8 md:space-x-12 flex-shrink-0">
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Chess.com</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Wagento</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">eWay Corp</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">BigCommerce</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Tour & Holiday</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Commerce Hero</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Dietana</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Redlin</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Talk Commerce</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">PASW</span>
-                  <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
-                </div>
-              ))}
+            <div className="flex animate-scroll-infinite space-x-8 md:space-x-12">
+              {/* First set of companies */}
+              <div className="flex space-x-8 md:space-x-12 flex-shrink-0">
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Chess.com</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Wagento</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">eWay Corp</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">BigCommerce</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Tour & Holiday</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Commerce Hero</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Dietana</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Redlin</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Talk Commerce</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">PASW</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">ZEF</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Hotel Irys</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">FUH Trabant</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+              </div>
+              {/* Duplicate for seamless loop */}
+              <div className="flex space-x-8 md:space-x-12 flex-shrink-0" aria-hidden="true">
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Chess.com</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Wagento</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">eWay Corp</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">BigCommerce</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Tour & Holiday</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Commerce Hero</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Dietana</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Redlin</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Talk Commerce</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">PASW</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">ZEF</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">Hotel Irys</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+                <span className="text-gray-300 text-sm md:text-base whitespace-nowrap">FUH Trabant</span>
+                <span className="text-[#fee715] text-lg md:text-xl">&bull;</span>
+              </div>
             </div>
           </div>
         </div>
@@ -716,17 +817,13 @@ export default function StronyWWWPage() {
           {/* Header */}
           <header className="text-center mb-16">
             <h2 id="why-better-heading" className="text-3xl md:text-5xl font-bold font-[Montserrat] text-white mb-4">
-              Co sprawia, że moje strony
-              <br />
-              <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent animate-gradient">
-                działają lepiej
-              </span>
+              Dlaczego warto?
             </h2>
           </header>
 
           {/* Cards Grid */}
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-            {/* Card 1 - Target/Goal */}
+            {/* Card 1 - Premium od pierwszego wrażenia */}
             <article className="group card-premium" tabIndex={0} aria-labelledby="card-1-title">
               <div className="icon-wrapper">
                 <svg className="w-6 h-6 text-[#fee715] transition-all duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -735,15 +832,15 @@ export default function StronyWWWPage() {
               </div>
               <div className="card-content">
                 <h3 id="card-1-title" className="card-title">
-                  Strony projektowane jak narzędzia sprzedaży
+                  1) Premium od pierwszego wrażenia
                 </h3>
                 <p className="card-description">
-                  Każdy projekt powstaje w oparciu o dane, psychologię decyzji i doświadczenie marketingowe. Wygląd to tylko część procesu - najważniejsze, by strona realizowała cele biznesowe.
+                  Projektuję stronę tak, by od razu budowała zaufanie do marki: typografia, proporcje, hierarchia treści, detale. To standard, który czuć natychmiast i który podnosi postrzeganą wartość Twojej oferty.
                 </p>
               </div>
             </article>
 
-            {/* Card 2 - Lightning/Speed */}
+            {/* Card 2 - Treść i układ */}
             <article className="group card-premium" tabIndex={0} aria-labelledby="card-2-title">
               <div className="icon-wrapper">
                 <svg className="w-6 h-6 text-[#fee715] transition-all duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -752,78 +849,78 @@ export default function StronyWWWPage() {
               </div>
               <div className="card-content">
                 <h3 id="card-2-title" className="card-title">
-                  Nowoczesna technologia i błyskawiczne działanie
+                  2) Treść i układ, które prowadzą do działania
                 </h3>
                 <p className="card-description">
-                  Buduję w frameworkach klasy premium (Next.js, Astro, Vercel). Dzięki temu strony ładują się w ok. 1 sekundę i działają stabilnie przez lata - bez wtyczek, lagów i zbędnych aktualizacji.
+                  Struktura strony wynika z procesu decyzyjnego klienta, a nie z szablonu. Użytkownik szybko rozumie, co oferujesz, dla kogo to jest i jaki ma zrobić następny krok.
                 </p>
               </div>
             </article>
 
-            {/* Card 3 - User-minus/Simple */}
+            {/* Card 3 - Błyskawiczne działanie na telefonie */}
             <article className="group card-premium" tabIndex={0} aria-labelledby="card-3-title">
               <div className="icon-wrapper">
                 <svg className="w-6 h-6 text-[#fee715] transition-all duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
               </div>
               <div className="card-content">
                 <h3 id="card-3-title" className="card-title">
-                  Bez pośredników i zbędnych kosztów
+                  3) Błyskawiczne działanie na telefonie
                 </h3>
                 <p className="card-description">
-                  Nie płacisz za agencję, zespół czy biuro. Pracuję sam, dlatego cały budżet inwestuję w jakość kodu, design i skuteczność strony.
+                  Strona ładuje się błyskawicznie i działa płynnie na mobile, bez ciężaru typowego dla gotowych systemów. To przekłada się na większą liczbę osób, które realnie docierają do oferty i kontaktu.
                 </p>
               </div>
             </article>
 
-            {/* Card 4 - Ruler/Pen */}
+            {/* Card 4 - SEO na poziomie */}
             <article className="group card-premium" tabIndex={0} aria-labelledby="card-4-title">
               <div className="icon-wrapper">
                 <svg className="w-6 h-6 text-[#fee715] transition-all duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
               <div className="card-content">
                 <h3 id="card-4-title" className="card-title">
-                  Strona uszyta na miarę Twojej marki
+                  4) SEO na poziomie, bo masz pełną kontrolę
                 </h3>
                 <p className="card-description">
-                  Nie korzystam z gotowych szablonów ani ograniczeń WordPressa. Każdy element powstaje od zera - dopasowany do Twojej branży, stylu i odbiorcy.
+                  W rozwiązaniach premium masz kontrolę nad strukturą, kodem, szybkością i każdym elementem strony. To baza pod SEO, której nie da się uzyskać w tym samym standardzie, gdy strona jest zależna od motywu i wtyczek.
                 </p>
               </div>
             </article>
 
-            {/* Card 5 - Edit/Pen-square */}
+            {/* Card 5 - Gotowa na landing page'e */}
             <article className="group card-premium" tabIndex={0} aria-labelledby="card-5-title">
               <div className="icon-wrapper">
                 <svg className="w-6 h-6 text-[#fee715] transition-all duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
               <div className="card-content">
                 <h3 id="card-5-title" className="card-title">
-                  Samodzielna edycja treści po wdrożeniu
+                  5) Gotowa na landing page'e, kampanie i sprzedaż
                 </h3>
                 <p className="card-description">
-                  Po uruchomieniu otrzymujesz prosty system do zmian treści i krótkie wideo-instrukcje. Pełna kontrola - bez technicznych barier.
+                  Strona jest przygotowana pod rozwój marketingu: landing page'e, lead magnety, sprzedaż kursu, nowe usługi i segmenty klientów. Dzięki temu nie wracasz do punktu wyjścia przy każdej nowej inicjatywie.
                 </p>
               </div>
             </article>
 
-            {/* Card 6 - Lifebuoy/Line-chart */}
+            {/* Card 6 - Architektura klasy enterprise */}
             <article className="group card-premium" tabIndex={0} aria-labelledby="card-6-title">
               <div className="icon-wrapper">
                 <svg className="w-6 h-6 text-[#fee715] transition-all duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
               <div className="card-content">
                 <h3 id="card-6-title" className="card-title">
-                  Wsparcie i optymalizacja po starcie
+                  6) Architektura klasy enterprise
                 </h3>
                 <p className="card-description">
-                  Przez 60 dni pomagam dopracować stronę, analizuję wyniki i doradzam, jak zwiększyć konwersję oraz wykorzystać potencjał strony w marketingu.
+                  Buduję w podejściu i technologii stosowanej przez globalne marki, które wymagają najwyższej jakości wydajności i stabilności. To standard używany m.in. w projektach takich jak Nike, OpenAI czy Netflix Jobs.
                 </p>
               </div>
             </article>
@@ -1230,7 +1327,7 @@ export default function StronyWWWPage() {
               },
               {
                 question: "Ile to kosztuje?",
-                answer: "Prosty landing page zaczyna się od 1500 zł netto, a większość projektów mieści się w przedziale 3000 - 5000 zł. W tej cenie otrzymujesz stronę, która pracuje na Twoje wyniki - jest szybka, zoptymalizowana i zaprojektowana pod konwersję. Pracuję bez pośredników i zespołów projektowych - wszystko tworzę sam, od strategii po wdrożenie. Dzięki temu płacisz za jakość i skuteczność, nie za strukturę agencji i wewnętrzne koszty."
+                answer: "Prosty landing page zaczyna się od 2500 zł netto, a większość standardowych stron mieści się w przedziale 3500 - 6000 zł. W tej cenie otrzymujesz stronę, która pracuje na Twoje wyniki - jest szybka, zoptymalizowana i zaprojektowana pod konwersję. Pracuję bez pośredników i zespołów projektowych - wszystko tworzę sam, od strategii po wdrożenie. Dzięki temu płacisz za jakość i skuteczność, nie za strukturę agencji i wewnętrzne koszty."
               },
               {
                 question: "Czym Twoje strony różnią się od innych wykonawców?",
@@ -1249,7 +1346,7 @@ export default function StronyWWWPage() {
                 answer: "W cenie masz poprawki, dopasowania i wsparcie po wdrożeniu. Nie kończę projektu w dniu publikacji - pomagam Ci ustawić wszystko tak, by strona działała w praktyce."
               }
             ].map((chat, index) => (
-              <div key={index} className="conversation-block">
+              <article key={index} className="conversation-block" itemScope itemType="https://schema.org/Question">
                 {/* Client Question */}
                 <div className="flex justify-start mb-4">
                   <div className="client-message">
@@ -1264,6 +1361,9 @@ export default function StronyWWWPage() {
                     <button 
                       onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
                       className="client-bubble cursor-pointer hover:bg-white/10 transition-colors duration-300 w-full text-left"
+                      aria-expanded={expandedFAQ === index}
+                      aria-controls={`faq-answer-${index}`}
+                      itemProp="name"
                     >
                       <p className="text-gray-300 text-sm leading-relaxed">{chat.question}</p>
                       <div className="flex items-center justify-end mt-2">
@@ -1276,9 +1376,16 @@ export default function StronyWWWPage() {
                 </div>
 
                 {/* My Answer - Hidden by default */}
-                <div className={`flex justify-end mb-6 transition-all duration-500 ease-in-out ${
-                  expandedFAQ === index ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0 overflow-hidden'
-                }`}>
+                <div 
+                  id={`faq-answer-${index}`}
+                  className={`flex justify-end mb-6 transition-all duration-500 ease-in-out ${
+                    expandedFAQ === index ? 'opacity-100 max-h-96' : 'opacity-0 max-h-0 overflow-hidden'
+                  }`}
+                  itemScope
+                  itemType="https://schema.org/Answer"
+                  role="region"
+                  aria-hidden={expandedFAQ !== index}
+                >
                   <div className="my-message">
                     <div className="flex items-center justify-end mb-2">
                       <span className="text-xs text-gray-400 font-medium mr-2">Ja</span>
@@ -1288,12 +1395,12 @@ export default function StronyWWWPage() {
                         </svg>
                       </div>
                     </div>
-                    <div className="my-bubble">
+                    <div className="my-bubble" itemProp="text">
                       <p className="text-white text-sm leading-relaxed">{chat.answer}</p>
                     </div>
                   </div>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
 
