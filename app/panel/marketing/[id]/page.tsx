@@ -12,6 +12,8 @@ import {
   useEdgesState,
   Controls,
   MiniMap,
+  Background,
+  BackgroundVariant,
   Panel,
   NodeTypes,
   EdgeTypes,
