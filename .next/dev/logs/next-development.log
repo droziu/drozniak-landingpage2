@@ -1,454 +1,253 @@
-[00:00:01.515] Server  LOG     ✓ Ready in 1300ms
-[00:00:12.390] Server  WARN    ⚠ The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
-[00:00:13.432] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:31.839] Browser WARN    Image with src "/images/Drozniak_Zdjecie_Suit_2.webp" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:18:28.619] Server  LOG     ✓ Compiled in 418ms
-[00:18:29.640] Server  LOG     ✓ Compiled in 166ms
-[00:18:30.519] Server  LOG     ✓ Compiled in 120ms
-[00:18:31.826] Server  LOG     ✓ Compiled in 192ms
-[00:19:22.953] Server  LOG     ✓ Compiled in 199ms
-[00:19:49.793] Server  LOG     ✓ Compiled in 155ms
-[00:20:05.187] Server  LOG     ✓ Compiled in 188ms
-[00:31:40.000] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-[01:18:24.406] Server  LOG     ✓ Compiled in 768ms
-[01:18:43.493] Server  LOG     ✓ Compiled in 136ms
-[01:18:43.987] Server  LOG     ✓ Compiled in 253ms
-[01:18:44.844] Server  LOG     ✓ Compiled in 95ms
-[01:22:44.803] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-[01:22:46.730] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-[01:22:47.220] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:23:55.607] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:26:52.857] Server  LOG     ✓ Compiled in 221ms
-[01:27:52.400] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:27:54.397] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:27:56.392] Browser WARN    Image with src "/images/Drozniak_Zdjecie_Suit_2.webp" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[01:28:23.555] Server  LOG     ✓ Compiled in 269ms
-[01:29:42.345] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:29:42.972] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-[01:33:52.348] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:34:05.087] Server  LOG     ✓ Compiled in 118ms
-[01:34:05.759] Server  LOG     ✓ Compiled in 105ms
-[01:34:18.393] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:34:20.458] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:36:00.058] Server  LOG     ✓ Compiled in 212ms
-[01:38:27.746] Server  LOG     ✓ Compiled in 684ms
-[01:39:15.176] Server  LOG     ✓ Compiled in 305ms
-[01:40:01.125] Server  LOG     ✓ Compiled in 950ms
-[01:40:01.241] Browser ERROR   ./strony_www/drozniak-landingpage/app/strony-www/page.tsx:659:19
-Parsing ecmascript source code failed
-  657 |                      </div>
-  658 |               </div>
-> 659 |             </div>
-      |                   ^
-> 660 |           </div>
-      | ^^^^^^^^^^^
-  661 |         </div>
-  662 |       </section>
-  663 |
-
-Expected '</', got 'jsx text (
-          )'
-
-Import traces:
-  Client Component Browser:
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Client Component Browser]
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Client Component SSR]
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Server Component]
-[01:40:31.893] Browser ERROR   ./strony_www/drozniak-landingpage/app/strony-www/page.tsx:659:19
-Parsing ecmascript source code failed
-  657 |                      </div>
-  658 |               </div>
-> 659 |             </div>
-      |                   ^
-> 660 |           </div>
-      | ^^^^^^^^^^^
-  661 |         </div>
-  662 |       </section>
-  663 |
-
-Expected '</', got 'jsx text (
-          )'
-
-Import traces:
-  Client Component Browser:
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Client Component Browser]
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Client Component SSR]
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Server Component]
-[01:40:43.449] Browser ERROR   ./strony_www/drozniak-landingpage/app/strony-www/page.tsx:663:19
-Parsing ecmascript source code failed
-  661 |                      </div>
-  662 |               </div>
-> 663 |             </div>
-      |                   ^
-> 664 |           </div>
-      | ^^^^^^^^^^^
-  665 |         </div>
-  666 |       </section>
-  667 |
-
-Expected '</', got 'jsx text (
-          )'
-
-Import traces:
-  Client Component Browser:
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Client Component Browser]
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Client Component SSR]
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Server Component]
-[01:41:01.196] Browser ERROR   ./strony_www/drozniak-landingpage/app/strony-www/page.tsx:682:19
-Parsing ecmascript source code failed
-  680 |                      </div>
-  681 |               </div>
-> 682 |             </div>
-      |                   ^
-> 683 |           </div>
-      | ^^^^^^^^^^^
-  684 |         </div>
-  685 |       </section>
-  686 |
-
-Expected '</', got 'jsx text (
-          )'
-
-Import traces:
-  Client Component Browser:
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Client Component Browser]
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Server Component]
-
-  Client Component SSR:
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Client Component SSR]
-    ./strony_www/drozniak-landingpage/app/strony-www/page.tsx [Server Component]
-[01:41:30.231] Server  LOG     ✓ Compiled in 211ms
-[01:41:53.086] Server  LOG     ✓ Compiled in 165ms
-[01:42:57.167] Server  LOG     ✓ Compiled in 294ms
-[01:43:59.424] Server  LOG     ✓ Compiled in 510ms
-[01:44:48.810] Server  LOG     ✓ Compiled in 215ms
-[01:44:51.174] Server  LOG     ✓ Compiled in 2.1s
-[01:47:03.894] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:47:06.362] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:47:08.136] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:48:18.549] Server  LOG     ✓ Compiled in 190ms
-[01:51:27.683] Server  LOG     ✓ Compiled in 594ms
-[01:52:03.019] Server  LOG     ✓ Compiled in 322ms
-[01:52:04.421] Server  LOG     ✓ Compiled in 597ms
-[02:15:49.123] Server  LOG     ✓ Compiled in 534ms
-[02:17:36.346] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.349] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.355] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.360] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.365] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.367] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.372] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.375] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.379] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.382] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.383] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.385] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.386] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.392] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.396] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.397] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.399] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.400] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.403] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.403] Server  ERROR   ⨯ ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-
-
-https://nextjs.org/docs/messages/module-not-found
-
-
-[02:17:36.521] Browser ERROR   ./strony_www/drozniak-landingpage/app/layout.tsx:6:1
-Module not found: Can't resolve '@vercel/analytics/next'
-  4 | import '@xyflow/react/dist/style.css';
-  5 | import { LayoutClient } from './components/LayoutClient';
-> 6 | import { Analytics } from '@vercel/analytics/next';
-    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  7 |
-  8 | const montserrat = Montserrat({
-  9 |   subsets: ['latin'],
-
-https://nextjs.org/docs/messages/module-not-found
-[02:21:10.054] Server  LOG     ✓ Compiled in 608ms
+[00:00:01.671] Server  LOG     ✓ Ready in 1444ms
+[00:00:12.680] Server  WARN    ⚠ The "images.domains" configuration is deprecated. Please use "images.remotePatterns" configuration instead.
+[00:00:12.818] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:12.949] Browser WARN    Image with src "/images/Drozniak_Zdjecie_Suit_2.webp" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:12.949] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:12.949] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:00:12.949] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461636028}
+[00:00:14.318] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:00:15.911] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:00:15.974] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461639052}
+[00:00:43.732] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:43.875] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:43.875] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:00:43.875] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461666954}
+[00:00:45.955] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:00:46.393] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:46.509] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:46.509] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog","route":"/blog"}
+[00:00:46.509] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461669589}
+[00:00:47.560] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/jak-zdobyc-klientow-w-malej-firmie-prosty-system-w-4-krokach color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/jak-zdobyc-klientow-w-malej-firmie-prosty-system-w-4-krokach","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461670636}
+[00:00:50.643] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:50.781] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:50.781] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:00:50.781] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461673860}
+[00:02:38.692] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:38.854] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:02:38.854] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/jak-zdobyc-klientow-w-malej-firmie-prosty-system-w-4-krokach","route":"/blog/[slug]"}
+[00:02:38.854] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/jak-zdobyc-klientow-w-malej-firmie-prosty-system-w-4-krokach color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/jak-zdobyc-klientow-w-malej-firmie-prosty-system-w-4-krokach","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461781933}
+[00:02:40.676] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:02:41.095] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461784173}
+[00:02:41.791] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:02:42.187] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:42.308] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:02:42.308] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog","route":"/blog"}
+[00:02:42.308] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461785386}
+[00:02:48.740] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461791818}
+[00:03:30.323] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:30.473] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:03:30.473] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:03:30.473] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461833553}
+[00:05:44.114] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:44.257] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:05:44.257] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:05:44.257] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770461967334}
+[00:06:19.176] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:19.312] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:06:19.312] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:06:19.312] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770462002392}
+[00:10:42.233] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:42.371] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:10:42.371] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:10:42.371] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770462265450}
+[00:12:56.247] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:12:56.399] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:12:56.399] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:12:56.399] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770462399478}
+[00:13:46.067] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:46.223] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:13:46.223] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:13:46.223] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770462449302}
+[00:16:14.562] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:14.701] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:16:14.701] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:16:14.701] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770462597781}
+[00:19:17.267] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:19:17.407] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:19:17.407] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:19:17.407] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770462780487}
+[00:21:22.025] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:21:22.172] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:21:22.172] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:21:22.172] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770462905253}
+[00:23:47.377] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:23:47.532] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:23:47.532] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:23:47.532] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770463050613}
+[00:28:17.405] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:28:17.555] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:28:17.555] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:28:17.555] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770463320637}
+[00:39:14.342] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770463977399}
+[00:39:14.342] Browser WARN    Image with src "/images/Drozniak_Zdjecie_Suit_2.webp" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:39:15.097] Server  WARN    Error: Route "/blog" used `searchParams.search`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:39:16.267] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog color: rgb(120, 120, 120) color: inherit {"dp":"/blog","o":"http://localhost:3000/blog","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770463979348}
+[00:39:27.471] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770463990553}
+[00:40:30.245] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:40:30.908] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:40:30.908] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:40:30.908] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770464053990}
+[00:44:48.784] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:44:49.389] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:44:49.389] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:44:49.389] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770464312467}
+[00:47:05.434] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:47:05.996] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:47:05.996] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:47:05.996] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770464449079}
+[00:48:21.651] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:48:22.148] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:48:22.150] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[00:48:22.150] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770464525230}
+[01:01:12.244] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:01:12.402] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:01:12.402] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:01:12.402] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465295489}
+[01:02:41.419] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:02:41.580] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <RenderFromTemplateContext>
+      <ScrollAndFocusHandler segmentPath={[...]}>
+        <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+            <LoadingBoundary name="dlaczego-s..." loading={null}>
+              <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+                <RedirectBoundary>
+                  <RedirectErrorBoundary router={{...}}>
+                    <InnerLayoutRouter url="/blog/dlac..." tree={[...]} params={{slug:"dlac..."}} ...>
+                      <SegmentViewNode type="page" pagePath="/strony_ww...">
+                        <SegmentTrieNode>
+                        <BlogPostPage>
+                          <script>
+                          <script>
+                          <BlogPostPage>
+                            <article className="min-h-scre...">
+                              <div>
+                              <div
++                               className="container mx-auto px-4 md:px-6 py-16 md:py-20 lg:py-24 max-w-5xl"
+-                               className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 flex-wrap"
+                              >
+                                <div
++                                 className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 flex-wrap"
+-                                 className="flex items-center gap-2"
+                                >
++                                 <div className="flex items-center gap-2">
+-                                 <span className="w-2 h-2 bg-[#fee715]">
+                                  ...
+                                ...
+                      ...
+                    ...
+          ...
+
+[01:02:42.066] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:02:42.066] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:02:42.066] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:02:42.066] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465385152}
+[01:02:42.066] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465385153}
+[01:03:00.738] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:03:00.979] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:03:00.979] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:03:00.979] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465404066}
+[01:04:13.828] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:04:13.970] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <RenderFromTemplateContext>
+      <ScrollAndFocusHandler segmentPath={[...]}>
+        <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+          <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+            <LoadingBoundary name="dlaczego-s..." loading={null}>
+              <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+                <RedirectBoundary>
+                  <RedirectErrorBoundary router={{...}}>
+                    <InnerLayoutRouter url="/blog/dlac..." tree={[...]} params={{slug:"dlac..."}} ...>
+                      <SegmentViewNode type="page" pagePath="/strony_ww...">
+                        <SegmentTrieNode>
+                        <BlogPostPage>
+                          <script>
+                          <script>
+                          <BlogPostPage>
+                            <article className="min-h-scre...">
+                              <div>
+                              <div
++                               className="container mx-auto px-4 md:px-6 py-16 md:py-20 lg:py-24 max-w-5xl"
+-                               className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 flex-wrap"
+                              >
+                                <div
++                                 className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 flex-wrap"
+-                                 className="flex items-center gap-2"
+                                >
++                                 <div className="flex items-center gap-2">
+-                                 <span className="w-2 h-2 bg-[#fee715]" aria-hidden="true">
+                                  ...
+                                ...
+                      ...
+                    ...
+          ...
+
+[01:04:14.446] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:04:14.446] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:04:14.446] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:04:14.446] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465477531}
+[01:04:14.446] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465477531}
+[01:05:00.993] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:05:01.237] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:05:01.237] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:05:01.237] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465524323}
+[01:05:47.900] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:05:48.183] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:05:48.183] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:05:48.183] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465571271}
+[01:07:24.433] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:07:25.094] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:07:25.094] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:07:25.094] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465668181}
+[01:11:16.880] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:11:17.500] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:11:17.500] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:11:17.500] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770465900588}
+[01:18:08.532] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:18:09.114] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:18:09.114] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:18:09.114] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770466312201}
+[01:24:20.995] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:24:21.599] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:24:21.599] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:24:21.599] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770466684687}
+[01:29:37.281] Server  LOG     ✓ Compiled in 249ms
+[01:31:01.887] Server  LOG     ✓ Compiled in 270ms
+[01:31:05.740] Server  LOG     ✓ Compiled in 108ms
+[01:31:05.823] Browser ERROR   The final argument passed to %s changed size between renders. The order and size of this array must remain constant.
+
+Previous: %s
+Incoming: %s useEffect [false] [false, true]
+[01:31:06.890] Server  LOG     ✓ Compiled in 97ms
+[01:31:21.034] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:31:21.579] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:31:21.579] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:31:21.579] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770467104672}
+[01:36:34.475] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:36:35.047] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[01:36:35.047] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/blog/dlaczego-strona-nie-sprzedaje","route":"/blog/[slug]"}
+[01:36:35.047] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje color: rgb(120, 120, 120) color: inherit {"dp":"/blog/[slug]","o":"http://localhost:3000/blog/dlaczego-strona-nie-sprzedaje","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1770467418141}

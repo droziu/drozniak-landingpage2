@@ -995,6 +995,7 @@ const LayoutClient = ({ children })=>{
     // Sprawdź czy jesteśmy na ścieżkach panelu/admina (nie pokazuj Header/Footer)
     const isPanelRoute = pathname === '/login' || pathname === '/panel' || pathname === '/admin' || pathname === '/profile' || pathname.startsWith('/panel/') || pathname.startsWith('/admin/') || pathname.startsWith('/profile/') || pathname.startsWith('/p/') || // Public proposals
     pathname.startsWith('/o/'); // PDF proposals
+    const isBlogRoute = pathname === '/blog' || pathname.startsWith('/blog/');
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         try {
             // Load existing cookie preferences
@@ -1004,7 +1005,8 @@ const LayoutClient = ({ children })=>{
             console.error('Error in LayoutClient useEffect:', error);
         }
     }, [
-        isPanelRoute
+        isPanelRoute,
+        isBlogRoute
     ]);
     const handleCookieAccept = (preferences)=>{
         setCookiePreferences(preferences);
@@ -1018,27 +1020,27 @@ const LayoutClient = ({ children })=>{
         children: [
             !isPanelRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$Header$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Header"], {}, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/LayoutClient.tsx",
-                lineNumber: 78,
+                lineNumber: 80,
                 columnNumber: 25
             }, ("TURBOPACK compile-time value", void 0)),
             children,
             !isPanelRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$Footer$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Footer"], {}, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/LayoutClient.tsx",
-                lineNumber: 80,
+                lineNumber: 82,
                 columnNumber: 25
             }, ("TURBOPACK compile-time value", void 0)),
-            !isPanelRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$StickyCTA$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["StickyCTA"], {
+            !isPanelRoute && !isBlogRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$StickyCTA$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["StickyCTA"], {
                 isVisible: isStickyCtaVisible
             }, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/LayoutClient.tsx",
-                lineNumber: 81,
-                columnNumber: 25
+                lineNumber: 83,
+                columnNumber: 41
             }, ("TURBOPACK compile-time value", void 0)),
             !isPanelRoute && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$strony_www$2f$drozniak$2d$landingpage$2f$app$2f$components$2f$CookieConsent$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CookieConsent"], {
                 onAccept: handleCookieAccept
             }, void 0, false, {
                 fileName: "[project]/strony_www/drozniak-landingpage/app/components/LayoutClient.tsx",
-                lineNumber: 82,
+                lineNumber: 84,
                 columnNumber: 25
             }, ("TURBOPACK compile-time value", void 0))
         ]

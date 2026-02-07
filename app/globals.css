@@ -26,6 +26,19 @@
   background-color: #0a0f14 !important;
 }
 
+/* Linia połączenia (podczas rysowania strzałki) ma być POD panelami bocznymi, nie nad nimi */
+.react-flow__connection,
+.react-flow__connectionline {
+  z-index: 0 !important;
+}
+
+/* Background React Flow — upewnij się że pokrywa cały obszar (większy SVG pattern) */
+.react-flow__background {
+  width: 10000px !important;
+  height: 10000px !important;
+  transform-origin: 0 0;
+}
+
 /* Blog styles */
 .blog-content {
   line-height: 1.9;

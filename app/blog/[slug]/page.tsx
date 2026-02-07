@@ -43,8 +43,8 @@ const getDesktopImageUrl = (baseUrl: string): string => {
   if (baseUrl.includes('-2000.webp')) {
     return baseUrl;
   }
-  const cleanUrl = baseUrl.replace(/\.(webp|jpg|png)$/i, '');
-  return `${cleanUrl}-2000.webp`;
+  // URL bez konwencji -1024/-2000 – zwracamy bez zmian (np. Drozniak_www_desktop.webp)
+  return baseUrl;
 };
 
 const getHeroImageSrcSet = (baseUrl: string): string => {
@@ -64,7 +64,7 @@ const getHeroImageSrcSet = (baseUrl: string): string => {
 };
 
 // Content Block Renderer (simplified version)
-const ContentBlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
+const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> = ({ block, inPair = false }) => {
   switch (block.type) {
     case 'text':
       let textContent = block.data.text || '';
@@ -117,17 +117,20 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
 
     case 'image':
       if (!block.data.imageUrl) return null;
-      const widthClass = {
-        narrow: 'max-w-md mx-auto',
-        standard: 'max-w-2xl mx-auto',
-        wide: 'max-w-4xl mx-auto',
-        full: 'w-full',
-      }[block.data.width || 'standard'];
+      const widthClass = inPair
+        ? 'w-full'
+        : {
+            narrow: 'max-w-md mx-auto',
+            standard: 'max-w-2xl mx-auto',
+            wide: 'max-w-4xl mx-auto',
+            full: 'w-full',
+          }[block.data.width || 'standard'];
+      const marginClass = inPair ? '' : 'my-16 md:my-20';
 
       const imageSrc = getDesktopImageUrl(block.data.imageUrl);
       
       return (
-        <figure className={`my-16 md:my-20 ${widthClass}`}>
+        <figure className={`${marginClass} ${widthClass}`}>
           <img
             src={imageSrc}
             alt={block.data.alt || ''}
@@ -487,34 +490,40 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Content */}
         <div className={`container mx-auto px-4 md:px-6 py-16 md:py-20 lg:py-24 ${maxWidthClass}`}>
-          {/* Category and date */}
+          {/* Category and date - stable DOM order to avoid hydration mismatch */}
           <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 flex-wrap">
-            {post.category_name && (
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-[#fee715]"></span>
-                <span className="inline-block text-xs font-semibold px-3 py-1 border border-gray-300 text-[#101820]">
-                  {post.category_name}
-                </span>
-              </div>
-            )}
-            {post.published_at && (
-              <div className="flex items-center gap-2 text-gray-600">
-                <Calendar size={16} weight="regular" className="text-gray-500 flex-shrink-0" />
-                <span className="text-sm">
-                  {new Date(post.published_at).toLocaleDateString('pl-PL', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </span>
-              </div>
-            )}
-            {post.reading_time && (
-              <div className="flex items-center gap-2 text-gray-600">
-                <Clock size={16} weight="regular" className="text-gray-500 flex-shrink-0" />
-                <span className="text-sm">{post.reading_time} min</span>
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              {post.category_name ? (
+                <>
+                  <span className="w-2 h-2 bg-[#fee715]" aria-hidden />
+                  <span className="inline-block text-xs font-semibold px-3 py-1 border border-gray-300 text-[#101820]">
+                    {post.category_name}
+                  </span>
+                </>
+              ) : null}
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              {post.published_at ? (
+                <>
+                  <Calendar size={16} weight="regular" className="text-gray-500 flex-shrink-0" />
+                  <span className="text-sm" suppressHydrationWarning>
+                    {new Date(post.published_at).toLocaleDateString('pl-PL', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </span>
+                </>
+              ) : null}
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              {post.reading_time ? (
+                <>
+                  <Clock size={16} weight="regular" className="text-gray-500 flex-shrink-0" />
+                  <span className="text-sm">{post.reading_time} min</span>
+                </>
+              ) : null}
+            </div>
           </div>
 
           {/* Title */}
@@ -551,14 +560,34 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="blog-content text-[#101820]">
             {post.content?.blocks?.map((block: ContentBlock, index: number) => {
               const prevBlock = index > 0 ? post.content?.blocks[index - 1] : null;
+              const nextBlock = index < (post.content?.blocks?.length ?? 0) - 1 ? post.content?.blocks[index + 1] : null;
               const isNewSection = block.type === 'text' && block.data.text && 
                 (block.data.text.includes('<h2>') || block.data.text.includes('<h2 '));
               const prevWasSeparator = prevBlock?.type === 'separator';
               const currentIsSeparator = block.type === 'separator';
               const shouldAddSeparator = isNewSection && index > 0 && prevBlock && !prevWasSeparator;
+              const isSecondOfImagePair = prevBlock?.type === 'image' && block.type === 'image';
+              const isFirstOfImagePair = block.type === 'image' && nextBlock?.type === 'image';
               
               if (currentIsSeparator && prevWasSeparator) {
                 return null;
+              }
+              if (isSecondOfImagePair) {
+                return null;
+              }
+              
+              if (isFirstOfImagePair && nextBlock) {
+                return (
+                  <div key={`${block.id}-${nextBlock.id}`}>
+                    {shouldAddSeparator && (
+                      <div className="my-16 md:my-20 h-4 bg-[#fee715]"></div>
+                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 my-16 md:my-20 max-w-5xl mx-auto">
+                      <ContentBlockRenderer block={block} inPair />
+                      <ContentBlockRenderer block={nextBlock} inPair />
+                    </div>
+                  </div>
+                );
               }
               
               return (

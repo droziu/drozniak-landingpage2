@@ -11,14 +11,6 @@
     "[project]/strony_www/drozniak-landingpage/app/page": [
       "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
       "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
-    ],
-    "[project]/strony_www/drozniak-landingpage/app/strony-www/page": [
-      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
-      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
-    ],
-    "[project]/strony_www/drozniak-landingpage/app/system/page": [
-      "static/media/e8f2fbee2754df70-s.p.9b7a96b4.woff2",
-      "static/media/cf514f5d0007dafa-s.p.417aa1a2.woff2"
     ]
   },
   "appUsingSizeAdjust": true,

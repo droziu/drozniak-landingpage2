@@ -183,7 +183,10 @@ CREATE POLICY "Admins can do everything with posts"
   WITH CHECK (public.is_admin());
 
 -- 10. View dla łatwego pobierania opublikowanych postów z danymi kategorii
-CREATE OR REPLACE VIEW blog_posts_public AS
+-- SECURITY INVOKER: uprawnienia i RLS względem użytkownika zapytania (nie twórcy widoku)
+CREATE OR REPLACE VIEW blog_posts_public
+  WITH (security_invoker = true)
+AS
 SELECT 
   p.id,
   p.slug,

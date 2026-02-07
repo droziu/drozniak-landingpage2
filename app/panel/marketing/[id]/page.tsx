@@ -12,8 +12,6 @@ import {
   useEdgesState,
   Controls,
   MiniMap,
-  Background,
-  BackgroundVariant,
   Panel,
   NodeTypes,
   EdgeTypes,
@@ -1091,6 +1089,7 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
   const pendingSelectionRef = useRef<{ nodeId: string; shouldSelect: boolean } | null>(null); // Intencja selekcji z onNodeClick
   const previousSelectedNodeIdsRef = useRef<Set<string>>(new Set()); // Poprzednio zaznaczone nody (przed kliknięciem)
   const isRestoringSelectionRef = useRef(false); // Flaga, że przywracamy selekcję (aby uniknąć pętli)
+  const isConnectingRef = useRef(false); // Flaga: użytkownik rysuje strzałkę — nie zamykaj panelu właściwości
 
   // Zapisz bieżący stan do historii (przed zmianą) — do Cofnij
   const pushUndoHistory = useCallback(() => {
@@ -1279,14 +1278,16 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
     }
   }, [id]);
 
-  // Load funnel data and custom templates
+  // Load funnel data i szablony/komentarze — tylko przy zmianie id lub user.
+  // Dzięki temu wpisywanie w panelu po prawej nie wywołuje ponownego loadFunnel i nie nadpisuje diagramu.
   useEffect(() => {
-    if (id && user) {
-      loadFunnel();
-      loadCustomTemplates();
-      loadCommentCounts();
-    }
-  }, [id, user, loadCustomTemplates, loadCommentCounts]);
+    if (!id || !user) return;
+    loadFunnel();
+    loadCustomTemplates();
+    loadCommentCounts();
+    // Celowo tylko [id, user] — żadne inne zmiany (np. wpisywanie w formularzu) nie mogą wywołać loadFunnel
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, user]);
 
   // Ustawienie viewportu po załadowaniu danych (tylko raz)
   useEffect(() => {
@@ -1394,16 +1395,78 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
     setHasUnsavedChanges(currentState !== savedState);
   }, [nodes, edges]);
 
-  // Auto-save on changes - ale NIE podczas edycji w modalu (properties panel)
+  // Usuń „osierocone” krawędzie i bardzo krótkie „fragmenty” (source lub target nie istnieje, lub są za blisko siebie)
   useEffect(() => {
-    if (funnel && nodes.length >= 0 && !showPropertiesPanel && !showEdgeProperties) {
-      const timeoutId = setTimeout(() => {
-        saveFunnel();
-      }, 2000); // Debounce 2 seconds
-
-      return () => clearTimeout(timeoutId);
+    const nodeIds = new Set(nodes.map((n) => n.id));
+    const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+    
+    const validEdges = edges.filter((e) => {
+      // Sprawdź czy edge ma prawidłowy ID
+      if (!e.id || typeof e.id !== 'string' || e.id.trim() === '') {
+        return false;
+      }
+      
+      // Podstawowe sprawdzenie: source i target muszą istnieć i być różne
+      if (!e.source || !e.target || !nodeIds.has(e.source) || !nodeIds.has(e.target) || e.source === e.target) {
+        return false;
+      }
+      
+      // Sprawdź czy krawędź nie jest za krótka („fragment”) — jeśli nody są bardzo blisko siebie (< 30px), usuń
+      const sourceNode = nodeMap.get(e.source);
+      const targetNode = nodeMap.get(e.target);
+      if (sourceNode && targetNode) {
+        const dx = Math.abs((sourceNode.position?.x || 0) - (targetNode.position?.x || 0));
+        const dy = Math.abs((sourceNode.position?.y || 0) - (targetNode.position?.y || 0));
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        // Jeśli odległość < 30px, to prawdopodobnie „fragment” — usuń
+        if (distance < 30) {
+          return false;
+        }
+        
+        // Sprawdź czy handle'y istnieją (jeśli są podane) — jeśli edge ma sourceHandle/targetHandle, ale nie istnieją na nodzie, usuń
+        const validHandles = ['top', 'bottom', 'left', 'right'];
+        if (e.sourceHandle && !validHandles.includes(e.sourceHandle)) {
+          return false;
+        }
+        if (e.targetHandle && !validHandles.includes(e.targetHandle)) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+    
+    if (validEdges.length < edges.length) {
+      const removed = edges.filter((e) => !validEdges.some((ve) => ve.id === e.id));
+      if (removed.length > 0) {
+        console.log('Usunięto osierocone/krótkie krawędzie:', removed.map((e) => ({ id: e.id, source: e.source, target: e.target })));
+      }
+      setEdges(validEdges);
+      if (selectedEdge && !validEdges.some((e) => e.id === selectedEdge.id)) {
+        setSelectedEdge(null);
+        setShowEdgeProperties(false);
+      }
     }
-  }, [nodes, edges, funnel, showPropertiesPanel, showEdgeProperties]);
+  }, [nodes, edges, selectedEdge]);
+
+  // Auto-save z dłuższym debounce — tylko gdy diagram się zmienił i panel właściwości jest zamknięty.
+  // Nie zapisuj podczas wpisywania w panelu po prawej, żeby nie nadpisywać i nie powodować „odświeżenia”.
+  useEffect(() => {
+    if (!funnel || showPropertiesPanel || showEdgeProperties) return;
+    if (!hasUnsavedChanges) return;
+    const timeoutId = setTimeout(() => {
+      saveFunnel();
+    }, 4000); // 4 sekundy — użytkownik ma czas dokończyć edycję bez irytującego zapisie
+
+    return () => clearTimeout(timeoutId);
+  }, [nodes, edges, funnel, showPropertiesPanel, showEdgeProperties, hasUnsavedChanges]);
+
+  // Funkcja zaznaczania wszystkich elementów (Ctrl+A / Cmd+A)
+  const handleSelectAll = useCallback(() => {
+    pushUndoHistory();
+    setNodes((nds) => nds.map((n) => ({ ...n, selected: true })));
+    setEdges((eds) => eds.map((e) => ({ ...e, selected: true })));
+  }, [setNodes, setEdges, pushUndoHistory]);
 
   // Funkcja kopiowania zaznaczonych nodów i edges
   const handleCopy = useCallback(() => {
@@ -1487,6 +1550,11 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
         handlePaste();
         return;
       }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'a') {
+        e.preventDefault();
+        handleSelectAll();
+        return;
+      }
       if (e.code === 'Space' && !e.repeat) {
         e.preventDefault();
         setIsSpacePressed(true);
@@ -1507,7 +1575,7 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [handleUndo, handleCopy, handlePaste]);
+  }, [handleUndo, handleCopy, handlePaste, handleSelectAll]);
 
   // Zapisywanie własnego szablonu
   const saveCustomTemplate = useCallback(async (label: string, icon: string, color: string, category: string) => {
@@ -1608,6 +1676,7 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
 
   // Ładowanie customowych pól dla wybranego edge'a
   const loadEdgeCustomFields = useCallback(async (edgeId: string, funnelId: string) => {
+    if (!edgeId?.trim() || !funnelId?.trim()) return;
     try {
       const { data, error } = await supabase
         .from('edge_custom_fields')
@@ -1628,7 +1697,8 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
 
       setEdgeCustomFields(fields);
     } catch (error: any) {
-      console.error('Błąd ładowania customowych pól dla edge:', error);
+      const msg = (error?.message ?? (typeof error === 'object' ? JSON.stringify(error) : String(error))) || 'Nieznany błąd';
+      console.error('Błąd ładowania customowych pól dla edge:', msg);
     }
   }, []);
 
@@ -2038,6 +2108,11 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
 
   // Obsługa kliknięcia w pustą przestrzeń (pane) - dla komentarzy i deselekcji
   const onPaneClick = useCallback((event: React.MouseEvent) => {
+    // Nie zamykaj panelu podczas rysowania strzałki (klik w uchwyt może bąbelkować do pane)
+    if (isConnectingRef.current) return;
+    // Klik w uchwyt połączenia (handle) — nie traktuj jak pane, żeby panel właściwości się nie chował
+    if (event.target instanceof HTMLElement && event.target.closest('.react-flow__handle')) return;
+
     // W trybie komentarzy: otwórz formularz dodawania komentarza w regionie
     if (commentMode && reactFlowInstance) {
       const point = reactFlowInstance.screenToFlowPosition({
@@ -2820,9 +2895,9 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
       )}
 
       <div className="flex-1 flex overflow-hidden relative">
-        {/* Sidebar - Node Templates */}
+        {/* Sidebar - Node Templates (z-20 żeby linia połączenia nie zasłaniała podczas rysowania strzałki) */}
         <div 
-          className={`transition-all duration-300 overflow-hidden funnel-builder-sidebar ${
+          className={`relative z-20 transition-all duration-300 overflow-hidden funnel-builder-sidebar ${
             showSidebar ? 'w-64 opacity-100' : 'w-0 opacity-0'
           }`}
           style={{ 
@@ -2881,8 +2956,8 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
           </div>
         </div>
 
-        {/* Main Canvas */}
-        <div className="flex-1 relative" ref={reactFlowWrapper}>
+        {/* Main Canvas (z-0 żeby panele z-20 były zawsze nad linią połączenia) */}
+        <div className="flex-1 relative z-0" ref={reactFlowWrapper}>
           {/* Legenda */}
           {showLegend && (
             <div className="absolute top-4 right-4 z-20 bg-[#0a0f14]/98 border border-white/10 rounded-lg shadow-xl backdrop-blur-sm p-4 min-w-[200px]">
@@ -3031,6 +3106,8 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
             onNodesChange={wrappedOnNodesChange}
             onEdgesChange={wrappedOnEdgesChange}
             onConnect={onConnect}
+            onConnectStart={() => { isConnectingRef.current = true; }}
+            onConnectEnd={() => { isConnectingRef.current = false; }}
             onNodeDragStart={(_, node) => {
               isDraggingNodeRef.current = true;
               pushUndoHistory();
@@ -3094,13 +3171,14 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
             }}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
-            fitView={true}
+            fitView={false}
             fitViewOptions={{ padding: 0.2, duration: 0 }}
             className={`bg-[#101820] ${interactionMode === 'select' ? 'funnel-select-mode' : ''}`}
             connectionLineType={"smoothstep" as any}
             snapToGrid={true}
             snapGrid={[20, 20]}
             connectionLineStyle={{ stroke: '#fee715', strokeWidth: 2, strokeDasharray: '5,5' }}
+            connectionLineContainerStyle={{ pointerEvents: 'none' }}
             defaultEdgeOptions={{
               type: 'custom',
               animated: false,
@@ -3131,6 +3209,7 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
             connectionRadius={80}
             minZoom={0.01}
             maxZoom={10}
+            onlyRenderVisibleElements={false}
             proOptions={{ hideAttribution: true }}
           >
             <Background 
@@ -3139,6 +3218,7 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
               size={1.5} 
               color="#ffffff25"
               style={{ opacity: 0.6 }}
+              offset={1}
             />
             {/* Mini-przycisk do przywrócenia ukrytego dolnego toolbara */}
             {!showBottomToolbar && (
@@ -3241,6 +3321,15 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={handleSelectAll}
+                    className="p-2 bg-[#18232F]/80 border border-white/10 hover:border-amber-500/50 hover:bg-amber-500/10 rounded-lg transition-all duration-200 text-white/80 hover:text-white backdrop-blur-sm"
+                    title="Zaznacz wszystko (Ctrl+A / Cmd+A)"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </button>
                   <div className="px-2 text-xs text-amber-400/90 font-medium border-l border-amber-500/20 ml-2 pl-2">
@@ -3352,10 +3441,10 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
           )}
         </div>
 
-        {/* Edge Properties Panel */}
+        {/* Edge Properties Panel (z-20 żeby linia połączenia nie zasłaniała podczas rysowania) */}
         {showEdgeProperties && selectedEdge && (
           <div 
-            className="w-72 border-l border-white/10 p-4 overflow-y-auto bg-[#0a0f14]/98 nodrag nopan"
+            className="relative z-20 w-72 border-l border-white/10 p-4 overflow-y-auto bg-[#0a0f14]/98 nodrag nopan"
             onKeyDown={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
             onKeyUp={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
           >
@@ -3600,11 +3689,10 @@ export default function FunnelBuilderPage({ params }: { params: Promise<{ id: st
           </div>
         )}
 
-        {/* Node Properties Panel */}
+        {/* Node Properties Panel (z-20 żeby linia połączenia nie zasłaniała podczas rysowania) */}
         {showPropertiesPanel && selectedNode && (
           <div 
-            className="w-72 border-l border-white/10 p-4 overflow-y-auto overflow-x-visible bg-[#0a0f14]/98 nodrag nopan"
-            style={{ zIndex: 10 }}
+            className="relative z-20 w-72 border-l border-white/10 p-4 overflow-y-auto overflow-x-visible bg-[#0a0f14]/98 nodrag nopan"
             onKeyDown={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
             onKeyUp={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
           >

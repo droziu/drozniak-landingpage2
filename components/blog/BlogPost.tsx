@@ -54,9 +54,8 @@ const getDesktopImageUrl = (baseUrl: string): string => {
   if (baseUrl.includes('-2000.webp')) {
     return baseUrl;
   }
-  // W przeciwnym razie spróbuj dodać -2000
-  const cleanUrl = baseUrl.replace(/\.(webp|jpg|png)$/i, '');
-  return `${cleanUrl}-2000.webp`;
+  // URL bez konwencji -1024/-2000 – zwracamy bez zmian (np. Drozniak_www_desktop.webp)
+  return baseUrl;
 };
 
 // Komponent do renderowania bloków treści
@@ -126,10 +125,9 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock }> = ({ block }) => {
         full: 'w-full',
       }[block.data.width || 'standard'];
 
-      // Sprawdź czy obraz ma wersje responsywne (sprawdzamy czy URL można przekształcić)
-      // Zakładamy, że jeśli obraz ma standardowe rozszerzenie, to możemy wygenerować wersje
+      // srcSet tylko gdy URL ma konwencję -1024/-2000 (np. hero-2000.webp)
       const hasResponsiveVersions = block.data.imageUrl && 
-        /\.(webp|jpg|png)$/i.test(block.data.imageUrl);
+        (block.data.imageUrl.includes('-1024.webp') || block.data.imageUrl.includes('-2000.webp'));
       
       // Jeśli ma standardowe rozszerzenie, użyj srcset, w przeciwnym razie zwykły src
       const imageSrc = hasResponsiveVersions 

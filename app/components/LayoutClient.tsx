@@ -32,6 +32,8 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
     pathname.startsWith('/p/') || // Public proposals
     pathname.startsWith('/o/'); // PDF proposals
 
+  const isBlogRoute = pathname === '/blog' || pathname.startsWith('/blog/');
+
   useEffect(() => {
     try {
       // Load existing cookie preferences
@@ -41,8 +43,8 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
           setCookiePreferences(JSON.parse(savedPreferences));
         }
 
-        // Tylko dla publicznych stron - sticky CTA
-        if (!isPanelRoute) {
+        // Tylko dla publicznych stron (nie panel, nie blog) - sticky CTA
+        if (!isPanelRoute && !isBlogRoute) {
           const handleScroll = () => {
             // Show sticky CTA after scrolling past the hero section (e.g., 800px)
             if (window.scrollY > 800) {
@@ -61,7 +63,7 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
     } catch (error) {
       console.error('Error in LayoutClient useEffect:', error);
     }
-  }, [isPanelRoute]);
+  }, [isPanelRoute, isBlogRoute]);
 
   const handleCookieAccept = (preferences: { necessary: boolean; performance: boolean; analytics: boolean }) => {
     setCookiePreferences(preferences);
@@ -78,7 +80,7 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
       {!isPanelRoute && <Header />}
       {children}
       {!isPanelRoute && <Footer />}
-      {!isPanelRoute && <StickyCTA isVisible={isStickyCtaVisible} />}
+      {!isPanelRoute && !isBlogRoute && <StickyCTA isVisible={isStickyCtaVisible} />}
       {!isPanelRoute && <CookieConsent onAccept={handleCookieAccept} />}
     </>
   );

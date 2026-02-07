@@ -13,9 +13,18 @@ export const useAuth = () => {
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error) {
         console.error('Błąd pobierania sesji:', error);
+        // Nieważny/nieznaleziony refresh token (np. po przełączeniu env lub wygaśnięciu) — wyczyść sesję
+        const msg = error?.message ?? '';
+        if (msg.includes('Refresh Token') || msg.includes('refresh_token')) {
+          supabase.auth.signOut().then(() => {
+            setUser(null);
+          });
+        } else {
+          setUser(null);
+        }
+      } else {
+        setUser(session?.user ?? null);
       }
-      console.log('Sesja załadowana:', session?.user?.email || 'brak sesji');
-      setUser(session?.user ?? null);
       setLoading(false);
     });
 

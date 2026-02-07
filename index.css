@@ -159,9 +159,7 @@
   text-decoration: underline !important;
   text-decoration-color: #101820 !important;
   opacity: 0.9 !important;
-}
-
-/* Reset margin i padding dla h2 w bloku heading (żółty boksik) - naturalna szerokość, centrowanie jako element */
+}/* Reset margin i padding dla h2 w bloku heading (żółty boksik) - naturalna szerokość, centrowanie jako element */
 .bg-\[#fee715\] h2 {
   margin: 0 !important;
   padding: 0 !important;
