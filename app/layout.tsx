@@ -1,23 +1,10 @@
 import type { Metadata } from 'next';
-import { Montserrat, Open_Sans } from 'next/font/google';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 import '@xyflow/react/dist/style.css';
 import { LayoutClient } from './components/LayoutClient';
 import { Analytics } from '@vercel/analytics/next';
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['400', '600', '700', '800'],
-  variable: '--font-montserrat',
-  display: 'swap',
-});
-
-const openSans = Open_Sans({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
-  variable: '--font-open-sans',
-  display: 'swap',
-});
 
 const BASE_URL = 'https://drozniak.pl';
 
@@ -77,7 +64,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Global Schema.org JSON-LD
 const globalSchemas = {
   organization: {
     '@context': 'https://schema.org',
@@ -175,12 +161,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" className={`${montserrat.variable} ${openSans.variable}`}>
+    <html lang="pl" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <head>
-        {/* Preconnect dla fontów Google - poprawia LCP o ~695ms */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Global Schema.org JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(globalSchemas.organization) }}
@@ -202,7 +184,7 @@ export default function RootLayout({
           id="schema-service"
         />
       </head>
-      <body className="bg-[#101820] text-white font-[Open Sans] antialiased">
+      <body className={`${GeistSans.className} text-white antialiased selection:bg-[#fee715] selection:text-[#050714]`}>
         <LayoutClient>
           {children}
         </LayoutClient>

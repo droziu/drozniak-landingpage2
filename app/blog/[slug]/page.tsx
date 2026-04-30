@@ -107,7 +107,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
             block.data.alignment === 'center' ? 'text-center' : ''
           } ${block.data.alignment === 'right' ? 'text-right' : ''
           } ${
-            hasH2 ? 'prose-headings:font-extrabold prose-headings:font-[Montserrat] prose-headings:text-[#101820] prose-h2:text-4xl prose-h2:md:text-5xl prose-h2:lg:text-6xl prose-h2:mb-8 prose-h2:mt-20 prose-h2:md:mt-24 prose-h2:uppercase prose-h2:leading-tight prose-h2:tracking-tight prose-h2:py-6' : ''
+            hasH2 ? 'prose-headings:font-extrabold prose-headings:prose-headings:text-[#101820] prose-h2:text-4xl prose-h2:md:text-5xl prose-h2:lg:text-6xl prose-h2:mb-8 prose-h2:mt-20 prose-h2:md:mt-24 prose-h2:uppercase prose-h2:leading-tight prose-h2:tracking-tight prose-h2:py-6' : ''
           } ${
             hasH3 ? 'prose-h3:text-2xl prose-h3:md:text-3xl prose-h3:lg:text-4xl prose-h3:mb-6 prose-h3:mt-12 prose-h3:md:mt-16 prose-h3:font-extrabold prose-h3:text-[#101820] prose-h3:leading-tight prose-h3:py-4' : ''
           } prose-p:leading-[1.7] prose-p:text-[#101820] prose-p:text-lg md:prose-p:text-xl prose-p:mb-8 prose-ul:my-10 prose-li:my-4 prose-li:text-[#101820] prose-li:leading-[1.7] prose-strong:text-[#101820] prose-strong:font-extrabold prose-a:text-[#101820] prose-a:underline prose-a:decoration-[#fee715] prose-a:decoration-2 prose-a:hover:text-[#101820] prose-a:hover:bg-[#fee715] prose-a:transition-colors`}
@@ -166,7 +166,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
           <div className="max-w-6xl mx-auto">
             <div className="bg-[#fee715] px-10 md:px-16 lg:px-20 flex items-center justify-center min-h-[60px] md:min-h-[70px] py-6 md:py-7">
               <h2 
-                className="text-lg md:text-xl lg:text-2xl font-extrabold font-[Montserrat] text-[#101820] leading-[2.6] tracking-tight text-center m-0 p-0 max-w-5xl -translate-y-[15px]"
+                className="text-lg md:text-xl lg:text-2xl font-extrabold text-[#101820] leading-[2.6] tracking-tight text-center m-0 p-0 max-w-5xl -translate-y-[15px]"
                 dangerouslySetInnerHTML={{ __html: block.data.text || '' }}
               />
             </div>
@@ -192,7 +192,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
         <div className="my-16 md:my-20 px-10 md:px-12 lg:px-16 bg-gray-50 text-[#101820] border-2 border-gray-200">
           <div className="pt-10 md:pt-12 lg:pt-16 pb-10 md:pb-12 lg:pb-16">
             {block.data.title && (
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold font-[Montserrat] text-[#101820] mb-8 md:mb-10 uppercase tracking-tight leading-[1.6] m-0">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#101820] mb-8 md:mb-10 uppercase tracking-tight leading-[1.6] m-0">
                 {block.data.title}
               </h3>
             )}
@@ -216,14 +216,14 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
             <div className="flex items-center gap-4 md:gap-6">
               <div className="flex-shrink-0">
                 <div className="w-14 h-14 md:w-16 md:h-16 bg-[#fee715] flex items-center justify-center">
-                  <span className="text-xl md:text-2xl font-extrabold font-[Montserrat] text-[#101820]">
+                  <span className="text-xl md:text-2xl font-extrabold text-[#101820]">
                     {block.data.number || ''}
                   </span>
                 </div>
               </div>
               <div className="flex-1">
                 <div className="h-14 md:h-16 bg-gray-50 px-4 md:px-6 flex items-center">
-                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold font-[Montserrat] text-[#101820] leading-tight tracking-tight m-0 p-0 uppercase">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-[#101820] leading-tight tracking-tight m-0 p-0 uppercase">
                     {block.data.text || ''}
                   </h2>
                 </div>
@@ -527,7 +527,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-[Montserrat] text-[#101820] py-6 md:py-8 leading-tight tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#101820] py-6 md:py-8 leading-tight tracking-tight">
             {post.title}
           </h1>
 

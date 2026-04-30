@@ -1,26 +1,40 @@
 'use client';
 
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface StickyCTAProps {
   isVisible: boolean;
 }
 
-export const StickyCTA: React.FC<StickyCTAProps> = ({ isVisible }) => {
-  return (
-    <div className={`fixed bottom-4 right-4 md:bottom-5 md:right-5 z-50 transition-all duration-500 ease-in-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
-      <a 
-        href="#cta"
-        onClick={(e) => {
-          e.preventDefault();
-          document.querySelector('#cta')?.scrollIntoView({
-            behavior: 'smooth'
-          });
-        }}
-        className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-8 rounded-full shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 flex items-center space-x-2 text-base md:text-lg"
+export const StickyCTA: React.FC<StickyCTAProps> = ({ isVisible }) => (
+  <AnimatePresence>
+    {isVisible && (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40"
       >
-        <span>Umów Darmową Rozmowę</span>
-      </a>
-    </div>
-  );
-};
+        <a
+          href="#cta"
+          onClick={(e) => {
+            e.preventDefault();
+            document.querySelector('#cta')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="btn btn-primary btn-lg cursor-pointer"
+        >
+          <span className="relative inline-flex h-1.5 w-1.5 mr-1">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[#0A0A0B]/40 ping-soft text-[#0A0A0B]" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#0A0A0B]" />
+          </span>
+          Umów darmową rozmowę
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);

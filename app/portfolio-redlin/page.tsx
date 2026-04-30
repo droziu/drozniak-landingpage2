@@ -1,674 +1,519 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BGPattern } from '@/app/components/premium/BGPattern';
+import { SectionLabel } from '@/app/components/premium/SectionLabel';
+import { FadeUp, Stagger, StaggerItem } from '@/app/components/premium/Motion';
+import { CinematicSection } from '@/app/components/premium/CinematicSection';
+import { MouseHalo } from '@/app/components/premium/MouseHalo';
+
+const PROBLEMS = [
+  {
+    title: 'Brak modułu sprzedaży biletów',
+    description:
+      'Poprzednia strona nie miała żadnego procesu zakupu. Fani musieli pisać wiadomości lub szukać zewnętrznych linków.',
+  },
+  {
+    title: 'Rozproszona informacja o koncertach',
+    description:
+      'Daty, ceny, lokalizacje - wszystko było w innych miejscach. Nie istniała logiczna, przejrzysta lista wydarzeń.',
+  },
+  {
+    title: 'Brak miejsca do budowania społeczności',
+    description:
+      'Nie było sekcji newslettera, landing page\'a do zapisów, ani sposobu na regularny kontakt z fanami.',
+  },
+  {
+    title: 'Przestarzały design',
+    description:
+      'Layout nie oddawał charakteru zespołu i jakości koncertów - wyglądał zbyt oldschoolowo.',
+  },
+  {
+    title: 'Słaba wersja mobilna',
+    description:
+      'Przy ponad 80% ruchu z telefonów, nawigacja była niewygodna, a strona działała wolno.',
+  },
+];
+
+const SOLUTIONS = [
+  {
+    title: 'Kompletny system zakupu biletów',
+    description:
+      'Przejrzysty proces: wybór koncertu → liczba biletów → dane → płatność PayU → bilety na maila.',
+  },
+  {
+    title: 'Przejrzysta lista koncertów',
+    description:
+      'Każde wydarzenie ma własną stronę z datą, miejscem, ceną, zdjęciami i mapą Google.',
+  },
+  {
+    title: 'Moduł newslettera dla fanów',
+    description:
+      'Dedykowany landing page + sekcja zapisu. Opisane korzyści, prosty formularz, jasna polityka prywatności.',
+  },
+  {
+    title: 'Nowoczesny design koncertowy',
+    description:
+      'Ciemne tła, czerwone akcenty, wysoko-kontrastowe CTA, zdjęcia ze sceny. Wizualnie profesjonalniej.',
+  },
+  {
+    title: 'Projekt mobile-first',
+    description:
+      'Cała strona zaprojektowana z myślą o telefonach - przekłada się na świetne wyniki wydajności.',
+  },
+  {
+    title: 'Uporządkowana struktura treści',
+    description:
+      'Ścieżka użytkownika jest jednoznaczna: wejście → koncerty → bilet → płatność → potwierdzenie.',
+  },
+];
+
+const GALLERY = [
+  { src: '/images/redlin_homepage.jpg', alt: 'Strona główna', label: 'Strona główna' },
+  { src: '/images/redlin_koncerty.jpg', alt: 'Lista koncertów', label: 'Lista koncertów' },
+  { src: '/images/redlin_stronakoncertu.jpg', alt: 'Strona koncertu', label: 'Strona koncertu' },
+  { src: '/images/redlin_zakupbiletu.jpg', alt: 'Zakup biletu', label: 'Zakup biletu' },
+  { src: '/images/redlin_newsletter.jpg', alt: 'Newsletter', label: 'Newsletter' },
+  { src: '/images/phone_redlin_1.jpg', alt: 'Mobile 1', label: 'Mobile' },
+  { src: '/images/phone_redlin_2.jpg', alt: 'Mobile 2', label: 'Mobile' },
+  { src: '/images/phone_redlin_3.jpg', alt: 'Mobile 3', label: 'Mobile' },
+  { src: '/images/phone_redlin_4.jpg', alt: 'Mobile 4', label: 'Mobile' },
+  { src: '/images/phone_redlin_5.jpg', alt: 'Mobile 5', label: 'Mobile' },
+];
+
+const TECHNOLOGIES = [
+  { name: 'Next.js', logo: '/images/nextjs-icon.svg' },
+  { name: 'Tailwind CSS', logo: '/images/tailwind-css.svg' },
+  { name: 'TypeScript', logo: '/images/typescript.svg' },
+  { name: 'Vercel', logo: '/images/vercel-icon.svg' },
+];
+
+const RESULTS_DESKTOP = [
+  { label: 'Wydajność', value: 99 },
+  { label: 'Dostępność', value: 90 },
+  { label: 'Best practices', value: 100 },
+  { label: 'SEO', value: 100 },
+];
+
+const RESULTS_MOBILE = [
+  { label: 'Wydajność', value: 94 },
+  { label: 'Dostępność', value: 94 },
+  { label: 'Best practices', value: 100 },
+  { label: 'SEO', value: 100 },
+];
 
 export default function PortfolioRedlinPage() {
-
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHomeExpanded, setIsHomeExpanded] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
-  // Reset scroll position to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const galleryImages = [
-    { src: '/images/redlin_homepage.jpg', alt: 'Desktop - Strona główna', label: 'Desktop - Strona główna' },
-    { src: '/images/redlin_koncerty.jpg', alt: 'Desktop - Lista koncertów', label: 'Desktop - Lista koncertów' },
-    { src: '/images/redlin_stronakoncertu.jpg', alt: 'Desktop - Strona koncertu', label: 'Desktop - Strona koncertu' },
-    { src: '/images/redlin_zakupbiletu.jpg', alt: 'Desktop - Zakup biletu', label: 'Desktop - Zakup biletu' },
-    { src: '/images/redlin_newsletter.jpg', alt: 'Desktop - Newsletter', label: 'Desktop - Newsletter' },
-    { src: '/images/phone_redlin_1.jpg', alt: 'Mobile - Widok 1', label: 'Mobile - Widok 1' },
-    { src: '/images/phone_redlin_2.jpg', alt: 'Mobile - Widok 2', label: 'Mobile - Widok 2' },
-    { src: '/images/phone_redlin_3.jpg', alt: 'Mobile - Widok 3', label: 'Mobile - Widok 3' },
-    { src: '/images/phone_redlin_4.jpg', alt: 'Mobile - Widok 4', label: 'Mobile - Widok 4' },
-    { src: '/images/phone_redlin_5.jpg', alt: 'Mobile - Widok 5', label: 'Mobile - Widok 5' }
-  ];
+  useEffect(() => {
+    if (isHovering) return;
+    const id = setInterval(() => {
+      setCurrentSlide((s) => (s + 1) % GALLERY.length);
+    }, 5500);
+    return () => clearInterval(id);
+  }, [isHovering]);
 
-  // Auto-play slider
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % galleryImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [galleryImages.length]);
-
-  const problems = [
-    {
-      title: 'Brak modułu sprzedaży biletów',
-      description: 'Poprzednia strona nie miała żadnego procesu zakupu. Fani musieli pisać wiadomości lub szukać zewnętrznych linków.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Rozproszona informacja o koncertach',
-      description: 'Daty, ceny, lokalizacje - wszystko było w innych miejscach. Nie istniała logiczna, przejrzysta lista wydarzeń.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Brak miejsca do budowania społeczności',
-      description: 'Nie było sekcji newslettera, landing page\'a do zapisów, ani sposobu na regularny kontakt z fanami.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Przestarzały design',
-      description: 'Layout nie oddawał charakteru zespołu i jakości koncertów - wyglądał zbyt oldschoolowo.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-        </svg>
-      )
-    },
-    {
-      title: 'Słaba wersja mobilna',
-      description: 'Przy ponad 80% ruchu z telefonów, nawigacja była niewygodna, a strona działała wolno.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-        </svg>
-      )
-    }
-  ];
-
-  const solutions = [
-    {
-      title: 'Kompletny system zakupu biletów',
-      description: 'Wprowadziłem przejrzysty proces: wybór koncertu → liczba biletów → dane → płatność PayU → bilety na maila. Całość jest prosta, a transakcje obsługuje PayU.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Przejrzysta lista koncertów',
-      description: 'Każde wydarzenie ma własną stronę z datą, miejscem, ceną, zdjęciami i mapą Google. Strona główna prowadzi bezpośrednio do kalendarza koncertów.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-        </svg>
-      )
-    },
-    {
-      title: 'Moduł newslettera dla fanów',
-      description: 'Dedykowany landing page + sekcja zapisu na stronie głównej. Opisane korzyści, prosty formularz, jasna polityka prywatności.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Nowoczesny design koncertowy',
-      description: 'Ciemne tła, czerwone akcenty, wysoko-kontrastowe CTA, zdjęcia ze sceny. Wizualnie dużo poważniej i profesjonalniej niż poprzednia wersja.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-        </svg>
-      )
-    },
-    {
-      title: 'Projekt mobile-first',
-      description: 'Cała strona została zaprojektowana z myślą o telefonach, co przełożyło się na świetne wyniki wydajności.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-        </svg>
-      )
-    },
-    {
-      title: 'Uporządkowana struktura treści',
-      description: 'Ścieżka użytkownika jest jednoznaczna: Wejście → koncerty → bilet → płatność → potwierdzenie.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-        </svg>
-      )
-    }
-  ];
-
-  const desktopResults = [
-    { label: 'Wydajność', value: '99', unit: '/100' },
-    { label: 'Dostępność', value: '90', unit: '/100' },
-    { label: 'Sprawdzone metody', value: '100', unit: '/100' },
-    { label: 'SEO', value: '100', unit: '/100' }
-  ];
-
-  const mobileResults = [
-    { label: 'Wydajność', value: '94', unit: '/100' },
-    { label: 'Dostępność', value: '94', unit: '/100' },
-    { label: 'Sprawdzone metody', value: '100', unit: '/100' },
-    { label: 'SEO', value: '100', unit: '/100' }
-  ];
-
-  const technologies = [
-    { name: 'Next.js', logo: '/images/nextjs-icon.svg' },
-    { name: 'Tailwind CSS', logo: '/images/tailwind-css.svg' },
-    { name: 'TypeScript', logo: '/images/typescript.svg' },
-    { name: 'Vercel', logo: '/images/vercel-icon.svg' }
-  ];
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % galleryImages.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
-  };
+  const next = () => setCurrentSlide((s) => (s + 1) % GALLERY.length);
+  const prev = () => setCurrentSlide((s) => (s - 1 + GALLERY.length) % GALLERY.length);
 
   return (
-    <main className="py-16 md:py-24 px-4 md:px-6 bg-[#101820]">
-      <div className="container mx-auto max-w-7xl">
-        {/* Hero Section */}
-        <div className="mb-20 md:mb-24">
-          <div className="text-center mb-16 md:mb-20">
-            <h1 className="font-[Montserrat] text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">
-                Strona www dla zespołu muzycznego REDLIN
-              </span>
+    <main className="text-white overflow-x-hidden">
+      {/* HERO */}
+      <section className="relative px-4 md:px-8 lg:px-12 pt-12 md:pt-20 pb-20 md:pb-24 overflow-hidden">
+        <BGPattern variant="grid" mask="fade-edges" size={60} fill="rgba(255, 255, 255, 0.05)" />
+        <MouseHalo />
+
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp whenInView={false} className="text-center max-w-4xl mx-auto">
+            <SectionLabel number="CASE 01" label="Music · Tickets · Payments" align="center" />
+            <h1 className="mt-7 cinematic-headline text-[clamp(2.25rem,7vw,5.5rem)] font-bold pb-3">
+              Strona www dla zespołu muzycznego REDLIN
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8">
-              - case study: strona internetowa dla zespołu muzycznego z systemem sprzedaży biletów
+            <p className="mt-7 text-base md:text-lg text-white/65 leading-relaxed text-balance">
+              Strona internetowa z pełnym systemem sprzedaży biletów, kalendarzem koncertów, dedykowanym newsletterem i nowoczesną oprawą wizualną - szyta na miarę pod marketing zespołu folkowego.
             </p>
-            <p className="text-xl md:text-2xl font-semibold text-white max-w-3xl mx-auto leading-relaxed mb-12 md:mb-16">
-              <strong>Strona www dla zespołu muzycznego</strong> REDLIN - <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">szybsza, nowocześniejsza</span> i zaprojektowana pod sprzedaż biletów, promocję koncertów i budowanie społeczności fanów. Przykład kompleksowej <strong>strony internetowej dla zespołu muzycznego</strong>.
-            </p>
-          </div>
 
-          <div className="relative flex justify-center">
-            {/* Multi-layer shadow effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/20 via-[#00C9A7]/20 to-[#fee715]/20 blur-3xl rounded-2xl -z-10 transform translate-y-8 scale-105"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#fee715]/10 via-[#00C9A7]/10 to-[#fee715]/10 blur-2xl rounded-2xl -z-10 transform translate-y-4 scale-102"></div>
-            
-            <div className="relative w-full md:w-[70%] lg:w-[65%] transform hover:scale-[1.02] transition-transform duration-500">
-              <img 
-                src="/images/redlin_mockup_1.jpg" 
-                alt="REDLIN - Mockup strony" 
-                className="w-full h-auto rounded-2xl shadow-2xl shadow-black/50"
-                style={{ filter: 'drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5))' }}
+            {/* Meta row */}
+            <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[13px] text-white/45">
+              <Meta label="Klient" value="REDLIN" />
+              <Dot />
+              <Meta label="Branża" value="Muzyka" />
+              <Dot />
+              <Meta label="Stack" value="Next.js · Vercel" />
+              <Dot />
+              <Meta label="Live" value="redlin.pl" />
+            </div>
+          </FadeUp>
+
+          {/* Mockup */}
+          <FadeUp delay={0.2} whenInView={false} className="mt-16 md:mt-24 mx-auto max-w-5xl">
+            <div className="relative">
+              <div
+                aria-hidden
+                className="absolute -inset-10 -z-10 rounded-[3rem] opacity-60"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(254, 231, 21, 0.18), transparent 70%)',
+                  filter: 'blur(60px)',
+                }}
               />
+              <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.6)]">
+                <img
+                  src="/images/redlin_mockup_1.jpg"
+                  alt="REDLIN - mockup strony"
+                  className="w-full h-auto"
+                />
+              </div>
             </div>
-          </div>
+          </FadeUp>
         </div>
+      </section>
 
-        {/* About Client & Project Goal Section */}
-        <section className="mb-20 md:mb-24">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* O kliencie Card */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-6 md:p-8 hover:border-white/20 transition-all duration-300 flex flex-col">
-                <h2 className="font-[Montserrat] text-xl md:text-2xl font-bold mb-4 text-[#fee715]">
-                  O kliencie
-                </h2>
-                <div className="space-y-3 text-gray-300 leading-relaxed text-sm md:text-base flex-grow">
-                  <p>
-                    REDLIN to zespół folkowy koncertujący w całej Polsce.
-                  </p>
-                  <p>
-                    Występują na wydarzeniach biletowanych, festiwalach, imprezach plenerowych i koncertach klubowych, a dodatkowo budują aktywną społeczność fanów.
-                  </p>
-                </div>
-              </div>
+      {/* CLIENT + GOAL */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5">
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <SectionLabel number="01" label="O projekcie" />
+            <h2 className="mt-7 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              Klient i cel projektu.
+            </h2>
+          </FadeUp>
 
-              {/* Cel projektu Card */}
-              <div className="bg-white/5 border border-white/10 rounded-xl p-6 md:p-8 hover:border-white/20 transition-all duration-300 flex flex-col">
-                <h2 className="font-[Montserrat] text-xl md:text-2xl font-bold mb-4 text-[#fee715]">
-                  Cel projektu
-                </h2>
-                <div className="space-y-3 text-gray-300 leading-relaxed text-sm md:text-base flex-grow">
-                  <p>
-                    Stworzyć stronę, która ułatwia zakup biletów online, porządkuje informacje o koncertach, zachęca do zapisów do newslettera i tworzy profesjonalny, nowoczesny wizerunek zespołu.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+          <Stagger className="grid md:grid-cols-2 gap-3">
+            <StaggerItem>
+              <InfoCard
+                eyebrow="Klient"
+                title="REDLIN"
+                desc="Zespół folkowy koncertujący w całej Polsce. Występują na wydarzeniach biletowanych, festiwalach, imprezach plenerowych i koncertach klubowych. Budują aktywną społeczność fanów."
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <InfoCard
+                eyebrow="Cel"
+                title="Strona, która sprzedaje bilety"
+                desc="Stworzyć stronę, która ułatwia zakup biletów online, porządkuje informacje o koncertach, zachęca do zapisów do newslettera i tworzy profesjonalny, nowoczesny wizerunek zespołu."
+              />
+            </StaggerItem>
+          </Stagger>
+        </div>
+      </section>
 
-        {/* Problems Section */}
-        <section className="mb-20 md:mb-24">
-          <h2 className="font-[Montserrat] text-3xl md:text-4xl font-bold mb-12 text-center text-white">
-            Cele i problemy klienta przed projektem
-          </h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {problems.map((problem, index) => (
-              <div
-                key={index}
-                className="group bg-white/5 border border-white/10 rounded-xl p-6 hover:border-[#fee715]/30 transition-all duration-300"
-              >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-red-500/20 to-red-600/20 flex items-center justify-center text-red-400 mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {problem.icon}
-                </div>
-                <h3 className="font-[Montserrat] text-lg font-bold text-white mb-2">
-                  {problem.title}
-                </h3>
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  {problem.description}
-                </p>
-              </div>
+      {/* PROBLEMS */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5">
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <SectionLabel number="02" label="Punkt wyjścia" />
+            <h2 className="mt-7 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              Problemy do rozwiązania.
+            </h2>
+          </FadeUp>
+
+          <Stagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {PROBLEMS.map((p, i) => (
+              <StaggerItem key={i}>
+                <ProblemCard num={String(i + 1).padStart(2, '0')} title={p.title} desc={p.description} />
+              </StaggerItem>
             ))}
-          </div>
-        </section>
+          </Stagger>
+        </div>
+      </section>
 
-        {/* Solutions Section */}
-        <section className="mb-20 md:mb-24">
-          <h2 className="font-[Montserrat] text-3xl md:text-4xl font-bold mb-12 text-center text-white">
-            Jak to rozwiązałem
-          </h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {solutions.map((solution, index) => (
-              <div
-                key={index}
-                className="group bg-white/5 border border-white/10 rounded-xl p-6 hover:border-[#fee715]/30 transition-all duration-300"
-              >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 flex items-center justify-center text-[#00C9A7] mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {solution.icon}
-                </div>
-                <h3 className="font-[Montserrat] text-lg font-bold text-white mb-2">
-                  {solution.title}
-                </h3>
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  {solution.description}
-                </p>
-              </div>
+      {/* SOLUTIONS */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5">
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <SectionLabel number="03" label="Realizacja" />
+            <h2 className="mt-7 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              Jak to rozwiązałem.
+            </h2>
+          </FadeUp>
+
+          <Stagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {SOLUTIONS.map((s, i) => (
+              <StaggerItem key={i}>
+                <SolutionCard num={String(i + 1).padStart(2, '0')} title={s.title} desc={s.description} />
+              </StaggerItem>
             ))}
-          </div>
-        </section>
+          </Stagger>
+        </div>
+      </section>
 
-        {/* Before/After Section - Home Page */}
-        <section className="mb-20 md:mb-24">
-          <div className="max-w-4xl mx-auto">
-            <button
-              onClick={() => setIsHomeExpanded(!isHomeExpanded)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl p-6 hover:border-[#fee715]/30 transition-all duration-300 text-left group"
+      {/* GALLERY */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5 overflow-hidden">
+        <BGPattern variant="dots" mask="fade-edges" size={28} fill="rgba(255, 255, 255, 0.05)" />
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <SectionLabel number="04" label="Galeria" />
+            <h2 className="mt-7 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              Widoki z projektu.
+            </h2>
+          </FadeUp>
+
+          <FadeUp className="relative">
+            <div
+              className="relative rounded-3xl overflow-hidden border border-white/10"
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
             >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-[Montserrat] text-2xl md:text-3xl font-bold text-white">
-                  Przykład poprawy: Strona główna
-                </h2>
-                <svg 
-                  className={`w-6 h-6 text-[#fee715] transition-transform duration-300 ${isHomeExpanded ? 'rotate-180' : ''}`}
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0, scale: 1.02 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+                  className="aspect-[16/10] bg-[#0A0E20]"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-              {!isHomeExpanded && (
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 grid grid-cols-2 gap-3">
-                    <div className="relative rounded-lg overflow-hidden border-2 border-red-500/30">
-                      <img 
-                        src="/images/redlin_home_before.jpg" 
-                        alt="Przed" 
-                        className="w-full h-24 object-cover opacity-70"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/images/redlin_mockup_1.jpg';
-                        }}
-                      />
-                      <div className="absolute bottom-1 left-1 bg-red-500/90 text-white px-2 py-0.5 rounded text-xs font-semibold">
-                        Przed
-                      </div>
-                    </div>
-                    <div className="relative rounded-lg overflow-hidden border-2 border-[#00C9A7]/30">
-                      <img 
-                        src="/images/redlin_homepage.jpg" 
-                        alt="Po" 
-                        className="w-full h-24 object-cover opacity-70"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/images/redlin_mockup_1.jpg';
-                        }}
-                      />
-                      <div className="absolute bottom-1 left-1 bg-[#00C9A7]/90 text-white px-2 py-0.5 rounded text-xs font-semibold">
-                        Po
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-gray-400 text-sm hidden md:block">
-                    Kliknij, aby zobaczyć pełne porównanie
-                  </p>
-                </div>
-              )}
-            </button>
+                  <img
+                    src={GALLERY[currentSlide].src}
+                    alt={GALLERY[currentSlide].alt}
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
+              </AnimatePresence>
 
-            {isHomeExpanded && (
-              <div className="mt-6 space-y-6 animate-fadeIn">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="group">
-                    <div className="relative bg-white/5 border border-red-500/30 rounded-xl overflow-hidden mb-4">
-                      <div className="absolute top-4 left-4 z-10 bg-red-500/90 text-white px-4 py-2 rounded-lg text-sm font-semibold">
-                        Przed
-                      </div>
-                      <img 
-                        src="/images/redlin_home_before.jpg" 
-                        alt="Strona główna - przed zmianami" 
-                        className="w-full h-auto opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/images/redlin_mockup_1.jpg';
-                        }}
-                      />
-                    </div>
-                    <p className="text-center text-gray-400 text-sm">
-                      Stara wersja
-                    </p>
-                  </div>
-
-                  <div className="group">
-                    <div className="relative bg-white/5 border border-[#00C9A7]/30 rounded-xl overflow-hidden mb-4">
-                      <div className="absolute top-4 left-4 z-10 bg-[#00C9A7]/90 text-white px-4 py-2 rounded-lg text-sm font-semibold">
-                        Po
-                      </div>
-                      <img 
-                        src="/images/redlin_homepage.jpg" 
-                        alt="Strona główna - po zmianach" 
-                        className="w-full h-auto opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/images/redlin_mockup_1.jpg';
-                        }}
-                      />
-                    </div>
-                    <p className="text-center text-gray-400 text-sm">
-                      Nowa wersja
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* Gallery Section */}
-        <section className="mb-20 md:mb-24">
-          <h2 className="font-[Montserrat] text-3xl md:text-4xl font-bold mb-12 text-center text-white">
-            Galeria projektu
-          </h2>
-          
-          <div className="relative max-w-5xl mx-auto">
-            {/* Slider */}
-            <div className="relative overflow-hidden rounded-2xl">
-              <div 
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-              >
-                {galleryImages.map((image, index) => (
-                  <div key={index} className="min-w-full">
-                    <div className="relative">
-                      <img 
-                        src={image.src} 
-                        alt={image.alt} 
-                        className="w-full h-auto"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/images/redlin_mockup_1.jpg';
-                        }}
-                      />
-                      <div className="absolute bottom-4 left-4 bg-[#fee715]/80 text-[#101820] font-semibold px-4 py-2 rounded-lg text-sm">
-                        {image.label}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              {/* Label */}
+              <div className="absolute bottom-5 left-5 glass-pill px-4 py-2 rounded-full">
+                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#fee715]">
+                  {String(currentSlide + 1).padStart(2, '0')}
+                </span>
+                <span className="section-pill-divider mx-2 inline-block" />
+                <span className="text-[12px] text-white/80">{GALLERY[currentSlide].label}</span>
               </div>
 
-              {/* Navigation - positioned on image edges */}
+              {/* Nav */}
               <button
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black/90 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-10"
-                aria-label="Poprzedni slajd"
+                onClick={prev}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full glass-pill flex items-center justify-center text-white/80 hover:text-[#fee715] transition-colors cursor-pointer"
+                aria-label="Poprzedni"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
               <button
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black/90 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-10"
-                aria-label="Następny slajd"
+                onClick={next}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full glass-pill flex items-center justify-center text-white/80 hover:text-[#fee715] transition-colors cursor-pointer"
+                aria-label="Następny"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
 
-            {/* Thumbnails Section */}
-            <div className="mt-8">
-              <p className="text-center text-gray-400 text-sm mb-4">
-                Przegląd widoków strony
-              </p>
-              <div className="flex justify-center gap-2 overflow-x-auto py-4 px-2">
-                {galleryImages.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`flex-shrink-0 rounded-lg border-2 transition-all duration-300 relative ${
-                      index === currentSlide 
-                        ? 'border-[#fee715] scale-110 w-20 h-20 md:w-24 md:h-24 z-10 shadow-lg shadow-[#fee715]/20' 
-                        : 'border-white/20 hover:border-white/40 opacity-60 hover:opacity-100 w-16 h-16 md:w-20 md:h-20'
-                    }`}
-                    aria-label={`Przejdź do slajdu ${index + 1}`}
-                  >
-                    <div className="w-full h-full rounded-lg overflow-hidden">
-                      <img 
-                        src={image.src} 
-                        alt={image.alt}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/images/redlin_mockup_1.jpg';
-                        }}
-                      />
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Technologies Section */}
-        <section className="mb-20 md:mb-24">
-          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl p-8 md:p-12">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#fee715]/20 to-[#00C9A7]/20 flex items-center justify-center">
-                  <svg className="w-7 h-7 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                  </svg>
-                </div>
-                <h2 className="font-[Montserrat] text-2xl md:text-3xl lg:text-4xl font-bold text-white">
-                  Technologie i architektura
-                </h2>
-              </div>
-              
-              <div className="mb-6">
-                <p className="text-gray-300 leading-relaxed text-lg mb-6">
-                  Strona została zbudowana w <span className="text-[#fee715] font-semibold">Next.js</span>, z wykorzystaniem SSR/SSG, optymalizacji obrazów i lekkich komponentów. Dzięki temu witryna pozostaje szybka i responsywna, mimo dużej liczby zdjęć, grafik i animowanych elementów koncertowych. Hosting na Vercel zapewnia natychmiastowe wdrażanie i świetną wydajność globalną.
-                </p>
-              </div>
-
-              {/* Technology Logos */}
-              <div className="flex flex-wrap items-center gap-6 justify-center">
-                {technologies.map((tech, index) => (
-                  <div key={index} className="flex flex-col items-center gap-2">
-                    <div className="w-16 h-16 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:border-[#fee715]/30 transition-all duration-300 p-3">
-                      <img 
-                        src={tech.logo} 
-                        alt={tech.name}
-                        className="w-full h-full object-contain filter brightness-0 invert"
-                      />
-                    </div>
-                    <span className="text-sm text-gray-300">{tech.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Results Section */}
-        <section className="mb-20 md:mb-24">
-          <h2 className="font-[Montserrat] text-3xl md:text-4xl font-bold mb-12 text-center text-white">
-            Rezultaty
-          </h2>
-          
-          <div className="max-w-6xl mx-auto space-y-8">
-            {/* Desktop Results */}
-            <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl p-6 md:p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <svg className="w-6 h-6 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <h3 className="font-[Montserrat] text-xl md:text-2xl font-bold text-white">
-                  Desktop (PageSpeed Insights)
-                </h3>
-              </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {desktopResults.map((result, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-[#00C9A7]/30 transition-all duration-300"
-                  >
-                    <div className="text-3xl md:text-4xl font-bold text-[#00C9A7] mb-1">
-                      {result.value}
-                      <span className="text-lg text-gray-400">{result.unit}</span>
-                    </div>
-                    <div className="text-gray-300 text-sm">
-                      {result.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Mobile Results */}
-            <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl p-6 md:p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <svg className="w-6 h-6 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
-                <h3 className="font-[Montserrat] text-xl md:text-2xl font-bold text-white">
-                  Mobile (PageSpeed Insights)
-                </h3>
-              </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {mobileResults.map((result, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/5 border border-white/10 rounded-xl p-4 text-center hover:border-[#00C9A7]/30 transition-all duration-300"
-                  >
-                    <div className="text-3xl md:text-4xl font-bold text-[#00C9A7] mb-1">
-                      {result.value}
-                      <span className="text-lg text-gray-400">{result.unit}</span>
-                    </div>
-                    <div className="text-gray-300 text-sm">
-                      {result.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Additional Effects */}
-            <div className="mt-6 text-center max-w-3xl mx-auto">
-              <p className="text-gray-300 leading-relaxed text-sm md:text-base italic">
-                Dodatkowe efekty: uproszczony proces zakupu biletów, większa konwersja dzięki przejrzystej strukturze, wyraźnie lepszy odbiór marki, wzrost zapisów do newslettera.
-              </p>
-            </div>
-
-            {/* Source */}
-            <div className="text-center mt-4">
-              <p className="text-gray-400 text-sm">
-                Źródło: Google PageSpeed Insights
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Live Site Link */}
-        <section className="mb-20 md:mb-24">
-          <div className="relative max-w-5xl mx-auto">
-            <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl overflow-hidden group hover:border-[#fee715]/30 transition-all duration-300">
-              {/* Background mockup preview */}
-              <div className="relative h-64 md:h-80 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-[#fee715]/10 via-transparent to-[#00C9A7]/10"></div>
-                <img 
-                  src="/images/pasw_main_page.jpg" 
-                  alt="REDLIN - Podgląd strony" 
-                  className="w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-300"
+            {/* Dot nav */}
+            <div className="mt-7 flex items-center justify-center gap-2">
+              {GALLERY.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentSlide(i)}
+                  className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+                    currentSlide === i ? 'w-10 bg-[#fee715]' : 'w-1.5 bg-white/15 hover:bg-white/35'
+                  }`}
+                  aria-label={`Slajd ${i + 1}`}
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center z-10">
-                    <h3 className="font-[Montserrat] text-3xl md:text-4xl font-bold mb-4 text-white">
-                      Zobacz stronę na żywo
-                    </h3>
-                    <p className="text-gray-300 mb-6 text-lg">
-                      Odwiedź działającą stronę i zobacz wszystkie funkcje w akcji
-                    </p>
-                    <a
-                      href="https://www.redlin.pl"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-3 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold px-8 py-4 rounded-lg hover:shadow-lg hover:shadow-[#fee715]/50 transition-all duration-300 transform hover:scale-105"
-                    >
-                      Otwórz stronę
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
-          </div>
-        </section>
+          </FadeUp>
+        </div>
+      </section>
 
-        {/* CTA Section */}
-        <section className="text-center">
-          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
-            <h3 className="font-[Montserrat] text-2xl md:text-3xl font-bold mb-4 text-white">
-              Chcesz taką stronę dla siebie?
-            </h3>
-            <p className="text-gray-300 mb-8 text-lg leading-relaxed">
-              Stwórzmy razem stronę, która działa szybko, wygląda profesjonalnie i pomaga osiągać Twoje cele biznesowe.
+      {/* RESULTS */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5 overflow-hidden">
+        <BGPattern variant="vertical-lines" mask="fade-edges" size={48} fill="rgba(255, 255, 255, 0.04)" />
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <SectionLabel number="05" label="Rezultaty" />
+            <h2 className="mt-7 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              Wyniki, które mówią same za siebie.
+            </h2>
+          </FadeUp>
+
+          <Stagger className="grid lg:grid-cols-2 gap-3">
+            <StaggerItem>
+              <ResultsBlock label="Desktop" results={RESULTS_DESKTOP} />
+            </StaggerItem>
+            <StaggerItem>
+              <ResultsBlock label="Mobile" results={RESULTS_MOBILE} />
+            </StaggerItem>
+          </Stagger>
+
+          <FadeUp className="mt-12 max-w-3xl mx-auto text-center">
+            <p className="text-base md:text-lg text-white/65 leading-relaxed text-pretty">
+              Dodatkowe efekty: <span className="text-white/85">uproszczony proces zakupu biletów</span>, większa konwersja dzięki przejrzystej strukturze, wyraźnie lepszy odbiór marki, wzrost zapisów do newslettera.
             </p>
-            <Link
-              href="/strony-www#cta"
-              className="group inline-flex items-center gap-3 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold px-8 py-4 rounded-lg hover:shadow-lg hover:shadow-[#fee715]/50 transition-all duration-300 transform hover:scale-105 relative overflow-hidden"
+            <div className="mt-8 inline-flex items-center gap-3 glass-pill px-5 py-2.5 rounded-full">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#fee715]">Źródło</span>
+              <span className="section-pill-divider" />
+              <span className="text-xs text-white/65">Google PageSpeed Insights</span>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* TECH */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5">
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <SectionLabel number="06" label="Stack" />
+            <h2 className="mt-7 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              Technologie i architektura.
+            </h2>
+            <p className="mt-7 text-base md:text-lg text-white/65 leading-relaxed text-pretty">
+              Strona zbudowana w <span className="text-white/85">Next.js</span> z SSR/SSG, optymalizacją obrazów i lekkimi komponentami. Hosting na <span className="text-white/85">Vercel</span> zapewnia natychmiastowe wdrażanie i świetną wydajność globalną.
+            </p>
+          </FadeUp>
+
+          <Stagger className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {TECHNOLOGIES.map((tech) => (
+              <StaggerItem key={tech.name}>
+                <div className="card surface-hover p-7 flex flex-col items-center gap-4 cursor-default">
+                  <div className="w-12 h-12 flex items-center justify-center">
+                    <img
+                      src={tech.logo}
+                      alt={tech.name}
+                      className="w-full h-full object-contain filter brightness-0 invert opacity-80"
+                    />
+                  </div>
+                  <span className="text-sm text-white/85">{tech.name}</span>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </section>
+
+      {/* LIVE LINK */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-20 md:py-28 border-t border-white/5">
+        <div className="relative max-w-3xl mx-auto">
+          <FadeUp className="card p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+            <div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#fee715] mb-3">
+                Live
+              </div>
+              <h3 className="text-xl md:text-2xl font-medium tracking-tight text-white">
+                Zobacz stronę na żywo
+              </h3>
+              <p className="mt-1 text-sm text-white/55">redlin.pl</p>
+            </div>
+            <a
+              href="https://www.redlin.pl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary btn-lg cursor-pointer flex-shrink-0"
             >
-              <span className="relative z-10">Skontaktuj się ze mną</span>
-              <svg 
-                className="w-5 h-5 relative z-10 transform group-hover:translate-x-1 transition-transform duration-300" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              Otwórz stronę
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#00C9A7] to-[#fee715] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </a>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <CinematicSection ghost="Porozmawiajmy">
+        <BGPattern variant="grid" mask="fade-edges" size={60} fill="rgba(254, 231, 21, 0.04)" />
+        <div className="relative max-w-3xl mx-auto text-center">
+          <h2 className="cinematic-headline text-[clamp(2.25rem,6vw,4.5rem)] font-bold pb-3">
+            Chcesz taką stronę dla siebie?
+          </h2>
+          <p className="mt-7 text-base md:text-lg text-white/60 leading-relaxed">
+            Stwórzmy razem stronę, która działa szybko, wygląda profesjonalnie i pomaga osiągać Twoje cele biznesowe.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/strony-www#cta" className="btn btn-primary btn-lg cursor-pointer magnetic">
+              Skontaktuj się ze mną
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+            <Link href="/strony-www" className="btn btn-secondary btn-lg cursor-pointer">
+              Zobacz wszystkie realizacje
             </Link>
           </div>
-        </section>
-      </div>
+        </div>
+      </CinematicSection>
     </main>
   );
-};
+}
+
+const Meta: React.FC<{ label: string; value: string }> = ({ label, value }) => (
+  <span className="inline-flex items-center gap-2">
+    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">{label}</span>
+    <span className="text-white/85">{value}</span>
+  </span>
+);
+
+const Dot: React.FC = () => <span className="w-1 h-1 rounded-full bg-white/15" />;
+
+const InfoCard: React.FC<{ eyebrow: string; title: string; desc: string }> = ({ eyebrow, title, desc }) => (
+  <div className="card surface-hover p-8 md:p-10 h-full">
+    <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#fee715] mb-5">
+      {eyebrow}
+    </div>
+    <h3 className="text-2xl md:text-3xl font-medium tracking-[-0.025em] text-white leading-tight mb-4">
+      {title}
+    </h3>
+    <p className="text-[15px] md:text-base text-white/60 leading-relaxed text-pretty">{desc}</p>
+  </div>
+);
+
+const ProblemCard: React.FC<{ num: string; title: string; desc: string }> = ({ num, title, desc }) => (
+  <div className="card surface-hover p-7 h-full">
+    <div className="flex items-center justify-between mb-5">
+      <span className="font-mono text-[11px] tracking-[0.18em] text-rose-400/80">{num}</span>
+      <span className="w-1 h-1 rounded-full bg-rose-400/60" />
+    </div>
+    <h3 className="text-lg md:text-xl font-medium tracking-tight text-white leading-snug mb-3">
+      {title}
+    </h3>
+    <p className="text-[15px] text-white/55 leading-relaxed">{desc}</p>
+  </div>
+);
+
+const SolutionCard: React.FC<{ num: string; title: string; desc: string }> = ({ num, title, desc }) => (
+  <div className="card surface-hover p-7 h-full">
+    <div className="flex items-center justify-between mb-5">
+      <span className="font-mono text-[11px] tracking-[0.18em] text-[#fee715]">{num}</span>
+      <span className="w-1 h-1 rounded-full bg-[#fee715]" />
+    </div>
+    <h3 className="text-lg md:text-xl font-medium tracking-tight text-white leading-snug mb-3">
+      {title}
+    </h3>
+    <p className="text-[15px] text-white/60 leading-relaxed">{desc}</p>
+  </div>
+);
+
+const ResultsBlock: React.FC<{ label: string; results: { label: string; value: number }[] }> = ({
+  label,
+  results,
+}) => (
+  <div className="card p-8 md:p-10">
+    <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#fee715] mb-7">
+      {label} · PageSpeed Insights
+    </div>
+    <div className="grid grid-cols-2 gap-px bg-white/5">
+      {results.map((r) => (
+        <div key={r.label} className="bg-[#070A1A] p-7 flex flex-col gap-3 min-h-[160px] justify-between">
+          <div className="flex items-baseline gap-1.5">
+            <span className="cinematic-headline-yellow text-[3.5rem] md:text-[4.5rem] font-bold leading-none">
+              {r.value}
+            </span>
+            <span className="text-sm font-mono text-white/35">/100</span>
+          </div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">
+            {r.label}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);

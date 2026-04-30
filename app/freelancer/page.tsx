@@ -1,449 +1,433 @@
 'use client';
 
 import React from 'react';
-import { useFadeIn } from '@/hooks/useFadeIn';
-import { CheckIcon } from '@/components/icons/CheckIcon';
-import { CrossIcon } from '@/components/icons/CrossIcon';
-import { MobileIcon } from '@/components/icons/MobileIcon';
-import { SoloWorkIcon } from '@/components/icons/SoloWorkIcon';
-import { CorporateIcon } from '@/components/icons/CorporateIcon';
-import { SpeedIcon } from '@/components/icons/SpeedIcon';
+import Link from 'next/link';
+import { Eyebrow } from '@/app/components/premium/Eyebrow';
+import { FadeUp, Stagger, StaggerItem } from '@/app/components/premium/Motion';
+import { HeroShapes } from '@/app/components/premium/HeroShapes';
 
 export default function FreelancerLandingPage() {
-  const fadeInH1 = useFadeIn<HTMLHeadingElement>();
-  const fadeInYellow = useFadeIn<HTMLDivElement>();
-  const fadeInSub = useFadeIn<HTMLParagraphElement>();
-  const fadeInCTA = useFadeIn<HTMLDivElement>();
-  const fadeInTrust = useFadeIn<HTMLDivElement>();
-
   return (
-    <div className="bg-[#101820] text-white font-[Open Sans] overflow-x-hidden">
-          {/* Hero Section */}
-          <section className="min-h-screen flex flex-col justify-center text-center py-2 md:py-24 px-4 md:px-6 relative">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-[#fee715]/10 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-10 w-48 h-48 bg-[#00C9A7]/10 rounded-full blur-xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-[#fee715]/5 rounded-full blur-lg animate-bounce"></div>
+    <div className="text-white overflow-x-hidden">
+      {/* HERO */}
+      <section className="relative min-h-[88vh] flex flex-col justify-center text-center px-4 md:px-8 py-16 md:py-24 overflow-hidden">
+        <HeroShapes variant="case" />
+        <div className="relative w-full max-w-4xl mx-auto">
+          <Stagger whenInView={false}>
+            <StaggerItem>
+              <Eyebrow align="center" className="mb-5">Dla freelancerów</Eyebrow>
+            </StaggerItem>
+            <StaggerItem>
+              <h1 className="cinematic-headline text-[clamp(2.25rem,7vw,5rem)] font-bold pb-3">
+                Strona, która sprzedaje Twoje usługi, <span className="text-gradient-yellow">a nie tylko ładnie wygląda.</span>
+              </h1>
+            </StaggerItem>
+            <StaggerItem>
+              <div className="mt-9 space-y-5 text-base md:text-lg text-white/65 leading-relaxed text-balance max-w-3xl mx-auto">
+                <p>
+                  Jako były video-editor freelancer i obecny specjalista marketingu, łączę wiedzę z obu światów, aby stworzyć strony, które nie tylko wyglądają świetnie, ale przede wszystkim{' '}
+                  <span className="text-white/90">konwertują i budują Twoją ekspertyzę.</span>
+                </p>
+                <p className="text-white/45 text-[15px]">
+                  Nie korzystam z szablonów ani gotowych motywów. Tworzę unikalne rozwiązania, które wyróżnią Cię na rynku.
+                </p>
+              </div>
+            </StaggerItem>
+            <StaggerItem>
+              <div className="mt-10 flex flex-col items-center gap-3">
+                <a
+                  href="#why"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector('#why')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="btn btn-primary btn-lg cursor-pointer"
+                >
+                  Dlaczego to działa?
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </a>
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/40">
+                  Bezpłatna konsultacja &middot; 30 min &middot; Zero zobowiązań
+                </p>
+              </div>
+            </StaggerItem>
+          </Stagger>
+
+          <FadeUp delay={0.4} whenInView={false} className="mt-20 md:mt-28">
+            <p className="text-center text-[11px] font-mono uppercase tracking-[0.22em] text-white/35 mb-6">
+              Współpracowałem z
+            </p>
+            <div className="overflow-hidden marquee-mask">
+              <div className="flex animate-scroll-infinite whitespace-nowrap">
+                {[...Array(2)].map((_, i) => (
+                  <div key={i} className="flex items-center gap-12 md:gap-16 flex-shrink-0 pr-12 md:pr-16">
+                    {['Designerzy', 'Programiści', 'Marketing', 'Konsultanci', 'Copywriterzy', 'Fotografowie', 'Coachowie', 'Trenerzy'].map((name) => (
+                      <span key={`${i}-${name}`} className="text-white/40 text-sm md:text-base font-medium">
+                        {name}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeUp>
         </div>
-        
-        <div className="container mx-auto max-w-4xl relative z-10">
-          <h1 ref={fadeInH1.ref} className={`font-[Montserrat] text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold mb-4 md:mb-6 leading-tight md:leading-relaxed ${fadeInH1.className}`}>
-            Strona, która sprzedaje Twoje usługi,
-          </h1>
-          <div ref={fadeInYellow.ref} className={`mb-4 md:mb-6 ${fadeInYellow.className}`}>
-            <span className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] hover:from-[#00C9A7] hover:to-[#fee715] bg-clip-text text-transparent font-[Montserrat] text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight md:leading-relaxed transition-all duration-500 cursor-pointer">a nie tylko ładnie wygląda.</span>
-          </div>
-          <div ref={fadeInSub.ref} className={`text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto mb-6 md:mb-8 lg:mb-10 px-2 leading-relaxed ${fadeInSub.className}`}>
-            <p className="mb-4 md:mb-6 text-gray-200 font-medium">Jako były video-editor freelancer i obecny specjalista marketingu, łączę wiedzę z obu światów, aby stworzyć strony, które nie tylko wyglądają świetnie, ale przede wszystkim <span style={{color: '#fee715'}}>konwertują i budują Twoją ekspertyzę.</span></p>
-            <p>Bez szablonów. Bez ograniczeń. Tylko unikalne rozwiązania, które wyróżnią Cię na rynku.</p>
-          </div>
-          <div ref={fadeInCTA.ref} className={`flex flex-col items-center space-y-3 px-4 ${fadeInCTA.className}`}>
-            <a 
-              href="#why" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#why')?.scrollIntoView({
-                  behavior: 'smooth'
-                });
-              }}
-              className="bg-[#fee715] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-10 rounded-lg text-base md:text-lg lg:text-xl hover:bg-gradient-to-r hover:from-[#fee715] hover:to-[#00C9A7] hover:shadow-2xl hover:shadow-[#fee715]/30 transform hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto"
-            >
-              Dlaczego to działa?
-            </a>
-            <p className="text-gray-400 text-sm">Bezpłatna konsultacja • 30 minut online • Zero zobowiązań</p>
-          </div>
+      </section>
+
+      {/* WHY */}
+      <section id="why" className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5">
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <Eyebrow>Portfolio kontra Landing</Eyebrow>
+            <h2 className="mt-5 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              <span className="text-gradient-fade">Dlaczego portfolio</span>{' '}
+              <span className="text-gradient-yellow">to za mało?</span>
+            </h2>
+            <p className="mt-6 text-base md:text-lg text-white/60 leading-relaxed text-balance">
+              Większość freelancerów myśli, że portfolio wystarczy. To błąd, który kosztuje ich tysiące złotych miesięcznie.
+            </p>
+          </FadeUp>
+
+          <Stagger className="grid lg:grid-cols-2 gap-8 lg:gap-10 mb-16 md:mb-20">
+            <StaggerItem>
+              <div>
+                <div className="mb-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-rose-400/20 bg-rose-400/5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-rose-400">
+                    Stare portfolio
+                  </span>
+                </div>
+                <div className="space-y-2.5">
+                  <ConCard title="Pokazujesz prace">
+                    To działa tylko dla klientów, którzy już Cię znają. Nowi klienci nie rozumieją, jak Twoja praca rozwiązuje ich problemy.
+                  </ConCard>
+                  <ConCard title="Brak ekspertyzy">
+                    Klienci nie widzą, dlaczego mają wybrać właśnie Ciebie. Nie wiedzą, że jesteś ekspertem w swojej dziedzinie.
+                  </ConCard>
+                  <ConCard title="Słaba konwersja">
+                    Odwiedzający nie wiedzą, co mają zrobić dalej. Brakuje jasnego call-to-action i procesu sprzedaży.
+                  </ConCard>
+                </div>
+              </div>
+            </StaggerItem>
+
+            <StaggerItem>
+              <div>
+                <div className="mb-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#fee715]/25 bg-[#fee715]/5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#fee715]" />
+                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#fee715]">
+                    Premium landing
+                  </span>
+                </div>
+                <div className="space-y-2.5">
+                  <ProCard title="Sprzedajesz rozwiązania">
+                    Pokazujesz, jak rozwiązujesz problemy klientów. Każdy element ma na celu przekonanie ich do współpracy.
+                  </ProCard>
+                  <ProCard title="Budujesz ekspertyzę">
+                    Pozycjonujesz się jako ekspert. Klienci widzą Twoją wiedzę, doświadczenie i unikalne podejście.
+                  </ProCard>
+                  <ProCard title="Wysoka konwersja">
+                    Każdy odwiedzający wie, co ma zrobić. Jasny proces sprzedaży prowadzi do więcej zapytań i wyższych cen.
+                  </ProCard>
+                </div>
+              </div>
+            </StaggerItem>
+          </Stagger>
+
+          {/* Mobile optimization */}
+          <FadeUp className="card p-8 md:p-12 mb-12">
+            <div className="text-center mb-10 max-w-2xl mx-auto">
+              <Eyebrow align="center">Mobile-first</Eyebrow>
+              <h3 className="mt-5 display-tight text-2xl md:text-3xl lg:text-4xl text-balance">
+                <span className="text-gradient-fade">Perfekcyjna optymalizacja</span>{' '}
+                <span className="text-gradient-yellow">mobilna.</span>
+              </h3>
+              <p className="mt-5 text-base md:text-lg text-white/60 leading-relaxed text-balance">
+                <span className="text-white/85 font-medium">65% wszystkich odwiedzin</span> pochodzi z urządzeń mobilnych. Większość freelancerów o tym zapomina.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-rose-400 mb-4">
+                  Typowe problemy
+                </div>
+                <ul className="space-y-2.5">
+                  {['Strona nie działa na telefonie', 'Tekst za mały do czytania', 'Przyciski za małe do kliknięcia', 'Wolne ładowanie na telefonie'].map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-white/65 text-[15px]">
+                      <svg className="w-4 h-4 text-rose-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 6l12 12M18 6L6 18" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#fee715] mb-4">
+                  Co otrzymujesz
+                </div>
+                <ul className="space-y-2.5">
+                  {['Strona wygląda świetnie na każdym urządzeniu', 'Czytelny tekst i intuicyjna nawigacja', 'Przyciski dostosowane do dotyku', 'Błyskawiczne ładowanie na telefonie'].map((item) => (
+                    <li key={item} className="flex items-start gap-3 text-white/65 text-[15px]">
+                      <svg className="w-4 h-4 text-[#fee715] mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-10 pt-7 border-t border-white/8 text-center">
+              <p className="text-base md:text-lg italic text-white/70 max-w-2xl mx-auto text-pretty">
+                "Nikt nie uważa Cię za profesjonalistę, jeśli Twoja strona wygląda źle na telefonie."
+              </p>
+            </div>
+          </FadeUp>
+
+          {/* Examples */}
+          <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {[
+              {
+                num: '01',
+                title: 'Pierwsze wrażenie, które sprzedaje',
+                desc: 'Nie „Oto moje prace", ale: „Rozwiązuję Twój problem X w sposób Y, który daje rezultat Z".',
+              },
+              {
+                num: '02',
+                title: 'Twoja metoda, która Cię wyróżnia',
+                desc: 'Przejrzysty proces pokazujący, dlaczego współpraca z Tobą to gwarancja efektu. To buduje zaufanie i eliminuje wątpliwości.',
+              },
+              {
+                num: '03',
+                title: 'Dowody, które budują zaufanie',
+                desc: 'Opinie klientów, liczby, case studies - twarde fakty, które potwierdzają, że jesteś ekspertem i dowozisz wyniki.',
+              },
+            ].map((ex) => (
+              <StaggerItem key={ex.num}>
+                <div className="card surface-hover p-7 h-full">
+                  <span className="font-mono text-[11px] tracking-[0.18em] text-[#fee715] mb-4 block">
+                    {ex.num}
+                  </span>
+                  <h4 className="text-lg md:text-xl font-medium tracking-tight text-white mb-3">
+                    {ex.title}
+                  </h4>
+                  <p className="text-[15px] text-white/60 leading-relaxed">{ex.desc}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
         </div>
-        <div ref={fadeInTrust.ref} className={`container mx-auto mt-12 md:mt-16 lg:mt-20 text-center px-4 ${fadeInTrust.className}`}>
-              <p className="text-gray-500 uppercase tracking-widest text-xs md:text-sm mb-4 md:mb-6">Współpracowałem już z</p>
-          <div className="overflow-hidden">
-            <div className="flex animate-scroll space-x-6 md:space-x-8 lg:space-x-12">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex space-x-4 md:space-x-6 lg:space-x-8 xl:space-x-12 flex-shrink-0">
-                  <span className="text-gray-300 text-xs sm:text-sm md:text-base whitespace-nowrap">Designerzy</span>
-                  <span className="text-[#fee715] text-sm md:text-lg lg:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-xs sm:text-sm md:text-base whitespace-nowrap">Programiści</span>
-                  <span className="text-[#fee715] text-sm md:text-lg lg:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-xs sm:text-sm md:text-base whitespace-nowrap">Marketing</span>
-                  <span className="text-[#fee715] text-sm md:text-lg lg:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-xs sm:text-sm md:text-base whitespace-nowrap">Konsultanci</span>
-                  <span className="text-[#fee715] text-sm md:text-lg lg:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-xs sm:text-sm md:text-base whitespace-nowrap">Copywriterzy</span>
-                  <span className="text-[#fee715] text-sm md:text-lg lg:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-xs sm:text-sm md:text-base whitespace-nowrap">Fotografowie</span>
-                  <span className="text-[#fee715] text-sm md:text-lg lg:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-xs sm:text-sm md:text-base whitespace-nowrap">Coachowie</span>
-                  <span className="text-[#fee715] text-sm md:text-lg lg:text-xl">&bull;</span>
-                  <span className="text-gray-300 text-xs sm:text-sm md:text-base whitespace-nowrap">Trenerzy</span>
-                  <span className="text-[#fee715] text-sm md:text-lg lg:text-xl">&bull;</span>
+      </section>
+
+      {/* PROCESS */}
+      <section id="process" className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5">
+        <div className="relative w-full max-w-4xl mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <Eyebrow>Jak to działa</Eyebrow>
+            <h2 className="mt-5 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              <span className="text-gradient-fade">4 kroki do</span>{' '}
+              <span className="text-gradient-yellow">premium strony.</span>
+            </h2>
+          </FadeUp>
+
+          <Stagger>
+            {[
+              { num: '01', title: 'Analiza Twojej branży', desc: 'Rozmawiamy o Twoich klientach, konkurencji i tym, co Cię wyróżnia. To podstawa do stworzenia skutecznej strony.' },
+              { num: '02', title: 'Strategia i projekt', desc: 'Tworzę strategię komunikacji i projekt strony, który będzie konwertował. Wszystko oparte na wiedzy marketingowej.' },
+              { num: '03', title: 'Implementacja', desc: 'Buduję stronę z dbałością o każdy szczegół. Optymalizacja pod kątem szybkości i konwersji.' },
+              { num: '04', title: 'Uruchomienie i wsparcie', desc: 'Strona idzie na żywo, a Ty otrzymujesz instrukcje jak ją aktualizować i rozwijać.' },
+            ].map((step, i, arr) => (
+              <StaggerItem key={step.num}>
+                <div className="relative flex items-start gap-6 md:gap-8">
+                  <div className="flex-shrink-0 flex flex-col items-center">
+                    <span className="font-mono text-xs text-[#fee715] mt-1">{step.num}</span>
+                    {i < arr.length - 1 && (
+                      <div
+                        className="w-px flex-1 mt-3 bg-gradient-to-b from-white/15 via-white/8 to-transparent"
+                        style={{ minHeight: '80px' }}
+                      />
+                    )}
+                  </div>
+                  <div className="pb-10 md:pb-14 flex-1">
+                    <h3 className="text-2xl md:text-3xl font-medium tracking-tight text-white mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-white/60 leading-relaxed text-[15px] md:text-base text-pretty max-w-2xl">
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </section>
+
+      {/* PRICING COMPARISON */}
+      <section id="pricing" className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5">
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="max-w-3xl mb-14 md:mb-20">
+            <Eyebrow>Inwestycja</Eyebrow>
+            <h2 className="mt-5 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+              <span className="text-gradient-fade">Lepiej niż</span>{' '}
+              <span className="text-gradient-yellow">agencja.</span>
+            </h2>
+          </FadeUp>
+
+          <Stagger className="grid md:grid-cols-2 gap-3 mb-12">
+            <StaggerItem>
+              <div className="card p-7 md:p-9 h-full">
+                <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-rose-400 mb-3">
+                  Typowa agencja
+                </div>
+                <h3 className="text-2xl md:text-3xl font-medium tracking-tight text-white mb-7">
+                  Szablon + faktura
+                </h3>
+                <ul className="space-y-3 text-[15px] text-white/65">
+                  {['Koszt: 3000+ PLN', 'Szablon + logo', 'Brak wiedzy marketingowej', 'Nie można zweryfikować jakości', 'Strona jak tysiące innych', '+ Koszt copywritera (1000+ PLN)', 'Słaba optymalizacja mobilna'].map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <svg className="w-4 h-4 text-rose-400 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 6l12 12M18 6L6 18" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-8 pt-6 border-t border-white/8">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-1">
+                    Razem
+                  </div>
+                  <div className="text-2xl md:text-3xl font-medium text-rose-300">4000+ PLN</div>
+                  <div className="text-xs text-white/45 mt-1">Za szablon bez gwarancji konwersji</div>
+                </div>
+              </div>
+            </StaggerItem>
+
+            <StaggerItem>
+              <div className="relative card card-accent p-7 md:p-9 h-full border-[#fee715]/30">
+                <div className="absolute -top-3 left-7">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-[0.18em] bg-[#fee715] text-[#0A0A0B]">
+                    Premium
+                  </span>
+                </div>
+                <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#fee715] mb-3">
+                  Moja usługa
+                </div>
+                <h3 className="text-2xl md:text-3xl font-medium tracking-tight text-white mb-7">
+                  Maszyna do sprzedaży
+                </h3>
+                <ul className="space-y-3 text-[15px] text-white/75">
+                  {['Koszt: 1500–2500 PLN', 'Unikalny design', 'Wiedza marketingowa', 'Optymalizacja pod konwersję', 'Twoja strona ma unikalny design', 'Copywriting w cenie', 'Pełne wsparcie przez 60 dni po wdrożeniu'].map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <svg className="w-4 h-4 text-[#fee715] mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-8 pt-6 border-t border-[#fee715]/15">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 mb-1">
+                    Razem
+                  </div>
+                  <div className="text-2xl md:text-3xl font-medium text-gradient-yellow">
+                    1500–2500 PLN
+                  </div>
+                  <div className="text-xs text-white/45 mt-1">Za maszynę do sprzedaży</div>
+                </div>
+              </div>
+            </StaggerItem>
+          </Stagger>
+
+          {/* Why */}
+          <FadeUp className="card p-8 md:p-12">
+            <div className="max-w-2xl mb-10">
+              <Eyebrow>Skąd taka cena</Eyebrow>
+              <h3 className="mt-5 display-tight text-2xl md:text-3xl lg:text-4xl text-balance">
+                <span className="text-gradient-fade">Dlaczego mogę to</span>{' '}
+                <span className="text-gradient-yellow">zaoferować?</span>
+              </h3>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {[
+                { title: 'Pracuję sam', desc: 'Nie mam zespołu, biura, kosztów operacyjnych. Cały budżet idzie na jakość.' },
+                { title: 'Doświadczenie z korporacjami', desc: 'Pracowałem z firmami wartymi miliony. Wiem, co sprzedaje, a co nie.' },
+                { title: 'Szybkość działania', desc: 'Bez biurokracji, bez długich procesów. Stronę otrzymasz w maksymalnie 21 dni.' },
+              ].map((item, i) => (
+                <div key={item.title} className="card surface-hover p-6">
+                  <span className="font-mono text-[11px] tracking-[0.18em] text-[#fee715] mb-3 block">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h4 className="text-lg font-medium tracking-tight text-white mb-2">{item.title}</h4>
+                  <p className="text-sm text-white/60 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </FadeUp>
         </div>
       </section>
 
-      {/* Why Section */}
-      <section id="why" className="py-6 md:py-8 lg:py-10 px-4 md:px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white">
-              Dlaczego portfolio to za mało?
-            </h2>
-            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-              Większość freelancerów myśli, że portfolio wystarczy. To błąd, który kosztuje ich tysiące złotych miesięcznie.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-8">
-            <div className="space-y-6 md:space-y-8">
-                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 md:p-6 hover:bg-red-500/15 transition-all duration-300">
-                    <div className="flex items-center mb-3 md:mb-4">
-                      <div className="text-red-400 mr-3">
-                        <CrossIcon className="w-5 h-5 md:w-6 md:h-6" />
-                      </div>
-                      <h3 className="text-lg md:text-xl font-bold text-red-300">Portfolio = Pokazujesz prace</h3>
-                    </div>
-                    <p className="text-sm md:text-base text-gray-300">To działa tylko dla klientów, którzy już Cię znają. Nowi klienci nie rozumieją, jak Twoja praca rozwiązuje ich problemy.</p>
-                  </div>
-              
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 md:p-6 hover:bg-red-500/15 transition-all duration-300">
-                <div className="flex items-center mb-3 md:mb-4">
-                  <div className="text-red-400 mr-3">
-                    <CrossIcon className="w-5 h-5 md:w-6 md:h-6" />
-                  </div>
-                  <h3 className="text-lg md:text-xl font-bold text-red-300">Brak ekspertyzy</h3>
-                </div>
-                <p className="text-sm md:text-base text-gray-300">Klienci nie widzą, dlaczego mają wybrać właśnie Ciebie. Nie wiedzą, że jesteś ekspertem w swojej dziedzinie.</p>
-              </div>
-
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 md:p-6 hover:bg-red-500/15 transition-all duration-300">
-                <div className="flex items-center mb-3 md:mb-4">
-                  <div className="text-red-400 mr-3">
-                    <CrossIcon className="w-5 h-5 md:w-6 md:h-6" />
-                  </div>
-                  <h3 className="text-lg md:text-xl font-bold text-red-300">Słaba konwersja</h3>
-                </div>
-                <p className="text-sm md:text-base text-gray-300">Odwiedzający nie wiedzą, co mają zrobić dalej. Brakuje jasnego call-to-action i procesu sprzedaży.</p>
-              </div>
-            </div>
-
-            <div className="space-y-6 md:space-y-8">
-              <div className="bg-gradient-to-br from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-4 md:p-6 hover:border-[#fee715]/40 transition-all duration-300">
-                <div className="flex items-center mb-3 md:mb-4">
-                  <div className="text-[#fee715] mr-3">
-                    <CheckIcon className="w-5 h-5 md:w-6 md:h-6" />
-                  </div>
-                  <h3 className="text-lg md:text-xl font-bold text-white">Landing Page = Sprzedajesz rozwiązania</h3>
-                </div>
-                <p className="text-sm md:text-base text-gray-300">Pokazujesz, jak rozwiązujesz problemy klientów. Każdy element ma na celu przekonanie ich do współpracy.</p>
-              </div>
-              
-              <div className="bg-gradient-to-br from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-4 md:p-6 hover:border-[#fee715]/40 transition-all duration-300">
-                <div className="flex items-center mb-3 md:mb-4">
-                  <div className="text-[#fee715] mr-3">
-                    <CheckIcon className="w-5 h-5 md:w-6 md:h-6" />
-                  </div>
-                  <h3 className="text-lg md:text-xl font-bold text-white">Budujesz ekspertyzę</h3>
-                </div>
-                <p className="text-sm md:text-base text-gray-300">Pozycjonujesz się jako ekspert. Klienci widzą Twoją wiedzę, doświadczenie i unikalne podejście.</p>
-              </div>
-
-              <div className="bg-gradient-to-br from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-4 md:p-6 hover:border-[#fee715]/40 transition-all duration-300">
-                <div className="flex items-center mb-3 md:mb-4">
-                  <div className="text-[#fee715] mr-3">
-                    <CheckIcon className="w-5 h-5 md:w-6 md:h-6" />
-                  </div>
-                  <h3 className="text-lg md:text-xl font-bold text-white">Wysoka konwersja</h3>
-                </div>
-                <p className="text-sm md:text-base text-gray-300">Każdy odwiedzający wie, co ma zrobić. Jasny proces sprzedaży prowadzi do więcej zapytań i wyższych cen.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile Optimization Section */}
-          <div className="bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-2xl p-6 md:p-8 lg:p-12 mb-12 md:mb-16">
-                <div className="text-center mb-6 md:mb-8">
-                  <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
-                    <MobileIcon className="w-8 h-8 md:w-10 md:h-10 text-[#101820]" />
-                  </div>
-              <h3 className="font-[Montserrat] text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-white">
-                Perfekcyjna optymalizacja mobilna
-              </h3>
-              <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-                <span className="text-[#fee715] font-bold">65% wszystkich odwiedzin</span> pochodzi z urządzeń mobilnych. 
-                Większość freelancerów o tym zapomina.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-              <div className="space-y-4">
-                <h3 className="text-lg md:text-xl font-bold text-red-300 mb-3">Typowe problemy:</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-start">
-                        <CrossIcon className="w-4 h-4 text-red-400 mr-3 mt-1 flex-shrink-0" />
-                        <p className="text-gray-300 text-sm md:text-base">Strona nie działa na telefonie</p>
-                      </div>
-                      <div className="flex items-start">
-                        <CrossIcon className="w-4 h-4 text-red-400 mr-3 mt-1 flex-shrink-0" />
-                        <p className="text-gray-300 text-sm md:text-base">Tekst za mały do czytania</p>
-                      </div>
-                      <div className="flex items-start">
-                        <CrossIcon className="w-4 h-4 text-red-400 mr-3 mt-1 flex-shrink-0" />
-                        <p className="text-gray-300 text-sm md:text-base">Przyciski za małe do kliknięcia</p>
-                      </div>
-                      <div className="flex items-start">
-                        <CrossIcon className="w-4 h-4 text-red-400 mr-3 mt-1 flex-shrink-0" />
-                        <p className="text-gray-300 text-sm md:text-base">Wolne ładowanie na telefonie</p>
-                      </div>
-                    </div>
-              </div>
-              
-              <div className="space-y-4">
-                <h3 className="text-lg md:text-xl font-bold text-[#fee715] mb-3">Co otrzymujesz:</h3>
-                <div className="space-y-3">
-                  <div className="flex items-start">
-                    <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 mt-1 flex-shrink-0" />
-                    <p className="text-gray-300 text-sm md:text-base">Strona wygląda świetnie na każdym urządzeniu</p>
-                  </div>
-                  <div className="flex items-start">
-                    <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 mt-1 flex-shrink-0" />
-                    <p className="text-gray-300 text-sm md:text-base">Czytelny tekst i intuicyjna nawigacja</p>
-                  </div>
-                  <div className="flex items-start">
-                    <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 mt-1 flex-shrink-0" />
-                    <p className="text-gray-300 text-sm md:text-base">Przyciski dostosowane do dotyku</p>
-                  </div>
-                  <div className="flex items-start">
-                    <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 mt-1 flex-shrink-0" />
-                    <p className="text-gray-300 text-sm md:text-base">Błyskawiczne ładowanie na telefonie</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-6 md:mt-8 p-4 md:p-6 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-xl">
-              <p className="text-center text-white font-bold text-base md:text-lg">
-                "Nikt nie uważa Cię za profesjonalistę, jeśli Twoja strona wygląda źle na telefonie"
-              </p>
-            </div>
-          </div>
-
-          {/* Real Examples */}
-          <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-2xl p-6 md:p-8 lg:p-12 mb-4 md:mb-6">
-            <h3 className="font-[Montserrat] text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center text-white">
-              Przykłady tego, co otrzymujesz:
-            </h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              <div className="text-center">
-                <div className="bg-[#fee715] text-[#101820] text-2xl md:text-3xl font-bold w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">1</div>
-                    <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Pierwsze wrażenie,<br />które sprzedaje</h4>
-                    <p className="text-gray-300 text-xs md:text-sm">Nie „Oto moje prace", ale: „Rozwiązuję Twój problem X w sposób Y, który daje rezultat Z".</p>
-              </div>
-              <div className="text-center">
-                <div className="bg-[#fee715] text-[#101820] text-2xl md:text-3xl font-bold w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">2</div>
-                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Twoja metoda, która wyróżnia Cię na tle konkurencji</h4>
-                <p className="text-gray-300 text-xs md:text-sm">Przejrzysty proces pokazujący, dlaczego współpraca z Tobą to gwarancja efektu. To buduje zaufanie i eliminuje wątpliwości.</p>
-              </div>
-              <div className="text-center sm:col-span-2 lg:col-span-1">
-                <div className="bg-[#fee715] text-[#101820] text-2xl md:text-3xl font-bold w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">3</div>
-                <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Dowody, które zamieniają ciekawość w zaufanie</h4>
-                <p className="text-gray-300 text-xs md:text-sm">Opinie klientów, liczby, case studies – twarde fakty, które potwierdzają, że jesteś ekspertem i naprawdę dowozisz wyniki.</p>
-              </div>
-            </div>
-          </div>
+      {/* CTA */}
+      <section id="cta" className="relative px-4 md:px-6 py-32 md:py-44 border-t border-white/5 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-dots bg-fade-radial opacity-25" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[1100px] max-h-[1100px] halo-yellow opacity-80" />
         </div>
-      </section>
 
-      {/* Process Section */}
-      <section id="process" className="py-6 md:py-8 lg:py-10 px-4 md:px-6 bg-gradient-to-b from-transparent to-white/5">
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-white">
-            Jak to działa?
+        <FadeUp className="relative max-w-3xl mx-auto text-center">
+          <Eyebrow align="center">Następny krok</Eyebrow>
+          <h2 className="mt-5 display-x text-[clamp(2.25rem,7vw,4.5rem)] text-balance">
+            <span className="text-gradient-fade">Gotowy na</span>{' '}
+            <span className="text-gradient-yellow">zmianę?</span>
           </h2>
-          <div className="space-y-6 md:space-y-8">
-            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 group">
-              <div className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold text-xl md:text-2xl w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">1</div>
-              <div className="text-center md:text-left">
-                <h3 className="text-lg md:text-xl lg:text-2xl font-bold mb-2 md:mb-3 text-white">Analiza Twojej branży</h3>
-                <p className="text-gray-300 text-sm md:text-base lg:text-lg">Rozmawiamy o Twoich klientach, konkurencji i tym, co Cię wyróżnia. To podstawa do stworzenia skutecznej strony.</p>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 group">
-              <div className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold text-xl md:text-2xl w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">2</div>
-              <div className="text-center md:text-left">
-                <h3 className="text-lg md:text-xl lg:text-2xl font-bold mb-2 md:mb-3 text-white">Strategia i projekt</h3>
-                <p className="text-gray-300 text-sm md:text-base lg:text-lg">Tworzę strategię komunikacji i projekt strony, który będzie konwertował. Wszystko oparte na wiedzy marketingowej.</p>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 group">
-              <div className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold text-xl md:text-2xl w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">3</div>
-              <div className="text-center md:text-left">
-                <h3 className="text-lg md:text-xl lg:text-2xl font-bold mb-2 md:mb-3 text-white">Implementacja</h3>
-                <p className="text-gray-300 text-sm md:text-base lg:text-lg">Buduję stronę z dbałością o każdy szczegół. Optymalizacja pod kątem szybkości i konwersji.</p>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 group">
-              <div className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold text-xl md:text-2xl w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">4</div>
-              <div className="text-center md:text-left">
-                <h3 className="text-lg md:text-xl lg:text-2xl font-bold mb-2 md:mb-3 text-white">Uruchomienie i wsparcie</h3>
-                <p className="text-gray-300 text-sm md:text-base lg:text-lg">Strona idzie na żywo, a Ty otrzymujesz instrukcje jak ją aktualizować i rozwijać.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Comparison */}
-      <section id="pricing" className="py-6 md:py-8 lg:py-10 px-4 md:px-6">
-        <div className="container mx-auto max-w-6xl">
-          <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-center text-white">
-            Dlaczego to jest lepsze niż agencja?
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 mb-12">
-            {/* Traditional Agency */}
-            <div className="bg-red-500/5 border border-red-500/20 rounded-2xl p-6 md:p-8">
-              <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-red-300">Typowa Agencja</h3>
-                  <div className="space-y-3 md:space-y-4">
-                    <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm md:text-base">Koszt: 3000+ PLN</span>
-                    </div>
-                    <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm md:text-base">Szablon + logo</span>
-                    </div>
-                    <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm md:text-base">Brak wiedzy marketingowej</span>
-                    </div>
-                    <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm md:text-base">Nie można zweryfikować jakości</span>
-                    </div>
-                    <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm md:text-base">Strona jak tysiące innych</span>
-                    </div>
-                    <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm md:text-base">+ Koszt copywritera (1000+ PLN)</span>
-                    </div>
-                    <div className="flex items-center">
-                      <CrossIcon className="w-4 h-4 text-red-400 mr-3 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm md:text-base">Słaba optymalizacja mobilna</span>
-                    </div>
-                  </div>
-              <div className="mt-4 md:mt-6 p-3 md:p-4 bg-red-500/10 rounded-lg">
-                <p className="text-red-300 font-bold text-base md:text-lg">RAZEM: 4000+ PLN</p>
-                <p className="text-red-400 text-xs md:text-sm">Za szablon bez gwarancji konwersji</p>
-              </div>
-            </div>
-
-            {/* My Service */}
-            <div className="bg-gradient-to-br from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/30 rounded-2xl p-6 md:p-8 relative overflow-hidden">
-              <div className="absolute top-3 md:top-4 right-3 md:right-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] px-3 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold shadow-lg">
-                OFERTA PREMIUM
-              </div>
-              <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-white">Moja Usługa</h3>
-              <div className="space-y-3 md:space-y-4">
-                <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm md:text-base">Koszt: 1500-2500 PLN</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm md:text-base">Unikalny design</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm md:text-base">Wiedza marketingowa</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm md:text-base">Optymalizacja pod konwersję</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm md:text-base">Twoja strona ma unikalny design</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm md:text-base">Copywriting w cenie</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckIcon className="w-4 h-4 text-[#fee715] mr-3 flex-shrink-0" />
-                  <span className="text-gray-300 text-sm md:text-base">Podłączamy Twoją domenę, a Ty otrzymujesz moje pełne wsparcie przez kolejne 60 dni</span>
-                </div>
-              </div>
-              <div className="mt-4 md:mt-6 p-3 md:p-4 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-lg">
-                <p className="text-white font-bold text-base md:text-lg">RAZEM: 1500-2500 PLN</p>
-                <p className="text-[#fee715] text-xs md:text-sm">Za maszynę do sprzedaży</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Why I Can Offer This */}
-          <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-2xl p-6 md:p-8 lg:p-12 text-center">
-            <h3 className="font-[Montserrat] text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-white">
-              Dlaczego mogę to zaoferować?
-            </h3>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                  <div>
-                    <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
-                      <SoloWorkIcon className="w-6 h-6 md:w-8 md:h-8 text-[#101820]" />
-                    </div>
-                    <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Pracuję sam</h4>
-                    <p className="text-gray-300 text-xs md:text-sm">Nie mam zespołu, biura, kosztów operacyjnych. Cały budżet idzie na jakość.</p>
-                  </div>
-                  <div>
-                    <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
-                      <CorporateIcon className="w-6 h-6 md:w-8 md:h-8 text-[#101820]" />
-                    </div>
-                    <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Doświadczenie z korporacjami</h4>
-                    <p className="text-gray-300 text-xs md:text-sm">Pracowałem z firmami wartymi miliony. Wiem, co sprzedaje, a co nie.</p>
-                  </div>
-                  <div className="sm:col-span-2 lg:col-span-1">
-                    <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center">
-                      <SpeedIcon className="w-6 h-6 md:w-8 md:h-8 text-[#101820]" />
-                    </div>
-                    <h4 className="text-base md:text-lg font-bold mb-2 md:mb-3 text-white">Szybkość działania</h4>
-                    <p className="text-gray-300 text-xs md:text-sm">Bez biurokracji, bez długich procesów. Stronę otrzymasz w ciągu maksymalnie 21 dni.</p>
-                  </div>
-                </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section id="cta" className="py-6 md:py-8 lg:py-10 px-4 md:px-6 bg-gradient-to-b from-white/5 to-transparent">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="font-[Montserrat] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 text-white">
-            Gotowy na zmianę?
-          </h2>
-          <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto">
+          <p className="mt-7 text-base md:text-lg text-white/60 leading-relaxed">
             Umówmy się na bezpłatną konsultację. Porozmawiamy o Twoich potrzebach i pokażę Ci, jak może wyglądać Twoja nowa strona.
           </p>
-          
-          <div className="grid sm:grid-cols-2 gap-4 md:gap-6 max-w-2xl mx-auto">
-            <a 
-              href="mailto:stanislaw@drozniak.com?subject=Konsultacja - Strona dla freelancera&body=Cześć! Chciałbym/chciałabym umówić się na konsultację dotyczącą nowej strony internetowej."
-              className="bg-[#fee715] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-base md:text-lg lg:text-xl hover:bg-gradient-to-r hover:from-[#fee715] hover:to-[#00C9A7] hover:shadow-2xl hover:shadow-[#fee715]/30 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center"
+          <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="mailto:stanislaw@drozniak.com?subject=Konsultacja - Strona dla freelancera"
+              className="btn btn-primary btn-lg cursor-pointer"
             >
               Wyślij email
             </a>
-            <a 
-              href="tel:+48123456789"
-              className="bg-gradient-to-r from-[#00C9A7] to-[#fee715] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-base md:text-lg lg:text-xl hover:shadow-2xl hover:shadow-[#00C9A7]/30 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center"
-            >
-              Zadzwoń teraz
-            </a>
+            <Link href="/kontakt" className="btn btn-secondary btn-lg cursor-pointer">
+              Wszystkie kanały kontaktu
+            </Link>
           </div>
-          
-          <p className="text-gray-400 text-xs md:text-sm mt-4 md:mt-6">30 minut online • Zero zobowiązań • Odpowiem w ciągu 24h</p>
-        </div>
+          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-white/40">
+            30 min &middot; Zero zobowiązań &middot; Odpowiedź w 24h
+          </p>
+        </FadeUp>
       </section>
     </div>
   );
-};
+}
+
+const ConCard: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+  <div className="card p-5 md:p-6 border-rose-400/15 hover:border-rose-400/30 transition-colors">
+    <div className="flex items-center gap-3 mb-2">
+      <svg className="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 6l12 12M18 6L6 18" />
+      </svg>
+      <h3 className="font-medium text-white text-base md:text-lg">{title}</h3>
+    </div>
+    <p className="text-[15px] text-white/55 leading-relaxed">{children}</p>
+  </div>
+);
+
+const ProCard: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+  <div className="card p-5 md:p-6 border-[#fee715]/20 hover:border-[#fee715]/40 transition-colors">
+    <div className="flex items-center gap-3 mb-2">
+      <svg className="w-4 h-4 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+      </svg>
+      <h3 className="font-medium text-white text-base md:text-lg">{title}</h3>
+    </div>
+    <p className="text-[15px] text-white/55 leading-relaxed">{children}</p>
+  </div>
+);
