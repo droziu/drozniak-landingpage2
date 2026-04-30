@@ -54,7 +54,7 @@ export const CookieConsent: React.FC<CookieConsentProps> = ({ onAccept }) => {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 24 }}
-          transition={{ duration: 0.4, ease: [0.22, 0.61, 0.36, 1] }}
+          transition={{ duration: 0.4, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
           className="fixed bottom-4 left-4 right-4 md:bottom-6 md:left-auto md:right-6 md:w-[420px] z-[60]"
         >
           <div className="relative rounded-2xl bg-[#050714]/95 backdrop-blur-2xl border border-white/12 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),0_0_0_1px_rgba(254,231,21,0.06)] overflow-hidden">

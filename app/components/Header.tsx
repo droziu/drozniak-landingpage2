@@ -43,7 +43,7 @@ export const Header: React.FC = () => {
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+      transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
       className="fixed top-0 left-0 right-0 z-50"
     >
       {/* Top fade veil */}
@@ -100,7 +100,7 @@ export const Header: React.FC = () => {
                     initial={{ opacity: 0, y: -6, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -6, scale: 0.98 }}
-                    transition={{ duration: 0.18, ease: [0.22, 0.61, 0.36, 1] }}
+                    transition={{ duration: 0.18, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
                     className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-72 rounded-2xl overflow-hidden p-1.5 bg-[#050714]/95 backdrop-blur-2xl border border-white/12 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]"
                   >
                     <DropdownLink
@@ -164,7 +164,7 @@ export const Header: React.FC = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.22, ease: [0.22, 0.61, 0.36, 1] }}
+              transition={{ duration: 0.22, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
               className="md:hidden absolute left-4 right-4 mt-2 rounded-2xl overflow-hidden bg-[#050714]/95 backdrop-blur-2xl border border-white/12 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]"
             >
               <div className="p-2 space-y-0.5">

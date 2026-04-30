@@ -14,7 +14,7 @@ export const StickyCTA: React.FC<StickyCTAProps> = ({ isVisible }) => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
-        transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }}
+        transition={{ duration: 0.3, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
         className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40"
       >
         <a

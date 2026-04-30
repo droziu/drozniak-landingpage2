@@ -50,7 +50,7 @@ export const ElegantShape: React.FC<ElegantShapeProps> = ({
       transition={{
         duration: 2.4,
         delay,
-        ease: [0.23, 0.86, 0.39, 0.96],
+        ease: [0.23, 0.86, 0.39, 0.96] as [number, number, number, number],
         opacity: { duration: 1.2 },
       }}
       className={`absolute will-change-transform ${className}`}

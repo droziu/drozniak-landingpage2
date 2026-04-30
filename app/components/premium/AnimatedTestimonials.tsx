@@ -67,7 +67,7 @@ export const AnimatedTestimonials: React.FC<Props> = ({
 
   const itemVariants = {
     hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 0.61, 0.36, 1] } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] } },
   };
 
   const t = testimonials[activeIndex];
@@ -179,7 +179,7 @@ export const AnimatedTestimonials: React.FC<Props> = ({
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+              transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
               className="absolute inset-0 rounded-3xl border border-white/[0.08] bg-[#0A0E20] p-10 md:p-12 lg:p-14 flex flex-col transition-colors duration-500 hover:border-white/[0.14]"
               itemScope
               itemType="https://schema.org/Review"

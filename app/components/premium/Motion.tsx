@@ -3,7 +3,7 @@
 import { motion, useReducedMotion, type Variants, type HTMLMotionProps } from 'framer-motion';
 import React from 'react';
 
-const ease = [0.22, 0.61, 0.36, 1] as const;
+const ease = [0.22, 0.61, 0.36, 1] as [number, number, number, number];
 
 export const fadeUpVariants: Variants = {
   hidden: { opacity: 0, y: 12, filter: 'blur(8px)' },
@@ -74,7 +74,7 @@ export const Stagger: React.FC<HTMLMotionProps<'div'> & { whenInView?: boolean }
   ...rest
 }) => {
   const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
+  if (reduce) return <div className={className}>{children as React.ReactNode}</div>;
 
   const animation = whenInView
     ? { initial: 'hidden', whileInView: 'show', viewport: { once: true, margin: '-80px' } }
@@ -98,7 +98,7 @@ export const StaggerItem: React.FC<HTMLMotionProps<'div'>> = ({ children, classN
 /** Smooth hover lift for cards */
 export const Lift: React.FC<HTMLMotionProps<'div'>> = ({ children, className, ...rest }) => {
   const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
+  if (reduce) return <div className={className}>{children as React.ReactNode}</div>;
   return (
     <motion.div
       whileHover={{ y: -3 }}

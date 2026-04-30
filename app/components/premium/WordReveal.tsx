@@ -50,7 +50,7 @@ export const WordReveal: React.FC<WordRevealProps> = ({
               transition={{
                 duration: 0.7,
                 delay: delay + i * stagger,
-                ease: [0.22, 0.61, 0.36, 1],
+                ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number],
               }}
               className="inline-block"
               aria-hidden

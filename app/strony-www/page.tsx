@@ -890,7 +890,7 @@ const FAQItem: React.FC<{
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.25, ease: [0.22, 0.61, 0.36, 1] }}
+          transition={{ duration: 0.25, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
           className="overflow-hidden"
         >
           <div className="px-6 md:px-7 pb-6 md:pb-7 text-[15px] text-white/65 leading-relaxed text-pretty">
