@@ -23,7 +23,6 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router-dom": "^7.9.3",
-    "reactflow": "^11.11.4",
     "simple-icons": "^16.6.0"
   },
   "devDependencies": {

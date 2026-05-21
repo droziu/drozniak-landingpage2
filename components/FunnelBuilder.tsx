@@ -1,4 +1,6 @@
-import React, { useState, useCallback, useEffect, useRef, createContext, useContext } from 'react';
+'use client';
+
+import React, { useState, useCallback, useEffect, useMemo, useRef, createContext, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import {
   ReactFlow,
@@ -24,21 +26,25 @@ import {
   NodeResizer,
   BaseEdge,
   type NodeChange,
+  type EdgeChange,
+  type ConnectionLineType,
+  type ConnectionMode,
+  type SelectionMode,
 } from '@xyflow/react';
 // CSS React Flow jest importowany globalnie w index.tsx
 import * as SimpleIcons from 'simple-icons';
-import { useAuth } from '../hooks/useAuth';
-import { supabase } from '../lib/supabase';
-import { AlertModal } from './AlertModal';
-import { LoadingState } from './LoadingState';
-import { CustomSelect } from './CustomSelect';
-import { CustomCheckbox } from './CustomCheckbox';
-import { IconPicker } from './IconPicker';
-import { CommentPanel } from './CommentPanel';
-import { CommentThread } from './CommentThread';
-import { CommentForm } from './CommentForm';
-import { CommentBadge } from './CommentBadge';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '@/app/hooks/useAuth';
+import { supabase } from '@/lib/supabase-client';
+import { AlertModal } from '@/components/AlertModal';
+import { LoadingState } from '@/components/LoadingState';
+import { CustomSelect } from '@/components/CustomSelect';
+import { CustomCheckbox } from '@/components/CustomCheckbox';
+import { IconPicker } from '@/components/IconPicker';
+import { CommentPanel } from '@/components/CommentPanel';
+import { CommentThread } from '@/components/CommentThread';
+import { CommentForm } from '@/components/CommentForm';
+import { CommentBadge } from '@/components/CommentBadge';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { 
   MegaphoneSimple, 
   MagnifyingGlass, 
@@ -256,10 +262,10 @@ interface CustomNodeData {
   icon: string;
   color?: string;
   notes?: string;
-  link?: string; // Link do konkretnego elementu
+  link?: string;
   isPinned?: boolean;
-  category?: string; // Kategoria dla wizualnych wskaźników
-  customFields?: NodeCustomField[]; // Customowe pola (tekst, data, liczba, link)
+  category?: string;
+  customFields?: NodeCustomField[];
 }
 
 interface NodeCustomField {
@@ -294,13 +300,15 @@ interface TextNodeData {
 const CustomNode: React.FC<{ id: string; data: CustomNodeData & { commentCount?: number; commentStatus?: 'warning' | 'pending' | 'neutral' | 'closed' }; selected?: boolean }> = ({ id, data, selected }) => {
   return (
     <div
-      className={`px-5 py-4 rounded-xl border-2 transition-all duration-200 min-w-[120px] relative group ${
+      className={`px-4 py-3 rounded-lg border transition-all duration-150 min-w-[140px] relative group ${
         selected
-          ? 'border-[#fee715] shadow-lg shadow-[#fee715]/30 bg-[#18232F]'
-          : 'border-[#fee715]/20 bg-[#0a0f14] hover:border-[#fee715]/50 hover:bg-[#18232F]'
+          ? 'border-[#fee715] bg-[#18232F]'
+          : 'border-white/[0.08] bg-[#13191f] hover:border-[#fee715]/40 hover:bg-[#18232F]'
       }`}
       style={{
-        boxShadow: selected ? '0 0 20px rgba(254, 231, 21, 0.3)' : '0 4px 6px rgba(0, 0, 0, 0.1)',
+        boxShadow: selected
+          ? '0 0 0 1px #fee715, 0 8px 24px rgba(254, 231, 21, 0.15), 0 2px 6px rgba(0, 0, 0, 0.3)'
+          : '0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2)',
       }}
     >
       {/* Comment Badge */}
@@ -319,33 +327,33 @@ const CustomNode: React.FC<{ id: string; data: CustomNodeData & { commentCount?:
       <Handle type="source" position={Position.Right} id="right" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ right: -10 }} title="Przeciągnij do kropki na drugim panelu" />
       
 
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-2.5">
         <div
-          className="w-9 h-9 rounded-lg flex items-center justify-center"
+          className="w-8 h-8 rounded-md flex items-center justify-center shrink-0"
           style={{ backgroundColor: data.color || '#fee71520', color: '#101820' }}
         >
-          {renderPhosphorIcon(data.icon, 20)}
+          {renderPhosphorIcon(data.icon, 18)}
         </div>
-        <div className="flex-1">
-          <div className="text-sm font-medium text-white leading-tight">{data.label}</div>
+        <div className="flex-1 min-w-0">
+          <div className="text-[13px] font-semibold text-white leading-tight truncate tracking-tight">{data.label}</div>
         </div>
       </div>
       {data.notes && (
-        <div className="text-xs text-gray-400 mt-1 line-clamp-1">{data.notes}</div>
+        <div className="text-[11px] text-white/55 mt-2 line-clamp-1">{data.notes}</div>
       )}
       {data.link && (
-        <div className="text-xs text-[#fee715] mt-1 line-clamp-1 flex items-center gap-1">
-          <Link size={12} weight="bold" />
+        <div className="text-[11px] text-[#fee715] mt-2 line-clamp-1 flex items-center gap-1">
+          <Link size={11} weight="bold" />
           <a href={data.link} target="_blank" rel="noopener noreferrer" className="hover:underline" onClick={(e) => e.stopPropagation()}>
             {data.link.length > 30 ? data.link.substring(0, 30) + '...' : data.link}
           </a>
         </div>
       )}
       {data.customFields && data.customFields.length > 0 && (
-        <div className="mt-2 pt-2 border-t border-white/5 space-y-1">
+        <div className="mt-2.5 pt-2 border-t border-white/[0.06] space-y-1">
           {data.customFields.map((field, index) => (
-            <div key={index} className="text-xs text-gray-400 flex items-center gap-2">
-              <span className="text-gray-500 font-medium">{field.field_name}:</span>
+            <div key={index} className="text-[11px] text-white/55 flex items-center gap-1.5">
+              <span className="text-white/40 font-medium">{field.field_name}:</span>
               {field.field_type === 'link' ? (
                 <a 
                   href={field.field_value} 
@@ -404,15 +412,13 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
 
       const currentRect = currentLabel.getBoundingClientRect();
       const allLabels = document.querySelectorAll('[data-edge-label]');
-      
+      const margin = 15; // margines kolizji dla etykiet edges
+
       // Sprawdź kolizje z innymi etykietami
       let hasCollision = false;
       for (const otherLabel of allLabels) {
         if (otherLabel === currentLabel) continue;
         const otherRect = otherLabel.getBoundingClientRect();
-        
-        // Sprawdź czy prostokąty się nakładają (z marginesem 15px)
-        const margin = 15;
         const overlapX = !(currentRect.right + margin < otherRect.left || currentRect.left - margin > otherRect.right);
         const overlapY = !(currentRect.bottom + margin < otherRect.top || currentRect.top - margin > otherRect.bottom);
         
@@ -655,6 +661,26 @@ const edgeTypes = {
   custom: CustomEdge,
 };
 
+// Stałe propy ReactFlow (wyniesione na poziom modułu, aby zapobiec re-rendererom przez nową referencję)
+const FUNNEL_DEFAULT_EDGE_OPTIONS = {
+  type: 'custom',
+  animated: false,
+  style: { stroke: '#fee715', strokeWidth: 2 },
+  markerStart: undefined,
+  markerEnd: {
+    type: MarkerType.ArrowClosed,
+    color: '#fee715',
+    orient: 'auto',
+  },
+} as const;
+
+const FUNNEL_CONNECTION_LINE_STYLE = { stroke: '#fee715', strokeWidth: 2, strokeDasharray: '5,5' } as const;
+const FUNNEL_FIT_VIEW_OPTIONS = { padding: 0.2, duration: 0 } as const;
+const FUNNEL_FIT_VIEW_OPTIONS_ANIMATED = { padding: 0.2, duration: 300 } as const;
+const FUNNEL_DELETE_KEY_CODES = ['Delete', 'Backspace'];
+const FUNNEL_SNAP_GRID: [number, number] = [20, 20];
+const FUNNEL_PRO_OPTIONS = { hideAttribution: true } as const;
+
 // Available Node Templates (Sidebar)
 const nodeTemplates = [
   { type: 'text', icon: 'FileText', label: 'Tekst', category: 'Narzędzia' },
@@ -847,7 +873,9 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
   // Zamknij po kliknięciu poza
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
+      // Uwaga: `Node` w tym pliku to React Flow Node (z @xyflow/react),
+      // a contains() oczekuje DOM Node - stąd jawne globalThis.Node.
+      const target = event.target as unknown as globalThis.Node;
       if (
         isDatePickerOpen &&
         datePickerRef.current &&
@@ -981,9 +1009,15 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
 };
 
 export const FunnelBuilder: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const rawParams = useParams<{ id: string | string[] }>();
+  const id = typeof rawParams?.id === 'string' ? rawParams.id : Array.isArray(rawParams?.id) ? rawParams.id[0] : undefined;
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const pathname = usePathname() || '';
+  // Tryb wejścia: klient otwiera /panel/marketing/:id (tylko podgląd + komentarze)
+  // Admin otwiera /admin/marketing/:id (pełna edycja).
+  // RLS w Supabase to drugi mur - UI to pierwszy. Nie ufamy klientowi nawet jeśli zrobi sztuczki w DOM.
+  const isReadOnly = pathname.startsWith('/panel/marketing/');
   const [funnel, setFunnel] = useState<FunnelDiagram | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -1019,9 +1053,13 @@ export const FunnelBuilder: React.FC = () => {
   const [showMinimap, setShowMinimap] = useState(false);
   const [showAlignToolbar, setShowAlignToolbar] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
-  const [showSidebar, setShowSidebar] = useState(true);
+  // Klient nie widzi sidebaru z szablonami (nic by tam nie zrobił - nie może dodawać nodów)
+  const [showSidebar, setShowSidebar] = useState(!isReadOnly);
   const [showBottomToolbar, setShowBottomToolbar] = useState(true);
   const [showLegend, setShowLegend] = useState(false);
+  const [showShortcutsModal, setShowShortcutsModal] = useState(false);
+  // Klient startuje w trybie pan (z możliwością przełączenia na comment dolnym toolbarem).
+  // Admin też - tryb wybiera użytkownik.
   const [interactionMode, setInteractionMode] = useState<'pan' | 'select' | 'comment'>('pan');
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; title: string; message: string; type: 'success' | 'error' | 'info' | 'warning' }>({
     isOpen: false,
@@ -1030,17 +1068,20 @@ export const FunnelBuilder: React.FC = () => {
     type: 'info',
   });
   // System komentarzy
+  // Klient po wejściu automatycznie widzi panel komentarzy otwarty (jak Figma w trybie review)
   const [commentMode, setCommentMode] = useState(false);
-  const [showCommentPanel, setShowCommentPanel] = useState(false);
+  const [showCommentPanel, setShowCommentPanel] = useState(isReadOnly);
   const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
   const [commentFormAnchor, setCommentFormAnchor] = useState<{ type: 'node' | 'edge' | 'region'; id?: string; coords?: { x: number; y: number; width: number; height: number } } | null>(null);
   const [nodeCommentCounts, setNodeCommentCounts] = useState<Map<string, { count: number; status: 'warning' | 'pending' | 'neutral' | 'closed' }>>(new Map());
   const [edgeCommentCounts, setEdgeCommentCounts] = useState<Map<string, { count: number; status: 'warning' | 'pending' | 'neutral' | 'closed' }>>(new Map());
   const [commentPanelRefreshTrigger, setCommentPanelRefreshTrigger] = useState(0);
 
-  // React Flow state
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  // React Flow state - inicjalizujemy z jawnym typem by TS nie wnioskował never[].
+  // Używamy Node/Edge jako luźnego kontenera (data: Record<string, unknown>) - specyficzne
+  // typy (CustomNodeData/TextNodeData) rzutujemy w miejscach użycia.
+  const [nodes, setNodes, onNodesChange] = useNodesState([] as Node[]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([] as Edge[]);
   
   // Ref do aktualnych nodów dla wrappedOnNodesChange (aby uniknąć stale closure)
   const nodesRef = useRef<Node[]>([]);
@@ -1073,6 +1114,8 @@ export const FunnelBuilder: React.FC = () => {
   const [alignmentGuides, setAlignmentGuides] = useState<{ vertical: number[]; horizontal: number[] }>({ vertical: [], horizontal: [] });
   const [viewport, setViewport] = useState({ x: 0, y: 0, zoom: 1 });
   const [flowContainerSize, setFlowContainerSize] = useState({ w: 0, h: 0 });
+  const nodeLabelInputRef = useRef<HTMLInputElement>(null);
+  const focusLabelOnOpenRef = useRef(false);
   const isManualSelectionRef = useRef(false); // Flaga, że ręcznie zarządzamy selekcją
   const pendingSelectionRef = useRef<{ nodeId: string; shouldSelect: boolean } | null>(null); // Intencja selekcji z onNodeClick
   const previousSelectedNodeIdsRef = useRef<Set<string>>(new Set()); // Poprzednio zaznaczone nody (przed kliknięciem)
@@ -1219,47 +1262,6 @@ export const FunnelBuilder: React.FC = () => {
 
       setNodeCommentCounts(nodeCounts);
       setEdgeCommentCounts(edgeCounts);
-      
-      // Debug: sprawdź czy dane są poprawnie załadowane
-      const allAnchorsInfo = (data || []).map((t: any) => {
-        const anchors = t.comment_anchors;
-        const anchor = Array.isArray(anchors) ? anchors[0] : anchors;
-        return {
-          threadId: t.id,
-          anchorType: anchor?.anchor_type,
-          anchorId: anchor?.anchor_id,
-          anchorIdType: typeof anchor?.anchor_id,
-          anchorIdValue: anchor?.anchor_id,
-          status: t.status,
-          isOpen: t.status !== 'Zatwierdzone' && t.status !== 'Odrzucone',
-          fullAnchor: anchor
-        };
-      });
-      
-      console.log('=== DEBUG: Załadowane liczniki komentarzy ===');
-      console.log('Total threads:', data?.length || 0);
-      console.log('Node counts:', Array.from(nodeCounts.entries()));
-      console.log('Edge counts:', Array.from(edgeCounts.entries()));
-      console.log('All anchors info (szczegóły):', JSON.stringify(allAnchorsInfo, null, 2));
-      console.log('Nodes with comments:', Array.from(nodeCounts.keys()));
-      console.log('Edges with comments:', Array.from(edgeCounts.keys()));
-      
-      // Sprawdź, które wątki są pomijane i dlaczego
-      (data || []).forEach((thread: any) => {
-        const anchors = thread.comment_anchors;
-        const anchor = Array.isArray(anchors) ? anchors[0] : anchors;
-        if (!anchor || !anchor.anchor_type) {
-          console.warn('⚠️ Thread bez anchor:', thread.id);
-        } else if (anchor.anchor_type === 'region') {
-          console.log('ℹ️ Thread dla regionu (pomijany):', thread.id);
-        } else if (anchor.anchor_type === 'node' && !anchor.anchor_id) {
-          console.warn('⚠️ Thread dla node bez anchor_id:', thread.id, anchor);
-        } else if (anchor.anchor_type === 'edge' && !anchor.anchor_id) {
-          console.warn('⚠️ Thread dla edge bez anchor_id:', thread.id, anchor);
-        } else if (thread.status === 'Zatwierdzone' || thread.status === 'Odrzucone') {
-          console.log('ℹ️ Thread zamknięty (pomijany):', thread.id, thread.status);
-        }
-      });
     } catch (error: any) {
       console.error('Błąd ładowania liczby wątków:', error);
     }
@@ -1281,9 +1283,9 @@ export const FunnelBuilder: React.FC = () => {
     // Sprawdź, czy jest przypięty node
     const pinnedNode = nodes.find((n) => {
       if (n.type === 'text') {
-        return (n.data as TextNodeData).isPinned === true;
+        return (n.data as unknown as TextNodeData).isPinned === true;
       } else {
-        return (n.data as CustomNodeData).isPinned === true;
+        return (n.data as unknown as CustomNodeData).isPinned === true;
       }
     });
     
@@ -1380,8 +1382,9 @@ export const FunnelBuilder: React.FC = () => {
     setHasUnsavedChanges(currentState !== savedState);
   }, [nodes, edges]);
 
-  // Auto-save on changes - ale NIE podczas edycji w modalu (properties panel)
+  // Auto-save on changes - ale NIE podczas edycji w modalu (properties panel) i NIE dla klienta
   useEffect(() => {
+    if (isReadOnly) return;
     if (funnel && nodes.length >= 0 && !showPropertiesPanel && !showEdgeProperties) {
       const timeoutId = setTimeout(() => {
         saveFunnel();
@@ -1389,7 +1392,7 @@ export const FunnelBuilder: React.FC = () => {
 
       return () => clearTimeout(timeoutId);
     }
-  }, [nodes, edges, funnel, showPropertiesPanel, showEdgeProperties]);
+  }, [nodes, edges, funnel, showPropertiesPanel, showEdgeProperties, isReadOnly]);
 
   // Funkcja kopiowania zaznaczonych nodów i edges
   const handleCopy = useCallback(() => {
@@ -1458,17 +1461,31 @@ export const FunnelBuilder: React.FC = () => {
     };
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isFormElement(e.target) || isFormElement(document.activeElement)) return;
-      if ((e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
+      // ? otwiera modal pomocy (Shift + /)
+      if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        setShowShortcutsModal((s) => !s);
+        return;
+      }
+      // F - fit view (jak w Figmie/Funnelytics)
+      if (e.key === 'f' || e.key === 'F') {
+        if (!e.metaKey && !e.ctrlKey && !e.altKey) {
+          e.preventDefault();
+          reactFlowInstance?.fitView({ duration: 300, padding: 0.2 });
+          return;
+        }
+      }
+      if (!isReadOnly && (e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
         handleUndo();
         return;
       }
-      if ((e.metaKey || e.ctrlKey) && e.key === 'c') {
+      if (!isReadOnly && (e.metaKey || e.ctrlKey) && e.key === 'c') {
         e.preventDefault();
         handleCopy();
         return;
       }
-      if ((e.metaKey || e.ctrlKey) && e.key === 'v') {
+      if (!isReadOnly && (e.metaKey || e.ctrlKey) && e.key === 'v') {
         e.preventDefault();
         handlePaste();
         return;
@@ -1493,7 +1510,7 @@ export const FunnelBuilder: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [handleUndo, handleCopy, handlePaste]);
+  }, [handleUndo, handleCopy, handlePaste, isReadOnly, reactFlowInstance]);
 
   // Zapisywanie własnego szablonu
   const saveCustomTemplate = useCallback(async (label: string, icon: string, color: string, category: string) => {
@@ -1541,7 +1558,13 @@ export const FunnelBuilder: React.FC = () => {
         .eq('node_id', nodeId)
         .order('display_order', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '42P01' || (error.message || '').includes('Could not find the table')) {
+          setNodeCustomFields([]);
+          return;
+        }
+        throw error;
+      }
 
       const fields: NodeCustomField[] = (data || []).map(f => ({
         id: f.id,
@@ -1554,6 +1577,7 @@ export const FunnelBuilder: React.FC = () => {
       setNodeCustomFields(fields);
     } catch (error: any) {
       console.error('Błąd ładowania customowych pól:', error);
+      setNodeCustomFields([]);
     }
   }, []);
 
@@ -1567,7 +1591,13 @@ export const FunnelBuilder: React.FC = () => {
         .eq('funnel_id', funnelId)
         .eq('node_id', nodeId);
 
-      if (deleteError) throw deleteError;
+      if (deleteError) {
+        if (deleteError.code === '42P01' || (deleteError.message || '').includes('Could not find the table')) {
+          console.warn('Tabela node_custom_fields nie istnieje - uruchom migrację supabase_migration_node_custom_fields.sql');
+          return;
+        }
+        throw deleteError;
+      }
 
       // Następnie dodaj nowe pola
       if (fields.length > 0) {
@@ -1602,7 +1632,13 @@ export const FunnelBuilder: React.FC = () => {
         .eq('edge_id', edgeId)
         .order('display_order', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '42P01' || (error.message || '').includes('Could not find the table')) {
+          setEdgeCustomFields([]);
+          return;
+        }
+        throw error;
+      }
 
       const fields: EdgeCustomField[] = (data || []).map(f => ({
         id: f.id,
@@ -1615,6 +1651,7 @@ export const FunnelBuilder: React.FC = () => {
       setEdgeCustomFields(fields);
     } catch (error: any) {
       console.error('Błąd ładowania customowych pól dla edge:', error);
+      setEdgeCustomFields([]);
     }
   }, []);
 
@@ -1628,7 +1665,13 @@ export const FunnelBuilder: React.FC = () => {
         .eq('funnel_id', funnelId)
         .eq('edge_id', edgeId);
 
-      if (deleteError) throw deleteError;
+      if (deleteError) {
+        if (deleteError.code === '42P01' || (deleteError.message || '').includes('Could not find the table')) {
+          console.warn('Tabela edge_custom_fields nie istnieje - uruchom migrację supabase_migration_edge_custom_fields.sql');
+          return;
+        }
+        throw deleteError;
+      }
 
       // Następnie dodaj nowe pola
       if (fields.length > 0) {
@@ -1712,7 +1755,7 @@ export const FunnelBuilder: React.FC = () => {
                   return {
                     ...node,
                     data: {
-                      ...(node.data as CustomNodeData),
+                      ...(node.data as unknown as CustomNodeData),
                       customFields: customFieldsByNodeId[node.id],
                     },
                   };
@@ -1760,6 +1803,7 @@ export const FunnelBuilder: React.FC = () => {
 
   const saveFunnel = async () => {
     if (!funnel || !reactFlowInstance) return;
+    if (isReadOnly) return; // Klient nigdy nie zapisuje (UI + RLS)
 
     try {
       setSaving(true);
@@ -1799,8 +1843,9 @@ export const FunnelBuilder: React.FC = () => {
 
   const onConnect = useCallback(
     (params: Connection) => {
+      if (isReadOnly) return; // Klient nie tworzy nowych połączeń
       pushUndoHistory();
-      const newEdge = {
+      const newEdge: Edge = {
         ...params,
         id: `edge-${params.source}-${params.target}-${Date.now()}`,
         type: 'custom',
@@ -1819,7 +1864,7 @@ export const FunnelBuilder: React.FC = () => {
       };
       setEdges((eds) => addEdge(newEdge, eds));
     },
-    [setEdges, pushUndoHistory]
+    [setEdges, pushUndoHistory, isReadOnly]
   );
 
   const onDragOver = useCallback((event: React.DragEvent) => {
@@ -1831,17 +1876,19 @@ export const FunnelBuilder: React.FC = () => {
     (event: React.DragEvent) => {
       event.preventDefault();
 
+      if (isReadOnly) return; // Klient nie wrzuca nowych nodów
       if (!reactFlowInstance || !reactFlowWrapper.current) return;
 
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const templateData = event.dataTransfer.getData('application/reactflow');
 
       if (!templateData) return;
 
       const template = JSON.parse(templateData);
+      // screenToFlowPosition w xyflow/react v12 oczekuje współrzędnych okna (clientX/Y),
+      // nie offsetu względem kontenera - inaczej node ląduje w innym miejscu niż kursor.
       const position = reactFlowInstance.screenToFlowPosition({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
+        x: event.clientX,
+        y: event.clientY,
       });
 
       let newNode: Node;
@@ -1886,7 +1933,7 @@ export const FunnelBuilder: React.FC = () => {
       pushUndoHistory();
       setNodes((nds) => nds.concat(newNode));
     },
-    [reactFlowInstance, setNodes, pushUndoHistory]
+    [reactFlowInstance, setNodes, pushUndoHistory, isReadOnly]
   );
 
   // Ref do śledzenia czy to jest przeciąganie (drag noda) - box selection działa tylko na pustym tle
@@ -1898,6 +1945,14 @@ export const FunnelBuilder: React.FC = () => {
       event.preventDefault();
       event.stopPropagation();
       setCommentFormAnchor({ type: 'node', id: node.id });
+      return;
+    }
+    // Klient w trybie read-only: kliknięcie elementu = pokaż istniejące komentarze (otwórz panel)
+    // i ustaw selectedThreadId na pierwszy thread tego noda (jeśli istnieje)
+    if (isReadOnly) {
+      event.preventDefault();
+      event.stopPropagation();
+      setShowCommentPanel(true);
       return;
     }
     
@@ -1959,32 +2014,32 @@ export const FunnelBuilder: React.FC = () => {
     
     if (node.type === 'text') {
       const props = {
-        text: (node.data as TextNodeData).text || '',
-        fontSize: (node.data as TextNodeData).fontSize || 18,
-        fontWeight: (node.data as TextNodeData).fontWeight || 'bold',
-        textAlign: (node.data as TextNodeData).textAlign || 'left',
-        verticalAlign: (node.data as TextNodeData).verticalAlign || 'middle',
-        showHandles: (node.data as TextNodeData).showHandles ?? false,
-        isPinned: (node.data as TextNodeData).isPinned ?? false,
+        text: (node.data as unknown as TextNodeData).text || '',
+        fontSize: (node.data as unknown as TextNodeData).fontSize || 18,
+        fontWeight: (node.data as unknown as TextNodeData).fontWeight || 'bold',
+        textAlign: (node.data as unknown as TextNodeData).textAlign || 'left',
+        verticalAlign: (node.data as unknown as TextNodeData).verticalAlign || 'middle',
+        showHandles: (node.data as unknown as TextNodeData).showHandles ?? false,
+        isPinned: (node.data as unknown as TextNodeData).isPinned ?? false,
       };
       setTextNodeProperties(props);
       lastSavedTextNodePropertiesRef.current = JSON.parse(JSON.stringify(props));
       setHasUnsavedTextNodeChanges(false);
     } else {
       const props = {
-        label: (node.data as CustomNodeData).label || '',
-        icon: (node.data as CustomNodeData).icon || 'FileText',
-        notes: (node.data as CustomNodeData).notes || '',
-        link: (node.data as CustomNodeData).link || '',
-        isPinned: (node.data as CustomNodeData).isPinned ?? false,
-        category: (node.data as CustomNodeData).category, // Zachowaj kategorię
+        label: (node.data as unknown as CustomNodeData).label || '',
+        icon: (node.data as unknown as CustomNodeData).icon || 'FileText',
+        notes: (node.data as unknown as CustomNodeData).notes || '',
+        link: (node.data as unknown as CustomNodeData).link || '',
+        isPinned: (node.data as unknown as CustomNodeData).isPinned ?? false,
+        category: (node.data as unknown as CustomNodeData).category, // Zachowaj kategorię
       };
       setNodeProperties(props);
       lastSavedNodePropertiesRef.current = JSON.parse(JSON.stringify(props));
       setHasUnsavedNodeChanges(false);
       
       // Załaduj customowe pola dla tego noda (z danych noda lub z bazy)
-      const customFieldsFromNode = (node.data as CustomNodeData).customFields;
+      const customFieldsFromNode = (node.data as unknown as CustomNodeData).customFields;
       if (customFieldsFromNode && customFieldsFromNode.length > 0) {
         setNodeCustomFields(customFieldsFromNode);
       } else if (id) {
@@ -1994,22 +2049,27 @@ export const FunnelBuilder: React.FC = () => {
       }
     }
     setShowEdgeProperties(false);
-  }, [interactionMode, selectedNode, setNodes, id, loadNodeCustomFields]);
+  }, [interactionMode, selectedNode, setNodes, id, loadNodeCustomFields, isReadOnly, commentMode]);
 
   const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge) => {
     event.stopPropagation();
-    
+
     // W trybie komentarzy: otwórz formularz dodawania komentarza
     if (commentMode) {
       setCommentFormAnchor({ type: 'edge', id: edge.id });
       return;
     }
-    
+    // Klient w trybie read-only: kliknięcie krawędzi otwiera panel komentarzy
+    if (isReadOnly) {
+      setShowCommentPanel(true);
+      return;
+    }
+
     setSelectedEdge(edge);
     setSelectedNode(null);
     const props = {
-      notes: edge.data?.notes || '',
-      link: edge.data?.link || '',
+      notes: (edge.data?.notes as string) || '',
+      link: (edge.data?.link as string) || '',
     };
     setEdgeProperties(props);
     lastSavedEdgePropertiesRef.current = JSON.parse(JSON.stringify(props));
@@ -2020,7 +2080,7 @@ export const FunnelBuilder: React.FC = () => {
     if (id) {
       loadEdgeCustomFields(edge.id, id);
     }
-  }, [commentMode, id, loadEdgeCustomFields]);
+  }, [commentMode, id, loadEdgeCustomFields, isReadOnly]);
 
   // Obsługa kliknięcia w pustą przestrzeń (pane) - dla komentarzy i deselekcji
   const onPaneClick = useCallback((event: React.MouseEvent) => {
@@ -2112,7 +2172,7 @@ export const FunnelBuilder: React.FC = () => {
   );
 
   const wrappedOnEdgesChange = useCallback(
-    (changes: { type: string }[]) => {
+    (changes: EdgeChange[]) => {
       if (changes.some((c) => c.type === 'remove')) pushUndoHistory();
       onEdgesChange(changes);
     },
@@ -2383,6 +2443,126 @@ export const FunnelBuilder: React.FC = () => {
     return { width, height };
   }, []);
 
+  // rAF throttle dla alignment guides - bez tego setState leciał na każdy piksel ruchu kursora
+  // i przy >50 nodach FPS spadało do 30. Teraz max 60Hz updateów.
+  const alignmentRafRef = useRef<number | null>(null);
+  const handleNodeDrag = useCallback((_: React.MouseEvent, node: Node, allNodes: Node[]) => {
+    if (alignmentRafRef.current !== null) return;
+    alignmentRafRef.current = requestAnimationFrame(() => {
+      alignmentRafRef.current = null;
+      const others = allNodes.filter((n) => n.id !== node.id);
+      if (others.length === 0) { setAlignmentGuides({ vertical: [], horizontal: [] }); return; }
+      const d = getNodeDimensions(node);
+      const left = node.position.x, cX = node.position.x + d.width / 2, right = node.position.x + d.width;
+      const top = node.position.y, cY = node.position.y + d.height / 2, bottom = node.position.y + d.height;
+      const vSet = new Set<number>(), hSet = new Set<number>();
+      const T = 5;
+      others.forEach((o) => {
+        const od = getNodeDimensions(o);
+        const oL = o.position.x, oCX = o.position.x + od.width / 2, oR = o.position.x + od.width;
+        const oT = o.position.y, oCY = o.position.y + od.height / 2, oB = o.position.y + od.height;
+        if (Math.abs(left - oL) <= T || Math.abs(cX - oL) <= T || Math.abs(right - oL) <= T) vSet.add(oL);
+        if (Math.abs(left - oCX) <= T || Math.abs(cX - oCX) <= T || Math.abs(right - oCX) <= T) vSet.add(oCX);
+        if (Math.abs(left - oR) <= T || Math.abs(cX - oR) <= T || Math.abs(right - oR) <= T) vSet.add(oR);
+        if (Math.abs(top - oT) <= T || Math.abs(cY - oT) <= T || Math.abs(bottom - oT) <= T) hSet.add(oT);
+        if (Math.abs(top - oCY) <= T || Math.abs(cY - oCY) <= T || Math.abs(bottom - oCY) <= T) hSet.add(oCY);
+        if (Math.abs(top - oB) <= T || Math.abs(cY - oB) <= T || Math.abs(bottom - oB) <= T) hSet.add(oB);
+      });
+      setAlignmentGuides({ vertical: Array.from(vSet), horizontal: Array.from(hSet) });
+    });
+  }, [getNodeDimensions]);
+
+  useEffect(() => () => {
+    if (alignmentRafRef.current !== null) cancelAnimationFrame(alignmentRafRef.current);
+  }, []);
+
+  // Po otwarciu panelu właściwości via dwuklik - autofocus na pole "Nazwa" i select tekstu.
+  // Jak Figma: dwuklik = inline edit nazwy. Tu otwieramy panel i od razu skupiamy pole.
+  useEffect(() => {
+    if (showPropertiesPanel && focusLabelOnOpenRef.current && nodeLabelInputRef.current) {
+      nodeLabelInputRef.current.focus();
+      nodeLabelInputRef.current.select();
+      focusLabelOnOpenRef.current = false;
+    }
+  }, [showPropertiesPanel]);
+
+  // Memoizacja propsów ReactFlow: bez tego każdy render tworzył nową tablicę nodes/edges
+  // i wymuszał re-renderowanie WSZYSTKICH węzłów/krawędzi (lag przy drag/zoom).
+  const nodesWithComments = useMemo(() => {
+    return nodes.map((node) => {
+      const commentInfo = nodeCommentCounts.get(node.id);
+      if (commentInfo && commentInfo.count > 0) {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            commentCount: commentInfo.count,
+            commentStatus: commentInfo.status,
+          },
+        };
+      }
+      return {
+        ...node,
+        data: {
+          ...node.data,
+          commentCount: undefined,
+          commentStatus: undefined,
+        },
+      };
+    });
+  }, [nodes, nodeCommentCounts]);
+
+  const edgesWithComments = useMemo(() => {
+    return edges.map((edge) => {
+      const commentInfo = edgeCommentCounts.get(edge.id);
+      if (commentInfo && commentInfo.count > 0) {
+        return {
+          ...edge,
+          data: {
+            ...edge.data,
+            commentCount: commentInfo.count,
+            commentStatus: commentInfo.status,
+          },
+        };
+      }
+      return {
+        ...edge,
+        data: {
+          ...edge.data,
+          commentCount: undefined,
+          commentStatus: undefined,
+        },
+      };
+    });
+  }, [edges, edgeCommentCounts]);
+
+  // Mapy ID → czytelna etykieta używane przez CommentPanel, by zamiast surowych UUID
+  // pokazywać "Facebook Ads" / "Lead → Sprzedaż". Aktualizujemy gdy zmieni się diagram.
+  const nodeLabelMap = useMemo(() => {
+    const m = new Map<string, string>();
+    nodes.forEach((node) => {
+      const d: any = node.data;
+      if (node.type === 'text') {
+        const t = typeof d?.text === 'string' ? d.text.trim() : '';
+        m.set(node.id, t ? `Tekst: ${t.slice(0, 40)}` : 'Pole tekstowe');
+      } else {
+        const label = d?.label ?? 'Element';
+        m.set(node.id, label);
+      }
+    });
+    return m;
+  }, [nodes]);
+
+  const edgeLabelMap = useMemo(() => {
+    const m = new Map<string, string>();
+    edges.forEach((edge) => {
+      const src = nodeLabelMap.get(edge.source) || 'Element';
+      const tgt = nodeLabelMap.get(edge.target) || 'Element';
+      m.set(edge.id, `${src} → ${tgt}`);
+    });
+    return m;
+  }, [edges, nodeLabelMap]);
+
   // Funkcje wyrównywania — np. "top" = wszystkie górne krawędzie na tej samej wysokości (min Y)
   const alignNodes = (direction: 'left' | 'right' | 'top' | 'bottom' | 'center-x' | 'center-y' | 'distribute-x' | 'distribute-y') => {
     const selectedNodes = nodes.filter((node) => node.selected);
@@ -2534,10 +2714,10 @@ export const FunnelBuilder: React.FC = () => {
         <div className="text-center text-white">
           <p className="text-lg mb-4">Lejek nie został znaleziony</p>
           <button
-            onClick={() => navigate('/admin/marketing')}
+            onClick={() => router.push(isReadOnly ? '/panel' : '/admin/marketing')}
             className="px-5 py-2.5 bg-[#fee715]/10 border border-[#fee715]/50 text-[#fee715] rounded-lg font-medium hover:bg-[#fee715]/20 hover:border-[#fee715]/70 transition-all duration-200"
           >
-            Wróć do listy
+            Wróć
           </button>
         </div>
       </div>
@@ -2560,20 +2740,25 @@ export const FunnelBuilder: React.FC = () => {
       )}
 
       {/* Header */}
-      <div className={`flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#18232F] transition-all duration-300 ${showHeader ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden border-0'}`}>
-        <div className="flex items-center gap-4">
+      <div className={`flex items-center justify-between px-5 py-2.5 border-b border-white/[0.06] bg-[#0a0f14]/85 backdrop-blur-xl transition-all duration-300 ${showHeader ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden border-0'}`}>
+        <div className="flex items-center gap-3">
           <button
-            onClick={() => navigate('/admin/marketing')}
+            onClick={() => router.push(isReadOnly ? '/panel' : '/admin/marketing')}
             className="p-2 hover:bg-white/10 rounded-lg transition-all"
+            title={isReadOnly ? 'Powrót do panelu' : 'Powrót do listy lejków'}
           >
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
           </button>
           <div className="flex-1">
-            {!isEditingTitle ? (
-              <h1 
-                className="font-[Montserrat] text-xl font-bold text-white cursor-pointer hover:text-[#fee715] transition-colors"
+            {isReadOnly ? (
+              <h1 className="font-[Montserrat] text-base font-semibold text-white tracking-tight">
+                {funnel.project_name || 'Bez nazwy'}
+              </h1>
+            ) : !isEditingTitle ? (
+              <h1
+                className="font-[Montserrat] text-base font-semibold text-white tracking-tight cursor-pointer hover:text-[#fee715] transition-colors"
                 onClick={() => {
                   setIsEditingTitle(true);
                   setEditedTitle(funnel.project_name || '');
@@ -2612,17 +2797,22 @@ export const FunnelBuilder: React.FC = () => {
                     setIsEditingTitle(false);
                   }
                 }}
-                className="font-[Montserrat] text-xl font-bold text-white bg-white/10 border border-[#fee715]/50 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 w-full max-w-md"
+                className="font-[Montserrat] text-base font-semibold text-white tracking-tight bg-white/10 border border-[#fee715]/50 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 w-full max-w-md"
                 autoFocus
               />
             )}
-            {!isEditingSubtitle ? (
+            {isReadOnly ? (
+              funnel.subtitle ? (
+                <div className="inline-flex items-center px-3 py-1 rounded-md bg-white/[0.04] border border-white/10 text-xs font-medium text-gray-300 mt-0.5">
+                  {funnel.subtitle}
+                </div>
+              ) : null
+            ) : !isEditingSubtitle ? (
               <div
                 className="inline-flex items-center px-3 py-1 rounded-md bg-white/[0.04] border border-white/10 text-xs font-medium text-gray-300 cursor-pointer hover:bg-white/[0.06] hover:border-white/20 hover:text-white transition-all mt-0.5"
                 onClick={() => {
                   setIsEditingSubtitle(true);
                   setEditedSubtitle(funnel.subtitle || '');
-                  // Ustaw tryb na podstawie aktualnego podtytułu
                   const standardSubtitles = ['stan obecny', 'docelowy', 'Plan 90 dni'];
                   if (funnel.subtitle && standardSubtitles.includes(funnel.subtitle)) {
                     setSubtitleMode('select');
@@ -2745,7 +2935,7 @@ export const FunnelBuilder: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          {saving && user?.email === 'stanislaw@drozniak.com' && (
+          {!isReadOnly && saving && user?.email === 'stanislaw@drozniak.com' && (
             <span className="text-sm text-gray-400 flex items-center gap-2">
               <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -2753,14 +2943,16 @@ export const FunnelBuilder: React.FC = () => {
               Zapisuję...
             </span>
           )}
-          <button
-            onClick={handleUndo}
-            disabled={undoHistory.length === 0}
-            title="Cofnij ostatnią zmianę (Ctrl+Z)"
-            className="px-4 py-2 bg-white/[0.06] border border-white/20 text-white/90 rounded-lg font-medium hover:bg-white/10 hover:border-white/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white/[0.06] disabled:hover:border-white/20"
-          >
-            Wstecz
-          </button>
+          {!isReadOnly && (
+            <button
+              onClick={handleUndo}
+              disabled={undoHistory.length === 0}
+              title="Cofnij ostatnią zmianę (Ctrl+Z)"
+              className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.08] text-white/80 rounded-lg text-sm font-medium hover:bg-white/[0.08] hover:border-white/[0.15] hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white/[0.04] disabled:hover:border-white/[0.08]"
+            >
+              Wstecz
+            </button>
+          )}
           <button
             onClick={() => {
               setShowCommentPanel(!showCommentPanel);
@@ -2768,32 +2960,34 @@ export const FunnelBuilder: React.FC = () => {
                 loadCommentCounts();
               }
             }}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
               showCommentPanel
-                ? 'bg-[#fee715]/10 border border-[#fee715]/50 text-[#fee715]'
-                : 'bg-white/[0.06] border border-white/20 text-white/90 hover:bg-white/10'
+                ? 'bg-[#fee715]/10 border border-[#fee715]/40 text-[#fee715]'
+                : 'bg-white/[0.04] border border-white/[0.08] text-white/80 hover:bg-white/[0.08] hover:text-white'
             }`}
             title="Komentarze"
           >
-            <ChatCircleDots size={18} className="inline-block mr-1.5" />
+            <ChatCircleDots size={16} />
             Komentarze
           </button>
-          <button
-            onClick={saveFunnel}
-            className="relative px-5 py-2 bg-[#fee715]/10 border border-[#fee715]/50 text-[#fee715] rounded-lg font-medium hover:bg-[#fee715]/20 hover:border-[#fee715]/70 transition-all duration-200"
-          >
-            <span className="flex items-center gap-2">
-              Zapisz zmiany
-              {hasUnsavedChanges && (
-                <span className="w-2 h-2 bg-[#fee715] rounded-full animate-pulse" title="Masz niezapisane zmiany"></span>
-              )}
-            </span>
-          </button>
+          {!isReadOnly && (
+            <button
+              onClick={saveFunnel}
+              className="relative px-3.5 py-1.5 bg-[#fee715] text-[#101820] rounded-lg text-sm font-semibold hover:brightness-110 transition-all duration-150 shadow-sm shadow-[#fee715]/20"
+            >
+              <span className="flex items-center gap-2">
+                Zapisz zmiany
+                {hasUnsavedChanges && (
+                  <span className="w-2 h-2 bg-[#fee715] rounded-full animate-pulse" title="Masz niezapisane zmiany"></span>
+                )}
+              </span>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Mini-przycisk do przywrócenia ukrytego sidebara */}
-      {!showSidebar && (
+      {/* Mini-przycisk do przywrócenia ukrytego sidebara - tylko admin */}
+      {!isReadOnly && !showSidebar && (
         <button
           onClick={() => setShowSidebar(true)}
           className={`fixed z-50 p-2 bg-[#0a0f14]/95 border border-[#fee715]/30 text-[#fee715] rounded-lg hover:bg-[#fee715]/10 hover:border-[#fee715]/50 transition-all duration-200 shadow-lg backdrop-blur-sm ${!showHeader ? 'top-14 left-2' : 'top-2 left-2'}`}
@@ -2806,8 +3000,9 @@ export const FunnelBuilder: React.FC = () => {
       )}
 
       <div className="flex-1 flex overflow-hidden relative">
-        {/* Sidebar - Node Templates */}
-        <div 
+        {/* Sidebar - Node Templates (tylko admin) */}
+        {!isReadOnly && (
+        <div
           className={`transition-all duration-300 overflow-hidden funnel-builder-sidebar ${
             showSidebar ? 'w-64 opacity-100' : 'w-0 opacity-0'
           }`}
@@ -2816,24 +3011,24 @@ export const FunnelBuilder: React.FC = () => {
             background: '#0a0f14',
           }}
         >
-          <div className="w-64 h-full border-r-2 border-[#fee715]/30 overflow-y-auto p-4 shadow-2xl">
+          <div className="w-64 h-full border-r border-white/[0.06] overflow-y-auto p-3.5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-[Montserrat] font-medium text-[#fee715] text-base tracking-tight border-b border-[#fee715]/20 pb-2.5 flex-1">Elementy</h3>
+              <h3 className="font-[Montserrat] font-semibold text-white text-sm tracking-tight">Elementy</h3>
               <button
                 onClick={() => setShowSidebar(false)}
-                className="p-1.5 hover:bg-white/10 rounded-lg transition-all text-gray-400 hover:text-white ml-2"
+                className="p-1 hover:bg-white/[0.06] rounded-md transition-colors text-white/40 hover:text-white"
                 title="Ukryj panel elementów"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-          <div className="space-y-6">
+          <div className="space-y-5">
             {Object.entries(groupedTemplates).map(([category, templates]) => (
               <div key={category}>
-                <h4 className="text-xs font-medium text-[#fee715] uppercase mb-3 tracking-wider px-2">{category}</h4>
-                <div className="space-y-2">
+                <h4 className="text-[10px] font-semibold text-white/40 uppercase mb-2 tracking-[0.1em] px-1">{category}</h4>
+                <div className="space-y-1">
                   {templates.map((template, idx) => (
                     <div
                       key={idx}
@@ -2841,22 +3036,13 @@ export const FunnelBuilder: React.FC = () => {
                       onDragStart={(event) => {
                         event.dataTransfer.setData('application/reactflow', JSON.stringify(template));
                       }}
-                      className="p-3 bg-[#18232F]/90 rounded-lg border border-white/10 hover:border-[#fee715]/40 cursor-move transition-all duration-200 shadow-sm hover:shadow-lg hover:shadow-[#fee715]/10 backdrop-blur-sm relative overflow-hidden group"
-                      style={{
-                        background: 'linear-gradient(to bottom, rgba(24, 35, 47, 0.9), rgba(24, 35, 47, 0.9))',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'linear-gradient(135deg, rgba(254, 231, 21, 0.08) 0%, rgba(24, 35, 47, 0.95) 50%, rgba(254, 231, 21, 0.05) 100%)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'linear-gradient(to bottom, rgba(24, 35, 47, 0.9), rgba(24, 35, 47, 0.9))';
-                      }}
+                      className="px-2.5 py-2 bg-white/[0.02] rounded-lg border border-white/[0.06] hover:border-[#fee715]/30 hover:bg-white/[0.04] cursor-grab active:cursor-grabbing transition-all duration-150 group"
                     >
-                      <div className="flex items-center gap-2 relative z-10">
-                        <div className="text-white">
-                          {renderPhosphorIcon(template.icon, 18)}
+                      <div className="flex items-center gap-2.5">
+                        <div className="text-white/70 group-hover:text-[#fee715] transition-colors">
+                          {renderPhosphorIcon(template.icon, 16)}
                         </div>
-                        <span className="text-sm text-white/95 font-medium tracking-tight">{template.label}</span>
+                        <span className="text-[13px] text-white/85 font-medium tracking-tight">{template.label}</span>
                       </div>
                     </div>
                   ))}
@@ -2866,6 +3052,7 @@ export const FunnelBuilder: React.FC = () => {
           </div>
           </div>
         </div>
+        )}
 
         {/* Main Canvas */}
         <div className="flex-1 relative" ref={reactFlowWrapper}>
@@ -2960,64 +3147,13 @@ export const FunnelBuilder: React.FC = () => {
           )}
           <FunnelSelectModeContext.Provider value={{ isSelectMode: interactionMode === 'select', onLongPressDeselect }}>
           <ReactFlow
-            nodes={nodes.map(node => {
-              const commentInfo = nodeCommentCounts.get(node.id);
-              if (commentInfo && commentInfo.count > 0) {
-                const updatedNode = {
-                  ...node,
-                  data: {
-                    ...node.data,
-                    commentCount: commentInfo.count,
-                    commentStatus: commentInfo.status,
-                  },
-                };
-                // Debug: sprawdź czy dane są poprawnie przypisane
-                if (node.id === nodes[0]?.id) {
-                  console.log('Przykładowy node z komentarzami:', {
-                    nodeId: updatedNode.id,
-                    commentCount: updatedNode.data.commentCount,
-                    commentStatus: updatedNode.data.commentStatus,
-                    hasBadge: updatedNode.data.commentCount !== undefined && updatedNode.data.commentCount > 0
-                  });
-                }
-                return updatedNode;
-              }
-              // Upewnij się, że commentCount jest undefined jeśli nie ma komentarzy
-              return {
-                ...node,
-                data: {
-                  ...node.data,
-                  commentCount: undefined,
-                  commentStatus: undefined,
-                },
-              };
-            })}
-            edges={edges.map(edge => {
-              const commentInfo = edgeCommentCounts.get(edge.id);
-              if (commentInfo && commentInfo.count > 0) {
-                return {
-                  ...edge,
-                  data: {
-                    ...edge.data,
-                    commentCount: commentInfo.count,
-                    commentStatus: commentInfo.status,
-                  },
-                };
-              }
-              // Upewnij się, że commentCount jest undefined jeśli nie ma komentarzy
-              return {
-                ...edge,
-                data: {
-                  ...edge.data,
-                  commentCount: undefined,
-                  commentStatus: undefined,
-                },
-              };
-            })}
+            nodes={nodesWithComments}
+            edges={edgesWithComments}
             onNodesChange={wrappedOnNodesChange}
             onEdgesChange={wrappedOnEdgesChange}
             onConnect={onConnect}
             onNodeDragStart={(_, node) => {
+              if (isReadOnly) return;
               isDraggingNodeRef.current = true;
               pushUndoHistory();
             }}
@@ -3026,6 +3162,17 @@ export const FunnelBuilder: React.FC = () => {
             onDrop={onDrop}
             onDragOver={onDragOver}
             onNodeClick={onNodeClick}
+            onNodeDoubleClick={(event, node) => {
+              // Klient nie edytuje - dwuklik tylko dla admina
+              if (isReadOnly) return;
+              // Dwuklik na tekstowy node nie ma sensu (edytuje się go inline)
+              if (node.type === 'text') return;
+              event.preventDefault();
+              event.stopPropagation();
+              focusLabelOnOpenRef.current = true;
+              // Wywołaj normalny click logic by ustawić selectedNode + załadować właściwości
+              onNodeClick(event as any, node);
+            }}
             onEdgeClick={onEdgeClick}
             onPaneClick={onPaneClick}
             onSelectionChange={(params) => {
@@ -3036,27 +3183,7 @@ export const FunnelBuilder: React.FC = () => {
               }
             }}
             onViewportChange={(vp) => { setViewport(vp); setCurrentZoom(vp.zoom); }}
-            onNodeDrag={(_, node, allNodes) => {
-              const others = allNodes.filter((n) => n.id !== node.id);
-              if (others.length === 0) { setAlignmentGuides({ vertical: [], horizontal: [] }); return; }
-              const d = getNodeDimensions(node);
-              const left = node.position.x, cX = node.position.x + d.width / 2, right = node.position.x + d.width;
-              const top = node.position.y, cY = node.position.y + d.height / 2, bottom = node.position.y + d.height;
-              const vSet = new Set<number>(), hSet = new Set<number>();
-              const T = 5;
-              others.forEach((o) => {
-                const od = getNodeDimensions(o);
-                const oL = o.position.x, oCX = o.position.x + od.width / 2, oR = o.position.x + od.width;
-                const oT = o.position.y, oCY = o.position.y + od.height / 2, oB = o.position.y + od.height;
-                if (Math.abs(left - oL) <= T || Math.abs(cX - oL) <= T || Math.abs(right - oL) <= T) vSet.add(oL);
-                if (Math.abs(left - oCX) <= T || Math.abs(cX - oCX) <= T || Math.abs(right - oCX) <= T) vSet.add(oCX);
-                if (Math.abs(left - oR) <= T || Math.abs(cX - oR) <= T || Math.abs(right - oR) <= T) vSet.add(oR);
-                if (Math.abs(top - oT) <= T || Math.abs(cY - oT) <= T || Math.abs(bottom - oT) <= T) hSet.add(oT);
-                if (Math.abs(top - oCY) <= T || Math.abs(cY - oCY) <= T || Math.abs(bottom - oCY) <= T) hSet.add(oCY);
-                if (Math.abs(top - oB) <= T || Math.abs(cY - oB) <= T || Math.abs(bottom - oB) <= T) hSet.add(oB);
-              });
-              setAlignmentGuides({ vertical: Array.from(vSet), horizontal: Array.from(hSet) });
-            }}
+            onNodeDrag={handleNodeDrag}
             onNodeDragStop={(_, node) => {
               const d = getNodeDimensions(node);
               const T = 5;
@@ -3081,50 +3208,42 @@ export const FunnelBuilder: React.FC = () => {
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
             fitView={true}
-            fitViewOptions={{ padding: 0.2, duration: 0 }}
-            className={`bg-[#101820] ${interactionMode === 'select' ? 'funnel-select-mode' : ''}`}
-            connectionLineType="smoothstep"
-            snapToGrid={true}
-            snapGrid={[20, 20]}
-            connectionLineStyle={{ stroke: '#fee715', strokeWidth: 2, strokeDasharray: '5,5' }}
-            defaultEdgeOptions={{
-              type: 'custom',
-              animated: false,
-              style: { stroke: '#fee715', strokeWidth: 2 },
-              markerStart: undefined,
-              markerEnd: {
-                type: MarkerType.ArrowClosed,
-                color: '#fee715',
-                orient: 'auto',
-              },
-            }}
-            nodesDraggable={true}
-            nodesConnectable={true}
+            fitViewOptions={FUNNEL_FIT_VIEW_OPTIONS}
+            className={`bg-[#0e141a] funnel-mode-${interactionMode} ${interactionMode === 'select' ? 'funnel-select-mode' : ''} ${isReadOnly ? 'funnel-readonly' : ''}`}
+            connectionLineType={'smoothstep' as ConnectionLineType}
+            snapToGrid={false}
+            snapGrid={FUNNEL_SNAP_GRID}
+            connectionLineStyle={FUNNEL_CONNECTION_LINE_STYLE}
+            defaultEdgeOptions={FUNNEL_DEFAULT_EDGE_OPTIONS}
+            nodesDraggable={!isReadOnly}
+            nodesConnectable={!isReadOnly}
             nodesFocusable={true}
-            elementsSelectable={interactionMode !== 'select'} // W trybie select wyłączamy domyślne zaznaczanie - zarządzamy ręcznie
+            edgesFocusable={!isReadOnly}
+            edgesReconnectable={!isReadOnly}
+            elementsSelectable={isReadOnly ? true : interactionMode !== 'select'}
             selectNodesOnDrag={false}
             panOnDrag={interactionMode === 'pan' ? true : (isSpacePressed ? [1, 2] : false)}
             panOnScroll={true}
+            panOnScrollSpeed={0.8}
             zoomOnScroll={true}
             zoomOnPinch={true}
             zoomOnDoubleClick={false}
             preventScrolling={false}
-            selectionOnDrag={interactionMode === 'select'}
-            selectionMode="full"
-            multiSelectionKeyCode={null} // W trybie select box selection działa bez Ctrl
-            deleteKeyCode={['Delete', 'Backspace']}
-            connectionMode="loose"
+            selectionOnDrag={!isReadOnly && interactionMode === 'select'}
+            selectionMode={'full' as SelectionMode}
+            multiSelectionKeyCode={null}
+            deleteKeyCode={isReadOnly ? null : FUNNEL_DELETE_KEY_CODES}
+            connectionMode={'loose' as ConnectionMode}
             connectionRadius={80}
-            minZoom={0.01}
-            maxZoom={10}
-            proOptions={{ hideAttribution: true }}
+            minZoom={0.05}
+            maxZoom={5}
+            proOptions={FUNNEL_PRO_OPTIONS}
           >
-            <Background 
-              variant={BackgroundVariant.Dots} 
-              gap={20} 
-              size={1.5} 
-              color="#ffffff25"
-              style={{ opacity: 0.6 }}
+            <Background
+              variant={BackgroundVariant.Dots}
+              gap={24}
+              size={1}
+              color="#ffffff18"
             />
             {/* Mini-przycisk do przywrócenia ukrytego dolnego toolbara */}
             {!showBottomToolbar && (
@@ -3144,7 +3263,7 @@ export const FunnelBuilder: React.FC = () => {
 
             {/* Custom Controls Toolbar */}
             {showBottomToolbar && (
-              <Panel position="bottom-left" className="bg-[#0a0f14]/95 border border-amber-500/20 rounded-lg p-2 shadow-xl backdrop-blur-sm">
+              <Panel position="bottom-left" className="bg-[#0a0f14]/85 border border-white/[0.08] rounded-xl p-1.5 shadow-2xl shadow-black/40 backdrop-blur-xl">
                 <div className="flex items-center gap-2">
                   {/* Przycisk ukrycia toolbara */}
                   <button
@@ -3158,25 +3277,26 @@ export const FunnelBuilder: React.FC = () => {
                   </button>
                   
                   {/* Tryby interakcji */}
-                  <div className="flex items-center gap-1 border-r border-[#fee715]/20 pr-2 mr-2">
-                    <span className="text-xs text-amber-400/90 font-medium mr-1">Tryb:</span>
+                  <div className="flex items-center gap-1 border-r border-white/[0.08] pr-1.5 mr-1.5">
+                    <span className="text-[10px] uppercase tracking-wider text-white/40 font-medium mr-1.5">Tryb:</span>
                   <button
                     onClick={() => setInteractionMode('pan')}
-                    className={`p-2 rounded-lg transition-all duration-200 ${
+                    className={`p-1.5 rounded-lg transition-all duration-150 ${
                       interactionMode === 'pan'
-                        ? 'bg-gradient-to-r from-amber-600 to-amber-500 text-white shadow-md shadow-amber-900/20'
-                        : 'bg-[#18232F]/80 text-white/80 hover:bg-amber-500/10 hover:text-white border border-white/10 hover:border-amber-500/50 backdrop-blur-sm'
+                        ? 'bg-[#fee715] text-[#101820] shadow-md shadow-[#fee715]/20'
+                        : 'text-white/60 hover:bg-white/[0.06] hover:text-white border border-transparent'
                     }`}
                     title="Przesuwanie (Space + drag lub środkowy przycisk myszy)"
                   >
                     <Hand size={16} />
                   </button>
+                  {!isReadOnly && (
                   <button
                     onClick={() => setInteractionMode('select')}
-                    className={`p-2 rounded-lg transition-all duration-200 ${
+                    className={`p-1.5 rounded-lg transition-all duration-150 ${
                       interactionMode === 'select'
-                        ? 'bg-gradient-to-r from-amber-600 to-amber-500 text-white shadow-md shadow-amber-900/20'
-                        : 'bg-[#18232F]/80 text-white/80 hover:bg-amber-500/10 hover:text-white border border-white/10 hover:border-amber-500/50 backdrop-blur-sm'
+                        ? 'bg-[#fee715] text-[#101820] shadow-md shadow-[#fee715]/20'
+                        : 'text-white/60 hover:bg-white/[0.06] hover:text-white border border-transparent'
                     }`}
                     title="Zaznaczanie elementów: Klikaj elementy lub przeciągnij po pustym tle (box selection)"
                   >
@@ -3184,15 +3304,16 @@ export const FunnelBuilder: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
                     </svg>
                   </button>
+                  )}
                   <button
                     onClick={() => {
                       setCommentMode(!commentMode);
                       setInteractionMode(commentMode ? 'pan' : 'comment');
                     }}
-                    className={`p-2 rounded-lg transition-all duration-200 ${
+                    className={`p-1.5 rounded-lg transition-all duration-150 ${
                       commentMode
-                        ? 'bg-gradient-to-r from-amber-600 to-amber-500 text-white shadow-md shadow-amber-900/20'
-                        : 'bg-[#18232F]/80 text-white/80 hover:bg-amber-500/10 hover:text-white border border-white/10 hover:border-amber-500/50 backdrop-blur-sm'
+                        ? 'bg-[#fee715] text-[#101820] shadow-md shadow-[#fee715]/20'
+                        : 'text-white/60 hover:bg-white/[0.06] hover:text-white border border-transparent'
                     }`}
                     title="Dodaj komentarz (kliknij na element)"
                   >
@@ -3204,7 +3325,7 @@ export const FunnelBuilder: React.FC = () => {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => reactFlowInstance?.zoomOut({ duration: 300 })}
-                    className="p-2 bg-[#18232F]/80 border border-white/10 hover:border-amber-500/50 hover:bg-amber-500/10 rounded-lg transition-all duration-200 text-white/80 hover:text-white backdrop-blur-sm"
+                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/60 hover:text-white"
                     title="Oddal (Zoom Out)"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3213,7 +3334,7 @@ export const FunnelBuilder: React.FC = () => {
                   </button>
                   <button
                     onClick={() => reactFlowInstance?.zoomIn({ duration: 300 })}
-                    className="p-2 bg-[#18232F]/80 border border-white/10 hover:border-amber-500/50 hover:bg-amber-500/10 rounded-lg transition-all duration-200 text-white/80 hover:text-white backdrop-blur-sm"
+                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/60 hover:text-white"
                     title="Przybliż (Zoom In)"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3222,16 +3343,24 @@ export const FunnelBuilder: React.FC = () => {
                   </button>
                   <button
                     onClick={() => reactFlowInstance?.fitView({ duration: 300, padding: 0.2 })}
-                    className="p-2 bg-[#18232F]/80 border border-white/10 hover:border-amber-500/50 hover:bg-amber-500/10 rounded-lg transition-all duration-200 text-white/80 hover:text-white backdrop-blur-sm"
+                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/60 hover:text-white"
                     title="Dopasuj do widoku (Fit View)"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                     </svg>
                   </button>
-                  <div className="px-2 text-xs text-amber-400/90 font-medium border-l border-amber-500/20 ml-2 pl-2">
+                  <div className="px-2 text-xs text-white/50 font-medium border-l border-white/[0.08] ml-1.5 pl-2.5">
                     {(currentZoom * 100).toFixed(0)}%
                   </div>
+                  {/* Skróty klawiaturowe - pomocnik dla użytkownika */}
+                  <button
+                    onClick={() => setShowShortcutsModal(true)}
+                    className="p-1.5 ml-1 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/60 hover:text-white"
+                    title="Skróty klawiaturowe (?)"
+                  >
+                    <span className="text-xs font-bold">?</span>
+                  </button>
                 </div>
               </div>
             </Panel>
@@ -3338,8 +3467,8 @@ export const FunnelBuilder: React.FC = () => {
           )}
         </div>
 
-        {/* Edge Properties Panel */}
-        {showEdgeProperties && selectedEdge && (
+        {/* Edge Properties Panel - tylko admin */}
+        {!isReadOnly && showEdgeProperties && selectedEdge && (
           <div 
             className="w-72 border-l border-white/10 p-4 overflow-y-auto bg-[#0a0f14]/98 nodrag nopan"
             onKeyDown={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
@@ -3586,8 +3715,8 @@ export const FunnelBuilder: React.FC = () => {
           </div>
         )}
 
-        {/* Node Properties Panel */}
-        {showPropertiesPanel && selectedNode && (
+        {/* Node Properties Panel - tylko admin */}
+        {!isReadOnly && showPropertiesPanel && selectedNode && (
           <div 
             className="w-72 border-l border-white/10 p-4 overflow-y-auto overflow-x-visible bg-[#0a0f14]/98 nodrag nopan"
             style={{ zIndex: 10 }}
@@ -3683,7 +3812,7 @@ export const FunnelBuilder: React.FC = () => {
                 <div className="pt-0.5">
                   <CustomCheckbox
                     id="showHandles"
-                    checked={textNodeProperties.showHandles}
+                    checked={textNodeProperties.showHandles ?? false}
                     onChange={(v) => setTextNodeProperties({ ...textNodeProperties, showHandles: v })}
                     label="Punkty połączenia"
                     size="sm"
@@ -3716,6 +3845,7 @@ export const FunnelBuilder: React.FC = () => {
                 <div>
                   <label className="block text-xs font-medium text-gray-400 mb-1">Nazwa</label>
                   <input
+                    ref={nodeLabelInputRef}
                     type="text"
                     value={nodeProperties.label}
                     onChange={(e) => setNodeProperties({ ...nodeProperties, label: e.target.value })}
@@ -3931,7 +4061,7 @@ export const FunnelBuilder: React.FC = () => {
                           });
                           return;
                         }
-                        const nodeColor = selectedNode?.data?.color || '#fee715';
+                        const nodeColor = (selectedNode?.data?.color as string) || '#fee715';
                         await saveCustomTemplate(
                           nodeProperties.label,
                           nodeProperties.icon,
@@ -3979,12 +4109,72 @@ export const FunnelBuilder: React.FC = () => {
         onClose={() => setAlertModal(prev => ({ ...prev, isOpen: false }))}
       />
 
+      {/* Modal: skróty klawiaturowe */}
+      {showShortcutsModal && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          onClick={() => setShowShortcutsModal(false)}
+        >
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div
+            className="relative bg-gradient-to-br from-[#18232F] to-[#0a0f14] rounded-2xl p-6 border-2 border-[#fee715]/30 max-w-md w-full shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-[Montserrat] text-lg font-semibold text-white tracking-tight">Skróty klawiaturowe</h3>
+              <button
+                onClick={() => setShowShortcutsModal(false)}
+                className="p-1.5 hover:bg-white/10 rounded-lg text-white/70 hover:text-white transition-colors"
+                aria-label="Zamknij"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="space-y-2.5 text-sm">
+              {[
+                { keys: ['Space', '+', 'drag'], label: 'Przesuwanie widoku (pan)' },
+                { keys: ['Scroll'], label: 'Zoom in/out' },
+                { keys: ['F'], label: 'Dopasuj cały lejek do widoku' },
+                ...(!isReadOnly ? [
+                  { keys: ['Click', 'na pustym tle + drag'], label: 'Box-select (tryb zaznaczania)' },
+                  { keys: ['Shift', '+', 'Click'], label: 'Dodaj/odejmij element z zaznaczenia' },
+                  { keys: ['Ctrl/Cmd', '+', 'C'], label: 'Skopiuj zaznaczone' },
+                  { keys: ['Ctrl/Cmd', '+', 'V'], label: 'Wklej' },
+                  { keys: ['Ctrl/Cmd', '+', 'Z'], label: 'Cofnij ostatnią zmianę' },
+                  { keys: ['Delete', '/', 'Backspace'], label: 'Usuń zaznaczone' },
+                  { keys: ['Dwuklik', 'na node'], label: 'Edycja właściwości' },
+                ] : []),
+                { keys: ['ESC'], label: 'Zamknij panel/modal' },
+              ].map((row, idx) => (
+                <div key={idx} className="flex items-center justify-between gap-4 py-1.5 border-b border-white/5 last:border-b-0">
+                  <span className="text-gray-300">{row.label}</span>
+                  <div className="flex items-center gap-1 shrink-0">
+                    {row.keys.map((k, i) => (
+                      k === '+' || k === '/' ? (
+                        <span key={i} className="text-gray-500 text-xs">{k}</span>
+                      ) : (
+                        <kbd key={i} className="px-2 py-0.5 bg-white/[0.06] border border-white/15 rounded text-xs text-white/90 font-mono">{k}</kbd>
+                      )
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              Naciśnij <kbd className="px-1.5 py-0.5 bg-white/[0.06] border border-white/15 rounded text-xs text-white/90 font-mono">ESC</kbd> aby zamknąć
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* System komentarzy */}
       {showCommentPanel && id && (
         <CommentPanel
           funnelId={id}
           isOpen={showCommentPanel}
           refreshTrigger={commentPanelRefreshTrigger}
+          nodeLabels={nodeLabelMap}
+          edgeLabels={edgeLabelMap}
           onClose={() => {
             setShowCommentPanel(false);
             setSelectedThreadId(null);
@@ -3994,8 +4184,11 @@ export const FunnelBuilder: React.FC = () => {
               const node = nodes.find(n => n.id === anchorId);
               if (node && reactFlowInstance) {
                 reactFlowInstance.setCenter(node.position.x, node.position.y, { zoom: 1, duration: 500 });
-                setSelectedNode(node);
-                setShowPropertiesPanel(true);
+                // W trybie klienta nie otwieramy panelu właściwości - to byłaby edycja
+                if (!isReadOnly) {
+                  setSelectedNode(node);
+                  setShowPropertiesPanel(true);
+                }
               }
             } else if (anchorType === 'edge' && anchorId) {
               const edge = edges.find(e => e.id === anchorId);
@@ -4003,8 +4196,10 @@ export const FunnelBuilder: React.FC = () => {
                 const sourceNode = nodes.find(n => n.id === edge.source);
                 if (sourceNode) {
                   reactFlowInstance.setCenter(sourceNode.position.x, sourceNode.position.y, { zoom: 1, duration: 500 });
-                  setSelectedEdge(edge);
-                  setShowEdgeProperties(true);
+                  if (!isReadOnly) {
+                    setSelectedEdge(edge);
+                    setShowEdgeProperties(true);
+                  }
                 }
               }
             } else if (anchorType === 'region' && regionCoords) {

@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "next-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "vite-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev:vite"],
+      "port": 3000
+    },
+    {
+      "name": "vercel-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev:vercel"],
+      "port": 3000
+    }
+  ]
+}

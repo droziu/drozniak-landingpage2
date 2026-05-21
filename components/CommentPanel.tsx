@@ -42,15 +42,21 @@ interface CommentPanelProps {
   onJumpToAnchor: (anchorType: 'node' | 'edge' | 'region', anchorId?: string, regionCoords?: { x: number; y: number; width: number; height: number }) => void;
   onThreadClick?: (threadId: string) => void;
   refreshTrigger?: number;
+  // Mapowanie ID -> label (z aktualnego diagramu) - by w panelu pokazywać "Facebook Ads"
+  // zamiast surowego UUID. Opcjonalne, jeśli brak - pokazujemy fallback.
+  nodeLabels?: Map<string, string>;
+  edgeLabels?: Map<string, string>;
 }
 
-export const CommentPanel: React.FC<CommentPanelProps> = ({ 
-  funnelId, 
-  isOpen, 
-  onClose, 
+export const CommentPanel: React.FC<CommentPanelProps> = ({
+  funnelId,
+  isOpen,
+  onClose,
   onJumpToAnchor,
   onThreadClick,
-  refreshTrigger
+  refreshTrigger,
+  nodeLabels,
+  edgeLabels,
 }) => {
   const [threads, setThreads] = useState<CommentThread[]>([]);
   const [loading, setLoading] = useState(false);
@@ -105,6 +111,18 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
           ? messages.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0]
           : null;
 
+        // Mapuj surowe ID na czytelną etykietę z diagramu (jeśli dostępna)
+        const anchorType = anchor?.anchor_type || 'node';
+        const anchorId = anchor?.anchor_id || null;
+        let anchorLabel = 'Element';
+        if (anchorType === 'region') {
+          anchorLabel = 'Obszar na mapie';
+        } else if (anchorType === 'node' && anchorId) {
+          anchorLabel = nodeLabels?.get(anchorId) || 'Element (usunięty)';
+        } else if (anchorType === 'edge' && anchorId) {
+          anchorLabel = edgeLabels?.get(anchorId) || 'Połączenie';
+        }
+
         return {
           id: thread.id,
           thread_type: thread.thread_type,
@@ -115,9 +133,9 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
           created_by: thread.created_by,
           created_at: thread.created_at,
           updated_at: thread.updated_at,
-          anchor_type: anchor?.anchor_type || 'node',
-          anchor_id: anchor?.anchor_id || null,
-          anchor_label: anchor?.anchor_id || 'Region',
+          anchor_type: anchorType,
+          anchor_id: anchorId,
+          anchor_label: anchorLabel,
           last_message: lastMessage?.content,
           last_message_at: lastMessage?.created_at,
           message_count: messages.length,
@@ -137,6 +155,16 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
       loadThreads();
     }
   }, [isOpen, funnelId, refreshTrigger]);
+
+  // ESC zamyka panel (zachowanie spójne z modalami w aplikacji)
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen, onClose]);
 
   const getThreadIcon = (type: string) => {
     switch (type) {
@@ -165,6 +193,35 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
       case 'Odrzucone': return 'text-gray-400';
       default: return 'text-white';
     }
+  };
+
+  // Spójny styl chipa statusu (tło + ramka) - widoczny "od razu", nie tylko z koloru tekstu
+  const getStatusChipClass = (status: string) => {
+    switch (status) {
+      case 'Otwarte': return 'bg-red-500/15 border-red-500/40 text-red-300';
+      case 'W toku': return 'bg-blue-500/15 border-blue-500/40 text-blue-300';
+      case 'Do akceptacji': return 'bg-amber-500/15 border-amber-500/40 text-amber-300';
+      case 'Zatwierdzone': return 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300';
+      case 'Odrzucone': return 'bg-gray-500/15 border-gray-500/40 text-gray-300';
+      default: return 'bg-white/[0.06] border-white/20 text-white/80';
+    }
+  };
+
+  // Relative time bez biblioteki - "5 min temu", "2 godz. temu", "wczoraj", "12.03"
+  const formatRelativeTime = (iso?: string): string => {
+    if (!iso) return '';
+    const then = new Date(iso).getTime();
+    const now = Date.now();
+    const diff = Math.max(0, now - then);
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return 'przed chwilą';
+    if (m < 60) return `${m} min temu`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h} godz. temu`;
+    const d = Math.floor(h / 24);
+    if (d === 1) return 'wczoraj';
+    if (d < 7) return `${d} dni temu`;
+    return new Date(iso).toLocaleDateString('pl-PL');
   };
 
   const filteredThreads = threads.filter(thread => {
@@ -264,40 +321,50 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
         {loading ? (
           <div className="text-center text-gray-400 py-8">Ładowanie...</div>
         ) : filteredThreads.length === 0 ? (
-          <div className="text-center text-gray-400 py-8">
-            {searchQuery || statusFilter !== 'all' || typeFilter !== 'all' 
-              ? 'Brak wyników' 
-              : 'Brak wątków'}
+          <div className="flex flex-col items-center justify-center text-center py-12 px-4 text-gray-400">
+            <ChatCircleDots size={40} className="text-white/20 mb-3" />
+            <p className="text-sm font-medium text-white/70">
+              {searchQuery || statusFilter !== 'all' || typeFilter !== 'all'
+                ? 'Brak wyników wyszukiwania'
+                : 'Brak komentarzy'}
+            </p>
+            <p className="text-xs text-gray-500 mt-1 max-w-[260px]">
+              {searchQuery || statusFilter !== 'all' || typeFilter !== 'all'
+                ? 'Spróbuj zmienić filtry lub wpisać inną frazę.'
+                : 'Włącz tryb komentowania i kliknij dowolny element na mapie, aby dodać pierwszą uwagę.'}
+            </p>
           </div>
         ) : (
           filteredThreads.map((thread) => {
             const ThreadIcon = getThreadIcon(thread.thread_type);
             const StatusIcon = getStatusIcon(thread.status);
-            
+            const chipClass = getStatusChipClass(thread.status);
+
             return (
               <div
                 key={thread.id}
                 onClick={() => {
                   onThreadClick?.(thread.id);
                   if (thread.anchor_type === 'region') {
-                    // TODO: Przekaż współrzędne regionu
                     onJumpToAnchor('region');
                   } else {
                     onJumpToAnchor(thread.anchor_type, thread.anchor_id || undefined);
                   }
                 }}
-                className="p-3 bg-white/[0.02] border border-white/10 rounded-lg hover:bg-white/5 hover:border-white/20 cursor-pointer transition-all"
+                className="p-3 bg-white/[0.02] border border-white/10 rounded-lg hover:bg-white/5 hover:border-[#fee715]/30 cursor-pointer transition-all"
               >
                 <div className="flex items-start gap-2 mb-2">
-                  <ThreadIcon size={16} className="text-[#fee715] mt-0.5" />
+                  <ThreadIcon size={16} className="text-[#fee715] mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="text-xs font-medium text-white">{thread.thread_type}</span>
-                      <StatusIcon size={12} className={getStatusColor(thread.status)} />
-                      <span className={`text-xs ${getStatusColor(thread.status)}`}>{thread.status}</span>
+                      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border ${chipClass}`}>
+                        <StatusIcon size={10} />
+                        {thread.status}
+                      </span>
                     </div>
-                    <div className="text-xs text-gray-400 line-clamp-1">
-                      {thread.anchor_label || 'Nieznany element'}
+                    <div className="text-xs text-gray-300 line-clamp-1 font-medium">
+                      {thread.anchor_label}
                     </div>
                   </div>
                 </div>
@@ -309,6 +376,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
                 <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
                   <span className="text-[10px] text-gray-500">
                     {thread.message_count} {thread.message_count === 1 ? 'wiadomość' : 'wiadomości'}
+                    {thread.last_message_at && ` · ${formatRelativeTime(thread.last_message_at)}`}
                   </span>
                   <button
                     onClick={(e) => {

@@ -16,9 +16,9 @@
   animation: shimmer 2s infinite;
 }
 
-/* Override React Flow styles - upewnij się że sidebar ma ciemne tło */
+/* Override React Flow styles - ciemne tło canvas */
 .react-flow__container {
-  background-color: #101820 !important;
+  background-color: #0e141a !important;
 }
 
 /* Upewnij się że sidebar nie ma białego tła */
@@ -178,4 +178,89 @@
   margin: 0 !important;
   padding: 0 !important;
   line-height: 1 !important;
+}
+
+/* =====================================================
+   FunnelBuilder - cursorse zależne od trybu interakcji
+   ===================================================== */
+
+/* Tryb pan (domyślny) - dłoń, jak w Figmie/Funnelytics */
+.funnel-mode-pan .react-flow__pane {
+  cursor: grab;
+}
+.funnel-mode-pan .react-flow__pane:active {
+  cursor: grabbing;
+}
+
+/* Tryb select - krzyżyk dla box selection */
+.funnel-select-mode .react-flow__pane {
+  cursor: crosshair;
+}
+
+/* Tryb comment - pinezka komentarza (cell jest zbliżony do "wskaż miejsce") */
+.funnel-mode-comment .react-flow__pane,
+.funnel-mode-comment .react-flow__node {
+  cursor: cell;
+}
+
+/* Tryb klienta read-only - drag nie powinien sugerować edycji */
+.funnel-readonly .react-flow__node {
+  cursor: pointer;
+}
+.funnel-readonly .react-flow__edge {
+  cursor: pointer;
+}
+
+/* Premium polish dla nodów - delikatny hover lift */
+.react-flow__node {
+  transition: transform 150ms ease, filter 150ms ease;
+}
+.react-flow__node:hover:not(.dragging) {
+  filter: brightness(1.05);
+}
+
+/* Krawędzie - lepsza widoczność na hover */
+.react-flow__edge-path {
+  transition: stroke 150ms ease, stroke-width 150ms ease, opacity 150ms ease;
+}
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 3 !important;
+}
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 3 !important;
+  filter: drop-shadow(0 0 6px rgba(254, 231, 21, 0.5));
+}
+
+/* Premium scrollbar w panelach - mniejszy i dyskretny */
+.react-flow__container ::-webkit-scrollbar,
+[class*='funnel-'] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.react-flow__container ::-webkit-scrollbar-track,
+[class*='funnel-'] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.react-flow__container ::-webkit-scrollbar-thumb,
+[class*='funnel-'] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+.react-flow__container ::-webkit-scrollbar-thumb:hover,
+[class*='funnel-'] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Selection box w trybie select - subtle */
+.react-flow__selection {
+  background: rgba(254, 231, 21, 0.08) !important;
+  border: 1px dashed rgba(254, 231, 21, 0.5) !important;
+}
+
+/* Handle - lekko ostrzejszy hover */
+.react-flow__handle {
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+.react-flow__handle:hover {
+  transform: scale(1.25);
 }
