@@ -1,26 +1,28 @@
+'use client';
 
 import React from 'react';
-import { useFadeIn } from '../hooks/useFadeIn';
-import { RocketIcon } from './icons/RocketIcon';
+import { Background } from '../app/components/premium/Background';
+import { Eyebrow } from '../app/components/premium/Eyebrow';
+import { FadeUp } from '../app/components/premium/Motion';
 
-export const FomoAI: React.FC = () => {
-    const fadeInSection = useFadeIn<HTMLDivElement>();
-  return (
-    <section ref={fadeInSection.ref} className={`py-20 px-6 bg-gradient-to-b from-[#18232F] to-[#101820] ${fadeInSection.className}`}>
-      <div className="container mx-auto max-w-4xl text-center">
-        <div className="relative inline-block">
-          <RocketIcon className="w-16 h-16 text-[#fee715] mx-auto mb-6 animate-bounce" />
-          <div className="absolute inset-0 w-16 h-16 mx-auto">
-            <div className="absolute inset-0 bg-[#fee715]/20 rounded-full animate-ping"></div>
-            <div className="absolute inset-2 bg-[#fee715]/10 rounded-full animate-pulse"></div>
-          </div>
-        </div>
-        <h2 className="font-[Montserrat] text-4xl md:text-5xl font-extrabold mb-6">Jesteśmy w erze AI. Wykorzystaj to.</h2>
-        <p className="text-lg text-gray-300 leading-relaxed mb-8 max-w-3xl mx-auto">
-          Interaktywne narzędzia konwertują <span className="text-[#fee715] font-bold">2–3× lepiej</span> niż PDF-y. AI segmentuje i podpowiada, kto jest naprawdę zainteresowany. Za rok większość firm to wdroży - pytanie, czy chcesz być pierwszy, czy ostatni?
+export const FomoAI: React.FC = () => (
+  <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 overflow-hidden">
+    <Background variant="subtle" />
+    <FadeUp className="relative max-w-3xl mx-auto text-center">
+      <Eyebrow align="center">Era AI &middot; Tu i teraz</Eyebrow>
+      <h2 className="mt-5 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+        <span className="text-gradient-fade">Jesteśmy w erze AI.</span>{' '}
+        <span className="text-gradient-yellow">Wykorzystaj to.</span>
+      </h2>
+      <div className="mt-9 space-y-5 text-base md:text-lg text-white/60 leading-relaxed text-balance">
+        <p>
+          Interaktywne narzędzia konwertują{' '}
+          <span className="text-white/85 font-medium">2–3× lepiej niż PDF-y</span>. AI segmentuje i podpowiada, kto jest naprawdę zainteresowany.
         </p>
-        <div className="h-1 w-24 bg-[#fee715] mx-auto rounded-full"></div>
+        <p className="text-white/45">
+          Za rok większość firm to wdroży - pytanie, czy chcesz być pierwszy, czy ostatni?
+        </p>
       </div>
-    </section>
-  );
-};
+    </FadeUp>
+  </section>
+);

@@ -1,6 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { FadeUp, Stagger, StaggerItem } from './components/premium/Motion';
+import { Spotlight } from './components/premium/Spotlight';
+import { BGPattern } from './components/premium/BGPattern';
+import { CinematicSection } from './components/premium/CinematicSection';
+import { AnimatedTestimonials, type Testimonial } from './components/premium/AnimatedTestimonials';
+import { HeroShapes } from './components/premium/HeroShapes';
 
 export const metadata: Metadata = {
   title: 'System pozyskiwania klientów i strony WWW dla małych firm',
@@ -25,249 +31,439 @@ export const metadata: Metadata = {
     description: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Systemy sprzedażowe, strony WWW i szkolenia z AI.',
     images: ['https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'],
   },
-  alternates: {
-    canonical: 'https://drozniak.pl',
-  },
+  alternates: { canonical: 'https://drozniak.pl' },
 };
+
+const homepageTestimonials: Testimonial[] = [
+  {
+    id: 1,
+    name: 'Brent Peterson',
+    role: 'CEO',
+    company: 'Wagento',
+    content: 'Świetna obsługa i błyskawiczny czas realizacji. Zdecydowanie polecam współpracę.',
+    rating: 5,
+    avatar: '/images/c1.jpg',
+  },
+  {
+    id: 2,
+    name: 'Russell Garner',
+    content: 'Stanisław trafił w dziesiątkę. Zrozumiał wizję, był zaangażowany i dowiózł efekt, który przerósł oczekiwania.',
+    rating: 5,
+  },
+  {
+    id: 3,
+    name: 'Kalen Jordan',
+    role: 'Co-Founder',
+    company: 'Commerce Hero',
+    content: 'Stanislaw is awesome! Reliable and great work.',
+    rating: 5,
+    avatar: '/images/c2.jpg',
+  },
+  {
+    id: 4,
+    name: 'Michał Fus',
+    content: 'Szybka realizacja, dopracowany każdy detal, pełen profesjonalizm.',
+    rating: 5,
+  },
+  {
+    id: 5,
+    name: 'Kaja Lewandowska',
+    content: 'Efekt mnie zaskoczył. Z czystym sumieniem polecam współpracę.',
+    rating: 5,
+  },
+];
+
+const homepageCompanies = [
+  'Chess.com', 'Wagento', 'eWay Corp', 'BigCommerce', 'Tour & Holiday',
+  'Commerce Hero', 'Dietana', 'Redlin', 'Talk Commerce', 'PASW', 'ZEF', 'Hotel Irys',
+  'ICAROS', 'Grupa Fibra', 'FHU Tomex',
+];
 
 export default function HomePage() {
   return (
-    <main className="bg-[#101820] text-white overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="min-h-[85vh] md:min-h-screen flex flex-col justify-center px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20">
-        <div className="container mx-auto max-w-7xl">
-          {/* Row 1: Typography + Visual - Similar Sizes */}
-          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-16 lg:gap-20 items-center mb-6 sm:mb-8 md:mb-12">
-            {/* Left - Typography */}
-            <div className="space-y-4 sm:space-y-6 md:space-y-8 order-2 lg:order-1">
-              {/* Main headline */}
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-[Montserrat] leading-[1.15]">
-                <span className="block text-white">Pomagam małym firmom</span>
-                <span className="block text-white">i freelancerom</span>
-                <span className="block bg-gradient-to-r from-[#fee715] to-[#00C9A7] bg-clip-text text-transparent">pozyskiwać klientów online</span>
+    <main className="relative text-white overflow-x-hidden">
+      {/* ==================== HERO - geometric shapes ==================== */}
+      <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden px-4 md:px-8">
+        <HeroShapes variant="signature" />
+
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-[88rem] mx-auto pt-12 md:pt-20">
+          <Stagger className="max-w-4xl mx-auto text-center" whenInView={false}>
+            <StaggerItem>
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[6.5rem] font-bold mb-6 md:mb-8 tracking-[-0.04em] leading-[1.05]">
+                <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
+                  Pozyskuję klientów
+                </span>
+                <br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FFF066] via-[#fee715] to-[#F59E0B] [filter:drop-shadow(0_0_32px_rgba(254,231,21,0.25))]">
+                  dla małych firm i freelancerów.
+                </span>
               </h1>
-              
-              {/* Lead */}
-              <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed">
-                Tworzę systemy pozyskiwania klientów z internetu, strony internetowe dla małych firm oraz wykorzystuję AI w marketingu i automatyzację do zwiększania sprzedaży.
+            </StaggerItem>
+
+            <StaggerItem>
+              <p className="mt-2 md:mt-4 text-base sm:text-lg md:text-xl text-white/45 leading-relaxed font-light tracking-wide max-w-2xl mx-auto px-2 text-balance">
+                Tworzę systemy sprzedażowe, strony internetowe i wdrażam AI w marketingu. Pracuję sam, bez agencji i pośredników.
               </p>
+            </StaggerItem>
+
+            <StaggerItem>
+              <div className="mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link href="/kontakt" className="btn btn-primary btn-lg cursor-pointer magnetic">
+                  Umów rozmowę 20 min
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
+                <Link href="/system" className="btn btn-secondary btn-lg cursor-pointer">
+                  Zobacz, co oferuję
+                </Link>
+              </div>
+            </StaggerItem>
+          </Stagger>
+
+          {/* Companies marquee - kept, restrained, low key */}
+          <FadeUp delay={1.0} whenInView={false} className="relative mt-20 md:mt-28">
+            <p className="text-center text-[11px] font-mono uppercase tracking-[0.22em] text-white/30 mb-7">
+              Pracowałem z
+            </p>
+            <div className="overflow-hidden marquee-mask">
+              <div className="flex animate-scroll-infinite whitespace-nowrap">
+                {[...Array(2)].map((_, i) => (
+                  <div key={i} className="flex items-center gap-12 md:gap-16 flex-shrink-0 pr-12 md:pr-16">
+                    {homepageCompanies.map((name) => (
+                      <span key={`${i}-${name}`} className="text-white/35 text-sm md:text-base font-medium">
+                        {name}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
-            
-            {/* Right - Photo - Visible on mobile too */}
-            <div className="relative order-1 lg:order-2 mb-4 sm:mb-6 lg:mb-0">
-              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden">
+          </FadeUp>
+        </div>
+
+        {/* Top + bottom fade frame */}
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#050714] via-[#050714]/60 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#050714] via-[#050714]/60 to-transparent pointer-events-none" />
+      </section>
+
+      {/* ==================== PORTRAIT / MANIFESTO ==================== */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-40 border-t border-white/5 overflow-hidden">
+        <BGPattern variant="dots" mask="fade-edges" size={28} fill="rgba(255, 255, 255, 0.05)" />
+        <div className="relative max-w-[88rem] mx-auto">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_1.3fr] gap-12 lg:gap-20 items-center">
+            {/* Portrait card */}
+            <FadeUp className="relative max-w-md mx-auto lg:mx-0 w-full">
+              <div
+                aria-hidden
+                className="absolute -inset-8 -z-10 rounded-[3rem] opacity-60"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(254, 231, 21, 0.15), transparent 70%)',
+                  filter: 'blur(48px)',
+                }}
+              />
+              <div className="relative rounded-[1.75rem] overflow-hidden border border-white/10 shadow-[0_40px_100px_-30px_rgba(0,0,0,0.7)]">
                 <Image
-                  src="/images/Drozniak_Zdjecie_Suit_2.webp"
+                  src="/images/Drozniak_photo_suit_1.webp"
                   alt="Stanisław Drożniak"
-                  width={600}
-                  height={800}
-                  className="w-full h-auto object-cover"
+                  width={800}
+                  height={1000}
+                  className="w-full h-auto object-cover aspect-[4/5]"
                   priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                  sizes="(max-width: 1024px) 90vw, 480px"
                 />
+                {/* Yellow corner accents */}
+                <span aria-hidden className="absolute top-4 left-4 w-10 h-10 border-t-2 border-l-2 border-[#fee715]/70 rounded-tl-2xl" />
+                <span aria-hidden className="absolute bottom-4 right-4 w-10 h-10 border-b-2 border-r-2 border-[#fee715]/70 rounded-br-2xl" />
               </div>
-            </div>
-          </div>
-          
-          {/* Row 2: Centered CTAs */}
-          <div className="flex justify-center order-3">
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 w-full sm:w-auto">
-              <Link
-                href="/strony-www"
-                className="inline-flex items-center justify-center bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-lg hover:shadow-xl hover:shadow-[#fee715]/20 transition-all duration-300 text-sm sm:text-base"
-              >
-                Strony internetowe dla małych firm
-              </Link>
-              <Link
-                href="/system"
-                className="inline-flex items-center justify-center border-2 border-[#fee715] text-[#fee715] hover:bg-[#fee715] hover:text-[#101820] font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all duration-300 text-sm sm:text-base"
-              >
-                System pozyskiwania klientów
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+            </FadeUp>
 
-      {/* About Section */}
-      <section className="py-12 md:py-20 px-4 sm:px-6 md:px-8">
-        <div className="container mx-auto max-w-7xl">
-          {/* Yellow title box - centered, same width as text */}
-          <div className="flex justify-center mb-8 md:mb-10">
-            <div className="max-w-4xl w-full">
-              <div className="bg-[#fee715] px-8 md:px-12 lg:px-16 py-4 md:py-5 text-center">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold font-[Montserrat] text-[#101820] leading-tight tracking-tight uppercase m-0 p-0">
-                  KIM JESTEM I JAK PRACUJĘ
-                </h2>
-              </div>
-            </div>
-          </div>
-          
-          {/* Full width content */}
-          <div className="max-w-4xl mx-auto space-y-6">
-            <p className="text-base md:text-lg text-gray-400 leading-relaxed">
-              Jestem specjalistą od marketingu i technologii. Od lat pomagam małym firmom i freelancerom uporządkować procesy sprzedażowe i komunikację online.
-            </p>
-            
-            <div className="space-y-4 text-base md:text-lg text-gray-300 leading-relaxed">
-              <p>
-                Zajmuję się <span className="font-bold text-[#fee715]">wdrażaniem systemów pozyskiwania klientów dla małych firm</span> - od sprawdzenia aktualnych działań, przez automatyzację marketingu i analizę danych, po wdrożenie AI w procesach sprzedażowych.
+            {/* Manifesto */}
+            <FadeUp delay={0.1}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#fee715] mb-5">
+                Stanisław Drożniak
               </p>
-              <p>
-                <span className="font-bold text-[#fee715]">Tworzę też strony internetowe dla małych firm i freelancerów</span>, które są nie tylko szybkie i estetyczne, ale przede wszystkim zaprojektowane z myślą o konwersji i pozyskiwaniu klientów.
-              </p>
-            </div>
-            
-            <p className="text-base text-gray-400 italic">
-              Pracuję samodzielnie - bez zespołu i pośredników. Cały budżet moich klientów idzie w jakość, design i skuteczność.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="py-12 md:py-20 px-4 sm:px-6 md:px-8 bg-gradient-to-b from-transparent to-[#101820]/50">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-            {/* Service 1 - Systems */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 lg:p-10 hover:border-[#fee715]/30 transition-all duration-300">
-              <div className="space-y-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </div>
-                
-                <h3 className="text-2xl md:text-3xl font-bold font-[Montserrat]">
-                  System pozyskiwania klientów dla małych firm
-                </h3>
-                
-                <p className="text-gray-300 leading-relaxed">
-                  Analizuję wszystkie działania marketingowe - od landing page'a, przez reklamy i social media, po wykorzystanie AI. Na tej podstawie tworzę <strong>system pozyskiwania klientów</strong>, który realnie pomaga małym firmom i freelancerom pozyskiwać nowych klientów z internetu.
+              <h2 className="cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+                Marketing, technologia i konkretne efekty.
+              </h2>
+              <div className="mt-7 space-y-4 text-base md:text-lg text-white/65 leading-relaxed text-balance max-w-xl">
+                <p>
+                  Pomagam małym firmom i freelancerom uporządkować procesy sprzedażowe i komunikację online. Łączę strategię marketingową, design i kod w jednym spójnym procesie.
                 </p>
-                
-                <Link
-                  href="/system"
-                  className="inline-flex items-center text-[#fee715] hover:text-white font-medium transition-colors duration-300"
-                >
-                  Zobacz system pozyskiwania klientów
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-
-            {/* Service 2 - Websites */}
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 lg:p-10 hover:border-[#fee715]/30 transition-all duration-300">
-              <div className="space-y-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                  </svg>
-                </div>
-                
-                <h3 className="text-2xl md:text-3xl font-bold font-[Montserrat]">
-                  Strony internetowe dla małych firm i freelancerów
-                </h3>
-                
-                <p className="text-gray-300 leading-relaxed">
-                  Buduję <strong>strony www dla małych firm i freelancerów</strong> oparte na nowoczesnych frameworkach (np. Next.js, Astro, Vercel). Każda powstaje od zera - dopasowana do marki, lekka, szybka i gotowa do skalowania. Strony projektowane pod pozyskiwanie klientów.
+                <p className="text-white/45 text-[15px]">
+                  Pracuję sam, bez zespołów i pośredników. Twój budżet idzie w jakość, design i skuteczność.
                 </p>
-                
-                <Link
-                  href="/strony-www"
-                  className="inline-flex items-center text-[#fee715] hover:text-white font-medium transition-colors duration-300"
-                >
-                  Zobacz strony internetowe dla małych firm
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
               </div>
-            </div>
+            </FadeUp>
           </div>
         </div>
       </section>
 
-      {/* Trust/Metrics Section */}
-      <section className="py-20 md:py-32 px-4 sm:px-6 md:px-8">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Metric 1 */}
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-2xl flex items-center justify-center mx-auto">
-                <svg className="w-8 h-8 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <p className="text-gray-300 leading-relaxed">
-                Ponad 9 lat doświadczenia w marketingu i projektowaniu systemów sprzedaży.
-              </p>
-            </div>
-
-            {/* Metric 2 */}
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-2xl flex items-center justify-center mx-auto">
-                <svg className="w-8 h-8 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <p className="text-gray-300 leading-relaxed">
-                Certyfikaty: Adobe, Meta, University of California.
-              </p>
-            </div>
-
-            {/* Metric 3 */}
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-2xl flex items-center justify-center mx-auto">
-                <svg className="w-8 h-8 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <p className="text-gray-300 leading-relaxed">
-                Doświadczenie w pracy z firmami o wartości milionów złotych.
-              </p>
-            </div>
-
-            {/* Metric 4 */}
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-[#fee715]/20 to-[#00C9A7]/20 rounded-2xl flex items-center justify-center mx-auto">
-                <svg className="w-8 h-8 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <p className="text-gray-300 leading-relaxed">
-                Współpraca 1:1 - bez pośredników, bez ogromnych budżetów.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA Section */}
-      <section id="cta" className="py-20 md:py-32 px-4 sm:px-6 md:px-8 bg-gradient-to-b from-transparent to-[#101820]">
-        <div className="container mx-auto max-w-4xl text-center">
-          <div className="space-y-8">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-[Montserrat]">
-              Masz projekt, który chcesz dopracować?
+      {/* ==================== SERVICES ==================== */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-40 border-t border-white/5 overflow-hidden">
+        <BGPattern variant="diagonal-stripes" mask="fade-edges" size={32} fill="rgba(255, 255, 255, 0.03)" />
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="mb-14 md:mb-20 max-w-3xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#fee715] mb-5">
+              Co oferuję
+            </p>
+            <h2 className="cinematic-headline text-3xl md:text-5xl lg:text-[4rem] font-bold pb-3">
+              Dwa filary, jeden wynik.
             </h2>
-            
-            <p className="text-xl text-gray-300 leading-relaxed">
-              Napisz do mnie -<br className="md:hidden" /> odpowiadam w 24 godziny.
+            <p className="mt-6 text-base md:text-lg text-white/60 leading-relaxed text-balance">
+              Wybierasz osobno albo razem - w obu przypadkach budujemy coś, co sprzedaje.
             </p>
-            
+          </FadeUp>
+
+          <Stagger className="grid lg:grid-cols-2 gap-3">
+            <StaggerItem>
+              <ServiceCard
+                num="01"
+                eyebrow="System"
+                title="System pozyskiwania klientów"
+                description="Analizuję wszystkie działania marketingowe: landing page, reklamy, social media, wykorzystanie AI. Na tej podstawie tworzę system, który pomaga małym firmom i freelancerom pozyskiwać nowych klientów z internetu."
+                href="/system"
+                cta="Zobacz, jak to działa"
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <ServiceCard
+                num="02"
+                eyebrow="Web"
+                title="Strony internetowe dla małych firm"
+                description="Buduję strony www w nowoczesnych frameworkach (Next.js, Astro, Vercel). Każda powstaje od zera, dopasowana do marki, lekka, szybka i zaprojektowana pod pozyskiwanie klientów."
+                href="/strony-www"
+                cta="Zobacz strony internetowe"
+              />
+            </StaggerItem>
+          </Stagger>
+        </div>
+      </section>
+
+      {/* ==================== APPROACH (NEW) ==================== */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-40 border-t border-white/5 overflow-hidden">
+        <BGPattern variant="grid" mask="fade-edges" size={64} fill="rgba(255, 255, 255, 0.04)" />
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="mb-14 md:mb-20 max-w-3xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#fee715] mb-5">
+              Jak pracuję
+            </p>
+            <h2 className="cinematic-headline text-3xl md:text-5xl lg:text-[4rem] font-bold pb-3">
+              Cztery kroki do efektu.
+            </h2>
+            <p className="mt-6 text-base md:text-lg text-white/60 leading-relaxed text-balance">
+              Prosty i przejrzysty proces - na każdym etapie wiesz dokładnie, co się dzieje i czego się spodziewać.
+            </p>
+          </FadeUp>
+
+          <Stagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <StaggerItem>
+              <ApproachStep
+                num="01"
+                title="Rozmowa"
+                desc="20 minut online. Słucham, zadaję pytania i oceniam, czy mogę Ci pomóc - bez nacisków sprzedażowych."
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <ApproachStep
+                num="02"
+                title="Plan i wycena"
+                desc="W ciągu 1–2 dni dostajesz plan działania, zakres i konkretną wycenę. Wiesz dokładnie, za co płacisz."
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <ApproachStep
+                num="03"
+                title="Wdrożenie"
+                desc="Pracuję samodzielnie, więc decyzje są szybkie. Widzisz postępy etapami i akceptujesz zmiany w trakcie."
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <ApproachStep
+                num="04"
+                title="Wsparcie"
+                desc="Po starcie nie znikam. Otrzymujesz instrukcje, krótką wideo­instrukcję i 60 dni wsparcia technicznego."
+              />
+            </StaggerItem>
+          </Stagger>
+        </div>
+      </section>
+
+      {/* ==================== TESTIMONIALS ==================== */}
+      <AnimatedTestimonials
+        badgeText="Co mówią klienci"
+        title={<>Słowa od osób, z którymi pracowałem.</>}
+        subtitle="Co o współpracy mówią ludzie, dla których realizowałem projekty."
+        testimonials={homepageTestimonials}
+        trustedCompanies={homepageCompanies}
+        trustedCompaniesTitle="Pracowałem z firmami i twórcami"
+      />
+
+      {/* ==================== STATS / TRUST ==================== */}
+      <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5 overflow-hidden">
+        <BGPattern variant="vertical-lines" mask="fade-edges" size={48} fill="rgba(255, 255, 255, 0.04)" />
+        <div className="relative max-w-[88rem] mx-auto">
+          <FadeUp className="mb-14 md:mb-20 max-w-3xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#fee715] mb-5">
+              Dlaczego ze mną
+            </p>
+            <h2 className="cinematic-headline text-3xl md:text-5xl lg:text-[4rem] font-bold pb-3">
+              Konkrety, nie obietnice.
+            </h2>
+          </FadeUp>
+
+          <Stagger className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border-y border-white/8">
+            <StaggerItem>
+              <Stat
+                value="9+"
+                unit="lat"
+                label="Doświadczenia w marketingu, projektowaniu systemów sprzedaży i tworzeniu stron www."
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <Stat
+                value="24h"
+                unit=""
+                label="Maksymalny czas odpowiedzi na Twoją wiadomość - w dni robocze zwykle szybciej."
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <Stat
+                value="2-4"
+                unit="tyg."
+                label="Średni czas realizacji projektu - od pierwszej rozmowy do uruchomienia."
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <Stat
+                value="60"
+                unit="dni"
+                label="Wsparcia technicznego po wdrożeniu w cenie - bez ukrytych kosztów."
+              />
+            </StaggerItem>
+          </Stagger>
+
+          {/* Certifications row - visual proof, no fake number */}
+          <FadeUp className="mt-12 md:mt-16 flex flex-wrap justify-center items-center gap-x-8 gap-y-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/35">
+              Certyfikaty i kwalifikacje
+            </span>
+            <span className="hidden md:inline-block w-px h-4 bg-white/10" />
+            <div className="flex flex-wrap items-center gap-3">
+              {['Adobe', 'Meta', 'University of California'].map((cert) => (
+                <span
+                  key={cert}
+                  className="px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-sm text-white/85"
+                >
+                  {cert}
+                </span>
+              ))}
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* ==================== FINAL CTA - cinematic ==================== */}
+      <CinematicSection ghost="Porozmawiajmy" id="cta">
+        <BGPattern variant="grid" mask="fade-edges" size={60} fill="rgba(254, 231, 21, 0.04)" />
+        <div className="relative max-w-3xl mx-auto text-center">
+          <h2 className="cinematic-headline text-[clamp(2.5rem,8vw,5.5rem)] font-bold pb-3">
+            Masz projekt, który chcesz dopracować?
+          </h2>
+          <p className="mt-7 text-base md:text-lg text-white/60 leading-relaxed">
+            Napisz do mnie - odpowiadam w 24 godziny.
+          </p>
+          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="https://calendly.com/drozniakstanislaw/spotkanie"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-4 px-8 rounded-lg hover:shadow-xl hover:shadow-[#fee715]/20 transition-all duration-300"
+              className="btn btn-primary btn-lg cursor-pointer magnetic"
             >
               Umów rozmowę 20 min
             </a>
+            <Link href="/kontakt" className="btn btn-secondary btn-lg cursor-pointer">
+              Napisz wiadomość
+            </Link>
+          </div>
+          <div className="mt-10 pt-8 border-t border-white/8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-[12px] font-mono uppercase tracking-[0.14em] text-white/40">
+            <span>20 min online</span>
+            <span className="text-white/15">·</span>
+            <span>Zero zobowiązań</span>
+            <span className="text-white/15">·</span>
+            <span>Odpowiedź w 24h</span>
           </div>
         </div>
-      </section>
+      </CinematicSection>
     </main>
   );
 }
+
+const Meta: React.FC<{ label: string; value: string }> = ({ label, value }) => (
+  <span className="inline-flex flex-col gap-1">
+    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/35">{label}</span>
+    <span className="text-white/85 font-medium text-sm">{value}</span>
+  </span>
+);
+
+const ServiceCard: React.FC<{
+  num: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  href: string;
+  cta: string;
+}> = ({ num, eyebrow, title, description, href, cta }) => (
+  <Spotlight as="a" href={href} className="group card card-accent surface-hover h-full p-8 md:p-12 flex flex-col gap-7 cursor-pointer">
+    <div className="flex items-start justify-between">
+      <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#fee715]">
+        {eyebrow}
+      </div>
+      <span className="font-mono text-[11px] tracking-[0.18em] text-white/30">{num}</span>
+    </div>
+
+    <div className="flex-1">
+      <h3 className="text-2xl md:text-4xl font-medium tracking-[-0.025em] text-white leading-[1.1]">
+        {title}
+      </h3>
+      <p className="mt-5 text-[15px] md:text-base text-white/60 leading-relaxed text-pretty max-w-xl">
+        {description}
+      </p>
+    </div>
+
+    <div className="pt-5 border-t border-white/8 inline-flex items-center justify-between text-sm">
+      <span className="text-white/80 group-hover:text-[#fee715] transition-colors">{cta}</span>
+      <span className="text-[#fee715] transition-transform duration-300 group-hover:translate-x-1">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </span>
+    </div>
+  </Spotlight>
+);
+
+const ApproachStep: React.FC<{ num: string; title: string; desc: string }> = ({ num, title, desc }) => (
+  <div className="card surface-hover p-7 md:p-8 h-full flex flex-col gap-5">
+    <div className="flex items-center justify-between">
+      <span className="font-mono text-[11px] tracking-[0.18em] text-[#fee715]">{num}</span>
+      <span className="w-1 h-1 rounded-full bg-[#fee715]" />
+    </div>
+    <h3 className="text-xl md:text-2xl font-medium tracking-[-0.02em] text-white leading-tight">
+      {title}
+    </h3>
+    <p className="text-[15px] text-white/60 leading-relaxed text-pretty">{desc}</p>
+  </div>
+);
+
+const Stat: React.FC<{ value: string; unit: string; label: string }> = ({ value, unit, label }) => (
+  <div className="bg-[#070A1A] p-7 md:p-10 flex flex-col justify-between gap-6 min-h-[220px]">
+    <div className="flex items-baseline gap-1.5">
+      <span className="cinematic-headline-yellow text-[3rem] md:text-[4.5rem] lg:text-[5rem] font-bold leading-none">
+        {value}
+      </span>
+      {unit && <span className="text-sm font-mono text-white/40">{unit}</span>}
+    </div>
+    <p className="text-[15px] text-white/55 leading-relaxed">{label}</p>
+  </div>
+);

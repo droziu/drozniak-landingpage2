@@ -2,22 +2,25 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "next-dev",
+      "name": "Next.js (dev)",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "port": 3000
+      "port": 3000,
+      "autoPort": true
     },
     {
-      "name": "vite-dev",
+      "name": "Vite (legacy panel)",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev:vite"],
-      "port": 3000
+      "port": 5173,
+      "autoPort": true
     },
     {
-      "name": "vercel-dev",
+      "name": "Vercel dev (with API routes)",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev:vercel"],
-      "port": 3000
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }

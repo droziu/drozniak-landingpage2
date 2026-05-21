@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Strony internetowe dla firm i freelancerów',
-  description: 'Premium jakość, błyskawiczne, dopracowane i przygotowane pod pozyskiwanie klientów - projekt szyty na miarę. Strony www dla małych firm i freelancerów.',
+  description: 'Błyskawiczne strony w jakości premium, przygotowane pod pozyskiwanie klientów. Projekt szyty na miarę dla małych firm i freelancerów.',
   keywords: ['strony internetowe dla małych firm', 'strony www dla freelancerów', 'strona www dla trenera', 'strona internetowa dla dietetyka', 'strona www dla zespołu muzycznego', 'strony www dla małych firm'],
   openGraph: {
     title: 'Strony internetowe dla małych firm i freelancerów',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Strony internetowe dla firm i freelancerów',
-    description: 'Premium jakość, błyskawiczne, dopracowane i przygotowane pod pozyskiwanie klientów - projekt szyty na miarę.',
+    description: 'Błyskawiczne strony w jakości premium, przygotowane pod pozyskiwanie klientów. Projekt szyty na miarę.',
     images: ['https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'],
   },
   alternates: {

@@ -1,27 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Modern JS target - eliminuje niepotrzebne polyfille (14 KiB oszczędności)
+  turbopack: {
+    root: __dirname,
+  },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
   },
-  // Modern browsers only - eliminuje transpilację dla starszych przeglądarek
-  swcMinify: true,
-  // Modern JS output - używa ES2022+ zamiast transpilacji do ES5
   experimental: {
-    optimizePackageImports: ['phosphor-react', '@xyflow/react'],
+    optimizePackageImports: ['phosphor-react', '@xyflow/react', 'framer-motion'],
   },
   images: {
-    domains: ['localhost'],
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.supabase.co',
-      },
+      { protocol: 'http', hostname: 'localhost' },
+      { protocol: 'https', hostname: '**.supabase.co' },
     ],
-    // Next.js automatycznie optymalizuje obrazy (WebP/AVIF)
   },
   // Next.js automatycznie obsługuje /sitemap.xml przez app/sitemap.ts
   async redirects() {

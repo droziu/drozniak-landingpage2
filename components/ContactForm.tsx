@@ -143,23 +143,21 @@ export const ContactForm: React.FC = () => {
 
   if (isSubmitted) {
     return (
-      <div className="bg-white/5 border border-white/10 rounded-xl p-8 text-center">
-        <div className="w-16 h-16 bg-gradient-to-r from-[#fee715] to-[#00C9A7] rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-8 h-8 text-[#101820]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      <div className="text-center py-8">
+        <div className="w-14 h-14 bg-gradient-to-br from-[#FFF066] via-[#fee715] to-[#E5C800] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_8px_24px_-4px_rgba(254,231,21,0.4)]">
+          <svg className="w-6 h-6 text-[#0A0A0B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="font-[Montserrat] text-2xl font-bold text-white mb-4">
-          Dziękuję za wiadomość
-        </h3>
-        <p className="text-gray-300 mb-6">
+        <h3 className="text-2xl font-medium tracking-tight text-white mb-3">Dziękuję za wiadomość</h3>
+        <p className="text-white/60 mb-7 max-w-sm mx-auto">
           Zwykle odpisuję w ciągu 24 godzin. Jeśli wolisz, możesz od razu zarezerwować 20-min rozmowę.
         </p>
         <a
           href="https://calendly.com/drozniakstanislaw/spotkanie"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block border border-[#fee715] text-[#fee715] hover:bg-[#fee715] hover:text-[#101820] font-medium py-2 px-6 rounded-lg transition-all duration-300"
+          className="btn btn-secondary cursor-pointer"
         >
           Zarezerwuj rozmowę
         </a>
@@ -192,7 +190,7 @@ export const ContactForm: React.FC = () => {
             name="name"
             value={formData.name}
             onChange={handleInputChange}
-            className={`w-full px-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300 ${
+            className={`w-full px-4 py-3 bg-white/[0.03] border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/30 transition-all duration-300 ${
               errors.name ? 'border-red-500' : 'border-white/20 focus:border-[#fee715]'
             }`}
             placeholder="Twoje imię i nazwisko"
@@ -215,7 +213,7 @@ export const ContactForm: React.FC = () => {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className={`w-full px-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300 ${
+            className={`w-full px-4 py-3 bg-white/[0.03] border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/30 transition-all duration-300 ${
               errors.email ? 'border-red-500' : 'border-white/20 focus:border-[#fee715]'
             }`}
             placeholder="Adres e-mail do odpowiedzi"
@@ -240,7 +238,7 @@ export const ContactForm: React.FC = () => {
           name="phone"
           value={formData.phone}
           onChange={handleInputChange}
-          className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#fee715] focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300"
+          className="w-full px-4 py-3 bg-white/[0.03] border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#fee715] focus:ring-2 focus:ring-[#fee715]/30 transition-all duration-300"
           placeholder="Telefon (jeśli wolisz szybki kontakt)"
         />
       </div>
@@ -256,7 +254,7 @@ export const ContactForm: React.FC = () => {
           name="message"
           value={formData.message}
           onChange={handleInputChange}
-          className={`w-full px-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/50 transition-all duration-300 resize-none min-h-[120px] md:min-h-[72px] max-h-[200px] overflow-y-auto ${
+          className={`w-full px-4 py-3 bg-white/[0.03] border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fee715]/30 transition-all duration-300 resize-none min-h-[120px] md:min-h-[72px] max-h-[200px] overflow-y-auto ${
             errors.message ? 'border-red-500' : 'border-white/20 focus:border-[#fee715]'
           }`}
           placeholder="Napisz krótko, czego potrzebujesz: nowa strona www, system pozyskiwania klientów, szkolenie z AI w marketingu (cel, branża, przybliżony zakres)"
@@ -304,9 +302,9 @@ export const ContactForm: React.FC = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 px-8 rounded-lg hover:shadow-lg hover:shadow-[#fee715]/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed md:flex-shrink-0"
+          className="btn btn-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed md:flex-shrink-0"
         >
-          {isLoading ? 'Wysyłanie...' : 'Wyślij wiadomość'}
+          {isLoading ? 'Wysyłanie…' : 'Wyślij wiadomość'}
         </button>
       </div>
 

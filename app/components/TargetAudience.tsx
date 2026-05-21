@@ -2,153 +2,122 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useFadeIn } from '@/hooks/useFadeIn';
+import { Eyebrow } from './premium/Eyebrow';
+import { FadeUp, Stagger, StaggerItem } from './premium/Motion';
 
-const CheckIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const XIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15 9L9 15M9 9L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const TargetAudienceItem: React.FC<{ 
-  text: React.ReactNode; 
-  isPositive: boolean; 
-  children: React.ReactNode;
-}> = ({ text, isPositive, children }) => {
-  const fadeInItem = useFadeIn<HTMLDivElement>();
-  
-  return (
-    <div ref={fadeInItem.ref} className={`group relative bg-white/5 backdrop-blur-md border border-white/10 p-4 md:p-6 rounded-lg shadow-xl transition-all duration-500 hover:scale-105 hover:shadow-2xl ${fadeInItem.className} ${
-      isPositive 
-        ? 'hover:border-[#00C9A7]/50 hover:bg-gradient-to-r hover:from-[#00C9A7]/5 hover:to-transparent' 
-        : 'hover:border-red-500/50 hover:bg-gradient-to-r hover:from-red-500/5 hover:to-transparent'
-    }`}>
-      {/* Gradient outline on hover */}
-      <div className={`absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
-        isPositive 
-          ? 'bg-gradient-to-r from-[#00C9A7]/20 to-transparent' 
-          : 'bg-gradient-to-r from-red-500/20 to-transparent'
-      }`}></div>
-      
-      {/* Content */}
-      <div className="relative z-10 flex items-start space-x-3">
-        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
-          isPositive 
-            ? 'bg-[#00C9A7] text-white' 
-            : 'bg-red-500 text-white'
-        }`}>
-          {isPositive ? <CheckIcon className="w-4 h-4" /> : <XIcon className="w-4 h-4" />}
-        </div>
-        <p className="text-gray-300 text-sm md:text-base leading-relaxed flex-grow">{text}</p>
-      </div>
+const Item: React.FC<{
+  text: React.ReactNode;
+  isPositive: boolean;
+}> = ({ text, isPositive }) => (
+  <div
+    className={`flex items-start gap-4 p-5 md:p-6 rounded-xl border transition-all duration-200 ${
+      isPositive
+        ? 'border-white/8 bg-white/[0.02] hover:border-emerald-400/30'
+        : 'border-white/8 bg-white/[0.02] hover:border-rose-400/30'
+    }`}
+  >
+    <div
+      className={`flex-shrink-0 mt-0.5 w-5 h-5 rounded-full flex items-center justify-center ${
+        isPositive ? 'bg-emerald-400/15 text-emerald-400' : 'bg-rose-400/15 text-rose-400'
+      }`}
+    >
+      {isPositive ? (
+        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+        </svg>
+      ) : (
+        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      )}
     </div>
-  );
-};
+    <p className="text-white/70 text-[15px] leading-relaxed flex-1 text-pretty">{text}</p>
+  </div>
+);
 
-export const TargetAudience: React.FC = () => {
-  const fadeInHeader = useFadeIn<HTMLDivElement>();
-  
-  return (
-    <section className="py-16 md:py-20 px-4 md:px-6 bg-gradient-to-b from-[#18232F] to-[#101820]">
-      <div className="container mx-auto max-w-6xl">
-        <div ref={fadeInHeader.ref} className={`text-center mb-12 md:mb-16 px-2 ${fadeInHeader.className}`}>
-          <h2 className="font-[Montserrat] text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4">
-            <span className="text-[#fee715]">Czy to dla Ciebie</span>
-          </h2>
-          <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
-            Sprawdź, czy moje rozwiązanie pasuje do Twojej sytuacji biznesowej
-          </p>
-        </div>
+export const TargetAudience: React.FC = () => (
+  <section className="relative px-4 md:px-8 lg:px-12 py-24 md:py-36 border-t border-white/5">
+    <div className="relative max-w-[88rem] mx-auto">
+      <FadeUp className="max-w-3xl mb-14 md:mb-20">
+        <Eyebrow>Dla kogo</Eyebrow>
+        <h2 className="mt-5 cinematic-headline text-3xl md:text-5xl lg:text-[3.75rem] font-bold pb-3">
+          <span className="text-gradient-fade">Czy to</span>{' '}
+          <span className="text-gradient-yellow">dla Ciebie?</span>
+        </h2>
+        <p className="mt-6 text-base md:text-lg text-white/60 leading-relaxed text-balance">
+          Sprawdź, czy moje rozwiązanie pasuje do Twojej sytuacji biznesowej.
+        </p>
+      </FadeUp>
 
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
-          {/* Pozytywna kolumna */}
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#00C9A7]/10 to-transparent border border-[#00C9A7]/20 rounded-full px-6 py-3">
-                <CheckIcon className="w-6 h-6 text-[#00C9A7]" />
-                <h3 className="font-[Montserrat] text-xl font-bold text-[#00C9A7]">Tak, jeśli:</h3>
-              </div>
+      <Stagger className="grid lg:grid-cols-2 gap-8 md:gap-10">
+        <StaggerItem>
+          <div>
+            <div className="mb-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-400/20 bg-emerald-400/5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-emerald-400">
+                Tak, jeśli
+              </span>
             </div>
-            
-            <div className="space-y-4">
-              <TargetAudienceItem isPositive={true} text="Masz już klientów lub zlecenia, ale nie masz stałego sposobu na zdobywanie nowych.">
-                <CheckIcon />
-              </TargetAudienceItem>
-              
-              <TargetAudienceItem isPositive={true} text="Masz stabilne przychody, ale utknąłeś na pewnym poziomie i chcesz przejść wyżej.">
-                <CheckIcon />
-              </TargetAudienceItem>
-              
-              <TargetAudienceItem isPositive={true} text="Oferujesz dobre usługi (klienci Cię chwalą), ale trudno Ci zdobywać nowych klientów online.">
-                <CheckIcon />
-              </TargetAudienceItem>
-              
-              <TargetAudienceItem isPositive={true} text="Próbowałeś reklam lub działań w internecie, ale kończyło się to stratą pieniędzy.">
-                <CheckIcon />
-              </TargetAudienceItem>
-              
-              <TargetAudienceItem isPositive={true} text="Chcesz mieć system, który działa dla Ciebie – strona, oferta, email, proces sprzedaży – zamiast ciągle samemu szukać zleceń.">
-                <CheckIcon />
-              </TargetAudienceItem>
+            <div className="space-y-2.5">
+              <Item isPositive text="Masz już klientów lub zlecenia, ale nie masz stałego sposobu na zdobywanie nowych." />
+              <Item isPositive text="Masz stabilne przychody, ale utknąłeś na pewnym poziomie i chcesz przejść wyżej." />
+              <Item isPositive text="Oferujesz dobre usługi (klienci Cię chwalą), ale trudno Ci zdobywać nowych klientów online." />
+              <Item isPositive text="Próbowałeś reklam lub działań w internecie, ale kończyło się to stratą pieniędzy." />
+              <Item isPositive text="Chcesz mieć system, który działa dla Ciebie - strona, oferta, email, proces sprzedaży - zamiast ciągle samemu szukać zleceń." />
             </div>
           </div>
+        </StaggerItem>
 
-          {/* Negatywna kolumna */}
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-500/10 to-transparent border border-red-500/20 rounded-full px-6 py-3">
-                <XIcon className="w-6 h-6 text-red-500" />
-                <h3 className="font-[Montserrat] text-xl font-bold text-red-500">Nie, jeśli:</h3>
-              </div>
+        <StaggerItem>
+          <div>
+            <div className="mb-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-rose-400/20 bg-rose-400/5">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-rose-400">
+                Nie, jeśli
+              </span>
             </div>
-            
-            <div className="space-y-4">
-              <TargetAudienceItem isPositive={false} text="Twój biznes dopiero startuje i nie masz jeszcze klientów ani sprawdzonej oferty. Najpierw warto zdobyć pierwsze zlecenia i upewnić się, że Twoja usługa naprawdę działa.">
-                <XIcon />
-              </TargetAudienceItem>
-              
-              <TargetAudienceItem isPositive={false} text={
-                <>
-                  Jeśli prowadzisz działalność, która ma rozbudowany dział marketingu lub zatrudniasz więcej niż 10 pracowników, to ta oferta nie jest dla Ciebie. W takiej sytuacji zapraszam do{' '}
-                  <Link href="/kontakt" className="text-[#fee715] hover:text-[#00C9A7] underline transition-colors duration-300">
-                    kontaktu indywidualnego
-                  </Link>
-                  , aby opisać swoją sytuację.
-                </>
-              }>
-                <XIcon />
-              </TargetAudienceItem>
-              
-              <TargetAudienceItem isPositive={false} text="Jeśli inwestycja rzędu kilku tysięcy złotych jest dla Ciebie zaporowa – ten model współpracy raczej nie będzie odpowiedni.">
-                <XIcon />
-              </TargetAudienceItem>
+            <div className="space-y-2.5">
+              <Item
+                isPositive={false}
+                text="Twój biznes dopiero startuje i nie masz jeszcze klientów ani sprawdzonej oferty. Najpierw warto zdobyć pierwsze zlecenia i upewnić się, że Twoja usługa naprawdę działa."
+              />
+              <Item
+                isPositive={false}
+                text={
+                  <>
+                    Jeśli prowadzisz działalność, która ma rozbudowany dział marketingu lub zatrudniasz więcej niż 10 pracowników, to ta oferta nie jest dla Ciebie. W takiej sytuacji zapraszam do{' '}
+                    <Link href="/kontakt" className="text-[#fee715] hover:text-white underline underline-offset-2 transition-colors">
+                      kontaktu indywidualnego
+                    </Link>
+                    , aby opisać swoją sytuację.
+                  </>
+                }
+              />
+              <Item
+                isPositive={false}
+                text="Jeśli inwestycja rzędu kilku tysięcy złotych jest dla Ciebie zaporowa - ten model współpracy raczej nie będzie odpowiedni."
+              />
             </div>
           </div>
-        </div>
+        </StaggerItem>
+      </Stagger>
 
-        {/* Call to action */}
-        <div className="text-center mt-12 md:mt-16">
-          <div className="bg-gradient-to-r from-[#fee715]/10 to-[#00C9A7]/10 border border-[#fee715]/20 rounded-xl p-6 md:p-8 max-w-3xl mx-auto">
-            <p className="text-lg md:text-xl text-gray-200 font-medium mb-4">
-              Jeśli rozpoznajesz się w pierwszej kolumnie, to prawdopodobnie mogę Ci pomóc
-            </p>
-            <a 
-              href="https://calendly.com/drozniakstanislaw/spotkanie"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-bold py-3 md:py-4 px-6 md:px-8 rounded-lg text-lg md:text-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:-translate-y-1 transition-all duration-300 inline-block"
-            >
-              Umów darmową rozmowę
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+      <FadeUp className="mt-16 md:mt-20 max-w-3xl mx-auto text-center">
+        <p className="text-base md:text-lg text-white/70 mb-6 text-balance">
+          Jeśli rozpoznajesz się w pierwszej kolumnie - prawdopodobnie mogę Ci pomóc.
+        </p>
+        <a
+          href="https://calendly.com/drozniakstanislaw/spotkanie"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-primary btn-lg cursor-pointer"
+        >
+          Umów darmową rozmowę
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+      </FadeUp>
+    </div>
+  </section>
+);

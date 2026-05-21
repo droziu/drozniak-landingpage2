@@ -78,7 +78,7 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
   return (
     <>
       {!isPanelRoute && <Header />}
-      {children}
+      <div className={!isPanelRoute ? 'pt-16 md:pt-20' : ''}>{children}</div>
       {!isPanelRoute && <Footer />}
       {!isPanelRoute && !isBlogRoute && <StickyCTA isVisible={isStickyCtaVisible} />}
       {!isPanelRoute && <CookieConsent onAccept={handleCookieAccept} />}
