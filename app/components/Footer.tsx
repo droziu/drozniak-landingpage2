@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { openCookieSettings } from './CookieConsent';
 
 /**
  * Jedno zamknięcie strony: kontakt i stopka w jednym ciemnym polu,
@@ -41,7 +44,12 @@ export const Footer: React.FC<{ compact?: boolean }> = ({ compact = false }) => 
 
         <div className="site-footer-legal">
           <span>© {year} Stanisław Drożniak</span>
-          <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
+          <span className="site-footer-legal-links">
+            <Link href="/polityka-prywatnosci">Polityka prywatności</Link>
+            <button type="button" onClick={openCookieSettings}>
+              Ustawienia cookies
+            </button>
+          </span>
         </div>
       </div>
       <span className="site-footer-name" aria-hidden="true">

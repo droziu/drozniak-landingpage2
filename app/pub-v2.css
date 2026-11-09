@@ -1243,63 +1243,279 @@
   }
 }
 
-/* --- Baner cookies (unosi się nad treścią, więc ma cień) --- */
-.site-cookie {
-  border-radius: 20px;
-  background: #fff;
-  padding: 18px;
-  box-shadow: 0 2px 6px rgba(22, 21, 17, 0.06), 0 24px 56px -24px rgba(22, 21, 17, 0.4); /* taste-skill-ignore */
+/* --- Okno zgody na cookies (components/CookieConsent.tsx) ---
+   Przy pierwszej wizycie zasłania stronę i czeka na wybór. Na telefonie wysuwa się od dołu,
+   na większym ekranie stoi na środku. Na stronie polityki prywatności nie blokuje treści. */
+.cc-root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: end center;
+  padding: 12px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  pointer-events: none;
 }
-.site-cookie-text {
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--ink);
+.cc-root[data-blocking] {
+  pointer-events: auto;
+  overscroll-behavior: contain;
 }
-.site-cookie-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
+@media (min-width: 640px) {
+  .cc-root[data-blocking] {
+    place-items: center;
+    padding: 24px;
+  }
+  .cc-root:not([data-blocking]) {
+    place-items: end end;
+    padding: 24px;
+  }
 }
-.site-btn-quiet {
-  background: var(--paper-tint);
-  color: var(--ink);
+.cc-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(22, 21, 17, 0.5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: cc-fade 360ms var(--ease-out) both;
 }
-.site-btn-quiet:hover {
-  background: #E6E3DA;
-}
-/* Ustawienia jako link w zdaniu: baner na telefonie ma dwa rzędy zamiast trzech */
-.site-cookie-more {
+.cc-dialog {
   position: relative;
-  font: inherit;
-  font-weight: 600;
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  pointer-events: auto;
+  border-radius: var(--radius);
+  background: var(--paper-white);
+  padding: 28px 24px 20px;
   color: var(--ink);
+  box-shadow: 0 2px 6px rgba(22, 21, 17, 0.08), 0 32px 80px -24px rgba(22, 21, 17, 0.45); /* taste-skill-ignore */
+  animation: cc-rise 520ms var(--ease-soft) 60ms both;
+}
+.cc-dialog:focus {
+  outline: none;
+}
+@media (min-width: 640px) {
+  .cc-dialog {
+    padding: 36px 36px 26px;
+  }
+}
+.cc-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(28px, 3vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.cc-text {
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.cc-text-small {
+  margin-top: 8px;
+  font-size: var(--t-small);
+}
+
+/* Ustawienia rozwijane płynnie (grid 0fr -> 1fr) */
+.cc-settings {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 320ms var(--ease-soft);
+}
+.cc-settings[data-open] {
+  grid-template-rows: 1fr;
+}
+.cc-settings-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.cc-list {
+  display: grid;
+  gap: 8px;
+  padding-top: 20px;
+  border: 0;
+  margin: 0;
+  min-width: 0;
+}
+.cc-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.cc-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out);
+}
+.cc-toggle:hover:not([data-locked]) {
+  background: var(--paper-tint);
+}
+.cc-toggle[data-locked] {
+  cursor: default;
+}
+.cc-toggle-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.cc-toggle-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+.cc-toggle-desc {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.cc-switch {
+  position: relative;
+  flex: none;
+  width: 40px;
+  height: 24px;
+  border-radius: 999px;
+  background: #D6D2C6;
+  transition: background-color 200ms var(--ease-out);
+}
+.cc-switch span {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--paper-white);
+  transition: transform 220ms var(--ease-soft);
+}
+.cc-switch[data-on] {
+  background: var(--ink);
+}
+.cc-switch[data-on] span {
+  transform: translateX(16px);
+}
+.cc-toggle[data-locked] .cc-switch {
+  opacity: 0.45;
+}
+
+.cc-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 24px;
+}
+@media (min-width: 440px) {
+  .cc-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.cc-btn {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 18px;
+  font-size: 15.5px;
+}
+.cc-btn-line {
+  background: var(--paper-white);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--ink); /* taste-skill-ignore */
+}
+.cc-btn-line:hover {
+  background: var(--paper);
+}
+.cc-more {
+  display: block;
+  margin: 10px auto 0;
+  min-height: 44px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: var(--t-small);
+  font-weight: 600;
+  color: var(--ink-2);
   text-decoration: underline;
   text-decoration-thickness: 1.5px;
   text-underline-offset: 0.22em;
-  text-decoration-color: rgba(22, 21, 17, 0.35);
+  text-decoration-color: rgba(22, 21, 17, 0.3);
   cursor: pointer;
+  transition: color 160ms var(--ease-out);
 }
-/* cel dotyku 44 px bez zmiany wysokości wiersza */
-.site-cookie-more::after {
-  content: '';
-  position: absolute;
-  inset: -12px -6px;
-}
-.site-cookie-more:hover {
+.cc-more:hover {
+  color: var(--ink);
   text-decoration-color: var(--ink);
 }
-.site-cookie-actions .site-btn {
-  flex: 1 1 auto;
+.cc-root:not([data-blocking]) .cc-dialog {
+  max-width: 420px;
 }
-@media (max-width: 599px) {
-  .site-cookie {
-    padding: 14px 14px 14px 16px;
+
+.cc-root[data-closing] .cc-backdrop {
+  animation: cc-fade-out 220ms var(--ease-out) both;
+}
+.cc-root[data-closing] .cc-dialog {
+  animation: cc-sink 220ms var(--ease-out) both;
+}
+@keyframes cc-fade {
+  from {
+    opacity: 0;
   }
-  .site-cookie-actions {
-    margin-top: 12px;
+}
+@keyframes cc-fade-out {
+  to {
+    opacity: 0;
   }
+}
+@keyframes cc-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+@keyframes cc-sink {
+  to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cc-backdrop,
+  .cc-dialog,
+  .cc-root[data-closing] .cc-backdrop,
+  .cc-root[data-closing] .cc-dialog {
+    animation: none;
+  }
+  .cc-settings,
+  .cc-switch,
+  .cc-switch span {
+    transition: none;
+  }
+}
+
+/* Przycisk „Ustawienia cookies” w stopce wygląda jak link obok */
+.site-footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+.site-footer-legal button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.site-footer-legal button:hover {
+  color: var(--paper);
 }
 
 /* --- Animacja drogi zapytania w „Co biorę pod uwagę” --- */

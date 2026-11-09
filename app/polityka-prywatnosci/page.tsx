@@ -157,6 +157,7 @@ export default function PrivacyPolicyPage() {
                   bullets={[
                     'Dane: adres IP, identyfikatory cookies, parametry urządzenia, aktywności na stronie.',
                     'Cel: analiza ruchu, poprawa funkcjonalności, statystyki (Google Analytics).',
+                    'Zbiorcze statystyki bez cookies (Vercel Web Analytics) prowadzimy bez zgody, na podstawie prawnie uzasadnionego interesu (art. 6 ust. 1 lit. f RODO).',
                   ]}
                 />
                 <PurposeItem
@@ -201,7 +202,7 @@ export default function PrivacyPolicyPage() {
               <div className="grid sm:grid-cols-2 gap-3">
                 <RecipientCard
                   label="Hosting i infrastruktura"
-                  items={['Vercel Inc. - hosting i utrzymanie strony']}
+                  items={['Vercel Inc. - hosting, utrzymanie strony i statystyki bez cookies']}
                 />
                 <RecipientCard
                   label="Analityka i reklama"
@@ -271,10 +272,18 @@ export default function PrivacyPolicyPage() {
                 <Bullet>personalizacji reklam i remarketingu (Meta Pixel, Google Ads)</Bullet>
                 <Bullet>analizy skuteczności kampanii</Bullet>
               </ul>
-              <p>
-                Masz prawo zarządzać ustawieniami cookies w swojej przeglądarce. Korzystanie ze
-                strony oznacza zgodę na zapisywanie cookies na urządzeniu użytkownika.
+              <p className="mb-4">
+                Pliki cookies analityczne i marketingowe zapisujemy tylko po Twojej zgodzie, wyrażonej w oknie, które
+                pokazuje się przy pierwszej wizycie. Do tego czasu Google otrzymuje wyłącznie anonimowe sygnały bez
+                plików cookies (tryb zgody Google), a Meta Pixel w ogóle się nie wczytuje. Zgodę możesz zmienić albo
+                wycofać w każdej chwili przyciskiem „Ustawienia cookies” w stopce strony.
               </p>
+              <p className="mb-4">
+                Niezależnie od zgody liczymy odwiedziny narzędziem Vercel Web Analytics. Nie zapisuje ono niczego na
+                Twoim urządzeniu i nie pozwala Cię zidentyfikować: zlicza odsłony, odwiedzane podstrony, źródło wejścia,
+                kraj oraz typ urządzenia i przeglądarki.
+              </p>
+              <p>Ustawieniami cookies możesz też zarządzać w swojej przeglądarce.</p>
             </DocSection>
           </FadeUp>
 

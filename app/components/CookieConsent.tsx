@@ -1,130 +1,208 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+
+export type ConsentPreferences = { necessary: boolean; performance: boolean; analytics: boolean };
 
 interface CookieConsentProps {
-  onAccept: (preferences: { necessary: boolean; performance: boolean; analytics: boolean }) => void;
+  onAccept: (preferences: ConsentPreferences) => void;
 }
 
-export const CookieConsent: React.FC<CookieConsentProps> = ({ onAccept }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [preferences, setPreferences] = useState({
-    necessary: true,
-    performance: false,
-    analytics: false,
-  });
+/** Zdarzenie, które otwiera okno zgody ponownie (przycisk „Ustawienia cookies” w stopce). */
+export const OPEN_COOKIE_SETTINGS = 'cookie-settings:open';
+export const openCookieSettings = () => window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS));
 
+const STORAGE_KEY = 'cookieConsent';
+const NONE: ConsentPreferences = { necessary: true, performance: false, analytics: false };
+const ALL: ConsentPreferences = { necessary: true, performance: true, analytics: true };
+const POLICY_PATH = '/polityka-prywatnosci';
+
+function readSaved(): ConsentPreferences | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as ConsentPreferences) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Okno zgody na cookies. Przy pierwszej wizycie zasłania stronę i czeka na wybór: „Akceptuję wszystkie”,
+ * „Tylko niezbędne” albo własne ustawienia. Obie główne decyzje są tak samo łatwe (wymóg UODO i EROD).
+ * Na stronie polityki prywatności okno nie blokuje treści, żeby dało się ją przeczytać przed decyzją.
+ */
+export const CookieConsent: React.FC<CookieConsentProps> = ({ onAccept }) => {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const [custom, setCustom] = useState(false);
+  const [prefs, setPrefs] = useState<ConsentPreferences>(NONE);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const returnFocus = useRef<HTMLElement | null>(null);
+
+  const blocking = open && pathname !== POLICY_PATH;
+
+  // Pierwsza wizyta: okno pojawia się chwilę po wyrenderowaniu strony.
   useEffect(() => {
-    const cookieConsent = localStorage.getItem('cookieConsent');
-    // Tylko w trybie deweloperskim: ?bez-cookies ukrywa baner na potrzeby zrzutów i pomiarów
     const skipForDev =
       process.env.NODE_ENV === 'development' && new URLSearchParams(window.location.search).has('bez-cookies');
-    if (!cookieConsent && !skipForDev) {
-      const t = setTimeout(() => setIsVisible(true), 500);
-      return () => clearTimeout(t);
-    }
+    if (readSaved() || skipForDev) return;
+    const t = window.setTimeout(() => setOpen(true), 350);
+    return () => window.clearTimeout(t);
   }, []);
 
-  const handleAcceptAll = () => {
-    const allAccepted = { necessary: true, performance: true, analytics: true };
-    setPreferences(allAccepted);
-    localStorage.setItem('cookieConsent', JSON.stringify(allAccepted));
-    setIsVisible(false);
-    onAccept(allAccepted);
-  };
+  // Ponowne otwarcie ze stopki, od razu z ustawieniami i z zapisanym wcześniej wyborem.
+  useEffect(() => {
+    const onOpen = () => {
+      returnFocus.current = document.activeElement as HTMLElement | null;
+      setPrefs(readSaved() ?? NONE);
+      setCustom(true);
+      setClosing(false);
+      setOpen(true);
+    };
+    window.addEventListener(OPEN_COOKIE_SETTINGS, onOpen);
+    return () => window.removeEventListener(OPEN_COOKIE_SETTINGS, onOpen);
+  }, []);
 
-  const handleAcceptSelected = () => {
-    localStorage.setItem('cookieConsent', JSON.stringify(preferences));
-    setIsVisible(false);
-    onAccept(preferences);
-  };
+  // Okno blokujące: reszta strony jest nieaktywna (inert), przewijanie wyłączone, fokus w oknie.
+  useLayoutEffect(() => {
+    if (!blocking) return;
+    const root = rootRef.current;
+    const page = root?.parentElement;
+    const siblings = page ? Array.from(page.children).filter((el) => el !== root) : [];
+    siblings.forEach((el) => el.setAttribute('inert', ''));
 
-  const handleRejectAll = () => {
-    const onlyNecessary = { necessary: true, performance: false, analytics: false };
-    setPreferences(onlyNecessary);
-    localStorage.setItem('cookieConsent', JSON.stringify(onlyNecessary));
-    setIsVisible(false);
-    onAccept(onlyNecessary);
-  };
+    const html = document.documentElement;
+    const scrollbar = window.innerWidth - html.clientWidth;
+    const prev = { overflow: html.style.overflow, paddingRight: html.style.paddingRight };
+    html.style.overflow = 'hidden';
+    if (scrollbar > 0) html.style.paddingRight = `${scrollbar}px`;
+
+    dialogRef.current?.focus({ preventScroll: true });
+
+    return () => {
+      siblings.forEach((el) => el.removeAttribute('inert'));
+      html.style.overflow = prev.overflow;
+      html.style.paddingRight = prev.paddingRight;
+    };
+  }, [blocking]);
+
+  const save = useCallback(
+    (next: ConsentPreferences) => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        // Bez localStorage zgoda działa tylko do końca wizyty.
+      }
+      onAccept(next);
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setClosing(true);
+      window.setTimeout(
+        () => {
+          setOpen(false);
+          setClosing(false);
+          setCustom(false);
+          returnFocus.current?.focus?.({ preventScroll: true });
+          returnFocus.current = null;
+        },
+        reduce ? 0 : 220,
+      );
+    },
+    [onAccept],
+  );
+
+  if (!open) return null;
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 24 }}
-          transition={{ duration: 0.4, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
-          className="fixed z-[60] left-3 right-3 bottom-[calc(12px+env(safe-area-inset-bottom))] md:left-6 md:right-auto md:bottom-6 md:w-[400px]"
-          role="region"
-          aria-label="Pliki cookies"
-        >
-          <div className="site-cookie">
-            <p className="site-cookie-text">
-              Strona używa plików cookies, także do statystyk i reklam.{' '}
-              <Link href="/polityka-prywatnosci" className="site-link">
-                Polityka prywatności
-              </Link>
-              {', '}
-              <button
-                type="button"
-                onClick={() => setIsExpanded((v) => !v)}
-                aria-expanded={isExpanded}
-                className="site-cookie-more"
-              >
-                {isExpanded ? 'zwiń ustawienia' : 'ustawienia'}
-              </button>
-            </p>
+    <div
+      ref={rootRef}
+      className="cc-root"
+      data-blocking={blocking || undefined}
+      data-closing={closing || undefined}
+    >
+      {blocking && <div className="cc-backdrop" aria-hidden="true" />}
+      <div
+        ref={dialogRef}
+        className="cc-dialog"
+        role={blocking ? 'alertdialog' : 'dialog'}
+        aria-modal={blocking || undefined}
+        aria-labelledby="cc-title"
+        aria-describedby="cc-desc"
+        tabIndex={-1}
+      >
+        <h2 id="cc-title" className="cc-title">
+          Pliki cookies
+        </h2>
+        <p id="cc-desc" className="cc-text">
+          Chcę wiedzieć, które treści na tej stronie są przydatne i&nbsp;skąd trafiają tu ludzie. Do tego potrzebuję
+          Twojej zgody na Google Analytics oraz narzędzia reklamowe Google i&nbsp;Mety. Wybór zmienisz w&nbsp;każdej chwili
+          w&nbsp;stopce strony.
+        </p>
+        <p className="cc-text cc-text-small">
+          Szczegóły w&nbsp;
+          <Link href={POLICY_PATH} className="site-link">
+            polityce prywatności
+          </Link>
+          .
+        </p>
 
-            <AnimatePresence initial={false}>
-              {isExpanded && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
-                  className="overflow-hidden"
-                >
-                  <div className="space-y-2 pt-3">
-                    <Toggle label="Niezbędne" desc="Wymagane do działania strony" checked disabled />
-                    <Toggle
-                      label="Marketing"
-                      desc="Google Ads, Meta (Facebook, Instagram)"
-                      checked={preferences.performance}
-                      onChange={(v) => setPreferences((p) => ({ ...p, performance: v }))}
-                    />
-                    <Toggle
-                      label="Analityka"
-                      desc="Google Analytics, statystyki"
-                      checked={preferences.analytics}
-                      onChange={(v) => setPreferences((p) => ({ ...p, analytics: v }))}
-                    />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <div className="site-cookie-actions">
-              <button type="button" onClick={handleAcceptAll} className="site-btn site-btn-ink site-btn-small">
-                Akceptuję
-              </button>
-              {isExpanded ? (
-                <button type="button" onClick={handleAcceptSelected} className="site-btn site-btn-quiet site-btn-small">
-                  Zapisz wybór
-                </button>
-              ) : (
-                <button type="button" onClick={handleRejectAll} className="site-btn site-btn-quiet site-btn-small">
-                  Tylko niezbędne
-                </button>
-              )}
-            </div>
+        <div className="cc-settings" data-open={custom || undefined}>
+          <div className="cc-settings-inner">
+            <fieldset className="cc-list" disabled={!custom}>
+              <legend className="cc-sr">Rodzaje plików cookies</legend>
+              <Toggle label="Niezbędne" desc="Działanie strony i zapamiętanie tego wyboru. Zawsze włączone." checked disabled />
+              <Toggle
+                label="Analityka"
+                desc="Google Analytics: odwiedziny, źródła ruchu, popularne treści."
+                checked={prefs.analytics}
+                onChange={(v) => setPrefs((p) => ({ ...p, analytics: v }))}
+              />
+              <Toggle
+                label="Marketing"
+                desc="Google Ads i Meta (Facebook, Instagram): pomiar i dopasowanie reklam."
+                checked={prefs.performance}
+                onChange={(v) => setPrefs((p) => ({ ...p, performance: v }))}
+              />
+            </fieldset>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        </div>
+
+        <div className="cc-actions">
+          <button type="button" className="site-btn site-btn-ink cc-btn" onClick={() => save(ALL)}>
+            Akceptuję wszystkie
+          </button>
+          {custom ? (
+            <button type="button" className="site-btn cc-btn cc-btn-line" onClick={() => save(prefs)}>
+              Zapisz mój wybór
+            </button>
+          ) : (
+            <button type="button" className="site-btn cc-btn cc-btn-line" onClick={() => save(NONE)}>
+              Tylko niezbędne
+            </button>
+          )}
+        </div>
+
+        {!custom && (
+          <button
+            type="button"
+            className="cc-more"
+            aria-expanded={false}
+            onClick={() => {
+              setCustom(true);
+              // Przycisk znika, więc fokus przechodzi na pierwszy przełącznik do wyboru.
+              requestAnimationFrame(() =>
+                dialogRef.current?.querySelector<HTMLElement>('.cc-toggle:not([data-locked])')?.focus({ preventScroll: true }),
+              );
+            }}
+          >
+            Wybierz, na co się zgadzasz
+          </button>
+        )}
+      </div>
+    </div>
   );
 };
 
@@ -139,27 +217,17 @@ const Toggle: React.FC<{
     type="button"
     role="switch"
     aria-checked={checked}
+    aria-disabled={disabled || undefined}
     onClick={() => !disabled && onChange?.(!checked)}
-    disabled={disabled}
-    className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-[12px] bg-[#F6F5F1] transition-colors ${
-      disabled ? 'cursor-default opacity-70' : 'hover:bg-[#EFEDE6] cursor-pointer'
-    }`}
+    className="cc-toggle"
+    data-locked={disabled || undefined}
   >
-    <div className="text-left min-w-0">
-      <div className="text-sm font-semibold text-[#161511]">{label}</div>
-      <div className="text-[13px] text-[#4A4740] mt-0.5">{desc}</div>
-    </div>
-    <span
-      className={`relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors ${
-        checked ? 'bg-[#161511]' : 'bg-[#D6D2C6]'
-      }`}
-      aria-hidden
-    >
-      <span
-        className={`inline-block h-3.5 w-3.5 transform rounded-full bg-[#FFFFFF] transition-transform ${
-          checked ? 'translate-x-[18px]' : 'translate-x-1'
-        }`}
-      />
+    <span className="cc-toggle-text">
+      <span className="cc-toggle-label">{label}</span>
+      <span className="cc-toggle-desc">{desc}</span>
+    </span>
+    <span className="cc-switch" data-on={checked || undefined} aria-hidden="true">
+      <span />
     </span>
   </button>
 );
