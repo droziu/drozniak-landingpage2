@@ -6,7 +6,6 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { CookieConsent } from './CookieConsent';
 import { Tracking } from './Tracking';
-import { Analytics } from '@vercel/analytics/next';
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -92,8 +91,6 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
       <Footer compact={pathname === '/kontakt'} />
       <CookieConsent onAccept={handleCookieAccept} />
       <Tracking prefs={cookiePreferences} />
-      {/* Licznik odwiedzin Vercela: bez cookies i bez danych osobowych, działa także bez zgody */}
-      <Analytics />
     </div>
   );
 };
