@@ -3,6 +3,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Turnstile, turnstileEnabled, type TurnstileHandle } from './Turnstile';
+import { trackLead } from '@/lib/track';
 
 type Field = 'name' | 'email' | 'phone' | 'company' | 'message';
 type Errors = Partial<Record<Field, string>>;
@@ -88,6 +89,7 @@ export const KontaktForm: React.FC<{ bookingUrl: string }> = ({ bookingUrl }) =>
         throw new Error();
       }
       setStatus('sent');
+      trackLead('contact');
       setValues(EMPTY);
     } catch {
       setStatus('error');

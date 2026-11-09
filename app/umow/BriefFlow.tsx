@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { BRIEF_QUESTIONS, type BriefAnswers } from '@/lib/booking/brief';
+import { trackEvent } from '@/lib/track';
 
 type Props = {
   token: string;
@@ -70,6 +71,7 @@ export function BriefFlow({ token, onSaved }: Props) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Nie udało się zapisać odpowiedzi.');
       setSaved(true);
+      trackEvent('brief_submitted', { answered: Object.keys(answers).length });
       onSaved?.();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Brak połączenia. Spróbuj jeszcze raz.');

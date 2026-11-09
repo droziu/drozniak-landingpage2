@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { CookieConsent } from './CookieConsent';
+import { Tracking } from './Tracking';
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -89,6 +90,7 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
       <div id="tresc" tabIndex={-1} className="pt-[72px] lg:pt-[84px] outline-none">{children}</div>
       <Footer compact={pathname === '/kontakt'} />
       <CookieConsent onAccept={handleCookieAccept} />
+      <Tracking prefs={cookiePreferences} />
     </div>
   );
 };

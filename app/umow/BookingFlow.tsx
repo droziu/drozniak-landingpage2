@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { DaySlots } from '@/lib/booking/slots';
+import { trackLead } from '@/lib/track';
 import { BriefFlow } from './BriefFlow';
 import { SlotPicker, SlotPickerSkeleton, formatDayLong, formatTime } from './SlotPicker';
 
@@ -218,6 +219,7 @@ export function BookingFlow() {
       }
       setDone(data);
       setStep('done');
+      if (!data.demo) trackLead('booking', { method: mode });
     } catch {
       setFormError('Brak połączenia. Sprawdź internet i spróbuj jeszcze raz, wpisane dane zostały w formularzu.');
     } finally {

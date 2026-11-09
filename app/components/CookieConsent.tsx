@@ -64,7 +64,7 @@ export const CookieConsent: React.FC<CookieConsentProps> = ({ onAccept }) => {
         >
           <div className="site-cookie">
             <p className="site-cookie-text">
-              Strona używa plików cookies, także do statystyk.{' '}
+              Strona używa plików cookies, także do statystyk i reklam.{' '}
               <Link href="/polityka-prywatnosci" className="site-link">
                 Polityka prywatności
               </Link>
@@ -91,8 +91,8 @@ export const CookieConsent: React.FC<CookieConsentProps> = ({ onAccept }) => {
                   <div className="space-y-2 pt-3">
                     <Toggle label="Niezbędne" desc="Wymagane do działania strony" checked disabled />
                     <Toggle
-                      label="Wydajność"
-                      desc="Narzędzia zewnętrzne"
+                      label="Marketing"
+                      desc="Google Ads, Meta (Facebook, Instagram)"
                       checked={preferences.performance}
                       onChange={(v) => setPreferences((p) => ({ ...p, performance: v }))}
                     />
