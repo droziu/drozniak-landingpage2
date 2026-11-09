@@ -7,6 +7,7 @@ const BASE_URL = 'https://drozniak.pl';
 const staticPages = [
   { url: '', priority: 1.0, changeFrequency: 'weekly' as const },
   { url: '/prowadzenie-marketingu', priority: 0.9, changeFrequency: 'monthly' as const },
+  { url: '/system-pozyskiwania-klientow', priority: 0.9, changeFrequency: 'monthly' as const },
   { url: '/szkolenia', priority: 0.8, changeFrequency: 'monthly' as const },
   { url: '/kontakt', priority: 0.7, changeFrequency: 'monthly' as const },
   { url: '/umow', priority: 0.7, changeFrequency: 'monthly' as const },

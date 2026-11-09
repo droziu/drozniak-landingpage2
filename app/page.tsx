@@ -164,7 +164,11 @@ export default function HomePage() {
             <div className="hpw-field hpw-a">
               <div className="hpw-inner" data-reveal>
                 <h3 className="hpw-h3">Jednorazowo</h3>
-                <p className="hpw-text">Sprawdzam cały proces i&nbsp;wdrażam najważniejsze zmiany.</p>
+                <p className="hpw-text">Ustawiam system pozyskiwania klientów i&nbsp;przez 30 dni pilnuję, żeby działał.</p>
+                <Link href="/system-pozyskiwania-klientow" className="site-btn site-btn-ink hpw-btn-a">
+                  Zobacz ofertę
+                  <ArrowIcon />
+                </Link>
               </div>
             </div>
             <div className="hpw-field hpw-b">

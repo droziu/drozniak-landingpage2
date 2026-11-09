@@ -8,7 +8,9 @@ import { AreaIcon, type IconName } from '../components/AreaIcon';
  * (prowadzenie-marketingu.css, prefiks hm-orbit); przy ograniczonym ruchu stoi.
  */
 
-const AREAS: { icon: IconName; label: string }[] = [
+export type OrbitArea = { icon: IconName; label: string };
+
+const AREAS: OrbitArea[] = [
   { icon: 'ads', label: 'Reklamy' },
   { icon: 'site', label: 'Strona' },
   { icon: 'offer', label: 'Oferta' },
@@ -19,17 +21,17 @@ const AREAS: { icon: IconName; label: string }[] = [
   { icon: 'film', label: 'Filmy' },
 ];
 
-const n = AREAS.length;
-
-export const OrbitScene: React.FC = () => (
+export const OrbitScene: React.FC<{ areas?: OrbitArea[] }> = ({ areas = AREAS }) => {
+  const n = areas.length;
+  return (
   <div
     className="hm-orbit"
     data-ui
     role="img"
-    aria-label={`Stanisław Drożniak w środku, wokół niego obszary pracy: ${AREAS.map((a) => a.label.toLowerCase()).join(', ')}`}
+    aria-label={`Stanisław Drożniak w środku, wokół niego obszary pracy: ${areas.map((a) => a.label.toLowerCase()).join(', ')}`}
   >
     <div className="hm-orbit-ring" aria-hidden="true">
-      {AREAS.map((a, i) => (
+      {areas.map((a, i) => (
         <span key={a.label} className="hm-orbit-slot" style={{ ['--a' as string]: `${i / n}turn`, ['--i' as string]: i }}>
           <span className="hm-orbit-icon">
             <AreaIcon name={a.icon} size={26} />
@@ -42,7 +44,7 @@ export const OrbitScene: React.FC = () => (
     </div>
     <img className="hm-orbit-photo" src="/images/home/portret-hero-480.jpg" alt="" width={480} height={600} loading="lazy" />
     <span className="hm-orbit-labels" aria-hidden="true">
-      {AREAS.map((a, i) => (
+      {areas.map((a, i) => (
         <span key={a.label} className="hm-orbit-label" style={{ ['--i' as string]: i }}>
           {a.label}
         </span>
@@ -50,3 +52,4 @@ export const OrbitScene: React.FC = () => (
     </span>
   </div>
 );
+};

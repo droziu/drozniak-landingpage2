@@ -35,6 +35,7 @@ export const Footer: React.FC<{ compact?: boolean }> = ({ compact = false }) => 
               <a href="https://www.linkedin.com/in/stanislawdrozniak" target="_blank" rel="noopener noreferrer">
                 LinkedIn
               </a>
+              <Link href="/system-pozyskiwania-klientow">Wdrożenie systemu</Link>
               <Link href="/prowadzenie-marketingu">Stała współpraca</Link>
               <Link href="/szkolenia">Szkolenia</Link>
             </div>

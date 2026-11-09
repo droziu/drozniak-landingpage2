@@ -24,7 +24,9 @@ const SHAPES: Record<'b' | 'c' | 'd', Pt[]> = {
 };
 
 // Droga klienta: sześć kroków, które prowadzę razem
-const STEPS: { icon: IconName; label: string }[] = [
+export type PathStep = { icon: IconName; label: string };
+
+const STEPS: PathStep[] = [
   { icon: 'ads', label: 'Reklama' },
   { icon: 'site', label: 'Strona' },
   { icon: 'inquiry', label: 'Zapytanie' },
@@ -71,10 +73,25 @@ const usePathStep = (n: number) => {
   return reduced ? n - 1 : step;
 };
 
-export const HeroCanvas: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+type HeroCanvasProps = {
+  children: React.ReactNode;
+  /** Kroki na osi w ciemnym polu (domyślnie droga klienta przy stałej współpracy). */
+  steps?: PathStep[];
+  /** Zdanie nad osią. */
+  pathTitle?: React.ReactNode;
+  /** Kafelek w prawym dolnym rogu. */
+  tile?: { big: string; small: string };
+};
+
+export const HeroCanvas: React.FC<HeroCanvasProps> = ({
+  children,
+  steps = STEPS,
+  pathTitle = <>Odpowiadam za marketing, ofertę i&nbsp;proces sprzedaży</>,
+  tile = { big: 'Jedna opłata', small: 'co miesiąc, za cały ustalony zakres' },
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const clips = useShapeClips(ref, SHAPES, SPACE);
-  const step = usePathStep(STEPS.length);
+  const step = usePathStep(steps.length);
 
   return (
     <div ref={ref} className="hmh-canvas" style={clips ?? undefined}>
@@ -93,14 +110,14 @@ export const HeroCanvas: React.FC<{ children: React.ReactNode }> = ({ children }
       </figure>
 
       <div className="hmh-shape hmh-c">
-        <p className="hmh-c-title">Odpowiadam za marketing, ofertę i&nbsp;proces sprzedaży</p>
+        <p className="hmh-c-title">{pathTitle}</p>
         <ol
           className="hmh-path"
           data-ui
           aria-label="Droga klienta"
-          style={{ ['--p' as string]: step / (STEPS.length - 1) }}
+          style={{ ['--p' as string]: step / (steps.length - 1) }}
         >
-          {STEPS.map((s, i) => (
+          {steps.map((s, i) => (
             <li key={s.label} className="hmh-step" data-on={i === step || undefined} data-done={i < step || undefined}>
               <span className="hmh-step-dot" aria-hidden="true">
                 <AreaIcon name={s.icon} size={24} />
@@ -113,8 +130,8 @@ export const HeroCanvas: React.FC<{ children: React.ReactNode }> = ({ children }
 
       <div className="hmh-shape hmh-d">
         <span className="hmh-d-text">
-          <span className="hmh-d-big">Jedna opłata</span>
-          <span className="hmh-d-small">co miesiąc, za cały ustalony zakres</span>
+          <span className="hmh-d-big">{tile.big}</span>
+          <span className="hmh-d-small">{tile.small}</span>
         </span>
       </div>
     </div>

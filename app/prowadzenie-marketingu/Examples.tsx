@@ -11,7 +11,7 @@ import { SlantRow } from '../components/shapes/SlantRow';
  * Treść poglądowa, do potwierdzenia przez Stanisława.
  */
 
-type Example = { id: string; tab: string; tasks: { icon: IconName; text: string }[] };
+export type Example = { id: string; tab: string; tasks: { icon: IconName; text: string }[] };
 
 const EXAMPLES: Example[] = [
   {
@@ -68,7 +68,7 @@ const nb = (s: string) => s.replace(/(^|\s)([aiouwzAIOUWZ])\s/g, '$1$2 ');
 type Loop = { shown: number; done: number; leaving: boolean };
 const ALL: Loop = { shown: 99, done: 99, leaving: false };
 
-export const Examples: React.FC<{ head: React.ReactNode }> = ({ head }) => {
+export const Examples: React.FC<{ head: React.ReactNode; examples?: Example[] }> = ({ head, examples = EXAMPLES }) => {
   const [active, setActive] = useState(0);
   const [loop, setLoop] = useState<Loop>(ALL);
   const [inView, setInView] = useState(false);
@@ -92,7 +92,7 @@ export const Examples: React.FC<{ head: React.ReactNode }> = ({ head }) => {
   // Oś czasu jednej pętli: wejście zadań, odhaczanie, chwila postoju, wyjście, od nowa
   useEffect(() => {
     if (reduced || !inView) return;
-    const n = EXAMPLES[active].tasks.length;
+    const n = examples[active].tasks.length;
     const timers: number[] = [];
     const at = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
 
@@ -111,7 +111,7 @@ export const Examples: React.FC<{ head: React.ReactNode }> = ({ head }) => {
   }, [active, inView, reduced]);
 
   const select = (i: number) => {
-    const next = (i + EXAMPLES.length) % EXAMPLES.length;
+    const next = (i + examples.length) % examples.length;
     setActive(next);
     tabsRef.current[next]?.focus();
   };
@@ -120,7 +120,7 @@ export const Examples: React.FC<{ head: React.ReactNode }> = ({ head }) => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') select(active + 1);
     else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') select(active - 1);
     else if (e.key === 'Home') select(0);
-    else if (e.key === 'End') select(EXAMPLES.length - 1);
+    else if (e.key === 'End') select(examples.length - 1);
     else return;
     e.preventDefault();
   };
@@ -139,7 +139,7 @@ export const Examples: React.FC<{ head: React.ReactNode }> = ({ head }) => {
           aria-label="Rodzaj firmy"
           onKeyDown={onKeyDown}
         >
-          {EXAMPLES.map((ex, i) => (
+          {examples.map((ex, i) => (
             <button
               key={ex.id}
               ref={(el) => {
@@ -161,7 +161,7 @@ export const Examples: React.FC<{ head: React.ReactNode }> = ({ head }) => {
       </div>
 
       <div ref={stageRef} className="hm-stage" data-reveal style={{ ['--d' as string]: 1 }}>
-        {EXAMPLES.map((ex, i) => (
+        {examples.map((ex, i) => (
           <div
             key={ex.id}
             id={`hm-panel-${ex.id}`}

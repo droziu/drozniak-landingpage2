@@ -130,6 +130,10 @@
 .hpw-btn:hover {
   background: var(--paper-white);
 }
+.hpw-btn-a {
+  margin-top: 10px;
+  align-self: flex-start;
+}
 .hpw-b :focus-visible {
   outline-color: var(--paper);
 }
