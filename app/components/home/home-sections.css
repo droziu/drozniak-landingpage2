@@ -772,7 +772,14 @@
 /* --- Telefon: klienci w niższych polach, po dwa w rzędzie --- */
 @media (max-width: 599px) {
   .hpc {
+    grid-template-columns: minmax(0, 1fr);
     gap: 24px;
+  }
+  /* najdłuższe pole łamie się na wąskich telefonach (320 px), zamiast wypychać stronę */
+  .hpc-chip-dark .hpc-chip-text {
+    white-space: normal;
+    text-align: center;
+    text-wrap: balance;
   }
   .hpc-names {
     gap: 8px;
