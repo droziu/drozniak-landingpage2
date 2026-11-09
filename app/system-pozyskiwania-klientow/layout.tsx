@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import '../prowadzenie-marketingu/prowadzenie-marketingu.css';
 
 const URL = 'https://drozniak.pl/system-pozyskiwania-klientow';
 const TITLE = 'System pozyskiwania klientów dla firmy';
 const DESCRIPTION =
-  'Jednorazowe wdrożenie: dopracowana oferta, kreacje, kampanie w Meta i Google, strona docelowa i automatyczna obsługa zapytań. Po uruchomieniu 30 dni wsparcia.';
+  'Jednorazowe wdrożenie od 1 900 zł netto: oferta, reklamy z filmami, kampanie w Meta i Google, formularz i automatyczna obsługa zapytań. Gotowe w 1-3 tygodnie, potem 30 dni wsparcia.';
 
 export const metadata: Metadata = {
   title: TITLE,
