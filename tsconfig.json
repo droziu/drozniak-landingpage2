@@ -40,12 +40,7 @@
     "node_modules",
     "components",
     "hooks",
-    "api",
     "utils",
-    "config",
-    "index.tsx",
-    "App.tsx",
-    "vite.config.ts",
-    "lib/supabase.ts"
+    "config"
   ]
 }

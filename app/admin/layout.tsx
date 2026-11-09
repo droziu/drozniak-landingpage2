@@ -1,17 +1,24 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/app/hooks/useAuth';
 import { LoadingState } from '@/components/LoadingState';
+import { AdminShell } from './_components/AdminShell';
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// Pełnoekranowe podstrony - bez AdminShell (mają własny header/sidebar)
+const FULLSCREEN_PATTERNS = [
+  /^\/admin\/marketing\/[^/]+$/, // /admin/marketing/{id}
+  /^\/admin\/proposals\/[^/]+$/, // /admin/proposals/{id} i /admin/proposals/new
+];
+
+const isFullscreenRoute = (path: string): boolean =>
+  FULLSCREEN_PATTERNS.some((re) => re.test(path));
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname() || '';
 
   useEffect(() => {
     if (!loading) {
@@ -28,8 +35,13 @@ export default function AdminLayout({
   }
 
   if (!user || user.email !== 'stanislaw@drozniak.com') {
-    return null; // Przekierowanie w useEffect
+    return null;
   }
 
-  return <>{children}</>;
+  // Strony pełnoekranowe (FunnelBuilder, ProposalEditor) - bez shella
+  if (isFullscreenRoute(pathname)) {
+    return <>{children}</>;
+  }
+
+  return <AdminShell>{children}</AdminShell>;
 }

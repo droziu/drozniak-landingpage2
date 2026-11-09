@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/admin/', '/panel/', '/login', '/profile', '/p/', '/o/'],
+        disallow: ['/api/', '/admin/', '/panel/', '/login', '/profile', '/p/', '/o/', '/umow/rezerwacja/'],
       },
     ],
     sitemap: 'https://drozniak.pl/sitemap.xml',

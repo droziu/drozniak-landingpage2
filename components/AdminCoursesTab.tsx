@@ -354,7 +354,7 @@ export const AdminCoursesTab: React.FC = () => {
       <div className="grid lg:grid-cols-3 gap-6">
           {/* Lista użytkowników */}
           <div className="lg:col-span-1 space-y-4">
-            <h2 className="font-[Montserrat] text-2xl font-bold mb-4">Kursanci</h2>
+            <h2 className="text-xl font-semibold text-white tracking-tight mb-4">Kursanci</h2>
             {userProgress.length === 0 ? (
               <div className="text-center text-gray-400 py-8 bg-white/5 rounded-xl">
                 Brak kursantów
@@ -364,7 +364,7 @@ export const AdminCoursesTab: React.FC = () => {
                 <div key={progress.userId}>
                   <div
                     onClick={() => setSelectedUser(selectedUser === progress.userId ? null : progress.userId)}
-                    className={`bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-4 border-2 cursor-pointer transition-all duration-300 ${
+                    className={`bg-white/[0.02] rounded-lg p-3.5 border cursor-pointer transition-all duration-300 ${
                       selectedUser === progress.userId
                         ? 'border-[#fee715] shadow-lg shadow-[#fee715]/20'
                         : 'border-white/10 hover:border-white/20'
@@ -379,7 +379,7 @@ export const AdminCoursesTab: React.FC = () => {
                       <div className="flex items-center gap-3 ml-4">
                         <div className="w-20 bg-white/10 rounded-full h-2">
                           <div
-                            className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] h-2 rounded-full transition-all duration-300"
+                            className="bg-[#fee715] h-1.5 rounded-full transition-all"
                             style={{ width: `${progress.percentage}%` }}
                           />
                         </div>
@@ -403,9 +403,9 @@ export const AdminCoursesTab: React.FC = () => {
                   </div>
 
                   {selectedUser === progress.userId && (
-                    <div className="mt-3 bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-6 border border-white/10 space-y-4">
+                    <div className="mt-3 bg-white/[0.02] rounded-lg p-5 border border-white/[0.06] space-y-4">
                       <div>
-                        <h3 className="font-[Montserrat] font-bold text-white mb-3 text-lg">
+                        <h3 className="font-sans font-bold text-white mb-3 text-lg">
                           {progress.userName}
                         </h3>
                         {(() => {
@@ -445,7 +445,7 @@ export const AdminCoursesTab: React.FC = () => {
                         
                         <div className="w-full bg-white/10 rounded-full h-3 mb-4">
                           <div
-                            className="bg-gradient-to-r from-[#fee715] to-[#00C9A7] h-3 rounded-full transition-all duration-300"
+                            className="bg-[#fee715] h-2 rounded-full transition-all"
                             style={{ width: `${progress.percentage}%` }}
                           />
                         </div>
@@ -460,8 +460,8 @@ export const AdminCoursesTab: React.FC = () => {
                                   <div
                                     className={`h-2 rounded-full transition-all duration-300 ${
                                       module.completed 
-                                        ? 'bg-gradient-to-r from-green-400 to-green-500' 
-                                        : 'bg-gradient-to-r from-[#fee715] to-[#00C9A7]'
+                                        ? 'bg-emerald-500' 
+                                        : 'bg-[#fee715]'
                                     }`}
                                     style={{ width: `${module.percentage}%` }}
                                   />
@@ -505,14 +505,14 @@ export const AdminCoursesTab: React.FC = () => {
                 {currentUserProgress && (() => {
                   const userProfile = users.find(u => u.id === currentUserProgress.userId);
                   return (
-                    <div className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-6 border-2 border-white/10">
-                      <h3 className="font-[Montserrat] text-xl font-bold text-white mb-4">
+                    <div className="bg-white/[0.02] rounded-lg p-5 border border-white/[0.06]">
+                      <h3 className="font-sans text-xl font-bold text-white mb-4">
                         Postęp: {currentUserProgress.userName}
                       </h3>
                       
                       {userProfile && (
                         <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
-                          <h4 className="font-[Montserrat] font-semibold text-white mb-3">Dane kontaktowe</h4>
+                          <h4 className="font-sans font-semibold text-white mb-3">Dane kontaktowe</h4>
                           <div className="space-y-2 text-sm">
                             {userProfile.company_name && (
                               <div className="flex items-center gap-2 text-gray-300">
@@ -549,13 +549,13 @@ export const AdminCoursesTab: React.FC = () => {
                       <div className="grid md:grid-cols-2 gap-4 mb-6">
                         <div>
                           <p className="text-sm text-gray-400 mb-1">Ukończone lekcje</p>
-                          <p className="text-2xl font-bold text-white">
+                          <p className="text-2xl font-semibold text-white tracking-tight">
                             {currentUserProgress.completedLessons}/{currentUserProgress.totalLessons}
                           </p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-400 mb-1">Postęp ogólny</p>
-                          <p className="text-2xl font-bold text-[#fee715]">
+                          <p className="text-2xl font-semibold text-[#fee715] tracking-tight">
                             {currentUserProgress.percentage}%
                           </p>
                         </div>
@@ -619,7 +619,7 @@ export const AdminCoursesTab: React.FC = () => {
                               }
                             }}
                             disabled={actionLoading}
-                            className="w-full bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
+                            className="w-full bg-[#fee715] text-[#101820] font-sans font-bold py-3 px-6 rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
@@ -637,7 +637,7 @@ export const AdminCoursesTab: React.FC = () => {
 
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-[Montserrat] text-xl font-bold text-white">
+                    <h3 className="font-sans text-xl font-bold text-white">
                       Odpowiedzi ({selectedUserResponses.length})
                     </h3>
                     <button
@@ -710,7 +710,7 @@ export const AdminCoursesTab: React.FC = () => {
                                     {response.status === 'pending' ? 'Oczekuje' : response.status === 'approved' ? 'Zatwierdzona' : 'Odrzucona'}
                                   </span>
                                 </div>
-                                <h4 className="font-[Montserrat] font-bold text-white mb-2">
+                                <h4 className="font-sans font-bold text-white mb-2">
                                   {question?.question || 'Pytanie'}
                                 </h4>
                                 <div className="bg-white/5 rounded-lg p-3">
@@ -740,35 +740,35 @@ export const AdminCoursesTab: React.FC = () => {
       {selectedResponse && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setSelectedResponse(null)} />
-          <div className="relative bg-gradient-to-br from-[#18232F] to-[#101820] rounded-2xl p-6 border-2 border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h3 className="font-[Montserrat] text-2xl font-bold text-white mb-6">
+          <div className="relative bg-[#0a0d1f] rounded-xl p-5 border border-white/[0.08] max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <h3 className="text-base font-semibold text-white tracking-tight mb-4">
               Weryfikacja odpowiedzi
             </h3>
             
             <div className="space-y-4 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Pytanie</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Pytanie</label>
                 <p className="text-white bg-white/5 rounded-lg p-3">
                   {selectedQuestion?.question || 'Brak pytania'}
                 </p>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Odpowiedź</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Odpowiedź</label>
                 <div className="bg-white/5 rounded-lg p-4 max-h-48 overflow-y-auto">
                   <p className="text-gray-200 whitespace-pre-wrap">{selectedResponse.answer_text}</p>
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">
                   Feedback (opcjonalnie)
                 </label>
                 <textarea
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   placeholder="Dodaj komentarz dla kursanta..."
-                  className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] min-h-[100px]"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors min-h-[100px]"
                 />
               </div>
             </div>
@@ -777,14 +777,14 @@ export const AdminCoursesTab: React.FC = () => {
               <button
                 onClick={() => handleReview(selectedResponse.id, 'approved')}
                 disabled={actionLoading}
-                className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white font-[Montserrat] font-bold py-3 px-4 rounded-xl hover:shadow-lg hover:shadow-green-500/40 transition-all duration-300 disabled:opacity-50"
+                className="flex-1 bg-emerald-500 text-white text-[13px] font-semibold py-2 px-3 rounded-md hover:brightness-110 transition-all disabled:opacity-50"
               >
                 Zatwierdź
               </button>
               <button
                 onClick={() => handleReview(selectedResponse.id, 'rejected')}
                 disabled={actionLoading}
-                className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white font-[Montserrat] font-bold py-3 px-4 rounded-xl hover:shadow-lg hover:shadow-red-500/40 transition-all duration-300 disabled:opacity-50"
+                className="flex-1 bg-red-500 text-white text-[13px] font-semibold py-2 px-3 rounded-md hover:brightness-110 transition-all disabled:opacity-50"
               >
                 Odrzuć
               </button>
@@ -793,7 +793,7 @@ export const AdminCoursesTab: React.FC = () => {
                   setSelectedResponse(null);
                   setFeedback('');
                 }}
-                className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-[Montserrat] font-semibold rounded-xl transition-all duration-300"
+                className="px-3 py-2 bg-white/[0.04] border border-white/[0.08] text-white/80 text-[13px] font-medium rounded-md hover:bg-white/[0.08] hover:text-white transition-colors"
               >
                 Zamknij
               </button>

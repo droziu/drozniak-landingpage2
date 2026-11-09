@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { StickyCTA } from './StickyCTA';
 import { CookieConsent } from './CookieConsent';
 
 interface LayoutClientProps {
@@ -13,7 +12,6 @@ interface LayoutClientProps {
 
 export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
   const pathname = usePathname();
-  const [isStickyCtaVisible, setStickyCtaVisible] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState<{
     necessary: boolean;
     performance: boolean;
@@ -34,6 +32,34 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
 
   const isBlogRoute = pathname === '/blog' || pathname.startsWith('/blog/');
 
+  // Nowa strona zawsze od samej góry, bez płynnego przewijania od dołu i bez hero przyciętego
+  // pod paskiem (Next przewija do początku treści, a ta zaczyna się 72-84 px niżej).
+  // Wstecz/dalej zostawiamy przeglądarce, która przywraca poprzednią pozycję; kotwice (#o-mnie) Nextowi.
+  const fromHistory = useRef(false);
+  const firstRender = useRef(true);
+  useEffect(() => {
+    const onPop = () => {
+      fromHistory.current = true;
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+  useLayoutEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    if (fromHistory.current) {
+      fromHistory.current = false;
+      return;
+    }
+    if (window.location.hash) return;
+    const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    toTop();
+    const raf = requestAnimationFrame(toTop);
+    return () => cancelAnimationFrame(raf);
+  }, [pathname]);
+
   useEffect(() => {
     try {
       // Load existing cookie preferences
@@ -41,23 +67,6 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
         const savedPreferences = localStorage.getItem('cookieConsent');
         if (savedPreferences) {
           setCookiePreferences(JSON.parse(savedPreferences));
-        }
-
-        // Tylko dla publicznych stron (nie panel, nie blog) - sticky CTA
-        if (!isPanelRoute && !isBlogRoute) {
-          const handleScroll = () => {
-            // Show sticky CTA after scrolling past the hero section (e.g., 800px)
-            if (window.scrollY > 800) {
-              setStickyCtaVisible(true);
-            } else {
-              setStickyCtaVisible(false);
-            }
-          };
-
-          window.addEventListener('scroll', handleScroll);
-          return () => {
-            window.removeEventListener('scroll', handleScroll);
-          };
         }
       }
     } catch (error) {
@@ -67,21 +76,19 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
 
   const handleCookieAccept = (preferences: { necessary: boolean; performance: boolean; analytics: boolean }) => {
     setCookiePreferences(preferences);
-    
-    // Load Calendly only if performance cookies are accepted
-    if (preferences.performance) {
-      // Calendly will be loaded by the FinalCTA component
-      console.log('Performance cookies accepted - Calendly will load');
-    }
   };
 
+  if (isPanelRoute) {
+    return <>{children}</>;
+  }
+
+  // Publiczna część - jasny motyw „Editorial Ink & Paper" (scope .site-pub)
   return (
-    <>
-      {!isPanelRoute && <Header />}
-      <div className={!isPanelRoute ? 'pt-16 md:pt-20' : ''}>{children}</div>
-      {!isPanelRoute && <Footer />}
-      {!isPanelRoute && !isBlogRoute && <StickyCTA isVisible={isStickyCtaVisible} />}
-      {!isPanelRoute && <CookieConsent onAccept={handleCookieAccept} />}
-    </>
+    <div className="site-pub">
+      <Header />
+      <div id="tresc" tabIndex={-1} className="pt-[72px] lg:pt-[84px] outline-none">{children}</div>
+      <Footer compact={pathname === '/kontakt'} />
+      <CookieConsent onAccept={handleCookieAccept} />
+    </div>
   );
 };

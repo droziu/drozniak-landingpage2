@@ -1,98 +1,113 @@
 'use client';
 
 import React from 'react';
-import { HeroShapes } from '@/app/components/premium/HeroShapes';
-import { Eyebrow } from '@/app/components/premium/Eyebrow';
 import { FadeUp } from '@/app/components/premium/Motion';
+
+const tocItems = [
+  { num: '01', id: 'administrator-danych', title: 'Administrator danych' },
+  { num: '02', id: 'kontakt-dane-osobowe', title: 'Kontakt w sprawie danych osobowych' },
+  { num: '03', id: 'zakres-i-cele', title: 'Zakres i cele przetwarzania danych' },
+  { num: '04', id: 'podstawy-prawne', title: 'Podstawy prawne przetwarzania' },
+  { num: '05', id: 'odbiorcy-danych', title: 'Odbiorcy danych' },
+  { num: '06', id: 'czas-przechowywania', title: 'Czas przechowywania danych' },
+  { num: '07', id: 'cookies', title: 'Pliki cookies i narzędzia śledzące' },
+  { num: '08', id: 'twoje-prawa', title: 'Twoje prawa (RODO)' },
+  { num: '09', id: 'bezpieczenstwo', title: 'Bezpieczeństwo danych' },
+  { num: '10', id: 'zmiany', title: 'Zmiany w polityce prywatności' },
+];
+
+const focusRing =
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#161511]';
 
 export default function PrivacyPolicyPage() {
   return (
     <main className="relative">
-      {/* HERO */}
-      <section className="relative px-4 md:px-8 py-20 md:py-28 overflow-hidden">
-        <HeroShapes variant="minimal" />
-        <div className="relative w-full max-w-4xl mx-auto text-center">
+      {/* ==================== NAGŁÓWEK DOKUMENTU ==================== */}
+      <header className="px-5 md:px-10 pt-14 md:pt-24 pb-10 md:pb-14">
+        <div className="mx-auto max-w-3xl">
           <FadeUp whenInView={false}>
-            <Eyebrow align="center" className="mb-5">
-              Dokument
-            </Eyebrow>
-            <h1 className="cinematic-headline text-[clamp(2.25rem,7vw,5rem)] font-bold pb-3">
-              Polityka <span className="text-gradient-yellow">prywatności</span>
+            <p className="pub-eyebrow mb-7">Dokument</p>
+            <h1 className="text-[clamp(2.4rem,6vw,4.2rem)]">
+              <span className="pub-h-serif block">Polityka</span>
+              <span className="pub-h-sans block mt-1">prywatności.</span>
             </h1>
-            <p className="mt-7 font-mono text-[11px] uppercase tracking-[0.22em] text-white/40">
-              Obowiązuje od 12.10.2025
+            <p className="mt-7 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[#85816F]">
+              Obowiązuje od 9.11.2026
             </p>
+          </FadeUp>
+        </div>
+      </header>
+
+      {/* ==================== SPIS TREŚCI ==================== */}
+      <section className="px-5 md:px-10">
+        <div className="mx-auto max-w-3xl">
+          <FadeUp whenInView={false} delay={0.15}>
+            <nav
+              aria-label="Spis treści"
+              className="bg-[#FFFFFF] border border-[#E4E1D8] rounded-[4px] p-6 md:p-9"
+            >
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#85816F] mb-4">
+                Spis treści
+              </p>
+              <ol className="list-none">
+                {tocItems.map((item) => (
+                  <li key={item.id} className="border-t border-[#E4E1D8] last:border-b">
+                    <a
+                      href={`#${item.id}`}
+                      className={`group flex items-baseline gap-4 py-3 px-1 transition-colors ${focusRing}`}
+                    >
+                      <span className="pub-serif text-sm text-[#8F7418] w-6 flex-shrink-0">
+                        {item.num}
+                      </span>
+                      <span className="text-[15px] font-medium text-[#161511] group-hover:text-[#8F7418] transition-colors">
+                        {item.title}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
           </FadeUp>
         </div>
       </section>
 
-      {/* CONTENT */}
-      <section className="relative px-4 md:px-8 pb-24 md:pb-36">
-        <div className="relative max-w-3xl mx-auto space-y-6">
-          {/* Section 1 - Administrator */}
+      {/* ==================== TREŚĆ ==================== */}
+      <section className="px-5 md:px-10 pb-24 md:pb-36">
+        <div className="mx-auto max-w-3xl">
+          {/* 01 - Administrator */}
           <FadeUp>
-            <Section number="01" title="Administrator danych">
-              <p className="text-white/65 mb-5 leading-relaxed">
-                Administratorem danych osobowych jest:
-              </p>
-              <div className="card p-6 md:p-7 space-y-2.5 text-[15px] text-white/75 leading-relaxed">
-                <p>
-                  <span className="text-white font-medium">MONLINE Stanisław Drożniak</span>
-                </p>
-                <p>ul. Krzycka 107/19, 53-019 Wrocław</p>
-                <p className="font-mono text-[12px] text-white/55 tracking-wider">
+            <DocSection id="administrator-danych" number="01" title="Administrator danych">
+              <p className="mb-5">Administratorem danych osobowych jest:</p>
+              <div className="bg-[#FFFFFF] border border-[#E4E1D8] rounded-[4px] p-6 md:p-8">
+                <p className="text-[#161511] font-semibold">MONLINE Stanisław Drożniak</p>
+                <p className="mt-1.5">ul. Krzycka 107/19, 53-019 Wrocław</p>
+                <p className="mt-1.5 text-[13px] tracking-[0.04em] text-[#85816F]">
                   NIP: 6332237557 &middot; REGON: 368769391
                 </p>
-                <div className="pt-4 mt-4 border-t border-white/8 space-y-2">
-                  <ContactRow
-                    icon={
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    }
-                    label="Email"
-                    href="mailto:stanislaw@drozniak.com"
-                    value="stanislaw@drozniak.com"
-                  />
-                  <ContactRow
-                    icon={
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                    }
-                    label="Telefon"
-                    href="tel:+48792491196"
-                    value="+48 792 491 196"
-                  />
+                <div className="mt-5 pt-5 border-t border-[#E4E1D8] space-y-2.5">
+                  <ContactRow label="E-mail" href="mailto:stanislaw@drozniak.com" value="stanislaw@drozniak.com" />
+                  <ContactRow label="Telefon" href="tel:+48792491196" value="+48 792 491 196" />
                 </div>
               </div>
-            </Section>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 2 */}
+          {/* 02 - Kontakt */}
           <FadeUp>
-            <Section number="02" title="Kontakt w sprawie danych osobowych">
-              <p className="text-white/65 leading-relaxed">
+            <DocSection id="kontakt-dane-osobowe" number="02" title="Kontakt w sprawie danych osobowych">
+              <p>
                 W sprawach dotyczących przetwarzania danych osobowych możesz skontaktować się przez{' '}
-                <a
-                  href="mailto:stanislaw@drozniak.com"
-                  className="text-[#fee715] hover:underline underline-offset-2"
-                >
-                  stanislaw@drozniak.com
-                </a>
-                .
+                <InlineLink href="mailto:stanislaw@drozniak.com">stanislaw@drozniak.com</InlineLink>.
               </p>
-            </Section>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 3 - Zakres */}
+          {/* 03 - Zakres i cele */}
           <FadeUp>
-            <Section number="03" title="Zakres i cele przetwarzania danych">
-              <p className="text-white/65 mb-6 leading-relaxed">
-                Przetwarzam dane osobowe wyłącznie w celu:
-              </p>
+            <DocSection id="zakres-i-cele" number="03" title="Zakres i cele przetwarzania danych">
+              <p className="mb-6">Przetwarzam dane osobowe wyłącznie w celu:</p>
               <div className="space-y-3">
-                <PurposeCard
+                <PurposeItem
                   num="3.1"
                   title="Obsługa formularza kontaktowego"
                   bullets={[
@@ -100,16 +115,16 @@ export default function PrivacyPolicyPage() {
                     'Cel: odpowiedź na zapytanie, przygotowanie oferty.',
                   ]}
                 />
-                <PurposeCard
+                <PurposeItem
                   num="3.2"
-                  title="Rezerwacja konsultacji / spotkań (Calendly)"
+                  title="Umawianie rozmów (kalendarz na stronie)"
                   bullets={[
-                    'Dane: imię i nazwisko, e-mail, telefon (jeśli wymagany przez system), informacje o terminie.',
-                    'Cel: zapis, obsługa rezerwacji, organizacja spotkania.',
-                    'System: Calendly LLC.',
+                    'Dane: imię i nazwisko, e-mail, temat rozmowy, termin; telefon, gdy wybierasz rozmowę telefoniczną lub podajesz go dobrowolnie; nazwa firmy, adres strony i odpowiedzi na pytania przed rozmową, jeśli je podasz.',
+                    'Cel: umówienie i przeprowadzenie rozmowy, wysłanie zaproszenia do kalendarza, potwierdzenia i przypomnień, przygotowanie się do rozmowy.',
+                    'Systemy: Google (Kalendarz, Meet, Dysk), Supabase Inc. (baza danych), Resend (wysyłka e-maili).',
                   ]}
                 />
-                <PurposeCard
+                <PurposeItem
                   num="3.3"
                   title="Wysyłka newslettera (MailerLite)"
                   bullets={[
@@ -118,7 +133,7 @@ export default function PrivacyPolicyPage() {
                     'System: MailerLite UAB.',
                   ]}
                 />
-                <PurposeCard
+                <PurposeItem
                   num="3.4"
                   title="Baza danych i backend (Supabase)"
                   bullets={[
@@ -127,7 +142,7 @@ export default function PrivacyPolicyPage() {
                     'System: Supabase Inc.',
                   ]}
                 />
-                <PurposeCard
+                <PurposeItem
                   num="3.5"
                   title="Płatności online (Stripe)"
                   bullets={[
@@ -136,7 +151,7 @@ export default function PrivacyPolicyPage() {
                     'Operator płatności: Stripe Payments Europe Ltd.',
                   ]}
                 />
-                <PurposeCard
+                <PurposeItem
                   num="3.6"
                   title="Analityka i statystyki (cookies)"
                   bullets={[
@@ -144,7 +159,7 @@ export default function PrivacyPolicyPage() {
                     'Cel: analiza ruchu, poprawa funkcjonalności, statystyki (Google Analytics).',
                   ]}
                 />
-                <PurposeCard
+                <PurposeItem
                   num="3.7"
                   title="Marketing (Meta Pixel, Google Ads)"
                   bullets={[
@@ -153,94 +168,120 @@ export default function PrivacyPolicyPage() {
                   ]}
                 />
               </div>
-            </Section>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 4 */}
+          {/* 04 - Podstawy prawne */}
           <FadeUp>
-            <Section number="04" title="Podstawy prawne przetwarzania">
-              <p className="text-white/65 mb-5 leading-relaxed">
-                Dane są przetwarzane na podstawie:
-              </p>
+            <DocSection id="podstawy-prawne" number="04" title="Podstawy prawne przetwarzania">
+              <p className="mb-5">Dane są przetwarzane na podstawie:</p>
               <ul className="space-y-3">
                 <Bullet>
-                  <span className="text-white">art. 6 ust. 1 lit. a RODO</span> &mdash; zgoda (np. newsletter, cookies marketingowe).
+                  <Strong>art. 6 ust. 1 lit. a RODO</Strong> - zgoda (np. newsletter, cookies
+                  marketingowe).
                 </Bullet>
                 <Bullet>
-                  <span className="text-white">art. 6 ust. 1 lit. b RODO</span> &mdash; wykonanie umowy lub działania na Twoje żądanie (kontakt, konsultacje, płatności).
+                  <Strong>art. 6 ust. 1 lit. b RODO</Strong> - wykonanie umowy lub działania
+                  na Twoje żądanie (kontakt, konsultacje, płatności).
                 </Bullet>
                 <Bullet>
-                  <span className="text-white">art. 6 ust. 1 lit. f RODO</span> &mdash; uzasadniony interes administratora (analityka, marketing własnych usług, bezpieczeństwo).
+                  <Strong>art. 6 ust. 1 lit. f RODO</Strong> - uzasadniony interes
+                  administratora (analityka, marketing własnych usług, bezpieczeństwo).
                 </Bullet>
               </ul>
-            </Section>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 5 - Odbiorcy */}
+          {/* 05 - Odbiorcy */}
           <FadeUp>
-            <Section number="05" title="Odbiorcy danych">
-              <p className="text-white/65 mb-6 leading-relaxed">
+            <DocSection id="odbiorcy-danych" number="05" title="Odbiorcy danych">
+              <p className="mb-6">
                 Dane mogą być przekazywane do podmiotów przetwarzających je w moim imieniu:
               </p>
               <div className="grid sm:grid-cols-2 gap-3">
-                <RecipientCard label="Hosting i infrastruktura" items={['Vercel Inc. - hosting i utrzymanie strony']} />
-                <RecipientCard label="Analityka i reklama" items={['Google Ireland Ltd. - Analytics, Tag Manager, Ads', 'Meta Platforms Ireland Ltd. - Pixel, API Conversions']} />
+                <RecipientCard
+                  label="Hosting i infrastruktura"
+                  items={['Vercel Inc. - hosting i utrzymanie strony']}
+                />
+                <RecipientCard
+                  label="Analityka i reklama"
+                  items={[
+                    'Google Ireland Ltd. - Analytics, Tag Manager, Ads',
+                    'Meta Platforms Ireland Ltd. - Pixel, API Conversions',
+                  ]}
+                />
                 <RecipientCard label="Newsletter" items={['MailerLite UAB']} />
-                <RecipientCard label="Rezerwacje konsultacji" items={['Calendly LLC']} />
+                <RecipientCard
+                  label="Umawianie rozmów"
+                  items={['Google Ireland Ltd. - Kalendarz, Meet, Dysk', 'Supabase Inc. - baza danych', 'Resend - wysyłka e-maili']}
+                />
                 <RecipientCard label="Płatności" items={['Stripe Payments Europe Ltd.']} />
-                <RecipientCard label="Pozostali dostawcy" items={['Dostawcy usług IT i marketingowych działający na podstawie umowy powierzenia danych']} />
+                <RecipientCard
+                  label="Pozostali dostawcy"
+                  items={[
+                    'Dostawcy usług IT i marketingowych działający na podstawie umowy powierzenia danych',
+                  ]}
+                />
               </div>
-              <p className="text-white/55 text-[14px] leading-relaxed mt-6">
-                Wszystkie podmioty realizują przetwarzanie zgodnie z RODO i wyłącznie na moje polecenie.
+              <p className="mt-6 text-[14px] text-[#85816F] leading-[1.7]">
+                Wszystkie podmioty realizują przetwarzanie zgodnie z RODO i wyłącznie na moje
+                polecenie.
               </p>
-            </Section>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 6 - Czas */}
+          {/* 06 - Czas przechowywania */}
           <FadeUp>
-            <Section number="06" title="Czas przechowywania danych">
+            <DocSection id="czas-przechowywania" number="06" title="Czas przechowywania danych">
               <ul className="space-y-3">
                 <Bullet>
-                  <span className="text-white">Dane z formularza kontaktowego</span> - do 12 miesięcy po zakończeniu kontaktu.
+                  <Strong>Dane z formularza kontaktowego</Strong> - do 12 miesięcy po
+                  zakończeniu kontaktu.
                 </Bullet>
                 <Bullet>
-                  <span className="text-white">Dane klientów</span> - przez okres obsługi oraz do 5 lat (obowiązki podatkowe).
+                  <Strong>Dane klientów</Strong> - przez okres obsługi oraz do 5 lat
+                  (obowiązki podatkowe).
                 </Bullet>
                 <Bullet>
-                  <span className="text-white">Dane newsletterowe</span> - do czasu wycofania zgody.
+                  <Strong>Dane z umawiania rozmów</Strong> - do 12 miesięcy po rozmowie, chyba że
+                  rozpoczniemy współpracę.
                 </Bullet>
                 <Bullet>
-                  <span className="text-white">Dane z cookies</span> - zgodnie z czasem przechowywania ustawionym w przeglądarce lub do usunięcia.
+                  <Strong>Dane newsletterowe</Strong> - do czasu wycofania zgody.
                 </Bullet>
                 <Bullet>
-                  <span className="text-white">Dane płatnicze (Stripe)</span> - zgodnie z przepisami rozliczeniowymi i księgowymi.
+                  <Strong>Dane z cookies</Strong> - zgodnie z czasem przechowywania ustawionym
+                  w przeglądarce lub do usunięcia.
+                </Bullet>
+                <Bullet>
+                  <Strong>Dane płatnicze (Stripe)</Strong> - zgodnie z przepisami
+                  rozliczeniowymi i księgowymi.
                 </Bullet>
               </ul>
-            </Section>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 7 - Cookies */}
+          {/* 07 - Cookies */}
           <FadeUp>
-            <Section number="07" title="Pliki cookies i narzędzia śledzące">
-              <p className="text-white/65 mb-5 leading-relaxed">
-                Strona korzysta z plików cookies w celu:
-              </p>
+            <DocSection id="cookies" number="07" title="Pliki cookies i narzędzia śledzące">
+              <p className="mb-5">Strona korzysta z plików cookies w celu:</p>
               <ul className="space-y-3 mb-6">
                 <Bullet>zapewnienia prawidłowego działania strony</Bullet>
                 <Bullet>tworzenia statystyk (Google Analytics)</Bullet>
                 <Bullet>personalizacji reklam i remarketingu (Meta Pixel, Google Ads)</Bullet>
                 <Bullet>analizy skuteczności kampanii</Bullet>
               </ul>
-              <p className="text-white/65 leading-relaxed">
-                Masz prawo zarządzać ustawieniami cookies w swojej przeglądarce. Korzystanie ze strony oznacza zgodę na zapisywanie cookies na urządzeniu użytkownika.
+              <p>
+                Masz prawo zarządzać ustawieniami cookies w swojej przeglądarce. Korzystanie ze
+                strony oznacza zgodę na zapisywanie cookies na urządzeniu użytkownika.
               </p>
-            </Section>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 8 - Prawa */}
+          {/* 08 - Prawa */}
           <FadeUp>
-            <Section number="08" title="Twoje prawa (RODO)">
-              <p className="text-white/65 mb-5 leading-relaxed">Masz prawo do:</p>
+            <DocSection id="twoje-prawa" number="08" title="Twoje prawa (RODO)">
+              <p className="mb-5">Masz prawo do:</p>
               <ul className="space-y-3 mb-6">
                 <Bullet>dostępu do swoich danych</Bullet>
                 <Bullet>sprostowania lub usunięcia danych</Bullet>
@@ -250,49 +291,41 @@ export default function PrivacyPolicyPage() {
                 <Bullet>cofnięcia zgody w dowolnym momencie</Bullet>
                 <Bullet>złożenia skargi do Prezesa UODO</Bullet>
               </ul>
-              <div className="card p-5 inline-flex items-center gap-3">
-                <svg className="w-4 h-4 text-[#fee715]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <a
-                  href="mailto:stanislaw@drozniak.com"
-                  className="text-[#fee715] hover:underline underline-offset-2 text-sm font-medium"
-                >
-                  stanislaw@drozniak.com
-                </a>
-              </div>
-            </Section>
+              <p>
+                Aby skorzystać z tych praw, napisz na{' '}
+                <InlineLink href="mailto:stanislaw@drozniak.com">stanislaw@drozniak.com</InlineLink>.
+              </p>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 9 - Bezpieczeństwo */}
+          {/* 09 - Bezpieczeństwo */}
           <FadeUp>
-            <Section number="09" title="Bezpieczeństwo danych">
-              <p className="text-white/65 mb-5 leading-relaxed">Dane chronione są przy użyciu:</p>
+            <DocSection id="bezpieczenstwo" number="09" title="Bezpieczeństwo danych">
+              <p className="mb-5">Dane chronione są przy użyciu:</p>
               <ul className="space-y-3 mb-6">
                 <Bullet>szyfrowania SSL</Bullet>
                 <Bullet>zabezpieczonych serwerów (Vercel)</Bullet>
                 <Bullet>kontroli dostępu</Bullet>
                 <Bullet>aktualnych standardów bezpieczeństwa IT</Bullet>
               </ul>
-              <p className="text-white/65 leading-relaxed">
-                Dostęp mają wyłącznie osoby upoważnione.
-              </p>
-            </Section>
+              <p>Dostęp mają wyłącznie osoby upoważnione.</p>
+            </DocSection>
           </FadeUp>
 
-          {/* Section 10 */}
+          {/* 10 - Zmiany */}
           <FadeUp>
-            <Section number="10" title="Zmiany w polityce prywatności">
-              <p className="text-white/65 leading-relaxed">
-                Polityka prywatności może być aktualizowana w przypadku zmian prawnych lub technicznych. Nowa wersja zostanie opublikowana na stronie drozniak.pl.
+            <DocSection id="zmiany" number="10" title="Zmiany w polityce prywatności">
+              <p>
+                Polityka prywatności może być aktualizowana w przypadku zmian prawnych lub
+                technicznych. Nowa wersja zostanie opublikowana na stronie drozniak.pl.
               </p>
-            </Section>
+            </DocSection>
           </FadeUp>
 
-          {/* Footer */}
+          {/* Stopka dokumentu */}
           <FadeUp>
-            <div className="text-center pt-8 mt-4 border-t border-white/8">
-              <p className="text-white/40 text-[13px] leading-relaxed">
+            <div className="mt-16 md:mt-20 pt-8 border-t border-[#E4E1D8] text-center">
+              <p className="text-[13px] text-[#85816F] leading-[1.7]">
                 &copy; {new Date().getFullYear()} MONLINE Stanisław Drożniak
                 <br />
                 Wszelkie prawa zastrzeżone.
@@ -305,44 +338,59 @@ export default function PrivacyPolicyPage() {
   );
 }
 
-const Section: React.FC<{ number: string; title: string; children: React.ReactNode }> = ({
-  number,
-  title,
-  children,
-}) => (
-  <div className="card p-7 md:p-9">
-    <div className="flex items-center gap-4 mb-6">
-      <span className="font-mono text-[11px] tracking-[0.18em] text-[#fee715]">{number}</span>
-      <span className="h-px flex-1 bg-gradient-to-r from-[#fee715]/40 via-white/8 to-transparent" />
+/* ==================== PRYMITYWY DOKUMENTU ==================== */
+
+const DocSection: React.FC<{
+  id: string;
+  number: string;
+  title: string;
+  children: React.ReactNode;
+}> = ({ id, number, title, children }) => (
+  <section id={id} className="scroll-mt-28 mt-12 md:mt-14 pt-10 md:pt-12 border-t border-[#E4E1D8]">
+    <div className="flex items-baseline gap-4 mb-6">
+      <span className="pub-num text-[1.7rem] md:text-[2rem] flex-shrink-0">{number}</span>
+      <h2 className="text-xl md:text-2xl font-bold tracking-[-0.02em] text-[#161511] leading-tight">
+        {title}
+      </h2>
     </div>
-    <h2 className="text-xl md:text-2xl lg:text-[1.65rem] font-medium tracking-[-0.02em] text-white leading-tight mb-6">
-      {title}
-    </h2>
-    <div className="text-[15px] md:text-base">{children}</div>
-  </div>
+    <div className="text-[15px] md:text-base text-[#4A4740] leading-[1.75]">{children}</div>
+  </section>
+);
+
+const Strong: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <span className="text-[#161511] font-semibold">{children}</span>
+);
+
+const InlineLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => (
+  <a
+    href={href}
+    className={`text-[#8F7418] font-medium underline decoration-[#C9A227]/50 underline-offset-[3px] hover:decoration-[#8F7418] transition-colors ${focusRing}`}
+  >
+    {children}
+  </a>
 );
 
 const Bullet: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <li className="flex items-start gap-3 text-white/65 leading-relaxed">
-    <span className="mt-2 w-1 h-1 rounded-full bg-[#fee715] flex-shrink-0" />
+  <li className="flex items-start gap-3 text-[#4A4740] leading-[1.75]">
+    <span aria-hidden="true" className="mt-[0.7em] w-1 h-1 bg-[#C9A227] flex-shrink-0" />
     <span>{children}</span>
   </li>
 );
 
-const PurposeCard: React.FC<{ num: string; title: string; bullets: string[] }> = ({
+const PurposeItem: React.FC<{ num: string; title: string; bullets: string[] }> = ({
   num,
   title,
   bullets,
 }) => (
-  <div className="rounded-xl bg-white/[0.02] border border-white/8 p-5 md:p-6">
-    <div className="flex items-center gap-3 mb-4">
-      <span className="font-mono text-[10px] tracking-[0.2em] text-[#fee715]">{num}</span>
-      <h3 className="text-[15px] md:text-base font-medium text-white">{title}</h3>
+  <div className="bg-[#FFFFFF] border border-[#E4E1D8] rounded-[4px] p-5 md:p-6">
+    <div className="flex items-baseline gap-3 mb-3.5">
+      <span className="pub-serif text-sm text-[#8F7418]">{num}</span>
+      <h3 className="text-[15px] md:text-base font-semibold text-[#161511]">{title}</h3>
     </div>
     <ul className="space-y-2">
       {bullets.map((b, i) => (
-        <li key={i} className="flex items-start gap-3 text-[14px] text-white/60 leading-relaxed">
-          <span className="mt-1.5 w-1 h-1 rounded-full bg-white/30 flex-shrink-0" />
+        <li key={i} className="flex items-start gap-3 text-[14px] text-[#4A4740] leading-[1.7]">
+          <span aria-hidden="true" className="mt-[0.68em] w-1 h-1 bg-[#D6D2C6] flex-shrink-0" />
           <span>{b}</span>
         </li>
       ))}
@@ -351,13 +399,13 @@ const PurposeCard: React.FC<{ num: string; title: string; bullets: string[] }> =
 );
 
 const RecipientCard: React.FC<{ label: string; items: string[] }> = ({ label, items }) => (
-  <div className="rounded-xl bg-white/[0.02] border border-white/8 p-5">
-    <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#fee715] mb-3">
+  <div className="bg-[#FFFFFF] border border-[#E4E1D8] rounded-[4px] p-5">
+    <p className="text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#85816F] mb-3">
       {label}
-    </div>
+    </p>
     <ul className="space-y-2">
       {items.map((item, i) => (
-        <li key={i} className="text-[14px] text-white/65 leading-relaxed">
+        <li key={i} className="text-[14px] text-[#4A4740] leading-[1.7]">
           {item}
         </li>
       ))}
@@ -365,19 +413,18 @@ const RecipientCard: React.FC<{ label: string; items: string[] }> = ({ label, it
   </div>
 );
 
-const ContactRow: React.FC<{
-  icon: React.ReactNode;
-  label: string;
-  href: string;
-  value: string;
-}> = ({ icon, label, href, value }) => (
-  <div className="flex items-center gap-3">
-    <span className="text-[#fee715]">{icon}</span>
-    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">{label}</span>
-    <span className="text-white/20">·</span>
+const ContactRow: React.FC<{ label: string; href: string; value: string }> = ({
+  label,
+  href,
+  value,
+}) => (
+  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+    <span className="w-16 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#85816F]">
+      {label}
+    </span>
     <a
       href={href}
-      className="text-[#fee715] hover:underline underline-offset-2 text-sm font-medium"
+      className={`text-[15px] text-[#161511] font-medium hover:text-[#8F7418] transition-colors ${focusRing}`}
     >
       {value}
     </a>

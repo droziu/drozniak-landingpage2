@@ -157,100 +157,116 @@ export const PanelClientsManagement: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="font-[Montserrat] text-lg font-bold text-white">Klienci panelu</h2>
-          <p className="text-gray-400 text-xs">Użytkownicy panelu klienta i przypisane widoki (Umowy, Kursy, Marketing, Dane, Projekty)</p>
+          <h2 className="text-xl font-semibold text-white tracking-tight">Konta klienckie</h2>
+          <p className="text-[13px] text-white/50 mt-0.5">Użytkownicy panelu klienta i ich dostępy do modułów</p>
         </div>
         <button
           onClick={openAdd}
-          className="px-4 py-2 bg-[#fee715] text-[#101820] text-sm font-semibold rounded-lg hover:bg-[#fee715]/90"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#fee715] text-[#050714] rounded-md text-[13px] font-semibold hover:brightness-110 transition-all shadow-sm shadow-[#fee715]/20"
         >
-          + Dodaj użytkownika
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          </svg>
+          Dodaj użytkownika
         </button>
       </div>
 
       {loading ? (
-        <LoadingState variant="block" skeleton="table" label="Ładowanie użytkowników…" />
+        <LoadingState variant="block" skeleton="table" label="Ładowanie…" />
       ) : list.length === 0 ? (
-        <div className="py-8 px-4 rounded-lg bg-white/5 border border-white/10 text-center text-gray-400 text-sm">
-          Brak użytkowników. Kliknij „Dodaj użytkownika” i podaj e‑mail istniejącego użytkownika oraz wybierz widoki.
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-lg p-12 text-center">
+          <svg className="w-10 h-10 mx-auto mb-3 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <p className="text-[13px] text-white/70 mb-1">Brak użytkowników</p>
+          <p className="text-[12px] text-white/40">Dodaj e-mail istniejącego użytkownika i przyznaj dostęp do modułów</p>
         </div>
       ) : (
-        <div className="border border-white/10 rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-white/10 bg-white/5">
-                <th className="text-left py-2 px-3 text-gray-400 font-medium">Email</th>
-                <th className="text-left py-2 px-3 text-gray-400 font-medium">Nazwa</th>
-                <th className="text-left py-2 px-3 text-gray-400 font-medium">Widoki</th>
-                <th className="text-right py-2 px-3 text-gray-400 font-medium">Akcje</th>
-              </tr>
-            </thead>
-            <tbody>
-              {list.map((row) => (
-                <tr key={row.id} className="border-b border-white/5 hover:bg-white/5">
-                  <td className="py-2 px-3 text-white">{row.email || '—'}</td>
-                  <td className="py-2 px-3 text-gray-300">{row.name || row.company_name || '—'}</td>
-                  <td className="py-2 px-3 text-gray-400">
-                    {(row.view_tags || []).join(', ') || '—'}
-                  </td>
-                  <td className="py-2 px-3 text-right">
-                    <button onClick={() => openEdit(row)} className="text-[#00C9A7] hover:underline text-xs">Edytuj</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="border border-white/[0.06] rounded-lg overflow-hidden bg-[#0a0d1f]/40">
+          <div className="grid grid-cols-[1fr_180px_1fr_100px] gap-4 px-4 py-2.5 border-b border-white/[0.06] bg-white/[0.02] text-[10px] font-mono font-semibold text-white/40 uppercase tracking-[0.14em]">
+            <div>Email</div>
+            <div>Nazwa</div>
+            <div>Moduły</div>
+            <div className="text-right">Akcje</div>
+          </div>
+          {list.map((row) => (
+            <div
+              key={row.id}
+              className="group grid grid-cols-[1fr_180px_1fr_100px] gap-4 px-4 py-3 border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.03] transition-colors items-center"
+            >
+              <div className="text-[12px] text-white truncate font-mono">{row.email || <span className="text-white/30 font-sans">—</span>}</div>
+              <div className="text-[12px] text-white/70 truncate">{row.name || row.company_name || <span className="text-white/30">—</span>}</div>
+              <div className="flex flex-wrap gap-1">
+                {(row.view_tags || []).length === 0 ? (
+                  <span className="text-[12px] text-white/30">—</span>
+                ) : (
+                  (row.view_tags || []).map((tag) => (
+                    <span key={tag} className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-white/[0.05] border border-white/[0.08] text-white/70 uppercase tracking-wide">
+                      {tag}
+                    </span>
+                  ))
+                )}
+              </div>
+              <div className="flex items-center justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => openEdit(row)} className="p-1.5 hover:bg-white/[0.08] rounded text-white/50 hover:text-white transition-colors" title="Edytuj">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
       {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/70" onClick={() => setModal(null)} />
-          <div className="relative bg-[#18232F] rounded-xl p-5 border border-white/10 max-w-md w-full">
-            <h3 className="text-base font-semibold text-white mb-4">{modal === 'add' ? 'Dodaj użytkownika panelu' : 'Edytuj uprawnienia'}</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setModal(null)}>
+          <div className="bg-[#0a0d1f] rounded-xl p-5 border border-white/[0.08] max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-base font-semibold text-white tracking-tight mb-4">{modal === 'add' ? 'Dodaj użytkownika' : 'Edytuj uprawnienia'}</h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">E‑mail *</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Email <span className="text-red-400 normal-case font-sans tracking-normal">*</span></label>
                 <input
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   disabled={modal === 'edit'}
                   placeholder="email@example.com"
-                  className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 disabled:opacity-60"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors disabled:opacity-50"
                 />
-                {modal === 'add' && <p className="text-xs text-gray-500 mt-1">Użytkownik musi już istnieć w systemie (auth).</p>}
+                {modal === 'add' && <p className="text-[11px] text-white/35 mt-1">Użytkownik musi już istnieć w systemie auth.</p>}
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Nazwa</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Nazwa</label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                  placeholder="Imię / firma"
-                  className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500"
+                  placeholder="Imię / nazwisko"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Nazwa firmy</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Firma</label>
                 <input
                   type="text"
                   value={form.company_name}
                   onChange={(e) => setForm((f) => ({ ...f, company_name: e.target.value }))}
-                  placeholder="Firma"
-                  className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500"
+                  placeholder="Nazwa firmy"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Klient marketingowy (dla lejków)</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Klient marketingowy (dla lejków)</label>
                 <CustomSelect
                   value={form.marketing_client_id}
                   onChange={(v) => setForm((f) => ({ ...f, marketing_client_id: v }))}
-                  placeholder="— Brak —"
+                  placeholder="Brak przypisania"
                   options={[
-                    { value: '', label: '— Brak —' },
+                    { value: '', label: 'Brak przypisania' },
                     ...marketingClients.map((c) => ({
                       value: c.id,
                       label: c.company_name ? `${c.name} (${c.company_name})` : c.name,
@@ -260,8 +276,8 @@ export const PanelClientsManagement: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-2">Widoki (co najmniej jeden) *</label>
-                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-2">Dostęp do modułów <span className="text-red-400 normal-case font-sans tracking-normal">*</span></label>
+                <div className="grid grid-cols-2 gap-1.5">
                   {VIEW_TAGS.map(({ value, label }) => (
                     <CustomCheckbox
                       key={value}
@@ -275,17 +291,26 @@ export const PanelClientsManagement: React.FC = () => {
                         }))
                       }
                       label={label}
-                      className="text-sm"
+                      className="text-[12px]"
                     />
                   ))}
                 </div>
               </div>
             </div>
             <div className="flex gap-2 mt-5">
-              <button onClick={handleSave} disabled={saving} className="px-4 py-2 bg-[#fee715] text-[#101820] text-sm font-semibold rounded-lg hover:bg-[#fee715]/90 disabled:opacity-50">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="flex-1 bg-[#fee715] text-[#050714] text-[13px] font-semibold py-2 px-4 rounded-md hover:brightness-110 transition-all shadow-sm shadow-[#fee715]/20 disabled:opacity-50"
+              >
                 {saving ? 'Zapisywanie…' : 'Zapisz'}
               </button>
-              <button onClick={() => setModal(null)} className="px-4 py-2 bg-white/10 text-white text-sm rounded-lg hover:bg-white/20">Anuluj</button>
+              <button
+                onClick={() => setModal(null)}
+                className="px-3 py-2 bg-white/[0.04] border border-white/[0.08] text-white/80 text-[13px] font-medium rounded-md hover:bg-white/[0.08] hover:text-white transition-colors"
+              >
+                Anuluj
+              </button>
             </div>
           </div>
         </div>

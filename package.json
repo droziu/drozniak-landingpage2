@@ -1,45 +1,36 @@
 {
-  "name": "strategia-ai-dla-firm",
+  "name": "drozniak-pl",
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "next dev",
-    "dev:vite": "vite",
+    "dev": "next dev --webpack",
     "dev:vercel": "vercel dev",
     "build": "next build",
-    "build:vite": "vite build",
     "start": "next start",
-    "lint": "next lint",
-    "preview": "vite preview"
+    "lint": "next lint"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
-    "@types/react-router-dom": "^5.3.3",
     "@vercel/analytics": "^1.6.1",
-    "@vercel/node": "^5.5.9",
     "@xyflow/react": "^12.10.0",
     "framer-motion": "^12.38.0",
     "geist": "^1.7.0",
-    "gsap": "^3.15.0",
     "next": "^16.1.4",
     "phosphor-react": "^1.4.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-router-dom": "^7.9.3",
     "simple-icons": "^16.6.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.22",
     "eslint": "^9",
     "eslint-config-next": "^15.1.4",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
     "typescript": "~5.8.2",
-    "vercel": "^48.10.10",
-    "vite": "^6.2.0"
+    "vercel": "^48.10.10"
   }
 }

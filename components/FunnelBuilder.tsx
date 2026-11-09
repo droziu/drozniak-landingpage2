@@ -31,6 +31,8 @@ import {
   type ConnectionMode,
   type SelectionMode,
 } from '@xyflow/react';
+// Style React Flow ładowane tylko tu, a nie w głównym layoucie: publiczne strony ich nie potrzebują
+import '@xyflow/react/dist/style.css';
 // CSS React Flow jest importowany globalnie w index.tsx
 import * as SimpleIcons from 'simple-icons';
 import { useAuth } from '@/app/hooks/useAuth';
@@ -296,22 +298,20 @@ interface TextNodeData {
   isPinned?: boolean;
 }
 
-// Custom Node Component with Handles (connection points)
+// Custom Node Component - DARK PREMIUM (Linear-style). Gradient elev-2 karty z kolorową ikoną.
 const CustomNode: React.FC<{ id: string; data: CustomNodeData & { commentCount?: number; commentStatus?: 'warning' | 'pending' | 'neutral' | 'closed' }; selected?: boolean }> = ({ id, data, selected }) => {
+  const accentColor = data.color || '#fee715';
   return (
     <div
-      className={`px-4 py-3 rounded-lg border transition-all duration-150 min-w-[140px] relative group ${
-        selected
-          ? 'border-[#fee715] bg-[#18232F]'
-          : 'border-white/[0.08] bg-[#13191f] hover:border-[#fee715]/40 hover:bg-[#18232F]'
-      }`}
+      className="relative group rounded-xl transition-all duration-150 min-w-[120px] max-w-[180px]"
       style={{
+        background: 'linear-gradient(180deg, #1a1d24 0%, #15171c 100%)',
+        border: selected ? `1.5px solid ${accentColor}` : '1px solid rgba(255, 255, 255, 0.07)',
         boxShadow: selected
-          ? '0 0 0 1px #fee715, 0 8px 24px rgba(254, 231, 21, 0.15), 0 2px 6px rgba(0, 0, 0, 0.3)'
-          : '0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2)',
+          ? `0 0 0 4px ${accentColor}22, 0 12px 32px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.35)`
+          : '0 4px 14px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.025)',
       }}
     >
-      {/* Comment Badge */}
       {data.commentCount !== undefined && data.commentCount > 0 && (
         <CommentBadge
           count={data.commentCount}
@@ -319,55 +319,61 @@ const CustomNode: React.FC<{ id: string; data: CustomNodeData & { commentCount?:
           onClick={() => {}}
         />
       )}
-      {/* Jedno kółko na stronę: przeciągnij z kropki do kropki na drugim panelu (tryb loose = source→source). */}
-      {/* Uchwyty są przezroczyste i pojawiają się tylko na hover noda */}
-      <Handle type="source" position={Position.Top} id="top" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ top: -10 }} title="Przeciągnij do kropki na drugim panelu" />
-      <Handle type="source" position={Position.Bottom} id="bottom" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ bottom: -10 }} title="Przeciągnij do kropki na drugim panelu" />
-      <Handle type="source" position={Position.Left} id="left" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ left: -10 }} title="Przeciągnij do kropki na drugim panelu" />
-      <Handle type="source" position={Position.Right} id="right" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ right: -10 }} title="Przeciągnij do kropki na drugim panelu" />
-      
+      {/* Handles - okrągłe, ciemny pierścień scala z node-em */}
+      <Handle type="source" position={Position.Top} id="top" className="!w-3 !h-3 !min-w-3 !min-h-3 !border-2 !border-[#13151a] hover:!w-4 hover:!h-4 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ top: -6, backgroundColor: accentColor }} title="Przeciągnij aby połączyć" />
+      <Handle type="source" position={Position.Bottom} id="bottom" className="!w-3 !h-3 !min-w-3 !min-h-3 !border-2 !border-[#13151a] hover:!w-4 hover:!h-4 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ bottom: -6, backgroundColor: accentColor }} title="Przeciągnij aby połączyć" />
+      <Handle type="source" position={Position.Left} id="left" className="!w-3 !h-3 !min-w-3 !min-h-3 !border-2 !border-[#13151a] hover:!w-4 hover:!h-4 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ left: -6, backgroundColor: accentColor }} title="Przeciągnij aby połączyć" />
+      <Handle type="source" position={Position.Right} id="right" className="!w-3 !h-3 !min-w-3 !min-h-3 !border-2 !border-[#13151a] hover:!w-4 hover:!h-4 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ right: -6, backgroundColor: accentColor }} title="Przeciągnij aby połączyć" />
 
-      <div className="flex items-center gap-2.5">
+      {/* Ikona u góry - duża, gradient brand */}
+      <div className="px-3 pt-3 pb-1 flex justify-center">
         <div
-          className="w-8 h-8 rounded-md flex items-center justify-center shrink-0"
-          style={{ backgroundColor: data.color || '#fee71520', color: '#101820' }}
+          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+          style={{
+            background: `linear-gradient(135deg, ${accentColor} 0%, ${accentColor}cc 100%)`,
+            color: '#0a0b0e',
+            boxShadow: `0 6px 16px ${accentColor}33, inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.15)`,
+          }}
         >
-          {renderPhosphorIcon(data.icon, 18)}
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-[13px] font-semibold text-white leading-tight truncate tracking-tight">{data.label}</div>
+          {renderPhosphorIcon(data.icon, 22)}
         </div>
       </div>
-      {data.notes && (
-        <div className="text-[11px] text-white/55 mt-2 line-clamp-1">{data.notes}</div>
-      )}
+
+      {/* Label */}
+      <div className="px-3 pb-2.5">
+        <div className="text-[12px] font-semibold text-white/95 leading-tight text-center tracking-tight line-clamp-2">{data.label}</div>
+        {data.notes && (
+          <div className="text-[10px] text-white/45 mt-1 text-center line-clamp-1">{data.notes}</div>
+        )}
+      </div>
       {data.link && (
-        <div className="text-[11px] text-[#fee715] mt-2 line-clamp-1 flex items-center gap-1">
-          <Link size={11} weight="bold" />
-          <a href={data.link} target="_blank" rel="noopener noreferrer" className="hover:underline" onClick={(e) => e.stopPropagation()}>
-            {data.link.length > 30 ? data.link.substring(0, 30) + '...' : data.link}
+        <div className="px-3 pb-2.5 -mt-1 flex items-center justify-center gap-1 text-[10px]" style={{ color: accentColor }}>
+          <Link size={10} weight="bold" />
+          <a href={data.link} target="_blank" rel="noopener noreferrer" className="hover:underline truncate" onClick={(e) => e.stopPropagation()}>
+            {data.link.length > 24 ? data.link.substring(0, 24) + '…' : data.link}
           </a>
         </div>
       )}
       {data.customFields && data.customFields.length > 0 && (
-        <div className="mt-2.5 pt-2 border-t border-white/[0.06] space-y-1">
+        <div className="px-3 pb-2.5 -mt-1 pt-2 border-t border-white/[0.06] space-y-0.5">
           {data.customFields.map((field, index) => (
-            <div key={index} className="text-[11px] text-white/55 flex items-center gap-1.5">
-              <span className="text-white/40 font-medium">{field.field_name}:</span>
+            <div key={index} className="text-[10px] text-white/65 flex items-center justify-between gap-1.5">
+              <span className="text-white/40 font-medium truncate">{field.field_name}:</span>
               {field.field_type === 'link' ? (
-                <a 
-                  href={field.field_value} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-[#fee715] hover:underline line-clamp-1" 
+                <a
+                  href={field.field_value}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline truncate"
+                  style={{ color: accentColor }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {field.field_value.length > 25 ? field.field_value.substring(0, 25) + '...' : field.field_value}
+                  {field.field_value.length > 20 ? field.field_value.substring(0, 20) + '…' : field.field_value}
                 </a>
               ) : field.field_type === 'date' ? (
-                <span>{field.field_value ? new Date(field.field_value).toLocaleDateString('pl-PL') : '-'}</span>
+                <span className="truncate">{field.field_value ? new Date(field.field_value).toLocaleDateString('pl-PL') : '—'}</span>
               ) : (
-                <span className="line-clamp-1">{field.field_value || '-'}</span>
+                <span className="truncate">{field.field_value || '—'}</span>
               )}
             </div>
           ))}
@@ -559,7 +565,7 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
             }}
             className="nodrag nopan"
           >
-            <div className="px-2 py-1 bg-[#fee715] text-[#101820] text-xs font-semibold rounded shadow-lg border-2 border-[#101820] max-w-[200px] break-words whitespace-normal leading-tight">
+            <div className="px-2.5 py-1.5 bg-[#13151a]/95 backdrop-blur-md text-white/90 text-[11px] font-medium rounded-md shadow-2xl shadow-black/50 border border-white/[0.10] max-w-[220px] break-words whitespace-normal leading-snug">
               {data.notes}
               {data?.link && (
                 <a
@@ -567,9 +573,9 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="block mt-1 text-[#101820] underline hover:text-blue-600"
+                  className="block mt-1 text-[#fee715] underline decoration-[#fee715]/40 hover:decoration-[#fee715]"
                 >
-                  🔗 Link
+                  Link
                 </a>
               )}
             </div>
@@ -589,13 +595,13 @@ const TextNode: React.FC<{ id: string; data: TextNodeData & { commentCount?: num
 
   return (
     <div
-      className={`px-8 py-5 rounded-xl border-2 transition-all duration-200 relative group ${
-        selected
-          ? 'border-[#fee715] shadow-lg shadow-[#fee715]/30 bg-[#18232F]'
-          : 'border-[#fee715]/20 bg-[#0a0f14] hover:border-[#fee715]/50 hover:bg-[#18232F]'
-      }`}
+      className="px-8 py-5 rounded-xl border transition-all duration-200 relative group"
       style={{
-        boxShadow: selected ? '0 0 20px rgba(254, 231, 21, 0.3)' : '0 4px 6px rgba(0, 0, 0, 0.1)',
+        background: selected ? 'linear-gradient(180deg, #1a1d24 0%, #15171c 100%)' : 'linear-gradient(180deg, #15171c 0%, #131519 100%)',
+        borderColor: selected ? 'rgba(254, 231, 21, 0.7)' : 'rgba(255, 255, 255, 0.07)',
+        boxShadow: selected
+          ? '0 0 0 4px rgba(254, 231, 21, 0.16), 0 10px 28px rgba(0, 0, 0, 0.5)'
+          : '0 4px 14px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.25)',
         width: nodeWidth,
         height: nodeHeight,
         minWidth: 150,
@@ -614,10 +620,10 @@ const TextNode: React.FC<{ id: string; data: TextNodeData & { commentCount?: num
       {/* Uchwyty są przezroczyste i pojawiają się tylko na hover noda */}
       {data.showHandles && (
         <>
-          <Handle type="source" position={Position.Top} id="top" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ top: -10 }} title="Przeciągnij do kropki na drugim panelu" />
-          <Handle type="source" position={Position.Bottom} id="bottom" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ bottom: -10 }} title="Przeciągnij do kropki na drugim panelu" />
-          <Handle type="source" position={Position.Left} id="left" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ left: -10 }} title="Przeciągnij do kropki na drugim panelu" />
-          <Handle type="source" position={Position.Right} id="right" className="!w-5 !h-5 !min-w-5 !min-h-5 bg-[#fee715] border-2 border-[#101820] hover:!w-6 hover:!h-6 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ right: -10 }} title="Przeciągnij do kropki na drugim panelu" />
+          <Handle type="source" position={Position.Top} id="top" className="!w-3 !h-3 !min-w-3 !min-h-3 !bg-[#fee715] !border-2 !border-[#13151a] hover:!w-4 hover:!h-4 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ top: -6 }} title="Przeciągnij do drugiego elementu" />
+          <Handle type="source" position={Position.Bottom} id="bottom" className="!w-3 !h-3 !min-w-3 !min-h-3 !bg-[#fee715] !border-2 !border-[#13151a] hover:!w-4 hover:!h-4 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ bottom: -6 }} title="Przeciągnij do drugiego elementu" />
+          <Handle type="source" position={Position.Left} id="left" className="!w-3 !h-3 !min-w-3 !min-h-3 !bg-[#fee715] !border-2 !border-[#13151a] hover:!w-4 hover:!h-4 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ left: -6 }} title="Przeciągnij do drugiego elementu" />
+          <Handle type="source" position={Position.Right} id="right" className="!w-3 !h-3 !min-w-3 !min-h-3 !bg-[#fee715] !border-2 !border-[#13151a] hover:!w-4 hover:!h-4 transition-all cursor-crosshair z-10 opacity-0 group-hover:opacity-100" style={{ right: -6 }} title="Przeciągnij do drugiego elementu" />
         </>
       )}
       <NodeResizer
@@ -627,7 +633,7 @@ const TextNode: React.FC<{ id: string; data: TextNodeData & { commentCount?: num
         minHeight={60}
         handleStyle={{
           backgroundColor: '#fee715',
-          border: '2px solid #101820',
+          border: '2px solid #13151a',
           borderRadius: '4px',
           width: '10px',
           height: '10px',
@@ -650,6 +656,81 @@ const TextNode: React.FC<{ id: string; data: TextNodeData & { commentCount?: num
   );
 };
 
+// ============================================================
+// Properties Panel - helper komponenty (Figma/Linear-style)
+// ============================================================
+
+interface PropSectionProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+/** Sekcja w properties panel - hairline separator, mono uppercase label */
+const PropSection: React.FC<PropSectionProps> = ({ title, children }) => (
+  <div className="border-b border-white/[0.06] last:border-b-0">
+    <div className="px-3.5 pt-3 pb-1.5 text-[9px] font-mono font-semibold text-white/40 uppercase tracking-[0.18em]">
+      {title}
+    </div>
+    <div className="px-3.5 pb-3 space-y-2">{children}</div>
+  </div>
+);
+
+interface PropRowProps {
+  label: string;
+  children: React.ReactNode;
+}
+
+/** Wiersz w sekcji - label + control. Label po lewej (fixed), kontrol po prawej. */
+const PropRow: React.FC<PropRowProps> = ({ label, children }) => (
+  <div>
+    <div className="text-[10px] text-white/50 mb-1 font-medium">{label}</div>
+    {children}
+  </div>
+);
+
+interface CollapsibleSectionProps {
+  title: string;
+  count?: number;
+  defaultOpen?: boolean;
+  onAdd?: () => void;
+  children: React.ReactNode;
+}
+
+/** Zwijana sekcja - tytuł + chevron + opcjonalny + button */
+const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, count, defaultOpen = false, onAdd, children }) => {
+  const [open, setOpen] = React.useState(defaultOpen);
+  return (
+    <div className="border-b border-white/[0.06] last:border-b-0">
+      <div className="px-3.5 pt-3 pb-2 flex items-center justify-between">
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="flex items-center gap-1.5 text-[9px] font-mono font-semibold text-white/40 hover:text-white/65 uppercase tracking-[0.18em] transition-colors"
+        >
+          <svg className={`w-2.5 h-2.5 transition-transform ${open ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+          </svg>
+          {title}
+          {typeof count === 'number' && count > 0 && (
+            <span className="ml-0.5 text-white/50 font-mono">{count}</span>
+          )}
+        </button>
+        {onAdd && (
+          <button
+            onClick={onAdd}
+            className="p-0.5 hover:bg-white/[0.06] rounded text-white/40 hover:text-white transition-colors"
+            title="Dodaj"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+        )}
+      </div>
+      {open && <div className="px-3.5 pb-3 space-y-2">{children}</div>}
+    </div>
+  );
+};
+
 // Node Types Configuration
 const nodeTypes: NodeTypes = {
   custom: CustomNode,
@@ -661,20 +742,22 @@ const edgeTypes = {
   custom: CustomEdge,
 };
 
-// Stałe propy ReactFlow (wyniesione na poziom modułu, aby zapobiec re-rendererom przez nową referencję)
+// Stałe propy ReactFlow (wyniesione na poziom modułu, aby zapobiec re-rendererom przez nową referencję).
+// Kolor edge: brand yellow z lekko stonowanym wariantem - czytelne ale nie krzykliwe na dark canvas.
+const FUNNEL_EDGE_COLOR = '#d4c10f';
 const FUNNEL_DEFAULT_EDGE_OPTIONS = {
   type: 'custom',
   animated: false,
-  style: { stroke: '#fee715', strokeWidth: 2 },
+  style: { stroke: FUNNEL_EDGE_COLOR, strokeWidth: 1.75, opacity: 0.85 },
   markerStart: undefined,
   markerEnd: {
     type: MarkerType.ArrowClosed,
-    color: '#fee715',
+    color: FUNNEL_EDGE_COLOR,
     orient: 'auto',
   },
 } as const;
 
-const FUNNEL_CONNECTION_LINE_STYLE = { stroke: '#fee715', strokeWidth: 2, strokeDasharray: '5,5' } as const;
+const FUNNEL_CONNECTION_LINE_STYLE = { stroke: '#fee715', strokeWidth: 2, strokeDasharray: '6,4' } as const;
 const FUNNEL_FIT_VIEW_OPTIONS = { padding: 0.2, duration: 0 } as const;
 const FUNNEL_FIT_VIEW_OPTIONS_ANIMATED = { padding: 0.2, duration: 300 } as const;
 const FUNNEL_DELETE_KEY_CODES = ['Delete', 'Backspace'];
@@ -906,12 +989,12 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
       <button
         type="button"
         onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-        className="w-full bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 flex items-center justify-between"
+        className="w-full bg-white/[0.06] border border-white/[0.08] rounded px-2 py-1 text-xs text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 flex items-center justify-between"
       >
-        <span className={value ? 'text-white' : 'text-gray-500'}>
+        <span className={value ? 'text-white' : 'text-white/40'}>
           {formatDateForDisplay(value)}
         </span>
-        <svg className="w-4 h-4 text-white flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 text-white/50 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       </button>
@@ -919,7 +1002,7 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
       {isDatePickerOpen && createPortal(
         <div
           ref={calendarRef}
-          className="fixed bg-[#18232F] border border-white/15 rounded-lg shadow-xl p-4"
+          className="fixed bg-[#1a1d24] border border-white/15 rounded-lg shadow-xl p-4"
           style={Object.keys(calendarStyle).length ? calendarStyle : { zIndex: 99999 }}
         >
           {/* Header */}
@@ -927,9 +1010,9 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
             <button
               type="button"
               onClick={() => navigateMonth(-1)}
-              className="p-1 rounded hover:bg-white/10 transition-colors"
+              className="p-1 rounded hover:bg-white/[0.06] transition-colors"
             >
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-white/65" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
@@ -939,9 +1022,9 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
             <button
               type="button"
               onClick={() => navigateMonth(1)}
-              className="p-1 rounded hover:bg-white/10 transition-colors"
+              className="p-1 rounded hover:bg-white/[0.06] transition-colors"
             >
-              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-white/65" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -950,7 +1033,7 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
           {/* Dni tygodnia */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {dayNames.map((day, idx) => (
-              <div key={idx} className="text-center text-[10px] text-gray-400 py-1">
+              <div key={idx} className="text-center text-[10px] text-white/50 py-1">
                 {day}
               </div>
             ))}
@@ -972,10 +1055,10 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
                     !dayObj.isCurrentMonth
                       ? 'text-gray-600 cursor-not-allowed'
                       : isSelected
-                      ? 'bg-[#fee715] text-[#101820] font-bold'
+                      ? 'bg-[#fee715] text-[#050714] font-bold'
                       : isToday
-                      ? 'bg-white/10 text-[#fee715] border border-[#fee715]/50'
-                      : 'text-white hover:bg-white/10'
+                      ? 'bg-white/[0.06] text-[#fee715] border border-[#fee715]/50'
+                      : 'text-white/80 hover:bg-white/[0.06]'
                   }`}
                 >
                   {dayObj.day}
@@ -985,18 +1068,18 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({ value, onChang
           </div>
 
           {/* Przyciski */}
-          <div className="flex gap-2 mt-3 pt-3 border-t border-white/10">
+          <div className="flex gap-2 mt-3 pt-3 border-t border-white/[0.08]">
             <button
               type="button"
               onClick={clearDate}
-              className="flex-1 px-2 py-1.5 bg-white/5 hover:bg-white/10 border border-white/20 rounded text-white text-[10px] transition-colors"
+              className="flex-1 px-2 py-1.5 bg-[#1a1d24] hover:bg-white/[0.06] border border-white/[0.12] rounded text-white text-[10px] transition-colors"
             >
               Wyczyść
             </button>
             <button
               type="button"
               onClick={selectToday}
-              className="flex-1 px-2 py-1.5 bg-[#fee715] text-[#101820] rounded text-[10px] font-bold transition-colors hover:bg-[#fee715]/90"
+              className="flex-1 px-2 py-1.5 bg-[#fee715] text-[#050714] rounded text-[10px] font-bold transition-colors hover:bg-[#fee715]/90"
             >
               Dzisiaj
             </button>
@@ -1029,13 +1112,35 @@ export const FunnelBuilder: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [showPropertiesPanel, setShowPropertiesPanel] = useState(false);
   const [customTemplates, setCustomTemplates] = useState<Array<{ type: string; icon: string; label: string; color: string; category: string; isCustom?: boolean }>>([]);
-  const [nodeProperties, setNodeProperties] = useState<Omit<CustomNodeData, 'color'>>({
+  const [nodeProperties, setNodeProperties] = useState<CustomNodeData>({
     label: '',
     icon: 'FileText',
+    color: '#fee715',
     notes: '',
     link: '',
     isPinned: false,
   });
+  // P4: ostatnio użyte kolory (max 5, persisted w localStorage)
+  const [recentColors, setRecentColors] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const stored = window.localStorage.getItem('funnel-recent-colors');
+      if (!stored) return [];
+      const parsed = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed.slice(0, 5) : [];
+    } catch {
+      return [];
+    }
+  });
+  const addRecentColor = useCallback((color: string) => {
+    setRecentColors((prev) => {
+      const next = [color, ...prev.filter((c) => c !== color)].slice(0, 5);
+      try {
+        window.localStorage.setItem('funnel-recent-colors', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  }, []);
   const [nodeCustomFields, setNodeCustomFields] = useState<NodeCustomField[]>([]);
   const [textNodeProperties, setTextNodeProperties] = useState<TextNodeData>({
     text: '',
@@ -1053,11 +1158,57 @@ export const FunnelBuilder: React.FC = () => {
   const [showMinimap, setShowMinimap] = useState(false);
   const [showAlignToolbar, setShowAlignToolbar] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
-  // Klient nie widzi sidebaru z szablonami (nic by tam nie zrobił - nie może dodawać nodów)
-  const [showSidebar, setShowSidebar] = useState(!isReadOnly);
+  // Klient nie widzi panelu Add (nic by tam nie zrobił - nie może dodawać nodów).
+  // showAddDrawer = overlay z templates, wyświetlany nad canvas po kliknięciu "+" w left rail.
+  const [showAddDrawer, setShowAddDrawer] = useState(false);
   const [showBottomToolbar, setShowBottomToolbar] = useState(true);
-  const [showLegend, setShowLegend] = useState(false);
   const [showShortcutsModal, setShowShortcutsModal] = useState(false);
+  // P3: czy user "zgubił się" w canvasie - żaden node nie jest w widoku
+  // (gdy true, pokażemy pulsujący Center button)
+  const [isLostInCanvas, setIsLostInCanvas] = useState(false);
+  // P5: wyszukiwanie templateów w sidebar
+  const [templateSearchQuery, setTemplateSearchQuery] = useState('');
+  // Szerokość Properties Panel - resizable z localStorage (288 = w-72 default)
+  const [propertiesPanelWidth, setPropertiesPanelWidth] = useState<number>(() => {
+    if (typeof window === 'undefined') return 288;
+    const stored = window.localStorage.getItem('funnel-prop-panel-w');
+    const n = stored ? parseInt(stored, 10) : NaN;
+    return !isNaN(n) && n >= 240 && n <= 640 ? n : 288;
+  });
+  const isResizingPanelRef = useRef(false);
+  const handlePanelResizeStart = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    isResizingPanelRef.current = true;
+    const startX = e.clientX;
+    const startWidth = propertiesPanelWidth;
+    const onMove = (ev: MouseEvent) => {
+      if (!isResizingPanelRef.current) return;
+      const delta = startX - ev.clientX; // przeciąganie w lewo = szerszy panel
+      const next = Math.max(240, Math.min(640, startWidth + delta));
+      setPropertiesPanelWidth(next);
+    };
+    const onUp = () => {
+      isResizingPanelRef.current = false;
+      try {
+        window.localStorage.setItem('funnel-prop-panel-w', String(propertiesPanelWidth));
+      } catch {}
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  }, [propertiesPanelWidth]);
+  // Persist szerokość po każdej zmianie (debounce by localStorage write)
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      try { window.localStorage.setItem('funnel-prop-panel-w', String(propertiesPanelWidth)); } catch {}
+    }, 200);
+    return () => window.clearTimeout(t);
+  }, [propertiesPanelWidth]);
   // Klient startuje w trybie pan (z możliwością przełączenia na comment dolnym toolbarem).
   // Admin też - tryb wybiera użytkownik.
   const [interactionMode, setInteractionMode] = useState<'pan' | 'select' | 'comment'>('pan');
@@ -1276,11 +1427,39 @@ export const FunnelBuilder: React.FC = () => {
     }
   }, [id, user, loadCustomTemplates, loadCommentCounts]);
 
-  // Ustawienie viewportu po załadowaniu danych (tylko raz)
+  // Initial viewport - priorytety:
+  // 1) Ostatni zapisany viewport z diagram_data.viewport (klient/admin wraca tam gdzie skończył)
+  // 2) Pinned node - centruj na nim z zoom 0.48
+  // 3) fitView jako fallback
+  // Uruchamia się raz po załadowaniu, hasSetInitialViewportRef blokuje powtórki.
   useEffect(() => {
-    if (!reactFlowInstance || !funnel || nodes.length === 0 || hasSetInitialViewportRef.current) return;
-    
-    // Sprawdź, czy jest przypięty node
+    if (!reactFlowInstance || !funnel || hasSetInitialViewportRef.current) return;
+
+    hasSetInitialViewportRef.current = true;
+
+    // Helper: czy viewport z bazy jest sensowny? (guard przeciw NaN, zepsutym danym, default {0,0,1})
+    const isValidViewport = (vp: { x: number; y: number; zoom: number } | undefined | null): boolean => {
+      if (!vp) return false;
+      if (typeof vp.x !== 'number' || typeof vp.y !== 'number' || typeof vp.zoom !== 'number') return false;
+      if (Number.isNaN(vp.x) || Number.isNaN(vp.y) || Number.isNaN(vp.zoom)) return false;
+      if (vp.zoom < 0.05 || vp.zoom > 5) return false;
+      // Default {0,0,1} potraktuj jako "brak zapisanego viewportu" - inaczej każdy nowy diagram by tu padał
+      if (vp.x === 0 && vp.y === 0 && vp.zoom === 1) return false;
+      return true;
+    };
+
+    // Priorytet 1: ostatni zapisany viewport
+    if (isValidViewport(viewport)) {
+      requestAnimationFrame(() => {
+        reactFlowInstance.setViewport(viewport, { duration: 0 });
+      });
+      return;
+    }
+
+    // Bez nodów - nic do pokazania, zostaw default
+    if (nodes.length === 0) return;
+
+    // Priorytet 2: pinned node
     const pinnedNode = nodes.find((n) => {
       if (n.type === 'text') {
         return (n.data as unknown as TextNodeData).isPinned === true;
@@ -1288,71 +1467,28 @@ export const FunnelBuilder: React.FC = () => {
         return (n.data as unknown as CustomNodeData).isPinned === true;
       }
     });
-    
-    hasSetInitialViewportRef.current = true;
-    
-    if (pinnedNode) {
-      // Wyśrodkuj przypięty node
+
+    if (pinnedNode && reactFlowWrapper.current) {
       hasCenteredOnPinnedRef.current = true;
-      
-      // Użyj requestAnimationFrame dla szybszego renderowania (zamiast setTimeout)
-      const setViewport = () => {
-        if (!reactFlowInstance || !reactFlowWrapper.current) {
-          requestAnimationFrame(setViewport);
-          return;
-        }
-        
-        // Sprawdź, czy node rzeczywiście istnieje w aktualnych nodes
-        const currentPinnedNode = nodes.find((n) => n.id === pinnedNode.id);
-        if (!currentPinnedNode) {
-          console.warn('Przypięty node nie został znaleziony:', pinnedNode.id);
-          // Fallback: ustaw domyślny viewport
-          reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.48 }, { duration: 0 });
-          return;
-        }
-        
-        // Oblicz wymiary noda
-        const width = currentPinnedNode.width || currentPinnedNode.measured?.width || (currentPinnedNode.type === 'text' ? 250 : 150);
-        const height = currentPinnedNode.height || currentPinnedNode.measured?.height || (currentPinnedNode.type === 'text' ? 100 : 80);
-        
-        // Oblicz środek noda w przestrzeni flow
-        const cx = currentPinnedNode.position.x + width / 2;
-        const cy = currentPinnedNode.position.y + height / 2;
-        
-        // Oblicz wymiary kontenera
-        const containerWidth = reactFlowWrapper.current.offsetWidth;
-        const containerHeight = reactFlowWrapper.current.offsetHeight;
-        const zoom = 0.48;
-        
-        // Oblicz pozycję viewport tak, aby środek noda był na środku ekranu
-        const x = containerWidth / 2 - cx * zoom;
-        const y = containerHeight / 2 - cy * zoom;
-        
-        // Ustaw viewport z wyśrodkowanym nodem i zoomem 0.48
-        reactFlowInstance.setViewport({ x, y, zoom }, { duration: 200 });
-      };
-      
-      // Użyj requestAnimationFrame dla natychmiastowego renderowania
+      const width = pinnedNode.width || pinnedNode.measured?.width || (pinnedNode.type === 'text' ? 250 : 150);
+      const height = pinnedNode.height || pinnedNode.measured?.height || (pinnedNode.type === 'text' ? 100 : 80);
+      const cx = pinnedNode.position.x + width / 2;
+      const cy = pinnedNode.position.y + height / 2;
+      const containerWidth = reactFlowWrapper.current.offsetWidth;
+      const containerHeight = reactFlowWrapper.current.offsetHeight;
+      const zoom = 0.48;
+      const x = containerWidth / 2 - cx * zoom;
+      const y = containerHeight / 2 - cy * zoom;
       requestAnimationFrame(() => {
-        requestAnimationFrame(setViewport);
+        reactFlowInstance.setViewport({ x, y, zoom }, { duration: 0 });
       });
-    } else {
-      // Nie ma przypiętego noda - użyj fitView jako domyślny widok
-      const setViewport = () => {
-        if (!reactFlowInstance) {
-          requestAnimationFrame(setViewport);
-          return;
-        }
-        
-        // Użyj fitView jako domyślny widok
-        reactFlowInstance.fitView({ padding: 0.2, duration: 200 });
-      };
-      
-      // Użyj requestAnimationFrame dla natychmiastowego renderowania
-      requestAnimationFrame(() => {
-        requestAnimationFrame(setViewport);
-      });
+      return;
     }
+
+    // Priorytet 3: fitView całego diagramu
+    requestAnimationFrame(() => {
+      reactFlowInstance.fitView({ padding: 0.15, duration: 0 });
+    });
   }, [reactFlowInstance, funnel, nodes, viewport]);
 
   // Reset flagi przy załadowaniu nowego lejka
@@ -1382,17 +1518,17 @@ export const FunnelBuilder: React.FC = () => {
     setHasUnsavedChanges(currentState !== savedState);
   }, [nodes, edges]);
 
-  // Auto-save on changes - ale NIE podczas edycji w modalu (properties panel) i NIE dla klienta
+  // Auto-save - 2s debounce po każdej zmianie nodes/edges.
+  // Działa też z otwartym properties panelem dzięki live-preview useEffect (P4):
+  // zmiany w nodeProperties trafiają od razu do `nodes`, więc autosave je złapie.
   useEffect(() => {
-    if (isReadOnly) return;
-    if (funnel && nodes.length >= 0 && !showPropertiesPanel && !showEdgeProperties) {
-      const timeoutId = setTimeout(() => {
-        saveFunnel();
-      }, 2000); // Debounce 2 seconds
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [nodes, edges, funnel, showPropertiesPanel, showEdgeProperties, isReadOnly]);
+    if (isReadOnly || !funnel) return;
+    if (!hasUnsavedChanges) return; // nic do zapisania
+    const timeoutId = setTimeout(() => {
+      saveFunnel();
+    }, 2000);
+    return () => clearTimeout(timeoutId);
+  }, [hasUnsavedChanges, funnel, isReadOnly]);
 
   // Funkcja kopiowania zaznaczonych nodów i edges
   const handleCopy = useCallback(() => {
@@ -1461,19 +1597,52 @@ export const FunnelBuilder: React.FC = () => {
     };
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isFormElement(e.target) || isFormElement(document.activeElement)) return;
+      // ESC zamyka Add drawer
+      if (e.key === 'Escape' && showAddDrawer) {
+        e.preventDefault();
+        setShowAddDrawer(false);
+        return;
+      }
+      // A - toggle Add drawer (Miro-style)
+      if ((e.key === 'a' || e.key === 'A') && !e.metaKey && !e.ctrlKey && !e.altKey && !isReadOnly) {
+        e.preventDefault();
+        setShowAddDrawer((s) => !s);
+        return;
+      }
+      // V - Pan tool (Miro-style)
+      if ((e.key === 'v' || e.key === 'V') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        setInteractionMode('pan');
+        setCommentMode(false);
+        return;
+      }
+      // S - Select tool
+      if ((e.key === 's' || e.key === 'S') && !e.metaKey && !e.ctrlKey && !e.altKey && !isReadOnly) {
+        e.preventDefault();
+        setInteractionMode('select');
+        setCommentMode(false);
+        return;
+      }
+      // C - Comment tool
+      if ((e.key === 'c' || e.key === 'C') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        setCommentMode((m) => !m);
+        setInteractionMode(commentMode ? 'pan' : 'comment');
+        return;
+      }
       // ? otwiera modal pomocy (Shift + /)
       if (e.key === '?' || (e.shiftKey && e.key === '/')) {
         e.preventDefault();
         setShowShortcutsModal((s) => !s);
         return;
       }
-      // F - fit view (jak w Figmie/Funnelytics)
-      if (e.key === 'f' || e.key === 'F') {
-        if (!e.metaKey && !e.ctrlKey && !e.altKey) {
-          e.preventDefault();
-          reactFlowInstance?.fitView({ duration: 300, padding: 0.2 });
-          return;
+      // F lub Home - smart return (wycentruj na nodach)
+      if ((e.key === 'f' || e.key === 'F' || e.key === 'Home') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        if (nodes.length > 0) {
+          reactFlowInstance?.fitView({ duration: 400, padding: 0.15 });
         }
+        return;
       }
       if (!isReadOnly && (e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
@@ -1510,7 +1679,7 @@ export const FunnelBuilder: React.FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [handleUndo, handleCopy, handlePaste, isReadOnly, reactFlowInstance]);
+  }, [handleUndo, handleCopy, handlePaste, isReadOnly, reactFlowInstance, nodes.length, showAddDrawer, commentMode]);
 
   // Zapisywanie własnego szablonu
   const saveCustomTemplate = useCallback(async (label: string, icon: string, color: string, category: string) => {
@@ -1850,11 +2019,11 @@ export const FunnelBuilder: React.FC = () => {
         id: `edge-${params.source}-${params.target}-${Date.now()}`,
         type: 'custom',
         animated: false,
-        style: { stroke: '#fee715', strokeWidth: 2 },
+        style: { stroke: FUNNEL_EDGE_COLOR, strokeWidth: 2 },
         markerStart: undefined,
         markerEnd: {
           type: MarkerType.ArrowClosed,
-          color: '#fee715',
+          color: FUNNEL_EDGE_COLOR,
           orient: 'auto',
         },
         data: {
@@ -2026,13 +2195,14 @@ export const FunnelBuilder: React.FC = () => {
       lastSavedTextNodePropertiesRef.current = JSON.parse(JSON.stringify(props));
       setHasUnsavedTextNodeChanges(false);
     } else {
-      const props = {
+      const props: CustomNodeData = {
         label: (node.data as unknown as CustomNodeData).label || '',
         icon: (node.data as unknown as CustomNodeData).icon || 'FileText',
+        color: (node.data as unknown as CustomNodeData).color || '#fee715',
         notes: (node.data as unknown as CustomNodeData).notes || '',
         link: (node.data as unknown as CustomNodeData).link || '',
         isPinned: (node.data as unknown as CustomNodeData).isPinned ?? false,
-        category: (node.data as unknown as CustomNodeData).category, // Zachowaj kategorię
+        category: (node.data as unknown as CustomNodeData).category,
       };
       setNodeProperties(props);
       lastSavedNodePropertiesRef.current = JSON.parse(JSON.stringify(props));
@@ -2443,6 +2613,110 @@ export const FunnelBuilder: React.FC = () => {
     return { width, height };
   }, []);
 
+  // P3: czy bounding box któregokolwiek noda przecina się z viewportem.
+  // Używane przez debounce w onViewportChange + Center button do auto-pulsowania.
+  const areAnyNodesVisible = useCallback((vp: { x: number; y: number; zoom: number }, ns: Node[]): boolean => {
+    if (ns.length === 0) return true; // brak nodów = nic do pokazania, nie alarmuj
+    if (!reactFlowWrapper.current) return true;
+    const cw = reactFlowWrapper.current.offsetWidth;
+    const ch = reactFlowWrapper.current.offsetHeight;
+    // Viewport w przestrzeni flow (NIE screen)
+    const viewLeft = -vp.x / vp.zoom;
+    const viewTop = -vp.y / vp.zoom;
+    const viewRight = viewLeft + cw / vp.zoom;
+    const viewBottom = viewTop + ch / vp.zoom;
+    for (const n of ns) {
+      const { width: w, height: h } = getNodeDimensions(n);
+      const nl = n.position.x, nt = n.position.y, nr = n.position.x + w, nb = n.position.y + h;
+      // Przecięcie AABB (Axis-Aligned Bounding Box)
+      if (nl < viewRight && nr > viewLeft && nt < viewBottom && nb > viewTop) return true;
+    }
+    return false;
+  }, [getNodeDimensions]);
+
+  // Debounced update isLostInCanvas - aktualizujemy 150ms po ostatnim ruchu kamery
+  const lostCheckTimerRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (lostCheckTimerRef.current !== null) {
+      window.clearTimeout(lostCheckTimerRef.current);
+    }
+    lostCheckTimerRef.current = window.setTimeout(() => {
+      setIsLostInCanvas(!areAnyNodesVisible(viewport, nodes));
+    }, 150);
+    return () => {
+      if (lostCheckTimerRef.current !== null) window.clearTimeout(lostCheckTimerRef.current);
+    };
+  }, [viewport, nodes, areAnyNodesVisible]);
+
+  // Smart return - klik / hotkey Home → fitView z animacją
+  // Auto-layout LR (left-to-right) - prosty BFS po grafie połączeń.
+  // Wyznacza kolumny (poziomy) i równo rozmieszcza nody. Niepodłączone nody w 1. kolumnie.
+  const handleAutoLayoutLR = useCallback(() => {
+    if (nodes.length === 0) return;
+    const COL_WIDTH = 240;
+    const ROW_HEIGHT = 180;
+    // Buduj mapę: targetId -> [sourceId...]
+    const incoming = new Map<string, string[]>();
+    const outgoing = new Map<string, string[]>();
+    nodes.forEach((n) => { incoming.set(n.id, []); outgoing.set(n.id, []); });
+    edges.forEach((e) => {
+      incoming.get(e.target)?.push(e.source);
+      outgoing.get(e.source)?.push(e.target);
+    });
+    // Roots: brak incoming (najlepiej traktować jako pierwsza kolumna)
+    const roots = nodes.filter((n) => (incoming.get(n.id) || []).length === 0).map((n) => n.id);
+    if (roots.length === 0) roots.push(nodes[0].id); // edge case: cycle
+    // BFS - przypisz każdemu nodowi level (kolumnę)
+    const level = new Map<string, number>();
+    roots.forEach((r) => level.set(r, 0));
+    const queue = [...roots];
+    while (queue.length > 0) {
+      const id = queue.shift()!;
+      const myLevel = level.get(id)!;
+      (outgoing.get(id) || []).forEach((next) => {
+        const nextLevel = Math.max(level.get(next) ?? -1, myLevel + 1);
+        if (nextLevel !== level.get(next)) {
+          level.set(next, nextLevel);
+          queue.push(next);
+        }
+      });
+    }
+    // Dla nodów które nie były dotknięte BFS (np. izolowane) - przypisz level 0
+    nodes.forEach((n) => { if (!level.has(n.id)) level.set(n.id, 0); });
+    // Pogrupuj po levelach
+    const byLevel = new Map<number, string[]>();
+    level.forEach((lvl, id) => {
+      if (!byLevel.has(lvl)) byLevel.set(lvl, []);
+      byLevel.get(lvl)!.push(id);
+    });
+    // Ustaw pozycje
+    const newPositions = new Map<string, { x: number; y: number }>();
+    Array.from(byLevel.entries())
+      .sort(([a], [b]) => a - b)
+      .forEach(([lvl, ids]) => {
+        const startY = -((ids.length - 1) * ROW_HEIGHT) / 2;
+        ids.forEach((id, idx) => {
+          newPositions.set(id, { x: lvl * COL_WIDTH, y: startY + idx * ROW_HEIGHT });
+        });
+      });
+    pushUndoHistory();
+    setNodes((nds) =>
+      nds.map((n) => {
+        const pos = newPositions.get(n.id);
+        return pos ? { ...n, position: pos } : n;
+      })
+    );
+    // FitView po krótkiej chwili
+    setTimeout(() => {
+      reactFlowInstance?.fitView({ padding: 0.15, duration: 400 });
+    }, 50);
+  }, [nodes, edges, setNodes, pushUndoHistory, reactFlowInstance]);
+
+  const handleSmartReturn = useCallback(() => {
+    if (!reactFlowInstance || nodes.length === 0) return;
+    reactFlowInstance.fitView({ padding: 0.15, duration: 400 });
+  }, [reactFlowInstance, nodes.length]);
+
   // rAF throttle dla alignment guides - bez tego setState leciał na każdy piksel ruchu kursora
   // i przy >50 nodach FPS spadało do 30. Teraz max 60Hz updateów.
   const alignmentRafRef = useRef<number | null>(null);
@@ -2485,6 +2759,76 @@ export const FunnelBuilder: React.FC = () => {
       focusLabelOnOpenRef.current = false;
     }
   }, [showPropertiesPanel]);
+
+  // Live preview - custom node: zmiany w nodeProperties natychmiast w nodes (bez "Zapisz")
+  useEffect(() => {
+    if (!showPropertiesPanel || !selectedNode || selectedNode.type === 'text') return;
+    setNodes((nds) =>
+      nds.map((n) =>
+        n.id === selectedNode.id
+          ? {
+              ...n,
+              data: {
+                ...n.data,
+                label: nodeProperties.label,
+                icon: nodeProperties.icon,
+                color: nodeProperties.color,
+                notes: nodeProperties.notes,
+                link: nodeProperties.link,
+                isPinned: nodeProperties.isPinned,
+                category: nodeProperties.category,
+              },
+            }
+          : n
+      )
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeProperties, showPropertiesPanel]);
+
+  // Live preview - text node: zmiany w textNodeProperties → nodes natychmiast
+  useEffect(() => {
+    if (!showPropertiesPanel || !selectedNode || selectedNode.type !== 'text') return;
+    setNodes((nds) =>
+      nds.map((n) =>
+        n.id === selectedNode.id
+          ? {
+              ...n,
+              data: {
+                ...n.data,
+                text: textNodeProperties.text,
+                fontSize: textNodeProperties.fontSize,
+                fontWeight: textNodeProperties.fontWeight,
+                textAlign: textNodeProperties.textAlign,
+                verticalAlign: textNodeProperties.verticalAlign,
+                showHandles: textNodeProperties.showHandles,
+                isPinned: textNodeProperties.isPinned,
+              },
+            }
+          : n
+      )
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textNodeProperties, showPropertiesPanel]);
+
+  // Live preview - edge: zmiany w edgeProperties → edges natychmiast
+  useEffect(() => {
+    if (!showEdgeProperties || !selectedEdge) return;
+    setEdges((eds) =>
+      eds.map((e) =>
+        e.id === selectedEdge.id
+          ? {
+              ...e,
+              data: {
+                ...e.data,
+                notes: edgeProperties.notes,
+                link: edgeProperties.link,
+              },
+            }
+          : e
+      )
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [edgeProperties, showEdgeProperties]);
 
   // Memoizacja propsów ReactFlow: bez tego każdy render tworzył nową tablicę nodes/edges
   // i wymuszał re-renderowanie WSZYSTKICH węzłów/krawędzi (lag przy drag/zoom).
@@ -2686,8 +3030,17 @@ export const FunnelBuilder: React.FC = () => {
 
   // Połącz standardowe szablony z własnymi
   const allTemplates = [...nodeTemplates, ...customTemplates];
-  
-  const groupedTemplates = allTemplates.reduce((acc, template) => {
+
+  // P5: filtrowanie po wyszukiwaniu (case-insensitive, label + category)
+  const filteredTemplates = useMemo(() => {
+    const q = templateSearchQuery.trim().toLowerCase();
+    if (!q) return allTemplates;
+    return allTemplates.filter(
+      (t) => t.label.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)
+    );
+  }, [allTemplates, templateSearchQuery]);
+
+  const groupedTemplates = filteredTemplates.reduce((acc, template) => {
     if (!acc[template.category]) {
       acc[template.category] = [];
     }
@@ -2710,7 +3063,7 @@ export const FunnelBuilder: React.FC = () => {
 
   if (!funnel) {
     return (
-      <div className="h-screen bg-[#101820] flex items-center justify-center">
+      <div className="h-screen bg-[#13151a] flex items-center justify-center">
         <div className="text-center text-white">
           <p className="text-lg mb-4">Lejek nie został znaleziony</p>
           <button
@@ -2725,12 +3078,12 @@ export const FunnelBuilder: React.FC = () => {
   }
 
   return (
-    <div className="h-screen bg-[#101820] flex flex-col relative">
+    <div className="h-screen bg-[#13151a] flex flex-col relative">
       {/* Mini-przycisk do przywrócenia ukrytego headera */}
       {!showHeader && (
         <button
           onClick={() => setShowHeader(true)}
-          className="fixed top-2 left-2 z-50 p-2 bg-[#18232F]/95 border border-[#fee715]/30 text-[#fee715] rounded-lg hover:bg-[#fee715]/10 hover:border-[#fee715]/50 transition-all duration-200 shadow-lg backdrop-blur-sm"
+          className="fixed top-2 left-2 z-50 p-2 bg-[#13151a]/95 border border-[#fee715]/30 text-[#fee715] rounded-lg hover:bg-[#fee715]/10 hover:border-[#fee715]/50 transition-all duration-200 shadow-lg backdrop-blur-sm"
           title="Pokaż nagłówek"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2739,33 +3092,37 @@ export const FunnelBuilder: React.FC = () => {
         </button>
       )}
 
-      {/* Header */}
-      <div className={`flex items-center justify-between px-5 py-2.5 border-b border-white/[0.06] bg-[#0a0f14]/85 backdrop-blur-xl transition-all duration-300 ${showHeader ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden border-0'}`}>
-        <div className="flex items-center gap-3">
+      {/* Header - minimal Linear/Figma style, h-10 */}
+      <div className={`flex items-center justify-between px-3 h-10 border-b border-white/[0.08] bg-[#13151a] border-white/[0.08] transition-all duration-300 ${showHeader ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden border-0'}`}>
+        <div className="flex items-center gap-1.5 min-w-0 flex-1">
           <button
             onClick={() => router.push(isReadOnly ? '/panel' : '/admin/marketing')}
-            className="p-2 hover:bg-white/10 rounded-lg transition-all"
-            title={isReadOnly ? 'Powrót do panelu' : 'Powrót do listy lejków'}
+            className="p-1 hover:bg-white/[0.06] rounded transition-colors text-white/50 hover:text-white shrink-0"
+            title={isReadOnly ? 'Powrót do panelu (Esc)' : 'Powrót do listy lejków'}
           >
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <div className="flex-1">
             {isReadOnly ? (
-              <h1 className="font-[Montserrat] text-base font-semibold text-white tracking-tight">
+              <h1 className="font-sans text-[13px] font-medium text-white tracking-tight truncate">
                 {funnel.project_name || 'Bez nazwy'}
               </h1>
             ) : !isEditingTitle ? (
               <h1
-                className="font-[Montserrat] text-base font-semibold text-white tracking-tight cursor-pointer hover:text-[#fee715] transition-colors"
+                className="group font-sans text-[13px] font-medium text-white tracking-tight cursor-pointer transition-colors truncate inline-flex items-center gap-1.5 hover:bg-[#1a1d24] rounded px-1.5 py-0.5 -mx-1.5 -my-0.5"
                 onClick={() => {
                   setIsEditingTitle(true);
                   setEditedTitle(funnel.project_name || '');
                 }}
-                title="Kliknij, aby edytować tytuł"
+                title="Kliknij, aby edytować nazwę"
               >
-                Mapa marketingu - {funnel.project_name || 'Bez nazwy'}
+                <span className="text-white/40 group-hover:text-white/50 transition-colors">Lejek /</span>
+                <span className="truncate">{funnel.project_name || 'Bez nazwy'}</span>
+                <svg className="w-3 h-3 text-white/0 group-hover:text-white/40 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
               </h1>
             ) : (
               <input
@@ -2797,19 +3154,19 @@ export const FunnelBuilder: React.FC = () => {
                     setIsEditingTitle(false);
                   }
                 }}
-                className="font-[Montserrat] text-base font-semibold text-white tracking-tight bg-white/10 border border-[#fee715]/50 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 w-full max-w-md"
+                className="font-sans text-base font-semibold text-white tracking-tight bg-white/[0.06] border border-[#fee715]/50 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 w-full max-w-md"
                 autoFocus
               />
             )}
             {isReadOnly ? (
               funnel.subtitle ? (
-                <div className="inline-flex items-center px-3 py-1 rounded-md bg-white/[0.04] border border-white/10 text-xs font-medium text-gray-300 mt-0.5">
+                <div className="inline-flex items-center px-3 py-1 rounded-md bg-white/[0.06] border border-white/[0.08] text-xs font-medium text-white/65 mt-0.5">
                   {funnel.subtitle}
                 </div>
               ) : null
             ) : !isEditingSubtitle ? (
               <div
-                className="inline-flex items-center px-3 py-1 rounded-md bg-white/[0.04] border border-white/10 text-xs font-medium text-gray-300 cursor-pointer hover:bg-white/[0.06] hover:border-white/20 hover:text-white transition-all mt-0.5"
+                className="inline-flex items-center px-3 py-1 rounded-md bg-white/[0.06] border border-white/[0.08] text-xs font-medium text-white/65 cursor-pointer hover:bg-white/[0.06] hover:border-white/[0.12] hover:text-white transition-all mt-0.5"
                 onClick={() => {
                   setIsEditingSubtitle(true);
                   setEditedSubtitle(funnel.subtitle || '');
@@ -2869,7 +3226,7 @@ export const FunnelBuilder: React.FC = () => {
                     value={editedSubtitle}
                     onChange={(e) => setEditedSubtitle(e.target.value)}
                     placeholder="Wpisz własny podtytuł"
-                    className="text-sm bg-white/10 border border-[#fee715]/50 rounded px-2 py-1 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 w-48"
+                    className="text-sm bg-[#13151a] border border-[#fee715]/50 rounded px-2 py-1 text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 w-48"
                     autoFocus
                   />
                 )}
@@ -2916,7 +3273,7 @@ export const FunnelBuilder: React.FC = () => {
                       setSubtitleMode('custom');
                     }
                   }}
-                  className="px-2 py-1 text-xs bg-white/10 border border-white/20 text-white/70 rounded hover:bg-white/20 transition-colors"
+                  className="px-2 py-1 text-xs bg-white/[0.06] border border-white/[0.12] text-white/65 rounded hover:bg-white/[0.10] transition-colors"
                   title="Anuluj"
                 >
                   ×
@@ -2925,226 +3282,280 @@ export const FunnelBuilder: React.FC = () => {
             )}
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setShowHeader(false)}
-            className="p-1.5 hover:bg-white/10 rounded-lg transition-all text-gray-400 hover:text-white"
-            title="Ukryj nagłówek"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          {!isReadOnly && saving && user?.email === 'stanislaw@drozniak.com' && (
-            <span className="text-sm text-gray-400 flex items-center gap-2">
-              <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              Zapisuję...
+        <div className="flex items-center gap-1">
+          {/* Status zapisu jako mała kropka + tooltip (oszczędność miejsca jak Figma) */}
+          {!isReadOnly && (
+            <span
+              className="flex items-center gap-1.5 px-1.5 mr-1 text-[10px] font-mono text-white/40"
+              title={saving ? 'Zapisywanie…' : hasUnsavedChanges ? 'Niezapisane (autosave za 2s)' : 'Wszystko zapisane'}
+            >
+              <span
+                className={`inline-block w-1.5 h-1.5 rounded-full ${
+                  saving ? 'bg-[#fee715] animate-pulse' : hasUnsavedChanges ? 'bg-amber-400' : 'bg-emerald-500'
+                }`}
+              />
+              <span className="hidden lg:inline">
+                {saving ? 'Zapisywanie' : hasUnsavedChanges ? 'Niezapisane' : 'Zapisano'}
+              </span>
             </span>
           )}
+
           {!isReadOnly && (
             <button
               onClick={handleUndo}
               disabled={undoHistory.length === 0}
-              title="Cofnij ostatnią zmianę (Ctrl+Z)"
-              className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.08] text-white/80 rounded-lg text-sm font-medium hover:bg-white/[0.08] hover:border-white/[0.15] hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white/[0.04] disabled:hover:border-white/[0.08]"
+              title="Cofnij (⌘Z)"
+              className="p-1.5 hover:bg-white/[0.06] rounded text-white/50 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
             >
-              Wstecz
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+              </svg>
             </button>
           )}
+
           <button
             onClick={() => {
               setShowCommentPanel(!showCommentPanel);
-              if (!showCommentPanel) {
-                loadCommentCounts();
-              }
+              if (!showCommentPanel) loadCommentCounts();
             }}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+            className={`flex items-center gap-1.5 px-2 py-1 rounded text-[12px] font-medium transition-colors ${
               showCommentPanel
-                ? 'bg-[#fee715]/10 border border-[#fee715]/40 text-[#fee715]'
-                : 'bg-white/[0.04] border border-white/[0.08] text-white/80 hover:bg-white/[0.08] hover:text-white'
+                ? 'bg-[#fee715]/10 text-[#fee715]'
+                : 'text-white/50 hover:bg-white/[0.06] hover:text-white'
             }`}
-            title="Komentarze"
+            title="Komentarze (C)"
           >
-            <ChatCircleDots size={16} />
-            Komentarze
+            <ChatCircleDots size={14} />
+            <span className="hidden md:inline">Komentarze</span>
           </button>
+
           {!isReadOnly && (
             <button
               onClick={saveFunnel}
-              className="relative px-3.5 py-1.5 bg-[#fee715] text-[#101820] rounded-lg text-sm font-semibold hover:brightness-110 transition-all duration-150 shadow-sm shadow-[#fee715]/20"
+              disabled={!hasUnsavedChanges || saving}
+              className="ml-1 px-2.5 py-1 bg-[#fee715] text-[#050714] rounded text-[12px] font-semibold hover:brightness-110 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm shadow-[#fee715]/20"
+              title="Zapisz teraz (⌘S)"
             >
-              <span className="flex items-center gap-2">
-                Zapisz zmiany
-                {hasUnsavedChanges && (
-                  <span className="w-2 h-2 bg-[#fee715] rounded-full animate-pulse" title="Masz niezapisane zmiany"></span>
-                )}
-              </span>
+              Zapisz
             </button>
           )}
+
+          <button
+            onClick={() => setShowHeader(false)}
+            className="ml-1 p-1.5 hover:bg-white/[0.06] rounded text-white/40 hover:text-white transition-colors"
+            title="Ukryj pasek"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      {/* Mini-przycisk do przywrócenia ukrytego sidebara - tylko admin */}
-      {!isReadOnly && !showSidebar && (
-        <button
-          onClick={() => setShowSidebar(true)}
-          className={`fixed z-50 p-2 bg-[#0a0f14]/95 border border-[#fee715]/30 text-[#fee715] rounded-lg hover:bg-[#fee715]/10 hover:border-[#fee715]/50 transition-all duration-200 shadow-lg backdrop-blur-sm ${!showHeader ? 'top-14 left-2' : 'top-2 left-2'}`}
-          title="Pokaż panel elementów"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      )}
-
       <div className="flex-1 flex overflow-hidden relative">
-        {/* Sidebar - Node Templates (tylko admin) */}
+        {/* Left Rail (Miro-style) - tylko dla admina, zawsze widoczny */}
         {!isReadOnly && (
-        <div
-          className={`transition-all duration-300 overflow-hidden funnel-builder-sidebar ${
-            showSidebar ? 'w-64 opacity-100' : 'w-0 opacity-0'
-          }`}
-          style={{ 
-            backgroundColor: '#0a0f14',
-            background: '#0a0f14',
-          }}
-        >
-          <div className="w-64 h-full border-r border-white/[0.06] overflow-y-auto p-3.5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-[Montserrat] font-semibold text-white text-sm tracking-tight">Elementy</h3>
-              <button
-                onClick={() => setShowSidebar(false)}
-                className="p-1 hover:bg-white/[0.06] rounded-md transition-colors text-white/40 hover:text-white"
-                title="Ukryj panel elementów"
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          <div className="space-y-5">
-            {Object.entries(groupedTemplates).map(([category, templates]) => (
-              <div key={category}>
-                <h4 className="text-[10px] font-semibold text-white/40 uppercase mb-2 tracking-[0.1em] px-1">{category}</h4>
-                <div className="space-y-1">
-                  {templates.map((template, idx) => (
-                    <div
-                      key={idx}
-                      draggable
-                      onDragStart={(event) => {
-                        event.dataTransfer.setData('application/reactflow', JSON.stringify(template));
-                      }}
-                      className="px-2.5 py-2 bg-white/[0.02] rounded-lg border border-white/[0.06] hover:border-[#fee715]/30 hover:bg-white/[0.04] cursor-grab active:cursor-grabbing transition-all duration-150 group"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <div className="text-white/70 group-hover:text-[#fee715] transition-colors">
-                          {renderPhosphorIcon(template.icon, 16)}
-                        </div>
-                        <span className="text-[13px] text-white/85 font-medium tracking-tight">{template.label}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          </div>
-        </div>
+          <aside className="w-12 shrink-0 border-r border-white/[0.08] bg-[#13151a] flex flex-col items-center py-2 gap-1 z-20">
+            {/* Add element */}
+            <button
+              onClick={() => setShowAddDrawer((s) => !s)}
+              className={`w-9 h-9 rounded-md flex items-center justify-center transition-colors ${
+                showAddDrawer
+                  ? 'bg-[#fee715] text-[#050714]'
+                  : 'bg-white/[0.06] text-white/65 hover:bg-white/[0.06] hover:text-white'
+              }`}
+              title="Dodaj element (A)"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+
+            <div className="w-7 h-px bg-white/[0.06] my-1" />
+
+            {/* Pan tool */}
+            <button
+              onClick={() => setInteractionMode('pan')}
+              className={`w-9 h-9 rounded-md flex items-center justify-center transition-colors ${
+                interactionMode === 'pan'
+                  ? 'bg-[#fee715] text-[#050714]'
+                  : 'text-white/50 hover:bg-[#1a1d24] hover:text-white'
+              }`}
+              title="Przesuwanie (V / Space+drag)"
+            >
+              <Hand size={16} weight="regular" />
+            </button>
+
+            {/* Select tool */}
+            <button
+              onClick={() => setInteractionMode('select')}
+              className={`w-9 h-9 rounded-md flex items-center justify-center transition-colors ${
+                interactionMode === 'select'
+                  ? 'bg-[#fee715] text-[#050714]'
+                  : 'text-white/50 hover:bg-[#1a1d24] hover:text-white'
+              }`}
+              title="Zaznaczanie (S)"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5" />
+              </svg>
+            </button>
+
+            {/* Comment tool */}
+            <button
+              onClick={() => {
+                setCommentMode(!commentMode);
+                setInteractionMode(commentMode ? 'pan' : 'comment');
+              }}
+              className={`w-9 h-9 rounded-md flex items-center justify-center transition-colors ${
+                commentMode
+                  ? 'bg-[#fee715] text-[#050714]'
+                  : 'text-white/50 hover:bg-[#1a1d24] hover:text-white'
+              }`}
+              title="Komentowanie (C)"
+            >
+              <ChatCircleDots size={16} weight="regular" />
+            </button>
+          </aside>
         )}
 
         {/* Main Canvas */}
         <div className="flex-1 relative" ref={reactFlowWrapper}>
-          {/* Legenda */}
-          {showLegend && (
-            <div className="absolute top-4 right-4 z-20 bg-[#0a0f14]/98 border border-white/10 rounded-lg shadow-xl backdrop-blur-sm p-4 min-w-[200px]">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-medium text-white/90 tracking-tight">Legenda</h3>
-                <button
-                  onClick={() => setShowLegend(false)}
-                  className="p-1 hover:bg-white/10 rounded transition-all text-gray-400 hover:text-white"
-                  title="Ukryj legendę"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+          {/* Add element drawer - overlay nad canvas, slide-in z lewej */}
+          {!isReadOnly && showAddDrawer && (
+            <>
+              {/* Backdrop - klik zamyka */}
+              <div
+                className="absolute inset-0 z-30 bg-black/20 backdrop-blur-[2px]"
+                onClick={() => setShowAddDrawer(false)}
+              />
+              {/* Drawer */}
+              <div
+                className="absolute top-0 left-0 h-full w-72 z-40 bg-[#13151a] border-r border-white/[0.08] shadow-2xl flex flex-col"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="px-3.5 py-3 border-b border-white/[0.08] flex items-center justify-between shrink-0">
+                  <h3 className="font-sans font-semibold text-white text-sm tracking-tight">Dodaj element</h3>
+                  <button
+                    onClick={() => setShowAddDrawer(false)}
+                    className="p-1 hover:bg-white/[0.06] rounded-md transition-colors text-white/40 hover:text-white"
+                    title="Zamknij (Esc)"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Search */}
+                <div className="px-3.5 py-2.5 border-b border-white/[0.08] shrink-0">
+                  <div className="relative">
+                    <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input
+                      type="text"
+                      value={templateSearchQuery}
+                      onChange={(e) => setTemplateSearchQuery(e.target.value)}
+                      placeholder="Szukaj elementu…"
+                      autoFocus
+                      className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md pl-8 pr-7 py-1.5 text-[12px] text-white/80 placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                    />
+                    {templateSearchQuery && (
+                      <button
+                        onClick={() => setTemplateSearchQuery('')}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white/[0.06] hover:bg-white/[0.10] text-white/50 hover:text-white text-[10px] flex items-center justify-center transition-colors"
+                        title="Wyczyść"
+                      >×</button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Templates */}
+                <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-4">
+                  {Object.keys(groupedTemplates).length === 0 && (
+                    <div className="py-6 text-center text-[12px] text-white/40">
+                      Brak wyników dla "{templateSearchQuery}"
+                    </div>
+                  )}
+                  {Object.entries(groupedTemplates).map(([category, templates]) => (
+                    <div key={category}>
+                      <h4 className="text-[10px] font-mono font-semibold text-white/40 uppercase mb-2 tracking-[0.16em] px-0.5">{category}</h4>
+                      <div className="grid grid-cols-2 gap-1">
+                        {templates.map((template, idx) => {
+                          const color = 'color' in template ? template.color : undefined;
+                          return (
+                            <div
+                              key={idx}
+                              draggable
+                              onDragStart={(event) => {
+                                event.dataTransfer.setData('application/reactflow', JSON.stringify(template));
+                                event.dataTransfer.effectAllowed = 'move';
+                                const original = event.currentTarget as HTMLElement;
+                                const ghost = original.cloneNode(true) as HTMLElement;
+                                ghost.style.position = 'absolute';
+                                ghost.style.top = '-1000px';
+                                ghost.style.left = '-1000px';
+                                ghost.style.width = `${original.offsetWidth}px`;
+                                ghost.style.backgroundColor = '#0f1428';
+                                ghost.style.border = '1px solid rgba(254, 231, 21, 0.3)';
+                                ghost.style.borderRadius = '6px';
+                                ghost.style.opacity = '0.95';
+                                ghost.style.pointerEvents = 'none';
+                                ghost.style.boxShadow = '0 8px 24px rgba(0,0,0,0.5)';
+                                document.body.appendChild(ghost);
+                                event.dataTransfer.setDragImage(ghost, original.offsetWidth / 2, original.offsetHeight / 2);
+                                requestAnimationFrame(() => {
+                                  if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
+                                });
+                              }}
+                              className="group flex flex-col items-center justify-center gap-1.5 px-2 py-2.5 rounded-md bg-[#1a1d24] border border-white/[0.06] hover:bg-white/[0.06] hover:border-white/[0.12] cursor-grab active:cursor-grabbing transition-colors duration-150"
+                              title={`${template.label} · ${template.category}`}
+                            >
+                              <div
+                                className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
+                                style={color ? { backgroundColor: `${color}1f`, color } : { color: '#FAFAFA' }}
+                              >
+                                {renderPhosphorIcon(template.icon, 16)}
+                              </div>
+                              <span className="text-[10.5px] text-white/65 group-hover:text-white text-center leading-tight font-medium line-clamp-2">
+                                {template.label}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Footer hint */}
+                <div className="px-3.5 py-2 border-t border-white/[0.08] shrink-0">
+                  <p className="text-[10px] font-mono text-white/30 tracking-wide">PRZECIĄGNIJ NA CANVAS</p>
+                </div>
               </div>
-              <div className="space-y-3 text-xs">
-                <div className="flex items-start gap-2.5">
-                  <div className="relative shrink-0 mt-0.5">
-                    <div className="w-6 h-6 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: '#4285F420' }}>
-                      {renderPhosphorIcon('MegaphoneSimple', 14)}
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#0a0f14]" style={{ backgroundColor: '#4285F4' }}></div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-white/90 font-medium">Źródła Ruchu</div>
-                    <div className="text-white/50 text-[10px] mt-0.5">Facebook Ads, Google Ads, Email</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <div className="relative shrink-0 mt-0.5">
-                    <div className="w-6 h-6 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: '#00C9A720' }}>
-                      {renderPhosphorIcon('Globe', 14)}
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#0a0f14]" style={{ backgroundColor: '#00C9A7' }}></div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-white/90 font-medium">Typ Strony</div>
-                    <div className="text-white/50 text-[10px] mt-0.5">Landing, Sprzedażowa, Checkout</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <div className="relative shrink-0 mt-0.5">
-                    <div className="w-6 h-6 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: '#fee71520' }}>
-                      {renderPhosphorIcon('Notebook', 14)}
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#0a0f14]" style={{ backgroundColor: '#fee715' }}></div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-white/90 font-medium">Działania</div>
-                    <div className="text-white/50 text-[10px] mt-0.5">Lead magnet, Webinar, Chatbot</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <div className="relative shrink-0 mt-0.5">
-                    <div className="w-6 h-6 rounded-lg flex items-center justify-center text-white" style={{ backgroundColor: '#10B98120' }}>
-                      {renderPhosphorIcon('CheckCircle', 14)}
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-[#0a0f14]" style={{ backgroundColor: '#10B981' }}></div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-white/90 font-medium">Cel/Konwersja</div>
-                    <div className="text-white/50 text-[10px] mt-0.5">Lead, Rezerwacja, Telefon, Sprzedaż</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <div className="relative shrink-0 mt-0.5">
-                    <div className="w-6 h-6 rounded-lg flex items-center justify-center text-white bg-white/5 border border-white/10">
-                      {renderPhosphorIcon('FileText', 14)}
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-white/90 font-medium">Narzędzia</div>
-                    <div className="text-white/50 text-[10px] mt-0.5">Pola tekstowe, notatki</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </>
           )}
-          {!showLegend && (
+
+          {/* P3: Smart return - widoczny zawsze gdy są nody, pulsuje gdy zgubiony */}
+          {nodes.length > 0 && (
             <button
-              onClick={() => setShowLegend(true)}
-              className="absolute top-4 right-4 z-20 p-2 bg-[#0a0f14]/95 border border-white/10 text-white/70 rounded-lg hover:bg-white/10 hover:text-white transition-all duration-200 shadow-lg backdrop-blur-sm"
-              title="Pokaż legendę"
+              onClick={handleSmartReturn}
+              className={`absolute top-4 right-4 z-30 flex items-center gap-2 px-3 py-1.5 bg-[#13151a] border rounded-lg backdrop-blur-xl shadow-lg shadow-black/40 transition-all duration-200 ${
+                isLostInCanvas
+                  ? 'border-[#fee715]/60 text-[#fee715] animate-pulse hover:bg-[#fee715]/10'
+                  : 'border-white/[0.08] text-white/65 hover:text-white hover:border-white/[0.12] hover:bg-[#1a1d24]'
+              }`}
+              title={isLostInCanvas ? 'Diagram poza widokiem — kliknij aby wrócić (Home)' : 'Wyśrodkuj diagram (Home / F)'}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
+              <span className="text-[12px] font-medium tracking-tight">{isLostInCanvas ? 'Wróć do diagramu' : 'Wyśrodkuj'}</span>
             </button>
           )}
+
+          {/* Legenda usunięta - kategorie widoczne w sidebar templates */}
           <FunnelSelectModeContext.Provider value={{ isSelectMode: interactionMode === 'select', onLongPressDeselect }}>
           <ReactFlow
             nodes={nodesWithComments}
@@ -3209,7 +3620,7 @@ export const FunnelBuilder: React.FC = () => {
             edgeTypes={edgeTypes}
             fitView={true}
             fitViewOptions={FUNNEL_FIT_VIEW_OPTIONS}
-            className={`bg-[#0e141a] funnel-mode-${interactionMode} ${interactionMode === 'select' ? 'funnel-select-mode' : ''} ${isReadOnly ? 'funnel-readonly' : ''}`}
+            className={`bg-[#f5f7fa] funnel-mode-${interactionMode} ${interactionMode === 'select' ? 'funnel-select-mode' : ''} ${isReadOnly ? 'funnel-readonly' : ''}`}
             connectionLineType={'smoothstep' as ConnectionLineType}
             snapToGrid={false}
             snapGrid={FUNNEL_SNAP_GRID}
@@ -3241,16 +3652,16 @@ export const FunnelBuilder: React.FC = () => {
           >
             <Background
               variant={BackgroundVariant.Dots}
-              gap={24}
+              gap={28}
               size={1}
-              color="#ffffff18"
+              color="rgba(255, 255, 255, 0.08)"
             />
             {/* Mini-przycisk do przywrócenia ukrytego dolnego toolbara */}
             {!showBottomToolbar && (
               <Panel position="bottom-left">
                 <button
                   onClick={() => setShowBottomToolbar(true)}
-                  className="p-2 bg-[#0a0f14]/95 border border-[#fee715]/30 text-[#fee715] rounded-lg hover:bg-[#fee715]/10 hover:border-[#fee715]/50 transition-all duration-200 shadow-lg backdrop-blur-sm"
+                  className="p-2 bg-[#13151a] border border-[#fee715]/30 text-[#fee715] rounded-lg hover:bg-[#fee715]/10 hover:border-[#fee715]/50 transition-all duration-200 shadow-lg backdrop-blur-sm"
                   title="Pokaż narzędzia"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3263,12 +3674,12 @@ export const FunnelBuilder: React.FC = () => {
 
             {/* Custom Controls Toolbar */}
             {showBottomToolbar && (
-              <Panel position="bottom-left" className="bg-[#0a0f14]/85 border border-white/[0.08] rounded-xl p-1.5 shadow-2xl shadow-black/40 backdrop-blur-xl">
+              <Panel position="bottom-left" className="bg-[#13151a] border border-white/[0.08] rounded-xl p-1.5 shadow-2xl shadow-black/40 backdrop-blur-xl">
                 <div className="flex items-center gap-2">
                   {/* Przycisk ukrycia toolbara */}
                   <button
                     onClick={() => setShowBottomToolbar(false)}
-                    className="p-1.5 hover:bg-white/10 rounded-lg transition-all text-gray-400 hover:text-white"
+                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all text-white/50 hover:text-white"
                     title="Ukryj narzędzia"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3276,56 +3687,43 @@ export const FunnelBuilder: React.FC = () => {
                     </svg>
                   </button>
                   
-                  {/* Tryby interakcji */}
-                  <div className="flex items-center gap-1 border-r border-white/[0.08] pr-1.5 mr-1.5">
-                    <span className="text-[10px] uppercase tracking-wider text-white/40 font-medium mr-1.5">Tryb:</span>
-                  <button
-                    onClick={() => setInteractionMode('pan')}
-                    className={`p-1.5 rounded-lg transition-all duration-150 ${
-                      interactionMode === 'pan'
-                        ? 'bg-[#fee715] text-[#101820] shadow-md shadow-[#fee715]/20'
-                        : 'text-white/60 hover:bg-white/[0.06] hover:text-white border border-transparent'
-                    }`}
-                    title="Przesuwanie (Space + drag lub środkowy przycisk myszy)"
-                  >
-                    <Hand size={16} />
-                  </button>
-                  {!isReadOnly && (
-                  <button
-                    onClick={() => setInteractionMode('select')}
-                    className={`p-1.5 rounded-lg transition-all duration-150 ${
-                      interactionMode === 'select'
-                        ? 'bg-[#fee715] text-[#101820] shadow-md shadow-[#fee715]/20'
-                        : 'text-white/60 hover:bg-white/[0.06] hover:text-white border border-transparent'
-                    }`}
-                    title="Zaznaczanie elementów: Klikaj elementy lub przeciągnij po pustym tle (box selection)"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-                    </svg>
-                  </button>
+                  {/* Tools usunięte z bottom - są teraz w left rail (Miro-style).
+                      Dla klienta (read-only) pokazujemy tylko Pan + Comment w bottom toolbar. */}
+                  {isReadOnly && (
+                    <div className="flex items-center gap-1 border-r border-white/[0.08] pr-1.5 mr-1.5">
+                      <button
+                        onClick={() => setInteractionMode('pan')}
+                        className={`p-1.5 rounded-lg transition-all duration-150 ${
+                          interactionMode === 'pan'
+                            ? 'bg-[#fee715] text-[#050714]'
+                            : 'text-white/50 hover:bg-white/[0.06] hover:text-white'
+                        }`}
+                        title="Przesuwanie"
+                      >
+                        <Hand size={16} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCommentMode(!commentMode);
+                          setInteractionMode(commentMode ? 'pan' : 'comment');
+                        }}
+                        className={`p-1.5 rounded-lg transition-all duration-150 ${
+                          commentMode
+                            ? 'bg-[#fee715] text-[#050714]'
+                            : 'text-white/50 hover:bg-white/[0.06] hover:text-white'
+                        }`}
+                        title="Dodaj komentarz"
+                      >
+                        <ChatCircleDots size={16} />
+                      </button>
+                    </div>
                   )}
-                  <button
-                    onClick={() => {
-                      setCommentMode(!commentMode);
-                      setInteractionMode(commentMode ? 'pan' : 'comment');
-                    }}
-                    className={`p-1.5 rounded-lg transition-all duration-150 ${
-                      commentMode
-                        ? 'bg-[#fee715] text-[#101820] shadow-md shadow-[#fee715]/20'
-                        : 'text-white/60 hover:bg-white/[0.06] hover:text-white border border-transparent'
-                    }`}
-                    title="Dodaj komentarz (kliknij na element)"
-                  >
-                    <ChatCircleDots size={16} />
-                  </button>
-                </div>
-                
-                {/* Kontrolki zoom */}
+
+                  {/* Kontrolki zoom */}
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => reactFlowInstance?.zoomOut({ duration: 300 })}
-                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/60 hover:text-white"
+                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/50 hover:text-white"
                     title="Oddal (Zoom Out)"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3334,7 +3732,7 @@ export const FunnelBuilder: React.FC = () => {
                   </button>
                   <button
                     onClick={() => reactFlowInstance?.zoomIn({ duration: 300 })}
-                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/60 hover:text-white"
+                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/50 hover:text-white"
                     title="Przybliż (Zoom In)"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3343,20 +3741,32 @@ export const FunnelBuilder: React.FC = () => {
                   </button>
                   <button
                     onClick={() => reactFlowInstance?.fitView({ duration: 300, padding: 0.2 })}
-                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/60 hover:text-white"
-                    title="Dopasuj do widoku (Fit View)"
+                    className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/50 hover:text-white"
+                    title="Dopasuj do widoku (F)"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                     </svg>
                   </button>
+                  {/* Auto-layout LR - ułóż diagram od lewej do prawej */}
+                  {!isReadOnly && nodes.length > 1 && (
+                    <button
+                      onClick={handleAutoLayoutLR}
+                      className="p-1.5 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/50 hover:text-white"
+                      title="Auto-layout: ułóż diagram od lewej do prawej"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h4m0 6h4m0 6h4M8 6v12M16 12v6" />
+                      </svg>
+                    </button>
+                  )}
                   <div className="px-2 text-xs text-white/50 font-medium border-l border-white/[0.08] ml-1.5 pl-2.5">
                     {(currentZoom * 100).toFixed(0)}%
                   </div>
                   {/* Skróty klawiaturowe - pomocnik dla użytkownika */}
                   <button
                     onClick={() => setShowShortcutsModal(true)}
-                    className="p-1.5 ml-1 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/60 hover:text-white"
+                    className="p-1.5 ml-1 hover:bg-white/[0.06] rounded-lg transition-all duration-150 text-white/50 hover:text-white"
                     title="Skróty klawiaturowe (?)"
                   >
                     <span className="text-xs font-bold">?</span>
@@ -3376,13 +3786,19 @@ export const FunnelBuilder: React.FC = () => {
                     ×
                   </button>
                   <MiniMap
-                    className="bg-[#18232F] border-2 border-[#fee715] rounded-lg shadow-2xl"
+                    className="rounded-lg overflow-hidden"
                     nodeColor="#fee715"
-                    nodeStrokeColor="#101820"
-                    nodeStrokeWidth={2}
-                    maskColor="rgba(16, 24, 32, 0.9)"
+                    nodeStrokeColor="#fee715"
+                    nodeStrokeWidth={1.5}
+                    nodeBorderRadius={4}
+                    maskColor="rgba(10, 11, 14, 0.55)"
+                    maskStrokeColor="rgba(255,255,255,0.06)"
                     style={{
-                      backgroundColor: '#18232F',
+                      backgroundColor: '#13151a',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.25)',
+                      width: 180,
+                      height: 130,
                     }}
                     pannable
                     zoomable
@@ -3402,10 +3818,10 @@ export const FunnelBuilder: React.FC = () => {
             {/* Toolbar z opcjami wyrównywania - kompaktowy, tylko ikony */}
             {showAlignToolbar && (
               <Panel position="top-center" className="bg-transparent">
-                <div className="flex items-center gap-1.5 bg-[#0a0f14]/95 border border-white/10 rounded-lg p-1.5 shadow-xl backdrop-blur-sm">
+                <div className="flex items-center gap-1.5 bg-[#13151a] border border-white/[0.08] rounded-lg p-1.5 shadow-xl backdrop-blur-sm">
                   <button
                     onClick={() => alignNodes('center-y')}
-                    className="p-1.5 bg-[#18232F]/80 border border-white/10 hover:border-[#fee715]/50 hover:bg-[#fee715]/10 rounded transition-all duration-200 text-white/80 hover:text-white"
+                    className="p-1.5 bg-[#13151a]/80 border border-white/[0.08] hover:border-[#fee715]/50 hover:bg-[#fee715]/10 rounded transition-all duration-200 text-white/65 hover:text-white"
                     title="Wyrównaj w pionie (ta sama wysokość Y)"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3414,17 +3830,17 @@ export const FunnelBuilder: React.FC = () => {
                   </button>
                   <button
                     onClick={() => alignNodes('center-x')}
-                    className="p-1.5 bg-[#18232F]/80 border border-white/10 hover:border-[#fee715]/50 hover:bg-[#fee715]/10 rounded transition-all duration-200 text-white/80 hover:text-white"
+                    className="p-1.5 bg-[#13151a]/80 border border-white/[0.08] hover:border-[#fee715]/50 hover:bg-[#fee715]/10 rounded transition-all duration-200 text-white/65 hover:text-white"
                     title="Wyrównaj w poziomie (ta sama pozycja X)"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16M12 4l-4 4m4-4l4 4m-4 12l-4-4m4 4l4-4" />
                     </svg>
                   </button>
-                  <div className="w-px h-4 bg-white/10 mx-0.5"></div>
+                  <div className="w-px h-4 bg-white/[0.06] mx-0.5"></div>
                   <button
                     onClick={() => setShowAlignToolbar(false)}
-                    className="p-1.5 bg-[#18232F]/80 border border-white/10 hover:border-white/30 hover:bg-white/10 rounded transition-all duration-200 text-white/60 hover:text-white"
+                    className="p-1.5 bg-[#13151a]/80 border border-white/[0.08] hover:border-white/30 hover:bg-white/[0.06] rounded transition-all duration-200 text-white/50 hover:text-white"
                     title="Ukryj panel"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3439,7 +3855,7 @@ export const FunnelBuilder: React.FC = () => {
               <Panel position="top-center" className="bg-transparent">
                 <button
                   onClick={() => setShowAlignToolbar(true)}
-                  className="p-2 bg-[#0a0f14]/95 border border-white/10 text-white/60 rounded-lg hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-200 shadow-lg backdrop-blur-sm"
+                  className="p-2 bg-[#13151a] border border-white/[0.08] text-white/50 rounded-lg hover:bg-white/[0.06] hover:text-white hover:border-white/[0.12] transition-all duration-200 shadow-lg backdrop-blur-sm"
                   title="Pokaż wyrównywanie"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3456,142 +3872,192 @@ export const FunnelBuilder: React.FC = () => {
               <svg width="100%" height="100%" viewBox={`0 0 ${flowContainerSize.w} ${flowContainerSize.h}`} preserveAspectRatio="none">
                 {alignmentGuides.vertical.map((x) => {
                   const sx = x * viewport.zoom + viewport.x;
-                  return <line key={`v-${x}`} x1={sx} y1={0} x2={sx} y2={flowContainerSize.h} stroke="#fee715" strokeOpacity={0.8} strokeWidth={1} />;
+                  return <line key={`v-${x}`} x1={sx} y1={0} x2={sx} y2={flowContainerSize.h} stroke="#fee715" strokeOpacity={0.9} strokeWidth={1} strokeDasharray="6 3" />;
                 })}
                 {alignmentGuides.horizontal.map((y) => {
                   const sy = y * viewport.zoom + viewport.y;
-                  return <line key={`h-${y}`} x1={0} y1={sy} x2={flowContainerSize.w} y2={sy} stroke="#fee715" strokeOpacity={0.8} strokeWidth={1} />;
+                  return <line key={`h-${y}`} x1={0} y1={sy} x2={flowContainerSize.w} y2={sy} stroke="#fee715" strokeOpacity={0.9} strokeWidth={1} strokeDasharray="6 3" />;
                 })}
               </svg>
             </div>
           )}
         </div>
 
-        {/* Edge Properties Panel - tylko admin */}
+        {/* Edge Properties Panel - tylko admin. Spójny z Node Properties (sekcje, sticky footer). */}
         {!isReadOnly && showEdgeProperties && selectedEdge && (
-          <div 
-            className="w-72 border-l border-white/10 p-4 overflow-y-auto bg-[#0a0f14]/98 nodrag nopan"
+          <div
+            className="shrink-0 border-l border-white/[0.08] bg-[#13151a] flex flex-col nodrag nopan relative"
+            style={{ width: `${propertiesPanelWidth}px` }}
             onKeyDown={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
             onKeyUp={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
           >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-medium text-white text-sm tracking-tight">Właściwości linii</h3>
+            {/* Resize handle - lewa krawędź panelu */}
+            <div
+              onMouseDown={handlePanelResizeStart}
+              className="absolute -left-1 top-0 bottom-0 w-2 cursor-col-resize hover:bg-[#fee715]/20 transition-colors z-20"
+              title="Przeciągnij aby zmienić szerokość"
+            />
+
+            {/* Sticky header */}
+            <div className="shrink-0 border-b border-white/[0.08] px-4 py-3 flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 bg-[#fee715]/12 text-[#fee715]">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] font-mono text-white/40 uppercase tracking-[0.16em]">Połączenie</div>
+                <div className="text-[13px] font-semibold text-white truncate tracking-tight">Strzałka</div>
+              </div>
               <button
                 onClick={() => {
                   setShowEdgeProperties(false);
                   setSelectedEdge(null);
                 }}
-                className="p-0.5 hover:bg-white/5 rounded text-gray-500 hover:text-gray-300 transition-colors"
+                className="shrink-0 p-1 hover:bg-white/[0.06] rounded-md text-white/40 hover:text-white transition-colors"
+                title="Zamknij (Esc)"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <div className="space-y-3">
+            {/* Body */}
+            <div className="flex-1 overflow-y-auto">
+              <PropSection title="Szczegóły">
+                <PropRow label="Notatki">
+                  <textarea
+                    value={edgeProperties.notes}
+                    onChange={(e) => setEdgeProperties({ ...edgeProperties, notes: e.target.value })}
+                    className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-2.5 py-1.5 text-[12px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors min-h-[60px] resize-none"
+                    placeholder="Opis przejścia…"
+                  />
+                </PropRow>
+                <PropRow label="Link">
+                  <input
+                    type="url"
+                    value={edgeProperties.link}
+                    onChange={(e) => setEdgeProperties({ ...edgeProperties, link: e.target.value })}
+                    className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-2.5 py-1.5 text-[12px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                    placeholder="https://…"
+                  />
+                </PropRow>
+              </PropSection>
+
+              <PropSection title="Kierunek">
+                <button
+                  onClick={() => {
+                    if (selectedEdge) {
+                      const newSource = selectedEdge.target;
+                      const newTarget = selectedEdge.source;
+                      setEdges((eds) =>
+                        eds.map((edge) =>
+                          edge.id === selectedEdge.id
+                            ? { ...edge, source: newSource, target: newTarget }
+                            : edge
+                        )
+                      );
+                      setSelectedEdge({ ...selectedEdge, source: newSource, target: newTarget });
+                    }
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 px-2.5 py-1.5 bg-white/[0.06] border border-white/[0.08] text-white/65 rounded-md text-[12px] font-medium hover:bg-white/[0.06] hover:text-white transition-colors"
+                  title="Odwróć kierunek strzałki"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                  </svg>
+                  Odwróć kierunek
+                </button>
+              </PropSection>
+
+              <CollapsibleSection
+                title="Pola dodatkowe"
+                count={edgeCustomFields.length}
+                defaultOpen={edgeCustomFields.length > 0}
+                onAdd={() => {
+                  setEdgeCustomFields([...edgeCustomFields, { field_name: '', field_type: 'text', field_value: '', display_order: edgeCustomFields.length }]);
+                }}
+              >
+                {edgeCustomFields.length === 0 ? (
+                  <p className="text-[11px] text-white/40 italic">Brak pól. Kliknij + aby dodać.</p>
+                ) : (
+                  <div className="space-y-2">
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Notatki</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/45 uppercase tracking-[0.14em] mb-1.5">Notatki</label>
                 <textarea
                   value={edgeProperties.notes}
                   onChange={(e) => setEdgeProperties({ ...edgeProperties, notes: e.target.value })}
-                  className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 min-h-[72px]"
+                  className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-3 py-1.5 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors min-h-[72px]"
                   placeholder="Notatki do linii..."
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Link (opcjonalnie)</label>
-                <input
-                  type="url"
-                  value={edgeProperties.link}
-                  onChange={(e) => setEdgeProperties({ ...edgeProperties, link: e.target.value })}
-                  className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                  placeholder="https://..."
-                />
-              </div>
-
-              {/* Customowe pola dla edge */}
-              <div className="pt-3 mt-3 border-t border-white/10">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-xs font-medium text-gray-400">Dodatkowe pola</label>
-                  <button
-                    onClick={() => {
-                      setEdgeCustomFields([...edgeCustomFields, { field_name: '', field_type: 'text', field_value: '', display_order: edgeCustomFields.length }]);
-                    }}
-                    className="px-2 py-1 text-xs bg-white/[0.06] border border-white/20 text-white/90 rounded hover:bg-white/10 hover:border-white/30 transition-colors"
-                  >
-                    + Dodaj pole
-                  </button>
-                </div>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {edgeCustomFields.map((field, index) => (
-                    <div key={index} className="p-2 bg-white/[0.02] border border-white/5 rounded">
-                      <div className="flex items-center gap-2 mb-2">
-                        <input
-                          type="text"
-                          value={field.field_name}
-                          onChange={(e) => {
-                            const updated = [...edgeCustomFields];
-                            updated[index].field_name = e.target.value;
-                            setEdgeCustomFields(updated);
-                          }}
-                          placeholder="Nazwa pola"
-                          className="flex-1 bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                        />
-                        <CustomSelect
-                          size="sm"
-                          value={field.field_type}
-                          onChange={(value) => {
-                            const updated = [...edgeCustomFields];
-                            updated[index].field_type = value as 'text' | 'date' | 'number' | 'link';
-                            updated[index].field_value = ''; // Reset value przy zmianie typu
-                            setEdgeCustomFields(updated);
-                          }}
-                          options={[
-                            { value: 'text', label: 'Tekst' },
-                            { value: 'date', label: 'Data' },
-                            { value: 'number', label: 'Liczba' },
-                            { value: 'link', label: 'Link' },
-                          ]}
-                          className="w-24"
-                        />
-                        <button
-                          onClick={() => {
-                            const updated = edgeCustomFields.filter((_, i) => i !== index);
-                            setEdgeCustomFields(updated);
-                          }}
-                          className="p-1 text-gray-400 hover:text-red-400 transition-colors"
-                          title="Usuń pole"
-                        >
-                          <Trash size={14} />
-                        </button>
-                      </div>
-                      {field.field_type === 'text' && (
-                        <input
-                          type="text"
-                          value={field.field_value}
-                          onChange={(e) => {
-                            const updated = [...edgeCustomFields];
-                            updated[index].field_value = e.target.value;
-                            setEdgeCustomFields(updated);
-                          }}
-                          placeholder="Wartość tekstowa"
-                          className="w-full bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                        />
-                      )}
-                      {field.field_type === 'date' && (
-                        <DatePickerField
-                          value={field.field_value}
-                          onChange={(value) => {
-                            const updated = [...edgeCustomFields];
-                            updated[index].field_value = value;
-                            setEdgeCustomFields(updated);
-                          }}
-                        />
-                      )}
-                      {field.field_type === 'number' && (
-                        <div className="relative w-full">
+                    {edgeCustomFields.map((field, index) => (
+                      <div key={index} className="bg-[#1a1d24] border border-white/[0.08] rounded-md p-2 space-y-1.5">
+                        <div className="flex items-center gap-1.5">
+                          <input
+                            type="text"
+                            value={field.field_name}
+                            onChange={(e) => {
+                              const updated = [...edgeCustomFields];
+                              updated[index].field_name = e.target.value;
+                              setEdgeCustomFields(updated);
+                            }}
+                            placeholder="Nazwa"
+                            className="flex-1 bg-[#1a1d24] border border-white/[0.08] rounded px-2 py-1 text-[11px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                          />
+                          <CustomSelect
+                            size="sm"
+                            value={field.field_type}
+                            onChange={(value) => {
+                              const updated = [...edgeCustomFields];
+                              updated[index].field_type = value as 'text' | 'date' | 'number' | 'link';
+                              updated[index].field_value = '';
+                              setEdgeCustomFields(updated);
+                            }}
+                            options={[
+                              { value: 'text', label: 'Tekst' },
+                              { value: 'date', label: 'Data' },
+                              { value: 'number', label: 'Liczba' },
+                              { value: 'link', label: 'Link' },
+                            ]}
+                            className="w-20"
+                          />
+                          <button
+                            onClick={() => {
+                              setEdgeCustomFields(edgeCustomFields.filter((_, i) => i !== index));
+                            }}
+                            className="p-1 hover:bg-red-500/15 rounded text-white/40 hover:text-red-300 transition-colors"
+                            title="Usuń pole"
+                          >
+                            <Trash size={12} weight="regular" />
+                          </button>
+                        </div>
+                        {field.field_type === 'text' && (
+                          <input
+                            type="text"
+                            value={field.field_value}
+                            onChange={(e) => {
+                              const updated = [...edgeCustomFields];
+                              updated[index].field_value = e.target.value;
+                              setEdgeCustomFields(updated);
+                            }}
+                            placeholder="Wartość"
+                            className="w-full bg-[#1a1d24] border border-white/[0.08] rounded px-2 py-1 text-[11px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                          />
+                        )}
+                        {field.field_type === 'date' && (
+                          <DatePickerField
+                            value={field.field_value}
+                            onChange={(value) => {
+                              const updated = [...edgeCustomFields];
+                              updated[index].field_value = value;
+                              setEdgeCustomFields(updated);
+                            }}
+                          />
+                        )}
+                        {field.field_type === 'number' && (
                           <input
                             type="text"
                             inputMode="numeric"
@@ -3602,501 +4068,500 @@ export const FunnelBuilder: React.FC = () => {
                               updated[index].field_value = value;
                               setEdgeCustomFields(updated);
                             }}
-                            placeholder="Wartość liczbowa"
-                            className="w-full bg-white/[0.04] border border-white/10 rounded px-2 py-1 pr-12 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
+                            placeholder="0"
+                            className="w-full bg-[#1a1d24] border border-white/[0.08] rounded px-2 py-1 text-[11px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                           />
-                          <div className="absolute right-0.5 top-0 bottom-0 w-11 flex flex-col">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const current = parseFloat(field.field_value) || 0;
-                                const updated = [...edgeCustomFields];
-                                updated[index].field_value = String(current + 1);
-                                setEdgeCustomFields(updated);
-                              }}
-                              className="flex-1 flex items-center justify-center text-gray-400 hover:text-white border-b border-white/10 hover:bg-white/5 rounded-t"
-                            >
-                              <Plus size={10} />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const current = parseFloat(field.field_value) || 0;
-                                const updated = [...edgeCustomFields];
-                                updated[index].field_value = String(Math.max(0, current - 1));
-                                setEdgeCustomFields(updated);
-                              }}
-                              className="flex-1 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-b"
-                            >
-                              <Minus size={10} />
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                      {field.field_type === 'link' && (
-                        <input
-                          type="url"
-                          value={field.field_value}
-                          onChange={(e) => {
-                            const updated = [...edgeCustomFields];
-                            updated[index].field_value = e.target.value;
-                            setEdgeCustomFields(updated);
-                          }}
-                          placeholder="https://example.com"
-                          className="w-full bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                        />
-                      )}
-                    </div>
-                  ))}
-                  {edgeCustomFields.length === 0 && (
-                    <div className="text-xs text-gray-500 py-2 text-center">Brak dodatkowych pól</div>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <button
-                  onClick={() => {
-                    if (selectedEdge) {
-                      // Odwróć kierunek strzałki
-                      const newSource = selectedEdge.target;
-                      const newTarget = selectedEdge.source;
-                      setEdges((eds) =>
-                        eds.map((edge) =>
-                          edge.id === selectedEdge.id
-                            ? {
-                                ...edge,
-                                source: newSource,
-                                target: newTarget,
-                              }
-                            : edge
-                        )
-                      );
-                      // Zaktualizuj selectedEdge
-                      setSelectedEdge({
-                        ...selectedEdge,
-                        source: newSource,
-                        target: newTarget,
-                      });
-                    }
-                  }}
-                  className="w-full px-3 py-1.5 bg-white/[0.04] border border-white/10 text-gray-300 rounded text-sm font-medium hover:bg-white/5 hover:border-[#fee715]/30 hover:text-[#fee715] transition-colors flex items-center justify-center gap-1.5"
-                  title="Odwróć kierunek strzałki"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                  </svg>
-                  Odwróć kierunek
-                </button>
-              </div>
-
-              <div className="flex gap-2 pt-3 mt-3 border-t border-white/10">
-                <button
-                  onClick={updateEdgeProperties}
-                  className="relative flex-1 px-3 py-1.5 bg-[#fee715]/10 border border-[#fee715]/40 text-[#fee715] rounded text-sm font-medium hover:bg-[#fee715]/15 hover:border-[#fee715]/50 transition-colors"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    Zapisz zmiany
-                    {hasUnsavedEdgeChanges && (
-                      <span className="w-1.5 h-1.5 bg-[#fee715] rounded-full animate-pulse" title="Masz niezapisane zmiany"></span>
-                    )}
-                  </span>
-                </button>
-                <button
-                  onClick={deleteSelectedEdge}
-                  title="Delete / Backspace"
-                  className="px-3 py-1.5 bg-white/[0.06] border border-white/20 text-white/90 rounded text-sm font-medium hover:bg-white/10 hover:border-white/30 transition-colors"
-                >
-                  Usuń
-                </button>
-              </div>
-              <p className="text-[11px] text-gray-500 mt-2">Delete / Backspace — usuwa strzałkę.</p>
-            </div>
-          </div>
-        )}
-
-        {/* Node Properties Panel - tylko admin */}
-        {!isReadOnly && showPropertiesPanel && selectedNode && (
-          <div 
-            className="w-72 border-l border-white/10 p-4 overflow-y-auto overflow-x-visible bg-[#0a0f14]/98 nodrag nopan"
-            style={{ zIndex: 10 }}
-            onKeyDown={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
-            onKeyUp={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-medium text-white text-sm tracking-tight">
-                {selectedNode.type === 'text' ? 'Właściwości tekstu' : 'Właściwości'}
-              </h3>
-              <button
-                onClick={() => {
-                  setShowPropertiesPanel(false);
-                  setSelectedNode(null);
-                }}
-                className="p-0.5 hover:bg-white/5 rounded text-gray-500 hover:text-gray-300 transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {selectedNode.type === 'text' ? (
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Tekst</label>
-                  <textarea
-                    value={textNodeProperties.text}
-                    onChange={(e) => setTextNodeProperties({ ...textNodeProperties, text: e.target.value })}
-                    className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 min-h-[72px]"
-                    placeholder="Wpisz tekst..."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Rozmiar czcionki</label>
-                  <input
-                    type="number"
-                    min="10"
-                    max="72"
-                    value={textNodeProperties.fontSize}
-                    onChange={(e) => setTextNodeProperties({ ...textNodeProperties, fontSize: parseInt(e.target.value) || 18 })}
-                    className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Waga czcionki</label>
-                  <CustomSelect
-                    size="sm"
-                    value={textNodeProperties.fontWeight || 'bold'}
-                    onChange={(value) => setTextNodeProperties({ ...textNodeProperties, fontWeight: value as 'normal' | 'bold' | 'semibold' })}
-                    options={[
-                      { value: 'normal', label: 'Normal' },
-                      { value: 'semibold', label: 'Semibold' },
-                      { value: 'bold', label: 'Bold' },
-                    ]}
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Wyrównanie poziome</label>
-                  <CustomSelect
-                    size="sm"
-                    value={textNodeProperties.textAlign || 'left'}
-                    onChange={(value) => setTextNodeProperties({ ...textNodeProperties, textAlign: value as 'left' | 'center' | 'right' })}
-                    options={[
-                      { value: 'left', label: 'Lewo' },
-                      { value: 'center', label: 'Środek' },
-                      { value: 'right', label: 'Prawo' },
-                    ]}
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Wyrównanie pionowe</label>
-                  <CustomSelect
-                    size="sm"
-                    value={textNodeProperties.verticalAlign || 'middle'}
-                    onChange={(value) => setTextNodeProperties({ ...textNodeProperties, verticalAlign: value as 'top' | 'middle' | 'bottom' })}
-                    options={[
-                      { value: 'top', label: 'Góra' },
-                      { value: 'middle', label: 'Środek' },
-                      { value: 'bottom', label: 'Dół' },
-                    ]}
-                    className="w-full"
-                  />
-                </div>
-
-                <div className="pt-0.5">
-                  <CustomCheckbox
-                    id="showHandles"
-                    checked={textNodeProperties.showHandles ?? false}
-                    onChange={(v) => setTextNodeProperties({ ...textNodeProperties, showHandles: v })}
-                    label="Punkty połączenia"
-                    size="sm"
-                    labelClassName="text-xs font-medium text-gray-400"
-                  />
-                </div>
-
-                <div className="flex gap-2 pt-3 mt-3 border-t border-white/10">
-                  <button
-                    onClick={updateNodeProperties}
-                    className="relative flex-1 px-3 py-1.5 bg-[#fee715]/10 border border-[#fee715]/40 text-[#fee715] rounded text-sm font-medium hover:bg-[#fee715]/15 hover:border-[#fee715]/50 transition-colors"
-                  >
-                    <span className="flex items-center justify-center gap-2">
-                      Zapisz zmiany
-                      {hasUnsavedTextNodeChanges && (
-                        <span className="w-1.5 h-1.5 bg-[#fee715] rounded-full animate-pulse" title="Masz niezapisane zmiany"></span>
-                      )}
-                    </span>
-                  </button>
-                  <button
-                    onClick={deleteSelectedNode}
-                    className="px-3 py-1.5 bg-white/[0.06] border border-white/20 text-white/90 rounded text-sm font-medium hover:bg-white/10 hover:border-white/30 transition-colors"
-                  >
-                    Usuń
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Nazwa</label>
-                  <input
-                    ref={nodeLabelInputRef}
-                    type="text"
-                    value={nodeProperties.label}
-                    onChange={(e) => setNodeProperties({ ...nodeProperties, label: e.target.value })}
-                    className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                    placeholder="Nazwa elementu"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Ikona</label>
-                  <IconPicker
-                    value={nodeProperties.icon}
-                    onChange={(iconName) => setNodeProperties({ ...nodeProperties, icon: iconName })}
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Notatki</label>
-                  <textarea
-                    value={nodeProperties.notes}
-                    onChange={(e) => setNodeProperties({ ...nodeProperties, notes: e.target.value })}
-                    className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 min-h-[72px]"
-                    placeholder="Notatki (np. CPC: 2 PLN)"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1">Link</label>
-                  <input
-                    type="url"
-                    value={nodeProperties.link || ''}
-                    onChange={(e) => setNodeProperties({ ...nodeProperties, link: e.target.value })}
-                    className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                    placeholder="https://example.com"
-                  />
-                </div>
-
-                {/* Customowe pola */}
-                <div className="pt-3 mt-3 border-t border-white/10">
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="block text-xs font-medium text-gray-400">Dodatkowe pola</label>
-                    <button
-                      onClick={() => {
-                        setNodeCustomFields([...nodeCustomFields, { field_name: '', field_type: 'text', field_value: '', display_order: nodeCustomFields.length }]);
-                      }}
-                      className="px-2 py-1 text-xs bg-white/[0.06] border border-white/20 text-white/90 rounded hover:bg-white/10 hover:border-white/30 transition-colors"
-                    >
-                      + Dodaj pole
-                    </button>
-                  </div>
-                  <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {nodeCustomFields.map((field, index) => (
-                      <div key={index} className="p-2 bg-white/[0.02] border border-white/5 rounded">
-                        <div className="flex items-center gap-2 mb-2">
-                          <input
-                            type="text"
-                            value={field.field_name}
-                            onChange={(e) => {
-                              const updated = [...nodeCustomFields];
-                              updated[index].field_name = e.target.value;
-                              setNodeCustomFields(updated);
-                            }}
-                            placeholder="Nazwa pola"
-                            className="flex-1 bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                          />
-                          <CustomSelect
-                            size="sm"
-                            value={field.field_type}
-                            onChange={(value) => {
-                              const updated = [...nodeCustomFields];
-                              updated[index].field_type = value as 'text' | 'date' | 'number' | 'link';
-                              updated[index].field_value = ''; // Reset value przy zmianie typu
-                              setNodeCustomFields(updated);
-                            }}
-                            options={[
-                              { value: 'text', label: 'Tekst' },
-                              { value: 'date', label: 'Data' },
-                              { value: 'number', label: 'Liczba' },
-                              { value: 'link', label: 'Link' },
-                            ]}
-                            className="w-24"
-                          />
-                        </div>
-                        {field.field_type === 'text' && (
-                          <input
-                            type="text"
-                            value={field.field_value}
-                            onChange={(e) => {
-                              const updated = [...nodeCustomFields];
-                              updated[index].field_value = e.target.value;
-                              setNodeCustomFields(updated);
-                            }}
-                            placeholder="Wartość tekstowa"
-                            className="w-full bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                          />
-                        )}
-                        {field.field_type === 'date' && (
-                          <DatePickerField
-                            value={field.field_value}
-                            onChange={(value) => {
-                              const updated = [...nodeCustomFields];
-                              updated[index].field_value = value;
-                              setNodeCustomFields(updated);
-                            }}
-                          />
-                        )}
-                        {field.field_type === 'number' && (
-                          <div className="relative w-full">
-                            <input
-                              type="text"
-                              inputMode="numeric"
-                              value={field.field_value}
-                              onChange={(e) => {
-                                const value = e.target.value.replace(/[^0-9.-]/g, '');
-                                const updated = [...nodeCustomFields];
-                                updated[index].field_value = value;
-                                setNodeCustomFields(updated);
-                              }}
-                              placeholder="Wartość liczbowa"
-                              className="w-full bg-white/[0.04] border border-white/10 rounded px-2 py-1 pr-12 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
-                            />
-                            <div className="absolute right-0.5 top-0 bottom-0 w-11 flex flex-col">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const currentValue = parseFloat(field.field_value) || 0;
-                                  const updated = [...nodeCustomFields];
-                                  updated[index].field_value = String(currentValue + 1);
-                                  setNodeCustomFields(updated);
-                                }}
-                                className="flex-1 px-1 bg-white/[0.08] hover:bg-white/[0.15] border-l border-white/20 rounded-tl text-white/70 hover:text-white transition-colors flex items-center justify-center"
-                                title="Zwiększ"
-                              >
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                                </svg>
-                              </button>
-                              <div className="h-px bg-white/20"></div>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const currentValue = parseFloat(field.field_value) || 0;
-                                  const updated = [...nodeCustomFields];
-                                  updated[index].field_value = String(Math.max(0, currentValue - 1));
-                                  setNodeCustomFields(updated);
-                                }}
-                                className="flex-1 px-1 bg-white/[0.08] hover:bg-white/[0.15] border-l border-white/20 rounded-bl text-white/70 hover:text-white transition-colors flex items-center justify-center"
-                                title="Zmniejsz"
-                              >
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
                         )}
                         {field.field_type === 'link' && (
                           <input
                             type="url"
                             value={field.field_value}
                             onChange={(e) => {
-                              const updated = [...nodeCustomFields];
+                              const updated = [...edgeCustomFields];
                               updated[index].field_value = e.target.value;
-                              setNodeCustomFields(updated);
+                              setEdgeCustomFields(updated);
                             }}
-                            placeholder="https://example.com"
-                            className="w-full bg-white/[0.04] border border-white/10 rounded px-2 py-1 text-xs text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
+                            placeholder="https://…"
+                            className="w-full bg-[#1a1d24] border border-white/[0.08] rounded px-2 py-1 text-[11px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                           />
                         )}
-                        <div className="flex justify-end mt-2">
-                          <button
-                            onClick={() => {
-                              setNodeCustomFields(nodeCustomFields.filter((_, i) => i !== index));
-                            }}
-                            className="px-2 py-1 text-xs text-gray-400 hover:text-red-400 transition-colors flex items-center gap-1"
-                            title="Usuń pole"
-                          >
-                            <Trash size={14} weight="regular" />
-                            <span>Usuń</span>
-                          </button>
-                        </div>
                       </div>
                     ))}
                   </div>
-                </div>
+                )}
+              </CollapsibleSection>
+            </div>
 
-                {/* Zapisz jako szablon */}
-                <div className="pt-3 mt-3 border-t border-white/10">
-                  <label className="block text-xs font-medium text-gray-400 mb-2">Zapisz jako własny szablon</label>
-                  <div className="space-y-2">
-                    <CustomSelect
-                      size="sm"
-                      value={nodeProperties.category || 'Działania'}
-                      onChange={(value) => setNodeProperties({ ...nodeProperties, category: value })}
-                      options={[
-                        { value: 'Źródła Ruchu', label: 'Źródła Ruchu' },
-                        { value: 'Typ Strony', label: 'Typ Strony' },
-                        { value: 'Działania', label: 'Działania' },
-                        { value: 'Cel/Konwersja', label: 'Cel/Konwersja' },
-                        { value: 'Narzędzia', label: 'Narzędzia' },
-                      ]}
-                      className="w-full"
-                    />
-                    <button
-                      onClick={async () => {
-                        if (!nodeProperties.label || !nodeProperties.icon) {
-                          setAlertModal({
-                            isOpen: true,
-                            title: 'Błąd',
-                            message: 'Wypełnij nazwę i wybierz ikonę przed zapisaniem szablonu.',
-                            type: 'error',
-                          });
-                          return;
-                        }
-                        const nodeColor = (selectedNode?.data?.color as string) || '#fee715';
-                        await saveCustomTemplate(
-                          nodeProperties.label,
-                          nodeProperties.icon,
-                          nodeColor,
-                          nodeProperties.category || 'Działania'
-                        );
-                      }}
-                      className="w-full px-3 py-1.5 bg-white/[0.06] border border-white/20 text-white/90 rounded text-sm font-medium hover:bg-white/10 hover:border-white/30 transition-colors"
-                    >
-                      Zapisz jako szablon
-                    </button>
-                  </div>
-                </div>
+            {/* Sticky footer z akcjami */}
+            <div className="shrink-0 border-t border-white/[0.08] bg-[#13151a] px-3 py-2.5 flex items-center gap-2">
+              <button
+                onClick={deleteSelectedEdge}
+                className="p-1.5 hover:bg-red-500/15 rounded-md text-white/50 hover:text-red-300 transition-colors"
+                title="Usuń strzałkę (Del)"
+              >
+                <Trash size={14} weight="regular" />
+              </button>
+              <div className="flex-1" />
+              <span className="text-[10px] font-mono text-white/30" title="Live preview - zmiany od razu na canvas, autosave po 2s">
+                LIVE
+              </span>
+            </div>
+          </div>
+        )}
 
-                <div className="flex gap-2 pt-3 mt-3 border-t border-white/10">
-                  <button
-                    onClick={updateNodeProperties}
-                    className="relative flex-1 px-3 py-1.5 bg-[#fee715]/10 border border-[#fee715]/40 text-[#fee715] rounded text-sm font-medium hover:bg-[#fee715]/15 hover:border-[#fee715]/50 transition-colors"
-                  >
-                    <span className="flex items-center justify-center gap-2">
-                      Zapisz zmiany
-                      {hasUnsavedNodeChanges && (
-                        <span className="w-1.5 h-1.5 bg-[#fee715] rounded-full animate-pulse" title="Masz niezapisane zmiany"></span>
-                      )}
-                    </span>
-                  </button>
-                  <button
-                    onClick={deleteSelectedNode}
-                    className="px-3 py-1.5 bg-white/[0.06] border border-white/20 text-white/90 rounded text-sm font-medium hover:bg-white/10 hover:border-white/30 transition-colors"
-                  >
-                    Usuń
-                  </button>
+        {/* Node Properties Panel - tylko admin. Figma/Linear-style sekcje z hairline separators.
+            Live preview działa - zmiany od razu widoczne na canvas, autosave po 2s.
+            Szerokość resizable przez drag uchwyt na lewej krawędzi (240-640px). */}
+        {!isReadOnly && showPropertiesPanel && selectedNode && (
+          <div
+            className="shrink-0 border-l border-white/[0.08] bg-[#13151a] flex flex-col nodrag nopan relative"
+            style={{ width: `${propertiesPanelWidth}px`, zIndex: 10 }}
+            onKeyDown={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
+            onKeyUp={(e) => { if (['INPUT','TEXTAREA','SELECT'].includes((e.target as HTMLElement)?.tagName)) e.stopPropagation(); }}
+          >
+            {/* Resize handle - lewa krawędź panelu */}
+            <div
+              onMouseDown={handlePanelResizeStart}
+              className="absolute -left-1 top-0 bottom-0 w-2 cursor-col-resize hover:bg-[#fee715]/20 transition-colors z-20"
+              title="Przeciągnij aby zmienić szerokość"
+            />
+
+            {/* Sticky header z preview ikony */}
+            <div className="shrink-0 border-b border-white/[0.08] px-4 py-3 flex items-center gap-2.5">
+              {selectedNode.type !== 'text' && (
+                <div
+                  className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
+                  style={{
+                    backgroundColor: nodeProperties.color ? `${nodeProperties.color}1f` : 'rgba(254, 231, 21, 0.12)',
+                    color: nodeProperties.color || '#fee715',
+                  }}
+                >
+                  {renderPhosphorIcon(nodeProperties.icon, 14)}
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] font-mono text-white/40 uppercase tracking-[0.16em]">
+                  {selectedNode.type === 'text' ? 'Tekst' : 'Element'}
+                </div>
+                <div className="text-[13px] font-semibold text-white truncate tracking-tight">
+                  {selectedNode.type === 'text'
+                    ? (textNodeProperties.text || 'Bez treści').slice(0, 28)
+                    : (nodeProperties.label || 'Bez nazwy')}
                 </div>
               </div>
-            )}
+              <button
+                onClick={() => {
+                  setShowPropertiesPanel(false);
+                  setSelectedNode(null);
+                }}
+                className="shrink-0 p-1 hover:bg-white/[0.06] rounded-md text-white/40 hover:text-white transition-colors"
+                title="Zamknij (Esc)"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Body - scroll, sekcje hairline */}
+            <div className="flex-1 overflow-y-auto">
+              {selectedNode.type === 'text' ? (
+                <>
+                  {/* SEKCJA: TREŚĆ */}
+                  <PropSection title="Treść">
+                    <textarea
+                      value={textNodeProperties.text}
+                      onChange={(e) => setTextNodeProperties({ ...textNodeProperties, text: e.target.value })}
+                      className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-2.5 py-1.5 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors min-h-[72px] resize-none"
+                      placeholder="Wpisz tekst…"
+                    />
+                  </PropSection>
+
+                  {/* SEKCJA: TYPOGRAFIA */}
+                  <PropSection title="Typografia">
+                    <PropRow label="Rozmiar">
+                      <input
+                        type="number"
+                        min="10"
+                        max="72"
+                        value={textNodeProperties.fontSize}
+                        onChange={(e) => setTextNodeProperties({ ...textNodeProperties, fontSize: parseInt(e.target.value) || 18 })}
+                        className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-2 py-1 text-[12px] text-white focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                      />
+                    </PropRow>
+                    <PropRow label="Waga">
+                      <CustomSelect
+                        size="sm"
+                        value={textNodeProperties.fontWeight || 'bold'}
+                        onChange={(value) => setTextNodeProperties({ ...textNodeProperties, fontWeight: value as 'normal' | 'bold' | 'semibold' })}
+                        options={[
+                          { value: 'normal', label: 'Normal' },
+                          { value: 'semibold', label: 'Semibold' },
+                          { value: 'bold', label: 'Bold' },
+                        ]}
+                        className="w-full"
+                      />
+                    </PropRow>
+                  </PropSection>
+
+                  {/* SEKCJA: WYRÓWNANIE - ikony z czytelnym tooltip i text label pod ikoną */}
+                  <PropSection title="Wyrównanie">
+                    <PropRow label="Poziome">
+                      <div className="grid grid-cols-3 gap-1">
+                        {([
+                          { val: 'left', label: 'Lewo', icon: 'M4 6h16M4 12h10M4 18h16' },
+                          { val: 'center', label: 'Środek', icon: 'M4 6h16M7 12h10M4 18h16' },
+                          { val: 'right', label: 'Prawo', icon: 'M4 6h16M10 12h10M4 18h16' },
+                        ] as const).map(({ val, label, icon }) => {
+                          const active = (textNodeProperties.textAlign || 'left') === val;
+                          return (
+                            <button
+                              key={val}
+                              onClick={() => setTextNodeProperties({ ...textNodeProperties, textAlign: val })}
+                              className={`flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-md transition-colors ${
+                                active
+                                  ? 'bg-[#fee715]/12 text-[#fee715] border border-[#fee715]/30'
+                                  : 'bg-[#1a1d24] border border-white/[0.08] text-white/50 hover:text-white hover:bg-[#1a1d24]'
+                              }`}
+                              title={`Wyrównanie poziome: ${label}`}
+                              aria-label={label}
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
+                              </svg>
+                              <span className="text-[9px] font-medium leading-none">{label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </PropRow>
+                    <PropRow label="Pionowe">
+                      <div className="grid grid-cols-3 gap-1">
+                        {([
+                          { val: 'top', label: 'Góra', icon: 'M5 4h14M5 8h14M5 12h14' },
+                          { val: 'middle', label: 'Środek', icon: 'M5 8h14M5 12h14M5 16h14' },
+                          { val: 'bottom', label: 'Dół', icon: 'M5 12h14M5 16h14M5 20h14' },
+                        ] as const).map(({ val, label, icon }) => {
+                          const active = (textNodeProperties.verticalAlign || 'middle') === val;
+                          return (
+                            <button
+                              key={val}
+                              onClick={() => setTextNodeProperties({ ...textNodeProperties, verticalAlign: val })}
+                              className={`flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-md transition-colors ${
+                                active
+                                  ? 'bg-[#fee715]/12 text-[#fee715] border border-[#fee715]/30'
+                                  : 'bg-[#1a1d24] border border-white/[0.08] text-white/50 hover:text-white hover:bg-[#1a1d24]'
+                              }`}
+                              title={`Wyrównanie pionowe: ${label}`}
+                              aria-label={label}
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
+                              </svg>
+                              <span className="text-[9px] font-medium leading-none">{label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </PropRow>
+                  </PropSection>
+
+                  {/* SEKCJA: OPCJE */}
+                  <PropSection title="Opcje">
+                    <CustomCheckbox
+                      id="showHandles"
+                      checked={textNodeProperties.showHandles ?? false}
+                      onChange={(v) => setTextNodeProperties({ ...textNodeProperties, showHandles: v })}
+                      label="Pokaż punkty połączeń"
+                      size="sm"
+                      labelClassName="text-[12px] text-white/65"
+                    />
+                  </PropSection>
+                </>
+              ) : (
+                <>
+                  {/* SEKCJA: IDENTYFIKACJA */}
+                  <PropSection title="Identyfikacja">
+                    <PropRow label="Nazwa">
+                      <input
+                        ref={nodeLabelInputRef}
+                        type="text"
+                        value={nodeProperties.label}
+                        onChange={(e) => setNodeProperties({ ...nodeProperties, label: e.target.value })}
+                        className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-2.5 py-1.5 text-[12px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                        placeholder="Nazwa elementu"
+                      />
+                    </PropRow>
+                    <PropRow label="Ikona">
+                      <IconPicker
+                        value={nodeProperties.icon}
+                        onChange={(iconName) => setNodeProperties({ ...nodeProperties, icon: iconName })}
+                        className="w-full"
+                      />
+                    </PropRow>
+                  </PropSection>
+
+                  {/* SEKCJA: KOLOR (compact) */}
+                  <PropSection title="Kolor">
+                    <div className="flex items-center gap-1.5">
+                      {['#1877F2', '#FF0000', '#00C9A7', '#fee715', '#10B981', '#E4405F'].map((c) => (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => {
+                            setNodeProperties({ ...nodeProperties, color: c });
+                            addRecentColor(c);
+                          }}
+                          className={`w-6 h-6 rounded transition-all ${
+                            nodeProperties.color === c
+                              ? 'ring-2 ring-white/90'
+                              : 'ring-1 ring-white/[0.08] hover:ring-white/30'
+                          }`}
+                          style={{ backgroundColor: c }}
+                          title={c}
+                        />
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <label className="relative w-7 h-7 rounded cursor-pointer overflow-hidden ring-1 ring-white/[0.08] hover:ring-white/30 transition-all flex items-center justify-center" title="Wybierz dowolny kolor">
+                        <input
+                          type="color"
+                          value={nodeProperties.color || '#fee715'}
+                          onChange={(e) => setNodeProperties({ ...nodeProperties, color: e.target.value })}
+                          onBlur={(e) => addRecentColor(e.target.value)}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        />
+                        <div className="w-full h-full" style={{ backgroundColor: nodeProperties.color || '#fee715' }} />
+                      </label>
+                      <input
+                        type="text"
+                        value={nodeProperties.color || ''}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          if (/^#[0-9a-fA-F]{0,6}$/.test(v) || v === '') {
+                            setNodeProperties({ ...nodeProperties, color: v });
+                          }
+                        }}
+                        onBlur={(e) => {
+                          if (/^#[0-9a-fA-F]{6}$/.test(e.target.value)) addRecentColor(e.target.value);
+                        }}
+                        className="flex-1 bg-[#1a1d24] border border-white/[0.08] rounded-md px-2 py-1 text-[11px] font-mono text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 uppercase"
+                        placeholder="#FEE715"
+                        maxLength={7}
+                      />
+                    </div>
+                    {recentColors.length > 0 && (
+                      <div className="mt-2.5 pt-2 border-t border-white/[0.06]">
+                        <div className="text-[9px] font-mono text-white/30 uppercase tracking-[0.16em] mb-1.5">Ostatnio</div>
+                        <div className="flex items-center gap-1.5">
+                          {recentColors.map((c) => (
+                            <button
+                              key={c}
+                              type="button"
+                              onClick={() => setNodeProperties({ ...nodeProperties, color: c })}
+                              className={`w-5 h-5 rounded transition-all ${
+                                nodeProperties.color === c ? 'ring-2 ring-white/90' : 'ring-1 ring-white/[0.08] hover:ring-white/30'
+                              }`}
+                              style={{ backgroundColor: c }}
+                              title={c}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </PropSection>
+
+                  {/* SEKCJA: SZCZEGÓŁY */}
+                  <PropSection title="Szczegóły">
+                    <PropRow label="Notatki">
+                      <textarea
+                        value={nodeProperties.notes}
+                        onChange={(e) => setNodeProperties({ ...nodeProperties, notes: e.target.value })}
+                        className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-2.5 py-1.5 text-[12px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors min-h-[60px] resize-none"
+                        placeholder="np. CPC: 2 PLN, CTR: 3%…"
+                      />
+                    </PropRow>
+                    <PropRow label="Link">
+                      <input
+                        type="url"
+                        value={nodeProperties.link || ''}
+                        onChange={(e) => setNodeProperties({ ...nodeProperties, link: e.target.value })}
+                        className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-2.5 py-1.5 text-[12px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                        placeholder="https://example.com"
+                      />
+                    </PropRow>
+                  </PropSection>
+
+                  {/* SEKCJA: POLA DODATKOWE (collapsible) */}
+                  <CollapsibleSection
+                    title="Pola dodatkowe"
+                    count={nodeCustomFields.length}
+                    defaultOpen={nodeCustomFields.length > 0}
+                    onAdd={() => {
+                      setNodeCustomFields([...nodeCustomFields, { field_name: '', field_type: 'text', field_value: '', display_order: nodeCustomFields.length }]);
+                    }}
+                  >
+                    {nodeCustomFields.length === 0 ? (
+                      <p className="text-[11px] text-white/40 italic">Brak pól. Kliknij + aby dodać własne (np. CPC, budżet).</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {nodeCustomFields.map((field, index) => (
+                          <div key={index} className="bg-[#1a1d24] border border-white/[0.08] rounded-md p-2 space-y-1.5">
+                            <div className="flex items-center gap-1.5">
+                              <input
+                                type="text"
+                                value={field.field_name}
+                                onChange={(e) => {
+                                  const updated = [...nodeCustomFields];
+                                  updated[index].field_name = e.target.value;
+                                  setNodeCustomFields(updated);
+                                }}
+                                placeholder="Nazwa pola"
+                                className="flex-1 bg-[#1a1d24] border border-white/[0.08] rounded px-2 py-1 text-[11px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                              />
+                              <CustomSelect
+                                size="sm"
+                                value={field.field_type}
+                                onChange={(value) => {
+                                  const updated = [...nodeCustomFields];
+                                  updated[index].field_type = value as 'text' | 'date' | 'number' | 'link';
+                                  updated[index].field_value = '';
+                                  setNodeCustomFields(updated);
+                                }}
+                                options={[
+                                  { value: 'text', label: 'Tekst' },
+                                  { value: 'date', label: 'Data' },
+                                  { value: 'number', label: 'Liczba' },
+                                  { value: 'link', label: 'Link' },
+                                ]}
+                                className="w-20"
+                              />
+                              <button
+                                onClick={() => {
+                                  setNodeCustomFields(nodeCustomFields.filter((_, i) => i !== index));
+                                }}
+                                className="p-1 hover:bg-red-500/15 rounded text-white/40 hover:text-red-300 transition-colors"
+                                title="Usuń pole"
+                              >
+                                <Trash size={12} weight="regular" />
+                              </button>
+                            </div>
+                            {field.field_type === 'text' && (
+                              <input
+                                type="text"
+                                value={field.field_value}
+                                onChange={(e) => {
+                                  const updated = [...nodeCustomFields];
+                                  updated[index].field_value = e.target.value;
+                                  setNodeCustomFields(updated);
+                                }}
+                                placeholder="Wartość"
+                                className="w-full bg-[#1a1d24] border border-white/[0.08] rounded px-2 py-1 text-[11px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                              />
+                            )}
+                            {field.field_type === 'date' && (
+                              <DatePickerField
+                                value={field.field_value}
+                                onChange={(value) => {
+                                  const updated = [...nodeCustomFields];
+                                  updated[index].field_value = value;
+                                  setNodeCustomFields(updated);
+                                }}
+                              />
+                            )}
+                            {field.field_type === 'number' && (
+                              <input
+                                type="text"
+                                inputMode="numeric"
+                                value={field.field_value}
+                                onChange={(e) => {
+                                  const value = e.target.value.replace(/[^0-9.-]/g, '');
+                                  const updated = [...nodeCustomFields];
+                                  updated[index].field_value = value;
+                                  setNodeCustomFields(updated);
+                                }}
+                                placeholder="0"
+                                className="w-full bg-[#1a1d24] border border-white/[0.08] rounded px-2 py-1 text-[11px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                              />
+                            )}
+                            {field.field_type === 'link' && (
+                              <input
+                                type="url"
+                                value={field.field_value}
+                                onChange={(e) => {
+                                  const updated = [...nodeCustomFields];
+                                  updated[index].field_value = e.target.value;
+                                  setNodeCustomFields(updated);
+                                }}
+                                placeholder="https://…"
+                                className="w-full bg-[#1a1d24] border border-white/[0.08] rounded px-2 py-1 text-[11px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
+                              />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CollapsibleSection>
+
+                  {/* SEKCJA: ZAPISZ JAKO SZABLON (collapsible) */}
+                  <CollapsibleSection title="Zapisz jako szablon">
+                    <div className="space-y-2">
+                      <CustomSelect
+                        size="sm"
+                        value={nodeProperties.category || 'Działania'}
+                        onChange={(value) => setNodeProperties({ ...nodeProperties, category: value })}
+                        options={[
+                          { value: 'Źródła Ruchu', label: 'Źródła Ruchu' },
+                          { value: 'Typ Strony', label: 'Typ Strony' },
+                          { value: 'Działania', label: 'Działania' },
+                          { value: 'Cel/Konwersja', label: 'Cel/Konwersja' },
+                          { value: 'Narzędzia', label: 'Narzędzia' },
+                        ]}
+                        className="w-full"
+                      />
+                      <button
+                        onClick={async () => {
+                          if (!nodeProperties.label || !nodeProperties.icon) {
+                            setAlertModal({
+                              isOpen: true,
+                              title: 'Błąd',
+                              message: 'Wypełnij nazwę i wybierz ikonę przed zapisaniem szablonu.',
+                              type: 'error',
+                            });
+                            return;
+                          }
+                          const nodeColor = (selectedNode?.data?.color as string) || '#fee715';
+                          await saveCustomTemplate(
+                            nodeProperties.label,
+                            nodeProperties.icon,
+                            nodeColor,
+                            nodeProperties.category || 'Działania'
+                          );
+                        }}
+                        className="w-full px-2.5 py-1.5 bg-white/[0.06] border border-white/[0.08] text-white/65 rounded-md text-[12px] font-medium hover:bg-white/[0.06] hover:text-white transition-colors"
+                      >
+                        Zapisz szablon
+                      </button>
+                    </div>
+                  </CollapsibleSection>
+                </>
+              )}
+            </div>
+
+            {/* Sticky footer z akcjami */}
+            <div className="shrink-0 border-t border-white/[0.08] bg-[#13151a] px-3 py-2.5 flex items-center gap-2">
+              <button
+                onClick={deleteSelectedNode}
+                className="p-1.5 hover:bg-red-500/15 rounded-md text-white/50 hover:text-red-300 transition-colors"
+                title="Usuń element (Del)"
+              >
+                <Trash size={14} weight="regular" />
+              </button>
+              <div className="flex-1" />
+              <span className="text-[10px] font-mono text-white/30" title="Live preview - zmiany od razu na canvas, autosave po 2s">
+                LIVE
+              </span>
+            </div>
           </div>
         )}
       </div>
@@ -4117,14 +4582,14 @@ export const FunnelBuilder: React.FC = () => {
         >
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
           <div
-            className="relative bg-gradient-to-br from-[#18232F] to-[#0a0f14] rounded-2xl p-6 border-2 border-[#fee715]/30 max-w-md w-full shadow-2xl"
+            className="relative bg-gradient-to-br from-[#18232F] to-[#0a0f14] rounded-2xl p-6 border border-[#fee715]/30 max-w-md w-full shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-5">
-              <h3 className="font-[Montserrat] text-lg font-semibold text-white tracking-tight">Skróty klawiaturowe</h3>
+              <h3 className="font-sans text-lg font-semibold text-white tracking-tight">Skróty klawiaturowe</h3>
               <button
                 onClick={() => setShowShortcutsModal(false)}
-                className="p-1.5 hover:bg-white/10 rounded-lg text-white/70 hover:text-white transition-colors"
+                className="p-1.5 hover:bg-white/[0.06] rounded-lg text-white/65 hover:text-white transition-colors"
                 aria-label="Zamknij"
               >
                 <X size={18} />
@@ -4132,36 +4597,46 @@ export const FunnelBuilder: React.FC = () => {
             </div>
             <div className="space-y-2.5 text-sm">
               {[
-                { keys: ['Space', '+', 'drag'], label: 'Przesuwanie widoku (pan)' },
-                { keys: ['Scroll'], label: 'Zoom in/out' },
-                { keys: ['F'], label: 'Dopasuj cały lejek do widoku' },
+                // Narzędzia (Miro-style single keys)
                 ...(!isReadOnly ? [
-                  { keys: ['Click', 'na pustym tle + drag'], label: 'Box-select (tryb zaznaczania)' },
-                  { keys: ['Shift', '+', 'Click'], label: 'Dodaj/odejmij element z zaznaczenia' },
-                  { keys: ['Ctrl/Cmd', '+', 'C'], label: 'Skopiuj zaznaczone' },
-                  { keys: ['Ctrl/Cmd', '+', 'V'], label: 'Wklej' },
-                  { keys: ['Ctrl/Cmd', '+', 'Z'], label: 'Cofnij ostatnią zmianę' },
-                  { keys: ['Delete', '/', 'Backspace'], label: 'Usuń zaznaczone' },
-                  { keys: ['Dwuklik', 'na node'], label: 'Edycja właściwości' },
+                  { keys: ['A'], label: 'Dodaj element (otwórz panel)' },
+                ] : []),
+                { keys: ['V'], label: 'Przesuwanie (pan)' },
+                ...(!isReadOnly ? [
+                  { keys: ['S'], label: 'Zaznaczanie' },
+                ] : []),
+                { keys: ['C'], label: 'Komentowanie' },
+                // Nawigacja
+                { keys: ['F'], label: 'Dopasuj cały lejek do widoku' },
+                { keys: ['Space', '+', 'drag'], label: 'Przesuwanie z dowolnego trybu' },
+                { keys: ['Scroll'], label: 'Zoom in/out' },
+                // Edycja (admin)
+                ...(!isReadOnly ? [
+                  { keys: ['Shift', '+', 'Click'], label: 'Dodaj/odejmij z zaznaczenia' },
+                  { keys: ['⌘/Ctrl', '+', 'C'], label: 'Skopiuj zaznaczone' },
+                  { keys: ['⌘/Ctrl', '+', 'V'], label: 'Wklej' },
+                  { keys: ['⌘/Ctrl', '+', 'Z'], label: 'Cofnij' },
+                  { keys: ['Delete'], label: 'Usuń zaznaczone' },
+                  { keys: ['Dwuklik'], label: 'Edytuj właściwości elementu' },
                 ] : []),
                 { keys: ['ESC'], label: 'Zamknij panel/modal' },
               ].map((row, idx) => (
-                <div key={idx} className="flex items-center justify-between gap-4 py-1.5 border-b border-white/5 last:border-b-0">
-                  <span className="text-gray-300">{row.label}</span>
+                <div key={idx} className="flex items-center justify-between gap-4 py-1.5 border-b border-white/[0.06] last:border-b-0">
+                  <span className="text-white/65">{row.label}</span>
                   <div className="flex items-center gap-1 shrink-0">
                     {row.keys.map((k, i) => (
                       k === '+' || k === '/' ? (
-                        <span key={i} className="text-gray-500 text-xs">{k}</span>
+                        <span key={i} className="text-white/40 text-xs">{k}</span>
                       ) : (
-                        <kbd key={i} className="px-2 py-0.5 bg-white/[0.06] border border-white/15 rounded text-xs text-white/90 font-mono">{k}</kbd>
+                        <kbd key={i} className="px-2 py-0.5 bg-white/[0.06] border border-white/15 rounded text-xs text-white/80 font-mono">{k}</kbd>
                       )
                     ))}
                   </div>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-4 text-center">
-              Naciśnij <kbd className="px-1.5 py-0.5 bg-white/[0.06] border border-white/15 rounded text-xs text-white/90 font-mono">ESC</kbd> aby zamknąć
+            <p className="text-xs text-white/40 mt-4 text-center">
+              Naciśnij <kbd className="px-1.5 py-0.5 bg-white/[0.06] border border-white/15 rounded text-xs text-white/80 font-mono">ESC</kbd> aby zamknąć
             </p>
           </div>
         </div>

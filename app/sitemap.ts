@@ -6,13 +6,11 @@ const BASE_URL = 'https://drozniak.pl';
 // Statyczne strony
 const staticPages = [
   { url: '', priority: 1.0, changeFrequency: 'weekly' as const },
-  { url: '/system', priority: 0.9, changeFrequency: 'monthly' as const },
-  { url: '/strony-www', priority: 0.9, changeFrequency: 'monthly' as const },
+  { url: '/prowadzenie-marketingu', priority: 0.9, changeFrequency: 'monthly' as const },
   { url: '/szkolenia', priority: 0.8, changeFrequency: 'monthly' as const },
   { url: '/kontakt', priority: 0.7, changeFrequency: 'monthly' as const },
+  { url: '/umow', priority: 0.7, changeFrequency: 'monthly' as const },
   { url: '/polityka-prywatnosci', priority: 0.3, changeFrequency: 'yearly' as const },
-  { url: '/portfolio-redlin', priority: 0.7, changeFrequency: 'yearly' as const },
-  { url: '/portfolio-pasw', priority: 0.7, changeFrequency: 'yearly' as const },
   { url: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
 ];
 

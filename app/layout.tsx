@@ -1,21 +1,36 @@
 import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
+import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
-import '@xyflow/react/dist/style.css';
+import './pub-v2.css';
 import { LayoutClient } from './components/LayoutClient';
 import { Analytics } from '@vercel/analytics/next';
 
 const BASE_URL = 'https://drozniak.pl';
 
+// Fonty publicznej części („Editorial Ink & Paper"): serif display + geometryczny sans.
+// Panel/admin pozostają na Geist (body className poniżej).
+const fraunces = Fraunces({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-display',
+  axes: ['opsz', 'SOFT', 'WONK'],
+  display: 'swap',
+});
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-sans-pub',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'System pozyskiwania klientów i strony WWW dla małych firm | Stanisław Drożniak',
+    default: 'Stanisław Drożniak | Marketing i pozyskiwanie klientów',
     template: '%s | Stanisław Drożniak',
   },
-  description: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Tworzę systemy pozyskiwania klientów, strony internetowe dla małych firm oraz szkolenia z AI w marketingu.',
-  keywords: ['system pozyskiwania klientów', 'strony internetowe dla małych firm', 'strony www dla freelancerów', 'AI w marketingu małej firmy', 'automatyzacja marketingu', 'strategia marketingowa dla małych firm'],
+  description: 'Marketing i pozyskiwanie klientów dla firm: reklamy, strona, obsługa zapytań, mailing i automatyzacje planowane razem.',
+  keywords: ['pozyskiwanie klientów', 'marketing dla firm', 'kampanie Meta i Google', 'obsługa zapytań', 'automatyzacje marketingu', 'szkolenia dla firm'],
   authors: [{ name: 'Stanisław Drożniak' }],
   creator: 'Stanisław Drożniak',
   publisher: 'Stanisław Drożniak',
@@ -23,9 +38,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pl_PL',
     url: BASE_URL,
-    siteName: 'Stanisław Drożniak - Marketing i Strony WWW',
-    title: 'System pozyskiwania klientów i strony WWW dla małych firm',
-    description: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Systemy sprzedażowe, strony WWW i szkolenia z AI.',
+    siteName: 'Stanisław Drożniak',
+    title: 'Stanisław Drożniak | Marketing i pozyskiwanie klientów',
+    description: 'Marketing i pozyskiwanie klientów dla firm: reklamy, strona, obsługa zapytań, mailing i automatyzacje planowane razem.',
     images: [
       {
         url: `${BASE_URL}/images/Drozniak_Zdjecie_Suit_2.webp`,
@@ -37,8 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'System pozyskiwania klientów i strony WWW dla małych firm',
-    description: 'Pomagam małym firmom i freelancerom pozyskiwać klientów z internetu. Systemy sprzedażowe, strony WWW i szkolenia z AI.',
+    title: 'Stanisław Drożniak | Marketing i pozyskiwanie klientów',
+    description: 'Marketing i pozyskiwanie klientów dla firm: reklamy, strona, obsługa zapytań, mailing i automatyzacje planowane razem.',
     images: [`${BASE_URL}/images/Drozniak_Zdjecie_Suit_2.webp`],
   },
   robots: {
@@ -54,14 +69,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/images/Drozniak_Favicon.svg', type: 'image/svg+xml' },
-      { url: '/images/Drozniak_Favicon_96x96.png', sizes: '96x96', type: 'image/png' },
-      { url: '/images/Drozniak_Favicon_176x176.png', sizes: '176x176', type: 'image/png' },
+      { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
     ],
-    apple: [
-      { url: '/images/Drozniak_Favicon_176x176.png', sizes: '180x180', type: 'image/png' },
-    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
+  manifest: '/site.webmanifest',
 };
 
 const globalSchemas = {
@@ -71,7 +85,7 @@ const globalSchemas = {
     name: 'Stanisław Drożniak',
     url: BASE_URL,
     logo: `${BASE_URL}/images/DROZNIAK_LOGO.svg`,
-    description: 'System pozyskiwania klientów i strony internetowe dla małych firm i freelancerów. Szkolenia z AI w marketingu.',
+    description: 'Marketing i pozyskiwanie klientów dla firm.',
     sameAs: ['https://www.linkedin.com/in/stanislawdrozniak'],
     contactPoint: {
       '@type': 'ContactPoint',
@@ -84,19 +98,19 @@ const globalSchemas = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Stanisław Drożniak',
-    jobTitle: 'Marketing Specialist & Web Developer',
+    jobTitle: 'Marketing i pozyskiwanie klientów',
     url: BASE_URL,
     email: 'stanislaw@drozniak.com',
     telephone: '+48-792-491-196',
     sameAs: ['https://www.linkedin.com/in/stanislawdrozniak'],
-    description: 'Specjalista od systemów pozyskiwania klientów, stron internetowych dla małych firm i szkoleń z AI w marketingu.',
+    description: 'Marketing i pozyskiwanie klientów dla firm: reklamy, strona, obsługa zapytań, mailing, pomiar i automatyzacje.',
   },
   website: {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Stanisław Drożniak - Marketing i Strony WWW',
+    name: 'Stanisław Drożniak',
     url: BASE_URL,
-    description: 'System pozyskiwania klientów i strony internetowe dla małych firm i freelancerów',
+    description: 'Marketing i pozyskiwanie klientów dla firm',
     publisher: {
       '@type': 'Person',
       name: 'Stanisław Drożniak',
@@ -113,7 +127,7 @@ const globalSchemas = {
   service: {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    serviceType: 'Marketing & Web Development Services',
+    serviceType: 'Marketing i pozyskiwanie klientów',
     provider: {
       '@type': 'Person',
       name: 'Stanisław Drożniak',
@@ -124,30 +138,22 @@ const globalSchemas = {
     },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Usługi marketingowe i web development',
+      name: 'Usługi marketingowe',
       itemListElement: [
         {
           '@type': 'Offer',
           itemOffered: {
             '@type': 'Service',
-            name: 'System pozyskiwania klientów dla małych firm',
-            description: 'Kompleksowy system pozyskiwania klientów z internetu dla małych firm i freelancerów',
+            name: 'Marketing i pozyskiwanie klientów',
+            description: 'Analiza i prowadzenie marketingu firmy: reklamy, strona, obsługa zapytań, mailing, pomiar i automatyzacje',
           },
         },
         {
           '@type': 'Offer',
           itemOffered: {
             '@type': 'Service',
-            name: 'Strony internetowe dla małych firm',
-            description: 'Strony www dla małych firm i freelancerów - szybkie, nowoczesne, projektowane pod pozyskiwanie klientów',
-          },
-        },
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: 'Szkolenia z AI w marketingu',
-            description: 'Szkolenia z AI w marketingu dla małych firm - automatyzacja marketingu i praktyczne zastosowania AI',
+            name: 'Szkolenia dla firm',
+            description: 'Praktyczne szkolenia dla zespołów i właścicieli: marketing, sprzedaż, nowe technologie i usprawnianie codziennej pracy',
           },
         },
       ],
@@ -161,7 +167,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="pl" data-scroll-behavior="smooth" className={`${GeistSans.variable} ${GeistMono.variable} ${fraunces.variable} ${jakarta.variable}`}>
       <head>
         <script
           type="application/ld+json"

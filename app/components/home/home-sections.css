@@ -1,0 +1,794 @@
+/* ============================================================
+   Sekcje strony głównej pod hero, w motywie hero (pola o zaokrąglonych
+   narożnikach łączone skosami). Prefiksy: hpc- (klienci), hpw- (współpraca),
+   hpt- (szkolenia), hpa- (o mnie). Kształty liczą ShapeCanvas i SlantRow
+   (app/components/shapes); poniżej progu pola stoją pod sobą jako prostokąty.
+   ============================================================ */
+
+/* --- Klienci: nazwy firm na pochylonych polach, rzędy wypełniają szerokość --- */
+.hpc {
+  display: grid;
+  gap: 32px;
+}
+.hpc-head {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 30rem;
+}
+.hpc-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-inline: 10px;
+}
+.hpc-names > li {
+  flex: 1 1 auto;
+  display: flex;
+}
+.hpc-chip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  padding: 12px 30px;
+  border-radius: 18px;
+  background: var(--paper-tint);
+  transform: skewX(-16deg);
+}
+.hpc-chip-dark {
+  background: var(--dark);
+}
+.hpc-chip-dark .hpc-chip-text {
+  color: var(--paper);
+}
+.hpc-chip-text {
+  display: block;
+  transform: skewX(16deg);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(22px, 2.2vw, 34px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--ink);
+}
+@media (min-width: 960px) {
+  .hpc {
+    grid-template-columns: 4fr 8fr;
+    gap: clamp(40px, 5vw, 80px);
+    align-items: center;
+  }
+  .hpc-chip {
+    min-height: 104px;
+    padding-inline: 40px;
+  }
+}
+
+/* --- Współpraca: nagłówek nad płótnem, trzy pola przecięte jednym skosem --- */
+.hpw {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.hpw-head {
+  display: grid;
+  gap: 20px;
+}
+.hpw-head .hp-body {
+  max-width: 36rem;
+}
+.hpw-canvas {
+  display: grid;
+  gap: 12px;
+}
+.hpw-field {
+  position: relative;
+  border-radius: var(--radius);
+  padding: 28px 24px 30px;
+}
+.hpw-a,
+.hpw-c {
+  background: var(--paper-tint);
+}
+.hpw-b {
+  background: var(--dark);
+  color: var(--paper);
+}
+.hpw-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hpw-h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(30px, 2.8vw, 44px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: inherit;
+}
+.hpw-text {
+  font-size: var(--t-body);
+  line-height: 1.5;
+  max-width: 26rem;
+}
+.hpw-b .hpw-text {
+  color: rgba(246, 245, 241, 0.86);
+}
+.hpw-b-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+.hpw-btn {
+  margin-top: 10px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.hpw-btn:hover {
+  background: var(--paper-white);
+}
+.hpw-b :focus-visible {
+  outline-color: var(--paper);
+}
+
+/* Kolejność pracy: trzy ikony, zapalają się po kolei */
+.hpw-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hpw-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--ink);
+}
+/* strzałka między krokami */
+.hpw-step + .hpw-step::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: -14px;
+  width: 20px;
+  height: 20px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2385816F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14m-6-6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.hpw-dot,
+.hpw-area {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+}
+.hpw-dot {
+  background: var(--paper-white);
+  color: var(--ink);
+}
+.hpw-dot-on,
+.hpw-area-on {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  opacity: 0;
+}
+.hpw-dot-on {
+  background: var(--ink);
+  color: var(--paper);
+  animation: hpw-light 6s var(--ease-out) calc(var(--i) * 2s) infinite;
+}
+
+/* Obszary prowadzone co miesiąc: pięć ikon, zapalają się po kolei */
+.hpw-areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.hpw-area {
+  background: var(--dark-2);
+  color: var(--paper);
+}
+.hpw-area-on {
+  background: var(--paper);
+  color: var(--ink);
+  animation: hpw-light-5 10s var(--ease-out) calc(var(--i) * 2s) infinite;
+}
+@keyframes hpw-light {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  6%,
+  28% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  36%,
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+@keyframes hpw-light-5 {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  4%,
+  17% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  22%,
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@media (min-width: 640px) {
+  .hpw-canvas {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hpw-c {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 960px) {
+  .hpw-head {
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(40px, 5vw, 80px);
+    align-items: end;
+  }
+  .hpw-field {
+    padding: 36px 40px 40px;
+  }
+}
+/* Od 1100 px jedno płótno: pola na całą powierzchnię, przycięte kształtami */
+@media (min-width: 1100px) {
+  .hpw-canvas {
+    position: relative;
+    display: block;
+    height: clamp(500px, 40vw, 580px);
+  }
+  .hpw-field {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border-radius: 0;
+  }
+  .hpw-a {
+    clip-path: var(--clip-a);
+  }
+  .hpw-b {
+    clip-path: var(--clip-b);
+  }
+  .hpw-c {
+    clip-path: var(--clip-c);
+  }
+  .hpw-a .hpw-inner {
+    position: absolute;
+    left: 44px;
+    top: 40px;
+    width: 34%;
+    height: calc(63.46% - 80px);
+    justify-content: space-between;
+  }
+  .hpw-steps {
+    position: absolute;
+    left: 28px;
+    width: calc(50% - 40px);
+    top: 82.9%;
+    translate: 0 -50%;
+  }
+  .hpw-b .hpw-inner {
+    position: absolute;
+    left: 64%;
+    right: 44px;
+    top: 40px;
+    bottom: 44px;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .hpw-areas {
+    margin-bottom: 0;
+  }
+  .hpw-text {
+    font-size: var(--t-lead);
+    line-height: 1.38;
+  }
+}
+
+/* --- Szkolenia: niski pas, jasne pole i ciemne pole z linkiem połączone skosem --- */
+.hpt {
+  display: grid;
+  gap: 12px;
+}
+.hpt-main {
+  display: grid;
+  gap: 16px;
+  padding: 28px 24px 30px;
+  border-radius: var(--radius);
+  background: var(--paper-tint);
+}
+.hpt-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--paper-white);
+  color: var(--ink);
+}
+.hpt-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(30px, 2.8vw, 44px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.hpt-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 96px;
+  padding: 24px;
+  border-radius: var(--radius);
+  background: var(--dark);
+  color: var(--paper);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  transition: background-color 200ms var(--ease-out);
+}
+.hpt-link .site-btn-arrow {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  transition: transform 200ms var(--ease-out);
+}
+.hpt-link:hover {
+  background: var(--dark-2);
+}
+.hpt-link:hover .site-btn-arrow {
+  transform: translateX(4px);
+}
+.hpt-link:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: -12px;
+  border-radius: var(--radius);
+}
+@media (min-width: 960px) {
+  .hpt {
+    display: flex;
+    align-items: stretch;
+  }
+  .hpt-main {
+    flex: 1 1 auto;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    gap: 32px;
+    padding: 40px calc(var(--s, 0px) + 36px) 40px 40px;
+    border-radius: 0;
+  }
+  .hpt-main .hp-body {
+    max-width: 34rem;
+  }
+  .hpt-link {
+    flex: 0 0 auto;
+    min-width: 30%;
+    white-space: nowrap;
+    padding: 36px 44px 36px calc(var(--s, 0px) + 36px);
+    border-radius: 0;
+  }
+}
+
+/* --- O mnie: lustro hero, zdjęcie z nosem w prawo i jasny pas z faktami --- */
+.hpa {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hpa-field {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.hpa-photo {
+  aspect-ratio: 1 / 1;
+  background: var(--paper-tint);
+}
+.hpa-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+.hpa-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px 0 20px;
+}
+.hpa-text {
+  max-width: 36rem;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.6;
+  color: var(--ink);
+}
+.hpa-text p + p {
+  margin-top: 0.9em;
+}
+.hpa-strip {
+  padding: 20px;
+  background: var(--paper-tint);
+}
+.hpa-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.hpa-fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 20px 0 6px;
+  border-radius: 999px;
+  background: var(--paper-white);
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.hpa-fact-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--paper-tint);
+  color: var(--ink);
+}
+@media (min-width: 600px) and (max-width: 959px) {
+  .hpa-photo {
+    aspect-ratio: 4 / 3;
+  }
+}
+@media (min-width: 960px) {
+  .hpa {
+    position: relative;
+    display: block;
+    height: clamp(600px, 46vw, 680px);
+  }
+  .hpa-field {
+    position: absolute;
+    inset: 0;
+    border-radius: 0;
+    aspect-ratio: auto;
+    padding: 0;
+    background: var(--paper-tint);
+  }
+  .hpa-photo {
+    clip-path: var(--clip-p);
+  }
+  .hpa-photo img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+  }
+  .hpa-strip {
+    clip-path: var(--clip-f);
+  }
+  .hpa-body {
+    position: absolute;
+    z-index: 1;
+    left: 54%;
+    right: 0;
+    top: 0;
+    height: 74%;
+    justify-content: center;
+    padding: 0 0 24px;
+  }
+  .hpa-facts {
+    position: absolute;
+    left: 54%;
+    right: 32px;
+    top: 88.9%;
+    translate: 0 -50%;
+  }
+}
+
+/* Przy ograniczonym ruchu ikony stoją, zapalona pierwsza */
+@media (prefers-reduced-motion: reduce) {
+  .site-pub .hpw-dot-on,
+  .site-pub .hpw-area-on {
+    animation: none !important;
+  }
+  .hpw-step:first-child .hpw-dot-on,
+  .hpw-area:first-child .hpw-area-on {
+    opacity: 1;
+  }
+}
+
+/* --- Co biorę pod uwagę (ScopeList.tsx), prefiks hpk-.
+   Kafelki naprzemiennie ciemne i jasne. Od 768 px (i 620 px wysokości) sekcja przypina się,
+   a przewijanie strony w dół przesuwa pas w bok; wysokość .hpk-pin to ekran plus długość pasa
+   (--hpk-dist liczy ScopeList: długość pasa podzielona przez prędkość). Niżej kafelki stoją jeden pod drugim jako zaokrąglone prostokąty.
+   Grafika nie ma własnego okienka: bierze kolory z kafelka przez zmienne --sc-*. --- */
+.hpk {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.hpk-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.hpk-head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 36rem;
+}
+.hpk-nav {
+  flex: none;
+  display: none;
+  gap: 8px;
+}
+.hpk-btn {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.hpk-btn:hover:not(:disabled) {
+  background: var(--dark-2);
+}
+.hpk-btn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+.hpk-btn:disabled {
+  background: var(--paper-tint);
+  color: var(--ink-3);
+  cursor: default;
+}
+.hpk-track {
+  border-radius: var(--radius);
+}
+.hpk-track:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+.hpk-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hpk-tile {
+  /* kolory grafiki na jasnym kafelku */
+  --sc-fg: var(--ink);
+  --sc-muted: var(--ink-2);
+  --sc-surface: var(--paper-tint);
+  --sc-strong: var(--line-strong);
+  --sc-out-bg: var(--ink);
+  --sc-out-fg: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 28px 24px 24px;
+  border-radius: var(--radius);
+  background: var(--paper-white);
+  color: var(--ink);
+}
+.hpk-dark {
+  /* i na ciemnym */
+  --sc-fg: var(--paper);
+  --sc-muted: rgba(246, 245, 241, 0.72);
+  --sc-surface: rgba(246, 245, 241, 0.09);
+  --sc-strong: rgba(246, 245, 241, 0.2);
+  --sc-out-bg: var(--paper);
+  --sc-out-fg: var(--ink);
+  background: var(--dark);
+  color: var(--paper);
+}
+.hpk-h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(26px, 2.2vw, 34px);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: inherit;
+  text-wrap: balance;
+}
+.hpk-note {
+  font-size: 16px;
+  line-height: 1.5;
+  color: inherit;
+  max-width: 24rem;
+  text-wrap: pretty;
+}
+.hpk-dark .hpk-note {
+  color: rgba(246, 245, 241, 0.86);
+}
+.hpk-art {
+  display: grid;
+  place-items: center;
+  height: 260px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* Przypięty pas */
+@media (min-width: 768px) and (min-height: 620px) {
+  .hpk-pin {
+    height: calc(100svh + var(--hpk-dist, 0px));
+  }
+  .hpk {
+    position: sticky;
+    top: 0;
+    justify-content: center;
+    gap: clamp(24px, 4svh, 40px);
+    height: 100svh;
+    padding: calc(var(--hpk-top, 72px) + 16px) 0 24px;
+  }
+  .hpk-nav {
+    display: flex;
+  }
+  .hpk-track {
+    overflow: hidden;
+  }
+  .hpk-row {
+    flex-direction: row;
+    width: max-content;
+    will-change: transform;
+  }
+  .hpk-tile {
+    flex: 0 0 auto;
+    width: clamp(380px, 31vw, 460px);
+    border-radius: 0;
+    padding: 34px calc(var(--s, 0px) + 20px) 32px calc(var(--s, 0px) + 28px);
+  }
+  .hpk-tile:first-child {
+    padding-left: 32px;
+  }
+  .hpk-tile:last-child {
+    padding-right: 32px;
+  }
+  .hpk-art {
+    height: clamp(200px, 30svh, 270px);
+  }
+}
+
+/* Licznik i strzałki karuzeli: tylko na telefonie i w niskim oknie */
+.hpk-foot {
+  display: none;
+}
+
+/* --- Telefon i niskie okno: pas jako karuzela przesuwana palcem ---
+   Pas wychodzi do krawędzi ekranu, następny kafelek wystaje zza prawej krawędzi
+   (widać, że można przesunąć), kafelki zatrzymują się przy lewym marginesie. */
+@media (max-width: 767px), (max-height: 619px) {
+  .hpk {
+    gap: 28px;
+  }
+  .hpk-track {
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    border-radius: 0;
+  }
+  .hpk-track::-webkit-scrollbar {
+    display: none;
+  }
+  .hpk-track:focus-visible {
+    outline-offset: -2px;
+  }
+  .hpk-row {
+    flex-direction: row;
+    width: max-content;
+    gap: 10px;
+  }
+  .hpk-tile {
+    flex: none;
+    width: min(80vw, 340px);
+    scroll-snap-align: start;
+    padding: 24px 22px 20px;
+  }
+  .hpk-art {
+    height: 230px;
+  }
+  .hpk-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: -8px;
+  }
+  .hpk-count {
+    font-family: var(--font-display), Georgia, serif;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .hpk-count-now {
+    font-size: 32px;
+    letter-spacing: -0.02em;
+  }
+  .hpk-count-all {
+    font-size: 20px;
+    color: var(--ink-2);
+  }
+  .hpk-foot-nav {
+    display: flex;
+    gap: 8px;
+  }
+  .hpk-foot .hpk-btn {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* --- Telefon: klienci w niższych polach, po dwa w rzędzie --- */
+@media (max-width: 599px) {
+  .hpc {
+    gap: 24px;
+  }
+  .hpc-names {
+    gap: 8px;
+    padding-inline: 6px;
+  }
+  .hpc-chip {
+    min-height: 54px;
+    padding: 8px 20px;
+    border-radius: 14px;
+  }
+  .hpc-chip-text {
+    font-size: 19px;
+  }
+  .hpw {
+    gap: 28px;
+  }
+  .hpw-h3 {
+    font-size: 28px;
+  }
+  .hpw-areas {
+    margin-bottom: 20px;
+  }
+}

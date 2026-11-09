@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ChatCircle, 
   Question, 
@@ -33,6 +33,15 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   const { user } = useAuth();
   const [threadType, setThreadType] = useState<'Komentarz' | 'Pytanie' | 'Zadanie'>('Komentarz');
   const [content, setContent] = useState('');
+
+  // ESC zamyka modal
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
   const [priority, setPriority] = useState<'Niski' | 'Średni' | 'Wysoki'>('Średni');
   const [assignedTo, setAssignedTo] = useState<string>('');
   const [dueDate, setDueDate] = useState<string>('');
@@ -109,23 +118,24 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0a0f14] border border-white/20 rounded-lg w-full max-w-md shadow-2xl">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-[#13151a] border border-white/[0.08] rounded-xl w-full max-w-md shadow-2xl" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="p-4 border-b border-white/10 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-white">Nowy wątek</h2>
+        <div className="px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
+          <h2 className="text-[14px] font-semibold text-white tracking-tight">Nowa uwaga</h2>
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-white/5 rounded transition-colors"
+            className="p-1 hover:bg-white/[0.06] rounded-md text-white/45 hover:text-white transition-colors"
+            title="Zamknij (ESC)"
           >
-            <X size={18} className="text-white/70" />
+            <X size={14} />
           </button>
         </div>
 
         {/* Formularz */}
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Typ</label>
+            <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Typ</label>
             <CustomSelect
               size="sm"
               value={threadType}
@@ -140,14 +150,14 @@ export const CommentForm: React.FC<CommentFormProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">
-              Treść <span className="text-red-400">*</span>
+            <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">
+              Treść <span className="text-red-400 normal-case font-sans tracking-normal">*</span>
             </label>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Opisz problem, zadanie lub pytanie..."
-              className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 min-h-[100px] resize-none"
+              placeholder={threadType === 'Pytanie' ? 'O co chcesz zapytać?' : threadType === 'Zadanie' ? 'Co należy zrobić?' : 'Twoja uwaga…'}
+              className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/30 focus:border-[#fee715]/40 transition-colors resize-none min-h-[90px]"
               autoFocus
             />
           </div>
@@ -156,7 +166,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
           {threadType === 'Zadanie' && (
             <>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Priorytet</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Priorytet</label>
                 <CustomSelect
                   size="sm"
                   value={priority}
@@ -171,7 +181,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Termin (opcjonalnie)</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Termin</label>
                 <DatePickerField
                   value={dueDate}
                   onChange={setDueDate}
@@ -179,13 +189,13 @@ export const CommentForm: React.FC<CommentFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Przypisz do (email, opcjonalnie)</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Przypisz do (email)</label>
                 <input
                   type="email"
                   value={assignedTo}
                   onChange={(e) => setAssignedTo(e.target.value)}
                   placeholder="email@example.com"
-                  className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
+                  className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/30 focus:border-[#fee715]/40 transition-colors"
                 />
               </div>
 
@@ -202,19 +212,19 @@ export const CommentForm: React.FC<CommentFormProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-white/10 flex items-center justify-end gap-2">
+        <div className="px-4 py-3 border-t border-white/[0.06] flex items-center justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-white/[0.06] border border-white/20 text-white/90 rounded text-sm font-medium hover:bg-white/10 transition-colors"
+            className="px-3 py-1.5 bg-white/[0.06] border border-white/[0.08] text-white/80 rounded-md text-[13px] font-medium hover:bg-white/[0.10] hover:text-white transition-colors"
           >
             Anuluj
           </button>
           <button
             onClick={handleSubmit}
             disabled={!content.trim() || saving}
-            className="px-4 py-2 bg-[#fee715]/10 border border-[#fee715]/50 text-[#fee715] rounded text-sm font-medium hover:bg-[#fee715]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 bg-[#fee715] text-[#0a0b0e] rounded-md text-[13px] font-semibold hover:brightness-110 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
           >
-            {saving ? 'Zapisywanie...' : 'Utwórz wątek'}
+            {saving ? 'Zapisywanie…' : 'Dodaj'}
           </button>
         </div>
       </div>

@@ -108,50 +108,87 @@ export const ClientDataView: React.FC = () => {
 
   if (loading) return <LoadingState variant="inline" label="Ładowanie danych…" />;
 
+  const FIELD_INPUT = "w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors";
+  const FIELD_LABEL = "block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5";
+
   return (
-    <div className="space-y-4">
-      <h2 className="text-base font-semibold text-white">Dane</h2>
-      <form onSubmit={onSave} className="bg-white/5 rounded-lg p-4 border border-white/10 space-y-3">
+    <div className="max-w-2xl space-y-5">
+      <div>
+        <h2 className="text-xl font-semibold text-white tracking-tight">Dane konta</h2>
+        <p className="text-[13px] text-white/50 mt-0.5">Zaktualizuj swoje dane kontaktowe i firmowe</p>
+      </div>
+
+      <form onSubmit={onSave} className="bg-white/[0.02] border border-white/[0.06] rounded-lg p-5 space-y-4">
+        {/* Sekcja: identyfikacja */}
         <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1">Email</label>
-          <input type="email" value={profileData.email} readOnly disabled className="w-full bg-white/10 border border-white/10 rounded px-3 py-2 text-sm text-gray-400" />
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1">Nazwa firmy</label>
-          <input type="text" value={profileData.company_name} onChange={(e) => setProfileData((p) => ({ ...p, company_name: e.target.value }))} placeholder="Nazwa firmy" className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]" />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Imię</label>
-            <input type="text" value={profileData.first_name} onChange={(e) => setProfileData((p) => ({ ...p, first_name: e.target.value }))} placeholder="Imię" className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]" />
+          <div className="text-[10px] font-mono font-semibold text-white/30 uppercase tracking-[0.16em] mb-3 pb-2 border-b border-white/[0.05]">Identyfikacja</div>
+          <div className="space-y-3">
+            <div>
+              <label className={FIELD_LABEL}>Email</label>
+              <input type="email" value={profileData.email} readOnly disabled className={`${FIELD_INPUT} disabled:opacity-50 font-mono`} />
+              <p className="text-[11px] text-white/35 mt-1">Email nie można zmienić — skontaktuj się z administratorem</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={FIELD_LABEL}>Imię</label>
+                <input type="text" value={profileData.first_name} onChange={(e) => setProfileData((p) => ({ ...p, first_name: e.target.value }))} placeholder="Imię" className={FIELD_INPUT} />
+              </div>
+              <div>
+                <label className={FIELD_LABEL}>Nazwisko</label>
+                <input type="text" value={profileData.last_name} onChange={(e) => setProfileData((p) => ({ ...p, last_name: e.target.value }))} placeholder="Nazwisko" className={FIELD_INPUT} />
+              </div>
+            </div>
+            <div>
+              <label className={FIELD_LABEL}>Preferowane imię</label>
+              <input
+                type="text"
+                value={profileData.display_name}
+                onChange={(e) => setProfileData((p) => ({ ...p, display_name: e.target.value }))}
+                placeholder="np. Franek"
+                className={FIELD_INPUT}
+              />
+              <p className="text-[11px] text-white/35 mt-1">Tak będziesz widoczny w komentarzach i historii zmian</p>
+            </div>
           </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Nazwisko</label>
-            <input type="text" value={profileData.last_name} onChange={(e) => setProfileData((p) => ({ ...p, last_name: e.target.value }))} placeholder="Nazwisko" className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]" />
+        </div>
+
+        {/* Sekcja: firma */}
+        <div>
+          <div className="text-[10px] font-mono font-semibold text-white/30 uppercase tracking-[0.16em] mb-3 pb-2 border-b border-white/[0.05]">Firma i kontakt</div>
+          <div className="space-y-3">
+            <div>
+              <label className={FIELD_LABEL}>Nazwa firmy</label>
+              <input type="text" value={profileData.company_name} onChange={(e) => setProfileData((p) => ({ ...p, company_name: e.target.value }))} placeholder="Nazwa firmy" className={FIELD_INPUT} />
+            </div>
+            <div>
+              <label className={FIELD_LABEL}>Telefon</label>
+              <input type="tel" value={profileData.phone} onChange={(e) => setProfileData((p) => ({ ...p, phone: e.target.value }))} placeholder="+48 ..." className={FIELD_INPUT} />
+            </div>
           </div>
         </div>
+
+        {/* Sekcja: notatki */}
         <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1">Telefon</label>
-          <input type="tel" value={profileData.phone} onChange={(e) => setProfileData((p) => ({ ...p, phone: e.target.value }))} placeholder="Telefon" className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]" />
+          <div className="text-[10px] font-mono font-semibold text-white/30 uppercase tracking-[0.16em] mb-3 pb-2 border-b border-white/[0.05]">Cele i notatki</div>
+          <div>
+            <label className={FIELD_LABEL}>Twoje cele biznesowe / kontekst</label>
+            <textarea
+              value={profileData.notes}
+              onChange={(e) => setProfileData((p) => ({ ...p, notes: e.target.value }))}
+              placeholder="Opisz swoje cele, kontekst biznesowy, czego oczekujesz od współpracy…"
+              rows={4}
+              className={`${FIELD_INPUT} resize-none`}
+            />
+          </div>
         </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1">Preferowane imię</label>
-          <input
-            type="text"
-            value={profileData.display_name}
-            onChange={(e) => setProfileData((p) => ({ ...p, display_name: e.target.value }))}
-            placeholder="np. Franek"
-            className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715]"
-          />
-          <p className="text-xs text-gray-500 mt-1">Opcjonalne pole z preferowaną formą imienia.</p>
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1">Notatki / cele</label>
-          <textarea value={profileData.notes} onChange={(e) => setProfileData((p) => ({ ...p, notes: e.target.value }))} placeholder="Notatki..." rows={3} className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:ring-1 focus:ring-[#fee715] focus:border-[#fee715] resize-none" />
-        </div>
-        <div className="pt-2">
-          <button type="submit" disabled={saving} className="px-4 py-2 bg-[#fee715] text-[#101820] text-sm font-semibold rounded-lg hover:bg-[#fee715]/90 disabled:opacity-50">
-            {saving ? 'Zapisywanie…' : 'Zapisz'}
+
+        <div className="flex justify-end pt-2 border-t border-white/[0.05]">
+          <button
+            type="submit"
+            disabled={saving}
+            className="px-4 py-2 bg-[#fee715] text-[#050714] text-[13px] font-semibold rounded-md hover:brightness-110 transition-all shadow-sm shadow-[#fee715]/20 disabled:opacity-50"
+          >
+            {saving ? 'Zapisywanie…' : 'Zapisz zmiany'}
           </button>
         </div>
       </form>

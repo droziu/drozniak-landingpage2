@@ -31,7 +31,7 @@ export interface ContentBlock {
   };
 }
 // Icons - using Client Component to avoid SSR issues with phosphor-react
-import { ArrowRight, CaretRight, Clock, Calendar } from '@/app/components/BlogIcons';
+import { CaretRight, Clock, Calendar } from '@/app/components/BlogIcons';
 
 const BASE_URL = 'https://drozniak.pl';
 
@@ -107,10 +107,10 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
             block.data.alignment === 'center' ? 'text-center' : ''
           } ${block.data.alignment === 'right' ? 'text-right' : ''
           } ${
-            hasH2 ? 'prose-headings:font-extrabold prose-headings:prose-headings:text-[#101820] prose-h2:text-4xl prose-h2:md:text-5xl prose-h2:lg:text-6xl prose-h2:mb-8 prose-h2:mt-20 prose-h2:md:mt-24 prose-h2:uppercase prose-h2:leading-tight prose-h2:tracking-tight prose-h2:py-6' : ''
+            hasH2 ? 'prose-headings:font-extrabold prose-headings:tracking-[-0.03em] prose-headings:text-[#161511] prose-h2:text-3xl prose-h2:md:text-4xl prose-h2:lg:text-[2.75rem] prose-h2:mb-6 prose-h2:mt-16 prose-h2:md:mt-20 prose-h2:leading-[1.12] prose-h2:py-2' : ''
           } ${
-            hasH3 ? 'prose-h3:text-2xl prose-h3:md:text-3xl prose-h3:lg:text-4xl prose-h3:mb-6 prose-h3:mt-12 prose-h3:md:mt-16 prose-h3:font-extrabold prose-h3:text-[#101820] prose-h3:leading-tight prose-h3:py-4' : ''
-          } prose-p:leading-[1.7] prose-p:text-[#101820] prose-p:text-lg md:prose-p:text-xl prose-p:mb-8 prose-ul:my-10 prose-li:my-4 prose-li:text-[#101820] prose-li:leading-[1.7] prose-strong:text-[#101820] prose-strong:font-extrabold prose-a:text-[#101820] prose-a:underline prose-a:decoration-[#fee715] prose-a:decoration-2 prose-a:hover:text-[#101820] prose-a:hover:bg-[#fee715] prose-a:transition-colors`}
+            hasH3 ? 'prose-h3:text-xl prose-h3:md:text-2xl prose-h3:lg:text-3xl prose-h3:mb-5 prose-h3:mt-12 prose-h3:md:mt-14 prose-h3:font-extrabold prose-h3:tracking-[-0.02em] prose-h3:text-[#161511] prose-h3:leading-[1.2] prose-h3:py-2' : ''
+          } prose-p:leading-[1.7] prose-p:text-[#101820] prose-p:text-lg md:prose-p:text-xl prose-p:mb-8 prose-ul:my-10 prose-li:my-4 prose-li:text-[#101820] prose-li:leading-[1.7] prose-strong:text-[#101820] prose-strong:font-extrabold prose-a:text-[#101820] prose-a:underline prose-a:decoration-[#C9A227] prose-a:decoration-2 prose-a:underline-offset-2 prose-a:hover:text-[#8F7418] prose-a:hover:decoration-[#8F7418] prose-a:transition-colors`}
           dangerouslySetInnerHTML={{ __html: textContent }}
         />
       );
@@ -134,11 +134,11 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
           <img
             src={imageSrc}
             alt={block.data.alt || ''}
-            className="w-full border-2 border-gray-200"
+            className="w-full border border-[#E4E1D8] rounded-[4px]"
             loading="lazy"
           />
           {block.data.caption && (
-            <figcaption className="text-center text-base text-gray-600 mt-6 font-medium">
+            <figcaption className="text-center text-base text-[#85816F] mt-6 font-medium">
               {block.data.caption}
             </figcaption>
           )}
@@ -147,26 +147,33 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
 
     case 'quote':
       return (
-        <blockquote className="border-l-4 border-[#fee715] pl-10 py-8 my-16 md:my-20 italic text-xl md:text-2xl text-[#101820] font-medium leading-[1.7]">
-          <p className="m-0 leading-[1.7]">"{block.data.quote}"</p>
+        <blockquote className="border-l-2 border-[#C9A227] pl-8 md:pl-10 py-6 my-16 md:my-20">
+          <p className="m-0 pub-serif italic text-xl md:text-2xl text-[#161511] leading-[1.55]">
+            &bdquo;{block.data.quote}&rdquo;
+          </p>
           {block.data.author && (
-            <footer className="text-lg text-gray-700 mt-6 font-semibold not-italic m-0">- {block.data.author}</footer>
+            <footer className="text-sm mt-5 font-semibold uppercase tracking-[0.14em] text-[#85816F] not-italic m-0">
+              - {block.data.author}
+            </footer>
           )}
         </blockquote>
       );
 
     case 'separator':
       return (
-        <div className="my-16 md:my-20 h-4 bg-[#fee715]"></div>
+        <div className="my-16 md:my-20 flex items-center gap-4" aria-hidden>
+          <span className="w-12 h-[2px] bg-[#C9A227]"></span>
+          <span className="flex-1 h-px bg-[#E4E1D8]"></span>
+        </div>
       );
 
     case 'heading':
       return (
         <div id={block.id} className="my-12 md:my-16 scroll-mt-20">
           <div className="max-w-6xl mx-auto">
-            <div className="bg-[#fee715] px-10 md:px-16 lg:px-20 flex items-center justify-center min-h-[60px] md:min-h-[70px] py-6 md:py-7">
-              <h2 
-                className="text-lg md:text-xl lg:text-2xl font-extrabold text-[#101820] leading-[2.6] tracking-tight text-center m-0 p-0 max-w-5xl -translate-y-[15px]"
+            <div className="bg-[#F1EBDA] border border-[#E4E1D8] rounded-[4px] px-8 md:px-14 lg:px-16 flex items-center justify-center min-h-[60px] md:min-h-[70px] py-6 md:py-7">
+              <h2
+                className="text-lg md:text-xl lg:text-2xl font-extrabold text-[#161511] leading-[1.35] tracking-[-0.02em] text-center !m-0 !p-0 max-w-5xl"
                 dangerouslySetInnerHTML={{ __html: block.data.text || '' }}
               />
             </div>
@@ -183,24 +190,24 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
         processedText = processedText.replace(/<ul>/g, '<ul class="space-y-5 list-none pl-0">');
         processedText = processedText.replace(
           /<li>/g,
-          '<li class="flex items-start gap-4"><span class="flex-shrink-0 mt-0.5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#fee715"/><path d="M8 12l2 2 4-4" stroke="#101820" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flex-1 text-lg leading-relaxed">'
+          '<li class="flex items-start gap-4"><span class="flex-shrink-0 mt-0.5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#C9A227"/><path d="M8 12l2 2 4-4" stroke="#161511" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flex-1 text-lg leading-relaxed">'
         );
         processedText = processedText.replace(/<\/li>/g, '</span></li>');
       }
-      
+
       return (
-        <div className="my-16 md:my-20 px-10 md:px-12 lg:px-16 bg-gray-50 text-[#101820] border-2 border-gray-200">
-          <div className="pt-10 md:pt-12 lg:pt-16 pb-10 md:pb-12 lg:pb-16">
+        <div className="my-16 md:my-20 px-8 md:px-12 lg:px-16 bg-[#F6F5F1] text-[#101820] border border-[#E4E1D8] rounded-[4px]">
+          <div className="pt-10 md:pt-12 lg:pt-14 pb-10 md:pb-12 lg:pb-14">
             {block.data.title && (
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#101820] mb-8 md:mb-10 uppercase tracking-tight leading-[1.6] m-0">
+              <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#161511] tracking-[-0.02em] leading-[1.2] !m-0 !mb-6 md:!mb-8 !p-0">
                 {block.data.title}
               </h3>
             )}
             {block.data.subtitle && (
-              <p className="text-xl md:text-2xl text-gray-700 mb-8 md:mb-10 font-semibold leading-[1.6] m-0">{block.data.subtitle}</p>
+              <p className="text-lg md:text-xl text-[#4A4740] mb-8 md:mb-10 font-semibold leading-[1.6] m-0">{block.data.subtitle}</p>
             )}
             {block.data.text && (
-              <div 
+              <div
                 className="prose prose-lg max-w-none prose-ul:my-8 prose-ul:list-none prose-ul:pl-0 prose-li:my-5 prose-li:pl-0 prose-p:text-[#101820] prose-p:text-lg prose-p:leading-[1.7] prose-p:mb-6 prose-strong:text-[#101820] prose-strong:font-extrabold"
                 dangerouslySetInnerHTML={{ __html: processedText }}
               />
@@ -215,15 +222,15 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-4 md:gap-6">
               <div className="flex-shrink-0">
-                <div className="w-14 h-14 md:w-16 md:h-16 bg-[#fee715] flex items-center justify-center">
-                  <span className="text-xl md:text-2xl font-extrabold text-[#101820]">
+                <div className="w-14 h-14 md:w-16 md:h-16 bg-[#161511] rounded-[2px] flex items-center justify-center">
+                  <span className="pub-serif text-2xl md:text-3xl text-[#F2CE4B]">
                     {block.data.number || ''}
                   </span>
                 </div>
               </div>
               <div className="flex-1">
-                <div className="h-14 md:h-16 bg-gray-50 px-4 md:px-6 flex items-center">
-                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-[#101820] leading-tight tracking-tight m-0 p-0 uppercase">
+                <div className="h-14 md:h-16 bg-[#F6F5F1] border border-[#E4E1D8] rounded-[2px] px-4 md:px-6 flex items-center">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-[#161511] leading-tight tracking-[-0.02em] m-0 p-0">
                     {block.data.text || ''}
                   </h2>
                 </div>
@@ -235,18 +242,17 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
 
     case 'cta':
       return (
-        <div className="my-16 md:my-20 text-center py-10 md:py-12 px-10 md:px-12 bg-gray-50 border-2 border-gray-200 flex flex-col items-center justify-center">
-          <p className="text-xl md:text-2xl font-extrabold text-[#101820] mb-6 leading-[1.6] m-0">{block.data.ctaText}</p>
+        <div className="my-16 md:my-20 text-center py-10 md:py-12 px-8 md:px-12 bg-[#F1EBDA]/60 border border-[#E4E1D8] rounded-[4px] flex flex-col items-center justify-center">
+          <p className="text-xl md:text-2xl font-extrabold tracking-[-0.02em] text-[#161511] mb-7 leading-[1.4] m-0">{block.data.ctaText}</p>
           {block.data.ctaLink && (
             <a
               href={block.data.ctaLink}
-              className={`inline-block px-8 py-4 font-extrabold text-lg transition-colors border-2 ${
-                block.data.ctaStyle === 'primary'
-                  ? 'bg-[#fee715] border-[#fee715] text-[#101820] hover:bg-[#101820] hover:text-[#fee715] hover:border-[#101820]'
-                  : 'bg-transparent border-[#fee715] text-[#fee715] hover:bg-[#fee715] hover:text-[#101820]'
-              }`}
+              className={block.data.ctaStyle === 'primary' ? 'pub-btn pub-btn-primary' : 'pub-btn pub-btn-outline'}
             >
               Dowiedz się więcej
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </a>
           )}
         </div>
@@ -453,36 +459,36 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         id="schema-breadcrumb"
       />
 
-      <article className="min-h-screen bg-white text-[#101820]">
+      <article className="min-h-screen bg-[#FFFFFF] text-[#101820]">
         {/* Breadcrumbs */}
-        <div className="container mx-auto px-4 md:px-6 py-8 md:py-10 max-w-7xl border-b border-gray-200">
-          <nav className="flex items-center gap-2 md:gap-3 flex-wrap text-sm md:text-base">
-            <Link 
-              href="/" 
-              className="text-gray-600 hover:text-[#101820] hover:bg-[#fee715]/10 px-3 py-1.5 transition-all font-medium rounded-sm"
+        <div className="container mx-auto px-4 md:px-6 py-6 md:py-8 max-w-7xl border-b border-[#E4E1D8]">
+          <nav aria-label="Okruszki" className="flex items-center gap-1.5 md:gap-2 flex-wrap text-[13px] md:text-sm">
+            <Link
+              href="/"
+              className="text-[#85816F] hover:text-[#161511] px-2 py-1.5 transition-colors font-medium rounded-[2px] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#161511]"
             >
               Strona główna
             </Link>
-            <CaretRight size={16} weight="bold" className="text-gray-300 flex-shrink-0" />
-            <Link 
-              href="/blog" 
-              className="text-gray-600 hover:text-[#101820] hover:bg-[#fee715]/10 px-3 py-1.5 transition-all font-medium rounded-sm"
+            <CaretRight size={14} weight="bold" className="text-[#D6D2C6] flex-shrink-0" />
+            <Link
+              href="/blog"
+              className="text-[#85816F] hover:text-[#161511] px-2 py-1.5 transition-colors font-medium rounded-[2px] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#161511]"
             >
               Blog
             </Link>
             {post.category_name && (
               <>
-                <CaretRight size={16} weight="bold" className="text-gray-300 flex-shrink-0" />
+                <CaretRight size={14} weight="bold" className="text-[#D6D2C6] flex-shrink-0" />
                 <Link
                   href={`/blog/kategoria/${post.category_slug}`}
-                  className="text-gray-600 hover:text-[#101820] hover:bg-[#fee715]/10 px-3 py-1.5 transition-all font-medium rounded-sm"
+                  className="text-[#85816F] hover:text-[#161511] px-2 py-1.5 transition-colors font-medium rounded-[2px] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#161511]"
                 >
                   {post.category_name}
                 </Link>
               </>
             )}
-            <CaretRight size={16} weight="bold" className="text-[#fee715] flex-shrink-0" />
-            <span className="text-[#101820] font-extrabold px-3 py-1.5 max-w-[600px] truncate">
+            <CaretRight size={14} weight="bold" className="text-[#C9A227] flex-shrink-0" />
+            <span className="text-[#161511] font-semibold px-2 py-1.5 max-w-[600px] truncate">
               {post.title}
             </span>
           </nav>
@@ -495,17 +501,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <div className="flex items-center gap-2">
               {post.category_name ? (
                 <>
-                  <span className="w-2 h-2 bg-[#fee715]" aria-hidden />
-                  <span className="inline-block text-xs font-semibold px-3 py-1 border border-gray-300 text-[#101820]">
-                    {post.category_name}
-                  </span>
+                  <span className="w-2 h-2 bg-[#C9A227]" aria-hidden />
+                  <span className="pub-chip">{post.category_name}</span>
                 </>
               ) : null}
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#85816F]">
               {post.published_at ? (
                 <>
-                  <Calendar size={16} weight="regular" className="text-gray-500 flex-shrink-0" />
+                  <Calendar size={16} weight="regular" className="text-[#85816F] flex-shrink-0" />
                   <span className="text-sm" suppressHydrationWarning>
                     {new Date(post.published_at).toLocaleDateString('pl-PL', {
                       year: 'numeric',
@@ -516,10 +520,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </>
               ) : null}
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#85816F]">
               {post.reading_time ? (
                 <>
-                  <Clock size={16} weight="regular" className="text-gray-500 flex-shrink-0" />
+                  <Clock size={16} weight="regular" className="text-[#85816F] flex-shrink-0" />
                   <span className="text-sm">{post.reading_time} min</span>
                 </>
               ) : null}
@@ -527,20 +531,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#101820] py-6 md:py-8 leading-tight tracking-tight">
+          <h1 className="pub-h-serif text-[clamp(2.2rem,5vw,3.8rem)] py-4 md:py-6">
             {post.title}
           </h1>
 
           {/* Excerpt */}
           {post.excerpt && (
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 md:mb-10 leading-relaxed font-medium">
+            <p className="text-xl md:text-2xl text-[#4A4740] mb-8 md:mb-10 leading-[1.6] font-medium text-pretty">
               {post.excerpt}
             </p>
           )}
 
           {/* Hero image */}
           {post.featured_image_url && (
-            <div className="w-full my-12 md:my-16 overflow-hidden bg-gray-100">
+            <div className="w-full my-12 md:my-16 overflow-hidden rounded-[4px] border border-[#E4E1D8] bg-[#F6F5F1]">
               <img
                 src={getDesktopImageUrl(post.featured_image_url) || post.featured_image_url}
                 srcSet={getHeroImageSrcSet(post.featured_image_url)}
@@ -554,7 +558,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           )}
 
           {/* Separator */}
-          <div className="w-40 h-4 bg-[#fee715] mb-20 md:mb-24"></div>
+          <div className="w-16 h-[3px] bg-[#C9A227] mb-16 md:mb-20" aria-hidden></div>
 
           {/* Content blocks */}
           <div className="blog-content text-[#101820]">
@@ -580,7 +584,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 return (
                   <div key={`${block.id}-${nextBlock.id}`}>
                     {shouldAddSeparator && (
-                      <div className="my-16 md:my-20 h-4 bg-[#fee715]"></div>
+                      <div className="my-16 md:my-20 flex items-center gap-4" aria-hidden>
+                        <span className="w-12 h-[2px] bg-[#C9A227]"></span>
+                        <span className="flex-1 h-px bg-[#E4E1D8]"></span>
+                      </div>
                     )}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 my-16 md:my-20 max-w-5xl mx-auto">
                       <ContentBlockRenderer block={block} inPair />
@@ -593,7 +600,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               return (
                 <div key={block.id}>
                   {shouldAddSeparator && (
-                    <div className="my-16 md:my-20 h-4 bg-[#fee715]"></div>
+                    <div className="my-16 md:my-20 flex items-center gap-4" aria-hidden>
+                      <span className="w-12 h-[2px] bg-[#C9A227]"></span>
+                      <span className="flex-1 h-px bg-[#E4E1D8]"></span>
+                    </div>
                   )}
                   <ContentBlockRenderer block={block} />
                 </div>
@@ -603,14 +613,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="mt-20 md:mt-24 pt-16">
-              <div className="h-4 bg-[#fee715] mb-10"></div>
-              <div className="flex flex-wrap gap-3">
+            <div className="mt-16 md:mt-20 pt-10 border-t border-[#E4E1D8]">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#85816F] mb-5">
+                Tagi
+              </p>
+              <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag: string) => (
-                  <span
-                    key={tag}
-                    className="px-4 py-2 text-sm bg-gray-100 border border-gray-300 text-[#101820] font-semibold"
-                  >
+                  <span key={tag} className="pub-chip">
                     #{tag}
                   </span>
                 ))}
@@ -618,16 +627,45 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </div>
           )}
 
-          {/* Back to blog */}
-          <div className="mt-20 md:mt-24 pt-16">
-            <div className="h-4 bg-[#fee715] mb-10"></div>
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 text-[#101820] hover:text-[#101820] transition-colors font-extrabold text-lg group"
-            >
-              <ArrowRight size={20} weight="bold" className="text-[#fee715] group-hover:translate-x-1 transition-transform" />
-              Wróć do bloga
-            </Link>
+          {/* Autor */}
+          <div className="mt-16 md:mt-20 pt-10 border-t border-[#E4E1D8] flex items-center gap-5">
+            <img
+              src="/images/Drozniak_photo_suit_1.webp"
+              alt="Stanisław Drożniak"
+              className="w-14 h-14 md:w-16 md:h-16 object-cover rounded-[4px] border border-[#E4E1D8]"
+              loading="lazy"
+            />
+            <div>
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#85816F]">
+                Autor
+              </p>
+              <p className="mt-1 pub-serif text-lg md:text-xl text-[#161511]">Stanisław Drożniak</p>
+              <p className="text-[13px] text-[#4A4740]">
+                Marketing, strony www i AI - w jednych rękach
+              </p>
+            </div>
+          </div>
+
+          {/* CTA na końcu artykułu */}
+          <div className="mt-12 md:mt-16 p-8 md:p-12 bg-[#F1EBDA]/60 border border-[#E4E1D8] rounded-[4px] text-center">
+            <h2 className="text-[clamp(1.6rem,3.5vw,2.4rem)]">
+              <span className="pub-h-serif block">Masz projekt,</span>
+              <span className="pub-h-sans block mt-1">który chcesz dopracować?</span>
+            </h2>
+            <p className="mt-5 text-base md:text-lg text-[#4A4740] leading-[1.7]">
+              Napisz do mnie - odpowiadam w 24 godziny.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/kontakt" className="pub-btn pub-btn-primary">
+                Porozmawiajmy
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <Link href="/blog" className="pub-btn pub-btn-outline">
+                Wróć do bloga
+              </Link>
+            </div>
           </div>
         </div>
       </article>

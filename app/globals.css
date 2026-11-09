@@ -748,3 +748,342 @@ body::before {
 /* Hide scrollbar utility */
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* ============================================================
+   PUBLIC LIGHT THEME — „Editorial Ink & Paper" redesign 2026
+   Scope: wyłącznie publiczna część strony (.site-pub wrapper).
+   Panel/admin/login nie zawierają .site-pub i pozostają na
+   ciemnych tokenach powyżej.
+   ============================================================ */
+
+.site-pub {
+  /* Tokens */
+  --paper: #F6F5F1;
+  --paper-white: #FFFFFF;
+  --paper-tint: #EFEDE6;
+  --ink: #161511;
+  --ink-2: #4A4740;
+  --ink-3: #85816F;
+  --line: #E4E1D8;
+  --line-strong: #D6D2C6;
+  --gold: #C9A227;
+  --gold-deep: #8F7418;
+  --gold-bright: #F2CE4B;
+  --gold-wash: #F1EBDA;
+  --dark: #171512;
+  --dark-2: #211F1A;
+
+  font-family: var(--font-sans-pub), var(--font-geist-sans), sans-serif;
+  color: var(--ink-2);
+  background: var(--paper);
+}
+
+/* Body przełącza się na jasny motyw tylko, gdy renderujemy publiczną część */
+body:has(.site-pub) {
+  background: #F6F5F1;
+  color: #4A4740;
+}
+body:has(.site-pub)::before {
+  content: none;
+}
+body:has(.site-pub) ::selection {
+  background-color: #161511;
+  color: #F6F5F1;
+}
+html:has(.site-pub) ::-webkit-scrollbar-track,
+html:has(.site-pub)::-webkit-scrollbar-track {
+  background: #F6F5F1;
+}
+html:has(.site-pub) ::-webkit-scrollbar-thumb,
+html:has(.site-pub)::-webkit-scrollbar-thumb {
+  background: rgba(22, 21, 17, 0.18);
+  border: 2px solid #F6F5F1;
+}
+html:has(.site-pub) ::-webkit-scrollbar-thumb:hover,
+html:has(.site-pub)::-webkit-scrollbar-thumb:hover {
+  background: rgba(22, 21, 17, 0.32);
+}
+
+.site-pub * {
+  border-color: var(--line);
+}
+
+/* --- Typografia --- */
+.pub-serif {
+  font-family: var(--font-display), Georgia, 'Times New Roman', serif;
+}
+
+/* Sygnaturowy miks nagłówka: linia serif + linia sans (wzór Crafton) */
+.pub-h-serif {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 450;
+  letter-spacing: -0.015em;
+  line-height: 1.08;
+  color: var(--ink);
+}
+.pub-h-sans {
+  font-family: var(--font-sans-pub), sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  color: var(--ink);
+}
+
+.pub-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.pub-eyebrow::before {
+  content: '';
+  width: 1.5rem;
+  height: 1px;
+  background: var(--gold);
+}
+
+/* Duże numery sekcji — Fraunces, oldstyle */
+.pub-num {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-feature-settings: 'onum';
+  color: var(--gold);
+  line-height: 1;
+}
+
+/* --- Przyciski: prawie kwadratowe, ink --- */
+.pub-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  height: 48px;
+  padding: 0 1.65rem;
+  border-radius: 2px;
+  font-family: var(--font-sans-pub), sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+.pub-btn-sm {
+  height: 40px;
+  padding: 0 1.15rem;
+  font-size: 0.85rem;
+}
+.pub-btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.pub-btn-primary:hover {
+  background: #0C0B08;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -14px rgba(22, 21, 17, 0.45);
+}
+.pub-btn-primary:active { transform: translateY(0); }
+.pub-btn-outline {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+.pub-btn-outline:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+/* Warianty na ciemnych slabach */
+.pub-btn-light {
+  background: var(--paper);
+  color: var(--ink);
+}
+.pub-btn-light:hover {
+  background: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.55);
+}
+.pub-btn-outline-light {
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid rgba(246, 245, 241, 0.4);
+}
+.pub-btn-outline-light:hover {
+  border-color: var(--paper);
+  background: rgba(246, 245, 241, 0.06);
+}
+
+/* --- Linki z animowaną strzałką + underline sweep --- */
+.pub-link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color 200ms ease;
+}
+.pub-link-arrow svg,
+.pub-link-arrow .pub-arrow {
+  transition: transform 250ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.pub-link-arrow:hover svg,
+.pub-link-arrow:hover .pub-arrow {
+  transform: translateX(4px);
+}
+
+.pub-underline {
+  position: relative;
+}
+.pub-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.pub-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* --- Karty / powierzchnie --- */
+.pub-card {
+  background: var(--paper-white);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition: border-color 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+}
+.pub-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 24px 60px -40px rgba(23, 21, 15, 0.28);
+  transform: translateY(-2px);
+}
+
+.pub-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.6rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+.pub-chip-dark {
+  border-color: rgba(246, 245, 241, 0.18);
+  color: rgba(246, 245, 241, 0.6);
+}
+
+.pub-hairline {
+  height: 1px;
+  background: var(--line);
+}
+
+/* --- Akordeon --- */
+.pub-acc-item {
+  border-top: 1px solid var(--line);
+}
+.pub-acc-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.pub-acc-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  padding: 1.6rem 0.25rem;
+  transition: padding-left 250ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.pub-acc-trigger:hover {
+  padding-left: 0.75rem;
+}
+.pub-acc-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  transition: transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1), background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.pub-acc-item[data-open='true'] .pub-acc-icon {
+  transform: rotate(45deg);
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+/* --- Media frame (zdjęcia/wideo na ciemnym slabie) --- */
+.pub-media-frame {
+  position: relative;
+  background: var(--dark);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.pub-media-frame img,
+.pub-media-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Jasna maska marquee (reuse keyframes scrollInfinite) */
+.pub-marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
+}
+
+/* Delikatny puls (hover na pasku „Dlaczego miałbyś mi zaufać") */
+@keyframes trustPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.09); }
+}
+
+/* Treści blogowe z CMS zawierają klasę link-yellow (neonowy żółty) —
+   w jasnym motywie nadpisujemy ją na redakcyjne złoto. */
+.site-pub .blog-content a.link-yellow {
+  color: #161511 !important;
+  background-color: #F1EBDA !important;
+  text-decoration: underline !important;
+  text-decoration-color: #8F7418 !important;
+  font-weight: 600 !important;
+  padding: 2px 4px !important;
+}
+.site-pub .blog-content a.link-yellow:hover {
+  background-color: #F2CE4B !important;
+  opacity: 1 !important;
+}
+
+/* Fullscreen menu — pozycje linków */
+.pub-menu-link {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  color: rgba(246, 245, 241, 0.92);
+  line-height: 1.15;
+  transition: color 200ms ease, padding-left 300ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.pub-menu-link:hover {
+  color: var(--gold-bright);
+  padding-left: 0.75rem;
+}

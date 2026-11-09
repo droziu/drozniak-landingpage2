@@ -1,0 +1,647 @@
+/* ============================================================
+   Podstrona /prowadzenie-marketingu (stała współpraca). Ten sam system
+   co strona główna i /szkolenia: tokeny, przyciski i nagłówki
+   z pub-v2.css, tu tylko układ sekcji. Klasy z prefiksem hm-.
+   ============================================================ */
+
+.hm [hidden] {
+  display: none !important;
+}
+
+.hm-h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(24px, 2vw, 30px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* --- Hero: zazębiające się pola (HeroCanvas.tsx) ---
+   Telefon i tablet: tekst, zdjęcie, pas z obszarami pracy i kafelek rozliczenia pod sobą.
+   Od 960 px: jedno płótno, pola przycięte skosami; wielokąty w procentach to wersja bez JS,
+   komponent podmienia je na zaokrąglone ścieżki (--clip-b, --clip-c, --clip-d). */
+.hmh {
+  padding-top: clamp(16px, 3vh, 32px);
+}
+.hmh-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hmh-a {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 20px;
+}
+.hmh-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: 11vw;
+  line-height: 0.94;
+  margin-left: -0.04em;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.hmh-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 30rem;
+}
+.hmh-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+}
+.hmh-actions .site-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.hmh-shape {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.hmh-b {
+  aspect-ratio: 1 / 1;
+  background: var(--paper-tint);
+}
+.hmh-b img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  animation: hp-settle 1400ms var(--ease-soft) both;
+}
+.hmh-c {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 28px 20px 32px;
+  background: var(--dark);
+}
+.hmh-c-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(24px, 2vw, 30px);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--paper);
+  text-wrap: balance;
+}
+/* Oś drogi klienta (data-ui): sześć kroków w równych kolumnach, linia od środka pierwszej
+   do środka ostatniej kropki, jej wypełnienie (--p) dochodzi do kroku podświetlonego */
+.hmh-path {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hmh-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.hmh-step-dot {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--dark-2);
+  color: rgba(246, 245, 241, 0.5);
+  box-shadow: 0 0 0 6px var(--dark); /* taste-skill-ignore: data-ui, odcina linię osi wokół kropki */
+  transition: background-color 400ms var(--ease-out), color 400ms var(--ease-out),
+    transform 500ms var(--ease-soft);
+}
+.hmh-step[data-done] .hmh-step-dot {
+  color: var(--paper);
+}
+.hmh-step[data-on] .hmh-step-dot {
+  background: var(--paper);
+  color: var(--ink);
+  transform: scale(1.1);
+}
+.hmh-step-label {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: rgba(246, 245, 241, 0.55);
+  white-space: nowrap;
+  transition: color 400ms var(--ease-out);
+}
+.hmh-step[data-on] .hmh-step-label,
+.hmh-step[data-done] .hmh-step-label {
+  color: var(--paper);
+}
+.hmh-d {
+  display: flex;
+  align-items: flex-end;
+  min-height: 150px;
+  padding: 24px;
+  background: var(--paper-tint);
+}
+.hmh-d-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hmh-d-big {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(30px, 2.6vw, 40px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.hmh-d-small {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+@media (min-width: 600px) {
+  .hmh-title {
+    font-size: 10vw;
+  }
+  .hmh-b {
+    aspect-ratio: 4 / 3;
+  }
+}
+@media (min-width: 960px) {
+  .hmh-canvas {
+    position: relative;
+    display: block;
+    height: clamp(600px, calc(100svh - 84px - 40px), 820px);
+  }
+  .hmh-a {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 46%;
+    height: 54%;
+    padding: 8px 0 0;
+    justify-content: space-between;
+  }
+  .hmh-title {
+    font-size: min(6.1vw, 100px);
+    line-height: 0.92;
+  }
+  .hmh-copy {
+    max-width: 82%;
+    gap: 20px;
+    padding-bottom: 8px;
+  }
+  .hmh-shape {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+    padding: 0;
+    border-radius: 0;
+    aspect-ratio: auto;
+    pointer-events: none;
+  }
+  .hmh-b {
+    clip-path: var(--clip-b, polygon(49% 0, 100% 0, 100% 69.03%, 47.6% 69.03%, 41.15% 55.58%, 49% 40.32%));
+    background: transparent;
+  }
+  /* Zdjęcie szersze niż pole (prawy brzeg przycina kształt), żeby postać stała na środku
+     głównej części pola (49-100%), a nie całej ramki razem z ostrogą po lewej */
+  .hmh-b img {
+    position: absolute;
+    left: 41%;
+    top: 0;
+    width: 67%;
+    height: 69.1%;
+    object-position: 50% 24%;
+  }
+  .hmh-c {
+    height: auto;
+    clip-path: var(--clip-c, polygon(0 56.77%, 40.2% 56.77%, 47% 70.97%, 86.3% 70.97%, 74.3% 100%, 0 100%));
+    background: transparent;
+  }
+  /* tło pola tylko w obrysie kształtu, żeby reszta płótna została papierem */
+  .hmh-c::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 13%;
+    top: 56%;
+    bottom: 0;
+    background: var(--dark);
+  }
+  /* Napis w środku schodka (56,8-71%), oś w środku dolnego pasa (71-100%);
+     oś kończy się przed skośną krawędzią pola */
+  .hmh-c {
+    padding: 0;
+  }
+  .hmh-c-title {
+    position: absolute;
+    left: 40px;
+    width: 34%;
+    top: calc(56.77% + 40px);
+  }
+  /* Kropki rozstawione od lewej krawędzi napisu; dół osi tyle od dołu pola, ile napis od góry */
+  .hmh-path {
+    position: absolute;
+    left: 40px;
+    right: 30%;
+    bottom: 44px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .hmh-path::before,
+  .hmh-path::after {
+    content: '';
+    position: absolute;
+    left: 32px;
+    right: 28px;
+    top: 27px;
+    height: 2px; /* taste-skill-ignore: data-ui, linia osi */
+    border-radius: 2px;
+    background: rgba(246, 245, 241, 0.16);
+  }
+  .hmh-path::after {
+    background: var(--paper);
+    transform: scaleX(var(--p, 1));
+    transform-origin: left center;
+    transition: transform 900ms var(--ease-soft);
+  }
+  .hmh-d {
+    clip-path: var(--clip-d, polygon(76% 100%, 88% 70.97%, 100% 70.97%, 100% 100%));
+    background: transparent;
+  }
+  .hmh-d::before {
+    content: '';
+    position: absolute;
+    left: 75%;
+    right: 0;
+    top: 70%;
+    bottom: 0;
+    background: var(--paper-tint);
+  }
+  .hmh-d-text {
+    position: absolute;
+    left: 85.5%;
+    right: 20px;
+    bottom: 28px;
+  }
+}
+#zakres {
+  scroll-margin-top: 96px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-pub .hmh-path::after {
+    transition: none !important;
+  }
+}
+
+/* --- Na czym polega (układ w prowadzenie-sekcje.css, prefiks hmw) --- */
+.hm-statement {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(24px, 2.3vw, 34px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.hm-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+}
+.hm-benefit {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink);
+}
+.hm-benefit-check {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--paper-tint);
+  color: var(--ink);
+}
+/* Scena: zdjęcie w środku, ikony obszarów na obracającym się pierścieniu (data-ui).
+   Jeden cykl to po 1,5 s na każdą z ośmiu ikon; zapala się ikona i jej nazwa pod zdjęciem. */
+.hm-orbit {
+  --t: 12s;
+  --spin: 80s;
+  --icon: clamp(48px, 14cqw, 64px);
+  --lift: 0 1px 2px rgba(22, 21, 17, 0.05), 0 14px 32px -20px rgba(22, 21, 17, 0.35);
+
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 1 / 1;
+}
+.hm-orbit-ring {
+  position: absolute;
+  inset: 0;
+  animation: hm-spin var(--spin) linear infinite;
+}
+.hm-orbit-slot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--icon);
+  height: var(--icon);
+  margin: calc(var(--icon) / -2) 0 0 calc(var(--icon) / -2);
+  transform: rotate(var(--a)) translateY(-40cqw) rotate(calc(-1 * var(--a)));
+}
+.hm-orbit-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: var(--lift); /* taste-skill-ignore: data-ui, ikony unoszą się nad polem sceny */
+  animation: hm-spin var(--spin) linear infinite reverse;
+}
+.hm-orbit-on {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--ink);
+  color: var(--paper);
+  opacity: 0;
+  animation: hm-light var(--t) var(--ease-out) calc(var(--i) * var(--t) / 8) infinite;
+}
+.hm-orbit-photo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 46cqw;
+  height: 46cqw;
+  margin: -23cqw 0 0 -23cqw;
+  border-radius: 999px;
+  object-fit: cover;
+  object-position: 50% 16%;
+}
+.hm-orbit-labels {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 23cqw);
+  display: grid;
+  transform: translate(-50%, -55%);
+}
+.hm-orbit-label {
+  grid-area: 1 / 1;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--lift); /* taste-skill-ignore: data-ui, etykieta unosi się nad zdjęciem */
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink);
+  opacity: 0;
+  animation: hm-label var(--t) var(--ease-out) calc(var(--i) * var(--t) / 8) infinite;
+}
+@keyframes hm-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+@keyframes hm-light {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  2.5%,
+  11% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  13.5%,
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+@keyframes hm-label {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+    filter: blur(6px);
+  }
+  3%,
+  10.5% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  13%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+    filter: blur(6px);
+  }
+}
+
+/* --- Przykładowe zakresy: nagłówek i zakładki po lewej, lista zadań po prawej --- */
+.hm-ex {
+  display: grid;
+  gap: 32px;
+}
+.hm-ex-side {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.hm-examples-head {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 34rem;
+}
+.hm-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hm-tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: var(--paper-tint);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.hm-tab:hover {
+  background: var(--line);
+}
+.hm-tab:active {
+  transform: scale(0.97);
+}
+.hm-tab[aria-selected='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.hm-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius);
+  background: var(--paper-tint);
+  padding: 32px 16px;
+}
+.hm-tasks-wrap {
+  width: 100%;
+  max-width: 440px;
+}
+@media (min-width: 960px) {
+  /* pola nachodzą na siebie o --s (SlantRow), scena ma skos po lewej */
+  .hm-ex {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .hm-ex-side {
+    flex: 6 1 0;
+    min-width: 0;
+    justify-content: center;
+    padding-right: calc(var(--s, 0px) + 24px);
+  }
+  .hm-tabs {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hm-stage {
+    flex: 6 1 0;
+    min-width: 0;
+    min-height: 560px;
+    padding: 56px 40px 56px calc(var(--s, 0px) + 40px);
+    border-radius: 0;
+  }
+}
+
+/* Lista zadań (data-ui): białe wiersze z ikoną, wchodzą po kolei i odhaczają się */
+.hm-tasks {
+  --lift: 0 1px 2px rgba(22, 21, 17, 0.05), 0 14px 32px -22px rgba(22, 21, 17, 0.35);
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: opacity 600ms var(--ease-out), filter 600ms var(--ease-out);
+}
+.hm-tasks[data-leaving] {
+  opacity: 0.32;
+  filter: blur(3px);
+}
+.hm-task {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 10px 14px 10px 10px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--lift); /* taste-skill-ignore: data-ui, wiersze unoszą się nad polem sceny */
+  opacity: 0.32;
+  transform: translateY(8px) scale(0.98);
+  filter: blur(3px);
+  transition: opacity 500ms var(--ease-out), transform 700ms var(--ease-soft), filter 500ms var(--ease-out);
+}
+.hm-task[data-in] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.hm-task-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--paper-tint);
+  color: var(--ink);
+}
+.hm-task-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.hm-task-check {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 260ms var(--ease-out), transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hm-task[data-done] .hm-task-check {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Rozliczenie (układ w prowadzenie-sekcje.css, prefiks hmr) --- */
+.hm-terms-text {
+  max-width: 38rem;
+  font-size: clamp(18px, 1.5vw, 20px);
+  line-height: 1.6;
+  color: var(--ink);
+}
+.hm-terms-text p + p {
+  margin-top: 0.9em;
+}
+
+
+/* Przy ograniczonym ruchu sceny stoją: pierwsza ikona zapalona, lista cała i odhaczona */
+@media (prefers-reduced-motion: reduce) {
+  .site-pub .hm-orbit-ring,
+  .site-pub .hm-orbit-icon,
+  .site-pub .hm-orbit-on,
+  .site-pub .hm-orbit-label {
+    animation: none !important;
+  }
+  .hm-orbit-slot:first-child .hm-orbit-on,
+  .hm-orbit-label:first-child {
+    opacity: 1;
+  }
+}

@@ -68,6 +68,19 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
   const [editingAssigned, setEditingAssigned] = useState(false);
   const [editingDueDate, setEditingDueDate] = useState(false);
 
+  // ESC zamyka wątek (jak Figma)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        // Tylko jeśli textarea nie jest sfocowane (żeby ESC w textarea czyściło tekst, nie zamykało)
+        const isTextarea = (document.activeElement as HTMLElement)?.tagName === 'TEXTAREA';
+        if (!isTextarea) onClose();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
   const loadThread = async () => {
     if (!threadId) return;
     setLoading(true);
@@ -202,118 +215,158 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
 
   if (loading || !thread) {
     return (
-      <div className="fixed right-0 top-0 h-full w-96 bg-[#0a0f14] border-l border-white/10 z-50 flex items-center justify-center">
-        <div className="text-gray-400">Ładowanie...</div>
+      <div className="fixed right-0 top-0 h-full w-96 bg-[#13151a] border-l border-white/[0.06] z-50 flex items-center justify-center">
+        <div className="text-white/45 text-[13px]">Ładowanie…</div>
       </div>
     );
   }
 
   const ThreadIcon = getThreadIcon(thread.thread_type);
 
+  const formatRelativeTime = (iso: string): string => {
+    const then = new Date(iso).getTime();
+    const now = Date.now();
+    const diff = Math.max(0, now - then);
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return 'przed chwilą';
+    if (m < 60) return `${m} min temu`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h} godz. temu`;
+    const d = Math.floor(h / 24);
+    if (d === 1) return 'wczoraj';
+    if (d < 7) return `${d} dni temu`;
+    return new Date(iso).toLocaleDateString('pl-PL');
+  };
+
+  const getInitials = (email?: string): string => {
+    if (!email) return '?';
+    const name = email.split('@')[0];
+    const parts = name.split(/[._-]/);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return name.slice(0, 2).toUpperCase();
+  };
+
   return (
-    <div className="fixed right-0 top-0 h-full w-96 bg-[#0a0f14] border-l border-white/10 z-50 flex flex-col shadow-2xl">
-      {/* Header */}
-      <div className="p-4 border-b border-white/10">
+    <div className="fixed right-0 top-0 h-full w-[420px] bg-[#13151a] border-l border-white/[0.06] z-50 flex flex-col shadow-2xl">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-10 bg-[#13151a]/95 backdrop-blur-xl border-b border-white/[0.06] px-4 py-3">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <ThreadIcon size={20} className="text-[#fee715]" />
-            <h2 className="text-lg font-semibold text-white">{thread.thread_type}</h2>
-          </div>
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-white/5 rounded transition-colors"
+            className="flex items-center gap-1.5 text-[12px] text-white/50 hover:text-white transition-colors"
+            title="Wróć do listy (ESC)"
           >
-            <X size={18} className="text-white/70" />
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Wstecz
           </button>
+          <div className="flex items-center gap-1.5">
+            <ThreadIcon size={14} className="text-[#fee715]" />
+            <span className="text-[11px] font-mono text-white/50 uppercase tracking-[0.14em]">{thread.thread_type}</span>
+          </div>
         </div>
 
-        {/* Status */}
+        {/* Status + Priorytet w jednej linii */}
         <div className="space-y-2">
-          <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Status</label>
-            <CustomSelect
-              size="sm"
-              value={thread.status}
-              onChange={(value) => updateStatus(value)}
-              options={[
-                { value: 'Otwarte', label: 'Otwarte' },
-                { value: 'W toku', label: 'W toku' },
-                { value: 'Do akceptacji', label: 'Do akceptacji' },
-                { value: 'Zatwierdzone', label: 'Zatwierdzone' },
-                { value: 'Odrzucone', label: 'Odrzucone' },
-              ]}
-              className="w-full"
-            />
-          </div>
+          <CustomSelect
+            size="sm"
+            value={thread.status}
+            onChange={(value) => updateStatus(value)}
+            options={[
+              { value: 'Otwarte', label: 'Otwarte' },
+              { value: 'W toku', label: 'W toku' },
+              { value: 'Do akceptacji', label: 'Do akceptacji' },
+              { value: 'Zatwierdzone', label: 'Zatwierdzone' },
+              { value: 'Odrzucone', label: 'Odrzucone' },
+            ]}
+            className="w-full"
+          />
 
-          {/* Priorytet i przypisanie (tylko dla Zadań) */}
           {thread.thread_type === 'Zadanie' && (
             <>
-              <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1">Priorytet</label>
-                <CustomSelect
-                  size="sm"
-                  value={thread.priority || 'Średni'}
-                  onChange={async (value) => {
-                    await supabase
-                      .from('comment_threads')
-                      .update({ priority: value })
-                      .eq('id', thread.id);
-                    await loadThread();
-                    onUpdate();
-                  }}
-                  options={[
-                    { value: 'Niski', label: 'Niski' },
-                    { value: 'Średni', label: 'Średni' },
-                    { value: 'Wysoki', label: 'Wysoki' },
-                  ]}
-                  className="w-full"
-                />
+              <CustomSelect
+                size="sm"
+                value={thread.priority || 'Średni'}
+                onChange={async (value) => {
+                  await supabase
+                    .from('comment_threads')
+                    .update({ priority: value })
+                    .eq('id', thread.id);
+                  await loadThread();
+                  onUpdate();
+                }}
+                options={[
+                  { value: 'Niski', label: 'Priorytet: Niski' },
+                  { value: 'Średni', label: 'Priorytet: Średni' },
+                  { value: 'Wysoki', label: 'Priorytet: Wysoki' },
+                ]}
+                className="w-full"
+              />
+              <div className="flex flex-wrap gap-2 text-[11px] text-white/50">
+                {thread.due_date && (
+                  <span className="flex items-center gap-1">
+                    <Calendar size={11} />
+                    {new Date(thread.due_date).toLocaleDateString('pl-PL')}
+                  </span>
+                )}
+                {thread.assigned_to_email && (
+                  <span className="flex items-center gap-1">
+                    <User size={11} />
+                    {thread.assigned_to_email}
+                  </span>
+                )}
               </div>
-              {thread.due_date && (
-                <div className="text-xs text-gray-400 flex items-center gap-1">
-                  <Calendar size={12} />
-                  Termin: {new Date(thread.due_date).toLocaleDateString('pl-PL')}
-                </div>
-              )}
-              {thread.assigned_to_email && (
-                <div className="text-xs text-gray-400 flex items-center gap-1">
-                  <User size={12} />
-                  Przypisane do: {thread.assigned_to_email}
-                </div>
-              )}
             </>
           )}
         </div>
       </div>
 
-      {/* Wiadomości */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {thread.messages.map((message) => (
-          <div key={message.id} className="bg-white/[0.02] border border-white/10 rounded p-3">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-medium text-white">
-                {message.creator_email || 'Nieznany użytkownik'}
-              </span>
-              <span className="text-[10px] text-gray-500">
-                {new Date(message.created_at).toLocaleString('pl-PL')}
-              </span>
-              {message.is_edited && (
-                <span className="text-[10px] text-gray-500 italic">(edytowane)</span>
-              )}
+      {/* Wiadomości - jak chat */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+        {thread.messages.map((message) => {
+          const isMine = message.created_by === user?.id;
+          return (
+            <div key={message.id} className="flex gap-2.5">
+              {/* Avatar */}
+              <div className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-[10px] font-semibold ${
+                isMine ? 'bg-[#fee715] text-[#0a0b0e]' : 'bg-white/[0.06] border border-white/[0.08] text-white/80'
+              }`}>
+                {getInitials(message.creator_email)}
+              </div>
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="text-[12px] font-medium text-white truncate">
+                    {message.creator_email?.split('@')[0] || 'Użytkownik'}
+                  </span>
+                  <span className="text-[10px] text-white/40 font-mono">
+                    {formatRelativeTime(message.created_at)}
+                  </span>
+                  {message.is_edited && (
+                    <span className="text-[10px] text-white/35 italic">(edytowane)</span>
+                  )}
+                </div>
+                <div className="text-[13px] text-white/85 whitespace-pre-wrap leading-relaxed">{message.content}</div>
+              </div>
             </div>
-            <div className="text-sm text-gray-300 whitespace-pre-wrap">{message.content}</div>
+          );
+        })}
+        {thread.messages.length === 0 && (
+          <div className="text-center text-[12px] text-white/45 py-8">
+            Brak wiadomości. Napisz pierwszą poniżej.
           </div>
-        ))}
+        )}
       </div>
 
       {/* Formularz nowej wiadomości */}
-      <div className="p-4 border-t border-white/10">
+      <div className="p-3 border-t border-white/[0.06] bg-[#13151a]/95 backdrop-blur-xl">
         <textarea
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Napisz odpowiedź..."
-          className="w-full bg-white/[0.04] border border-white/10 rounded px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 min-h-[80px] resize-none"
+          placeholder="Odpowiedz w wątku…"
+          className="w-full bg-[#1a1d24] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/30 focus:border-[#fee715]/40 transition-colors resize-none"
+          rows={3}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
               e.preventDefault();
@@ -322,13 +375,13 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
           }}
         />
         <div className="flex items-center justify-between mt-2">
-          <span className="text-[10px] text-gray-500">Cmd/Ctrl + Enter aby wysłać</span>
+          <span className="text-[10px] font-mono text-white/35 tracking-wide">⌘/CTRL + ENTER</span>
           <button
             onClick={sendMessage}
             disabled={!newMessage.trim() || saving}
-            className="px-4 py-1.5 bg-[#fee715]/10 border border-[#fee715]/50 text-[#fee715] rounded text-sm font-medium hover:bg-[#fee715]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#fee715] text-[#0a0b0e] rounded-md text-[12px] font-semibold hover:brightness-110 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
           >
-            <PaperPlaneTilt size={16} />
+            <PaperPlaneTilt size={13} weight="fill" />
             Wyślij
           </button>
         </div>

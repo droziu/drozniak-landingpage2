@@ -33,7 +33,7 @@ export const CommentBadge: React.FC<CommentBadgeProps> = ({ count, status, onCli
 
   return (
     <div
-      className={`absolute -top-2.5 -right-2.5 min-w-[22px] h-[22px] px-1.5 rounded-full ${bg} border-2 border-[#0a0f14] flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-transform z-20 shadow-lg ${pulse ? 'animate-pulse' : ''}`}
+      className={`absolute -top-2.5 -right-2.5 min-w-[22px] h-[22px] px-1.5 rounded-full ${bg} border-2 border-[#13151a] flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-transform z-20 shadow-lg ${pulse ? 'animate-pulse' : ''}`}
       onClick={(e) => {
         e.stopPropagation();
         onClick?.();

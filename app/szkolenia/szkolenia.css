@@ -1,0 +1,456 @@
+/* ============================================================
+   Podstrona /szkolenia. Ten sam system co strona główna:
+   tokeny, przyciski i nagłówki z pub-v2.css, tu tylko układ
+   sekcji. Klasy z prefiksem sz-.
+   ============================================================ */
+
+.sz-h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(26px, 2.3vw, 34px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* --- Hero: tytuł, opis i przycisk po lewej, zdjęcie po prawej --- */
+.sz-hero {
+  display: grid;
+  gap: 32px;
+  padding-top: clamp(24px, 4vh, 48px);
+}
+.sz-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.sz-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: 14vw;
+  line-height: 0.94;
+  margin-left: -0.04em;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.sz-hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 34rem;
+}
+.sz-hero-actions {
+  margin-top: 10px;
+}
+.sz-hero-photo {
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper-tint);
+  aspect-ratio: 1 / 1;
+}
+.sz-hero-photo > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  animation: hp-settle 1400ms var(--ease-soft) both;
+}
+@media (min-width: 600px) {
+  .sz-title {
+    font-size: 11vw;
+  }
+  .sz-hero-photo {
+    aspect-ratio: 4 / 3;
+  }
+}
+@media (min-width: 960px) {
+  .sz-hero {
+    grid-template-columns: 7fr 5fr;
+    gap: clamp(32px, 4vw, 64px);
+    align-items: stretch;
+    padding-top: clamp(16px, 3vh, 40px);
+  }
+  .sz-hero-text {
+    justify-content: flex-end;
+    gap: 36px;
+    padding-bottom: 4px;
+  }
+  .sz-title {
+    font-size: min(8.6vw, 136px);
+    line-height: 0.92;
+  }
+  .sz-hero-photo {
+    aspect-ratio: auto;
+    position: relative;
+    height: clamp(540px, calc(100svh - 84px - 48px), 860px);
+  }
+  .sz-hero-photo > img {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+/* --- Tematy: nagłówek nad siatką, w każdym polu ikona, tytuł i jedno zdanie --- */
+.sz-topics-head {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 36rem;
+  margin-bottom: 40px;
+}
+.sz-topic-grid {
+  display: grid;
+  gap: 32px;
+}
+/* Pozycja listy: ikona z boku, obok tytuł i jedno zdanie */
+.sz-topic {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+.sz-topic-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+}
+.sz-topic-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--paper-tint);
+  color: var(--ink);
+}
+.sz-topic .hp-body {
+  max-width: 24rem;
+}
+@media (min-width: 900px) {
+  .sz-topic-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px 40px;
+  }
+}
+@media (min-width: 1280px) {
+  .sz-topic-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 56px 48px;
+  }
+}
+
+/* --- Dla kogo: zdjęcie po lewej, dwie grupy po prawej --- */
+.sz-audience {
+  display: grid;
+  gap: 32px;
+}
+.sz-audience-photo {
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--paper-tint);
+}
+.sz-audience-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+.sz-audience-body {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.sz-audience-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 36rem;
+}
+@media (min-width: 960px) {
+  .sz-audience {
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+  }
+  .sz-audience-photo {
+    aspect-ratio: 4 / 5;
+    max-height: 680px;
+  }
+}
+
+/* --- Przebieg: jedno ciemne pole, kroki obok siebie --- */
+.sz-steps {
+  border-radius: var(--radius);
+  background: var(--dark);
+  padding: 40px 24px 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.sz-steps .hp-h2,
+.sz-steps .sz-h3 {
+  color: var(--paper);
+}
+.sz-steps .hp-body {
+  color: rgba(246, 245, 241, 0.86);
+}
+.sz-step-list {
+  display: grid;
+  gap: 32px;
+}
+.sz-step {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sz-step-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  background: var(--dark-2);
+  color: var(--paper);
+}
+/* Zapalony etap: jasne koło z ciemną ikoną, etapy zapalają się po kolei w pętli */
+.sz-step-on {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--paper);
+  color: var(--ink);
+  opacity: 0;
+}
+@media (min-width: 700px) {
+  .sz-step-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 32px;
+  }
+}
+@media (min-width: 1100px) {
+  .sz-steps {
+    padding: 72px 56px 80px;
+    gap: 64px;
+  }
+  .sz-step-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 40px;
+  }
+}
+
+/* --- Materiały: tekst po lewej, trzy kafle w pętli po prawej, wprost na tle sekcji --- */
+.sz-materials {
+  display: grid;
+  gap: 40px;
+}
+.sz-materials-text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 34rem;
+}
+.sz-materials-graphic {
+  display: grid;
+  place-items: center;
+  min-height: 300px;
+}
+.sz-loop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+.sz-loop-tile {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: calc(var(--i, 0) * clamp(20px, 5vw, 56px));
+  padding: 12px 28px 12px 12px;
+  border-radius: 999px;
+  background: var(--paper-white);
+  box-shadow: 0 1px 2px rgba(22, 21, 17, 0.04), 0 18px 40px -24px rgba(22, 21, 17, 0.28); /* taste-skill-ignore: data-ui, kafle unoszą się nad tłem */
+  font-size: clamp(20px, 1.8vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.sz-loop-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--paper-tint);
+}
+/* Zapalona ikona: ta sama ikona na atramencie, przykryta do czasu swojej kolejki */
+.sz-loop-on {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--ink);
+  color: var(--paper);
+  opacity: 0;
+}
+.sz-loop-tile:first-child .sz-loop-on {
+  opacity: 1;
+}
+@media (min-width: 960px) {
+  .sz-materials {
+    grid-template-columns: 5fr 7fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .sz-materials-graphic {
+    min-height: 380px;
+  }
+}
+
+/* --- Dofinansowanie: nagłówek po lewej, treść po prawej --- */
+.sz-funding {
+  display: grid;
+  gap: 28px;
+}
+.sz-funding-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  max-width: 40rem;
+}
+.sz-funding-text {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(24px, 2.3vw, 34px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+@media (min-width: 960px) {
+  .sz-funding {
+    grid-template-columns: 5fr 7fr;
+    gap: 64px;
+    align-items: start;
+  }
+}
+
+/* --- Ruch: wejście elementów sekcji --- */
+.sz-anim [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 500ms var(--ease-out), transform 650ms var(--ease-soft);
+  transition-delay: calc(var(--d, 0) * 70ms);
+}
+.sz-anim [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+.sz-anim [data-reveal] .sz-loop-tile {
+  opacity: 0;
+}
+.sz-anim [data-reveal].is-in .sz-loop-tile {
+  animation: sz-tile-in 900ms cubic-bezier(0.23, 1, 0.32, 1) calc(300ms + var(--i, 0) * 260ms) forwards;
+}
+@keyframes sz-tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+/* Etapy szkolenia: po wejściu zapalają się po kolei, każdy na około dwie sekundy */
+.sz-anim [data-reveal].is-in .sz-step-on {
+  animation: sz-light 8.8s ease-in-out calc(1200ms + var(--i, 0) * 2200ms) infinite both;
+}
+/* Po wejściu ikony zapalają się po kolei, każda na około dwie sekundy */
+.sz-anim [data-reveal].is-in .sz-loop-on {
+  opacity: 0;
+  animation: sz-light 6.6s ease-in-out calc(1600ms + var(--i, 0) * 2200ms) infinite both;
+}
+@keyframes sz-light {
+  0% {
+    opacity: 0;
+  }
+  8%,
+  30% {
+    opacity: 1;
+  }
+  38%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* --- Telefon: przebieg jako oś czasu (ikona z lewej, linia łączy etapy), krótsze sekcje --- */
+@media (max-width: 699px) {
+  .sz-hero {
+    gap: 28px;
+  }
+  .sz-topics-head {
+    margin-bottom: 32px;
+  }
+  .sz-topic-grid {
+    gap: 24px;
+  }
+  .sz-steps {
+    padding: 32px 20px 36px;
+    gap: 32px;
+  }
+  .sz-step-list {
+    gap: 0;
+  }
+  .sz-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 4px;
+    padding-bottom: 28px;
+  }
+  .sz-step:last-child {
+    padding-bottom: 0;
+  }
+  .sz-step::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 56px;
+    bottom: 8px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--dark-2);
+  }
+  .sz-step:last-child::before {
+    display: none;
+  }
+  .sz-step-icon {
+    grid-row: 1 / span 2;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+  }
+  .sz-step .sz-h3 {
+    font-size: 24px;
+    padding-top: 10px;
+  }
+  .sz-materials-graphic {
+    min-height: 0;
+    padding-block: 8px;
+  }
+}

@@ -203,7 +203,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
       case 'Do akceptacji': return 'bg-amber-500/15 border-amber-500/40 text-amber-300';
       case 'Zatwierdzone': return 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300';
       case 'Odrzucone': return 'bg-gray-500/15 border-gray-500/40 text-gray-300';
-      default: return 'bg-white/[0.06] border-white/20 text-white/80';
+      default: return 'bg-white/[0.06] border-white/[0.12] text-white/80';
     }
   };
 
@@ -250,23 +250,23 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed right-0 top-0 h-full w-96 bg-[#0a0f14] border-l border-white/10 z-50 flex flex-col shadow-2xl">
+    <div className="fixed right-0 top-0 h-full w-96 bg-[#13151a] border-l border-white/[0.06] z-50 flex flex-col shadow-2xl">
       {/* Header */}
-      <div className="p-4 border-b border-white/10 flex items-center justify-between">
+      <div className="p-4 border-b border-white/[0.08] flex items-center justify-between">
         <div className="flex items-center gap-2">
           <ChatCircleDots size={20} className="text-[#fee715]" />
           <h2 className="text-lg font-semibold text-white">Komentarze</h2>
         </div>
         <button
           onClick={onClose}
-          className="p-1.5 hover:bg-white/5 rounded transition-colors"
+          className="p-1.5 hover:bg-white/[0.06] rounded transition-colors"
         >
-          <X size={18} className="text-white/70" />
+          <X size={18} className="text-white/75" />
         </button>
       </div>
 
       {/* Filtry i wyszukiwarka */}
-      <div className="p-4 border-b border-white/10 space-y-3">
+      <div className="p-4 border-b border-white/[0.08] space-y-3">
         <div className="relative">
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -274,7 +274,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Szukaj..."
-            className="w-full bg-white/[0.04] border border-white/10 rounded px-3 pl-9 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30"
+            className="w-full bg-white/[0.06] border border-white/[0.08] rounded px-3 pl-9 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/30 focus:border-[#fee715]/40"
           />
         </div>
         <div className="grid grid-cols-2 gap-2">
@@ -310,7 +310,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
             type="checkbox"
             checked={showClosed}
             onChange={(e) => setShowClosed(e.target.checked)}
-            className="w-4 h-4 rounded bg-white/[0.04] border-white/10 text-[#fee715] focus:ring-[#fee715]/40"
+            className="w-4 h-4 rounded bg-white/[0.06] border-white/[0.08] text-[#fee715] focus:ring-[#fee715]/30"
           />
           Pokaż zamknięte
         </label>
@@ -323,7 +323,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
         ) : filteredThreads.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-12 px-4 text-gray-400">
             <ChatCircleDots size={40} className="text-white/20 mb-3" />
-            <p className="text-sm font-medium text-white/70">
+            <p className="text-sm font-medium text-white/75">
               {searchQuery || statusFilter !== 'all' || typeFilter !== 'all'
                 ? 'Brak wyników wyszukiwania'
                 : 'Brak komentarzy'}
@@ -351,7 +351,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
                     onJumpToAnchor(thread.anchor_type, thread.anchor_id || undefined);
                   }
                 }}
-                className="p-3 bg-white/[0.02] border border-white/10 rounded-lg hover:bg-white/5 hover:border-[#fee715]/30 cursor-pointer transition-all"
+                className="p-3 bg-[#1a1d24] border border-white/[0.08] rounded-lg hover:bg-white/[0.06] hover:border-[#fee715]/40 cursor-pointer transition-all"
               >
                 <div className="flex items-start gap-2 mb-2">
                   <ThreadIcon size={16} className="text-[#fee715] mt-0.5 shrink-0" />
@@ -373,7 +373,7 @@ export const CommentPanel: React.FC<CommentPanelProps> = ({
                     {thread.last_message}
                   </div>
                 )}
-                <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/[0.06]">
                   <span className="text-[10px] text-gray-500">
                     {thread.message_count} {thread.message_count === 1 ? 'wiadomość' : 'wiadomości'}
                     {thread.last_message_at && ` · ${formatRelativeTime(thread.last_message_at)}`}

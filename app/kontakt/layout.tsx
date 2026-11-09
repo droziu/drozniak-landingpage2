@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
 
+const DESCRIPTION =
+  'Napisz kilka zdań o firmie albo umów rozmowę online. Odpowiadam w ciągu 24 godzin w dni robocze.';
+
 export const metadata: Metadata = {
-  title: 'Kontakt - System pozyskiwania klientów i strony WWW',
-  description: 'Skontaktuj się w sprawie systemu pozyskiwania klientów, strony internetowej dla małej firmy lub szkolenia z AI w marketingu. Odpowiadam w 24 godziny.',
-  keywords: ['kontakt', 'system pozyskiwania klientów', 'strony www dla małych firm', 'szkolenia AI'],
+  title: 'Kontakt',
+  description: DESCRIPTION,
   openGraph: {
-    title: 'Kontakt - System pozyskiwania klientów i strony WWW',
-    description: 'Skontaktuj się w sprawie systemu pozyskiwania klientów, strony internetowej lub szkolenia z AI w marketingu.',
+    title: 'Kontakt | Stanisław Drożniak',
+    description: DESCRIPTION,
     url: 'https://drozniak.pl/kontakt',
   },
   alternates: {
@@ -14,10 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ContactLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

@@ -75,9 +75,10 @@ async function getBlogPosts(search?: string, categorySlug?: string) {
 export default async function BlogListPage({
   searchParams,
 }: {
-  searchParams: { search?: string; category?: string };
+  searchParams: Promise<{ search?: string; category?: string }>;
 }) {
-  const posts = await getBlogPosts(searchParams.search, searchParams.category);
+  const { search, category } = await searchParams;
+  const posts = await getBlogPosts(search, category);
 
   return <BlogListClient initialPosts={posts} blogTopics={blogTopics} />;
 }

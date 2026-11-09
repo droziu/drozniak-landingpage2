@@ -1,12 +1,17 @@
 import type { Metadata } from 'next';
+import './szkolenia.css';
+
+const TITLE = 'Szkolenia dla firm';
+const DESCRIPTION =
+  'Szkolenia dla zespołów w małych firmach i działów w większych: marketing i pozyskiwanie klientów, obsługa zapytań, automatyzacje i AI w codziennej pracy. Program pod konkretną firmę, online albo na miejscu.';
 
 export const metadata: Metadata = {
-  title: 'Szkolenia z AI w marketingu dla małych firm',
-  description: 'Szkolenia z AI w marketingu dla małych firm. AI w marketingu małej firmy - praktyczne zastosowania. Automatyzacja marketingu w małej firmie. Warsztaty i szkolenia projektowane na zamówienie.',
-  keywords: ['szkolenia z AI w marketingu', 'AI w marketingu małej firmy', 'automatyzacja marketingu w małej firmie', 'szkolenia AI w marketingu', 'AI w marketingu dla małych firm'],
+  title: TITLE,
+  description: DESCRIPTION,
+  keywords: ['szkolenia dla firm', 'szkolenia z marketingu', 'szkolenia z obsługi klienta', 'szkolenia AI dla firm', 'szkolenia z automatyzacji'],
   openGraph: {
-    title: 'Szkolenia z AI w marketingu dla małych firm',
-    description: 'Szkolenia z AI w marketingu dla małych firm. Praktyczne zastosowania AI i automatyzacji marketingu w małej firmie.',
+    title: `${TITLE} | Stanisław Drożniak`,
+    description: DESCRIPTION,
     url: 'https://drozniak.pl/szkolenia',
     images: [
       {
@@ -19,8 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Szkolenia z AI w marketingu dla małych firm',
-    description: 'Szkolenia z AI w marketingu dla małych firm. Praktyczne zastosowania AI i automatyzacji marketingu w małej firmie.',
+    title: `${TITLE} | Stanisław Drożniak`,
+    description: DESCRIPTION,
     images: ['https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'],
   },
   alternates: {
@@ -28,10 +33,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SzkoleniaLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SzkoleniaLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

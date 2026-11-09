@@ -220,154 +220,125 @@ export const ClientManagement: React.FC = () => {
     ? clients 
     : clients.filter(c => c.status === filterStatus);
 
+  const statusMeta: Record<string, { label: string; cls: string }> = {
+    active: { label: 'Aktywny', cls: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300' },
+    inactive: { label: 'Nieaktywny', cls: 'bg-amber-500/15 border-amber-500/30 text-amber-300' },
+    archived: { label: 'Archiwum', cls: 'bg-white/[0.04] border-white/[0.08] text-white/50' },
+  };
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="font-[Montserrat] text-2xl font-bold text-white mb-2">
-            Zarządzanie Klientami
-          </h2>
-          <p className="text-gray-400 text-sm">
-            Dodawaj i zarządzaj klientami marketingowymi
-          </p>
+          <h2 className="text-xl font-semibold text-white tracking-tight">Klienci</h2>
+          <p className="text-[13px] text-white/50 mt-0.5">Klienci marketingowi do lejków, ofert i dokumentów</p>
         </div>
         <button
           onClick={handleAddClient}
-          className="px-6 py-3 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#fee715] text-[#050714] rounded-md text-[13px] font-semibold hover:brightness-110 transition-all shadow-sm shadow-[#fee715]/20"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
           </svg>
-          Dodaj Klienta
+          Dodaj klienta
         </button>
       </div>
 
-      {/* Filtry */}
-      <div className="mb-6 flex gap-2">
-        <button
-          onClick={() => setFilterStatus('all')}
-          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-            filterStatus === 'all'
-              ? 'bg-[#fee715] text-[#101820]'
-              : 'bg-white/10 text-gray-300 hover:bg-white/20'
-          }`}
-        >
-          Wszyscy
-        </button>
-        <button
-          onClick={() => setFilterStatus('active')}
-          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-            filterStatus === 'active'
-              ? 'bg-green-500 text-white'
-              : 'bg-white/10 text-gray-300 hover:bg-white/20'
-          }`}
-        >
-          Aktywni
-        </button>
-        <button
-          onClick={() => setFilterStatus('inactive')}
-          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-            filterStatus === 'inactive'
-              ? 'bg-yellow-500 text-white'
-              : 'bg-white/10 text-gray-300 hover:bg-white/20'
-          }`}
-        >
-          Nieaktywni
-        </button>
-        <button
-          onClick={() => setFilterStatus('archived')}
-          className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-            filterStatus === 'archived'
-              ? 'bg-gray-500 text-white'
-              : 'bg-white/10 text-gray-300 hover:bg-white/20'
-          }`}
-        >
-          Zarchiwizowani
-        </button>
+      {/* Filter chips */}
+      <div className="mb-5 flex gap-1 p-1 bg-white/[0.03] border border-white/[0.06] rounded-md w-fit">
+        {(['all', 'active', 'inactive', 'archived'] as const).map((s) => {
+          const labels = { all: 'Wszyscy', active: 'Aktywni', inactive: 'Nieaktywni', archived: 'Archiwum' };
+          return (
+            <button
+              key={s}
+              onClick={() => setFilterStatus(s)}
+              className={`px-2.5 py-1 rounded text-[12px] font-medium transition-colors ${
+                filterStatus === s
+                  ? 'bg-white/[0.08] text-white'
+                  : 'text-white/55 hover:text-white/80'
+              }`}
+            >
+              {labels[s]}
+              {s !== 'all' && (
+                <span className="ml-1.5 text-[10px] text-white/30 font-mono">
+                  {clients.filter((c) => c.status === s).length}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Lista klientów */}
+      {/* Lista */}
       {loading ? (
-        <LoadingState variant="block" skeleton="cards" label="Ładowanie klientów…" />
+        <LoadingState variant="block" skeleton="cards" label="Ładowanie…" />
       ) : filteredClients.length === 0 ? (
-        <div className="bg-white/5 rounded-xl p-12 text-center text-gray-400">
-          <svg className="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-lg p-12 text-center">
+          <svg className="w-10 h-10 mx-auto mb-3 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
-          <p className="text-lg mb-2">Brak klientów</p>
-          <p className="text-sm">Kliknij "Dodaj Klienta", aby rozpocząć</p>
+          <p className="text-[13px] text-white/70 mb-1">
+            {filterStatus === 'all' ? 'Brak klientów' : 'Brak klientów w tej kategorii'}
+          </p>
+          <p className="text-[12px] text-white/40">Kliknij "Dodaj klienta", aby rozpocząć</p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredClients.map((client) => (
-            <div
-              key={client.id}
-              className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-6 border-2 border-white/10 hover:border-[#fee715]/50 transition-all duration-300"
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="font-[Montserrat] font-bold text-white text-lg mb-1">
-                    {client.name}
-                  </h3>
+        <div className="border border-white/[0.06] rounded-lg overflow-hidden bg-[#0a0d1f]/40">
+          <div className="grid grid-cols-[1fr_220px_140px_120px_100px] gap-4 px-4 py-2.5 border-b border-white/[0.06] bg-white/[0.02] text-[10px] font-mono font-semibold text-white/40 uppercase tracking-[0.14em]">
+            <div>Klient</div>
+            <div>Email</div>
+            <div>Telefon</div>
+            <div>Status</div>
+            <div className="text-right">Akcje</div>
+          </div>
+          {filteredClients.map((client) => {
+            const meta = statusMeta[client.status] || statusMeta.inactive;
+            return (
+              <div
+                key={client.id}
+                className="group grid grid-cols-[1fr_220px_140px_120px_100px] gap-4 px-4 py-3 border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.03] transition-colors items-center"
+              >
+                <div className="min-w-0">
+                  <div className="text-[13px] font-medium text-white truncate">{client.name}</div>
                   {client.company_name && (
-                    <p className="text-gray-400 text-sm mb-2">{client.company_name}</p>
+                    <div className="text-[11px] text-white/40 mt-0.5 truncate">{client.company_name}</div>
                   )}
                 </div>
-                <span
-                  className={`px-2 py-1 rounded-lg text-xs font-semibold ${
-                    client.status === 'active'
-                      ? 'bg-green-500/20 text-green-300 border border-green-500/50'
-                      : client.status === 'inactive'
-                      ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/50'
-                      : 'bg-gray-500/20 text-gray-300 border border-gray-500/50'
-                  }`}
-                >
-                  {client.status === 'active' ? 'Aktywny' : client.status === 'inactive' ? 'Nieaktywny' : 'Zarchiwizowany'}
-                </span>
-              </div>
-
-              <div className="space-y-2 text-sm text-gray-300 mb-4">
-                {client.email && (
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span className="truncate">{client.email}</span>
-                  </div>
-                )}
-                {client.phone && (
-                  <div className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    <span>{client.phone}</span>
-                  </div>
-                )}
-              </div>
-
-              {client.notes && (
-                <div className="mb-4 p-3 bg-white/5 rounded-lg">
-                  <p className="text-xs text-gray-400 mb-1">Notatki:</p>
-                  <p className="text-sm text-gray-300 line-clamp-2">{client.notes}</p>
+                <div className="text-[12px] text-white/60 truncate">
+                  {client.email || <span className="text-white/30">—</span>}
                 </div>
-              )}
-
-              <div className="flex gap-2 pt-4 border-t border-white/10">
-                <button
-                  onClick={() => handleEditClient(client)}
-                  className="flex-1 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all text-sm font-semibold"
-                >
-                  Edytuj
-                </button>
-                <button
-                  onClick={() => handleDeleteClient(client.id)}
-                  className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg transition-all text-sm font-semibold"
-                >
-                  Usuń
-                </button>
+                <div className="text-[12px] text-white/60 font-mono truncate">
+                  {client.phone || <span className="text-white/30 font-sans">—</span>}
+                </div>
+                <div>
+                  <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium border ${meta.cls}`}>
+                    {meta.label}
+                  </span>
+                </div>
+                <div className="flex items-center justify-end gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => handleEditClient(client)}
+                    className="p-1.5 hover:bg-white/[0.08] rounded text-white/50 hover:text-white transition-colors"
+                    title="Edytuj"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClient(client.id)}
+                    className="p-1.5 hover:bg-red-500/15 rounded text-white/50 hover:text-red-300 transition-colors"
+                    title="Usuń"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -375,61 +346,61 @@ export const ClientManagement: React.FC = () => {
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowAddModal(false)} />
-          <div className="relative bg-gradient-to-br from-[#18232F] to-[#101820] rounded-2xl p-6 border-2 border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h3 className="font-[Montserrat] text-2xl font-bold text-white mb-6">
+          <div className="relative bg-[#0a0d1f] rounded-xl p-5 border border-white/[0.08] max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <h3 className="text-base font-semibold text-white tracking-tight mb-4">
               {editingClient ? 'Edytuj Klienta' : 'Dodaj Nowego Klienta'}
             </h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">
                   Nazwa * <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715]"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                   placeholder="Nazwa klienta"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Email</label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715]"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                   placeholder="email@example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Nazwa Firmy</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Nazwa Firmy</label>
                 <input
                   type="text"
                   value={formData.company_name}
                   onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                  className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715]"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                   placeholder="Nazwa firmy"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Telefon</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Telefon</label>
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715]"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                   placeholder="+48 123 456 789"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Status</label>
                 <CustomSelect
                   value={formData.status}
                   onChange={(value) => setFormData({ ...formData, status: value as any })}
@@ -443,11 +414,11 @@ export const ClientManagement: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Notatki</label>
+                <label className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">Notatki</label>
                 <textarea
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  className="w-full bg-white/5 border-2 border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-[#fee715] min-h-[100px]"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors min-h-[100px]"
                   placeholder="Dodatkowe notatki o kliencie..."
                 />
               </div>
@@ -456,13 +427,13 @@ export const ClientManagement: React.FC = () => {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={handleSaveClient}
-                className="flex-1 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-4 rounded-xl hover:shadow-lg hover:shadow-[#fee715]/40 transition-all duration-300"
+                className="flex-1 bg-[#fee715] text-[#050714] text-[13px] font-semibold py-2 px-4 rounded-md hover:brightness-110 transition-all shadow-sm shadow-[#fee715]/20"
               >
                 {editingClient ? 'Zaktualizuj' : 'Dodaj'}
               </button>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-[Montserrat] font-semibold rounded-xl transition-all duration-300"
+                className="px-3 py-2 bg-white/[0.04] border border-white/[0.08] text-white/80 text-[13px] font-medium rounded-md hover:bg-white/[0.08] hover:text-white transition-colors"
               >
                 Anuluj
               </button>

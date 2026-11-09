@@ -104,15 +104,15 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
         ref={buttonRef}
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full bg-white/[0.04] border text-white focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 transition-all flex items-center justify-between ${
-          isOpen ? 'border-[#fee715]/50' : 'border-white/10 hover:border-white/20'
-        } ${isSm ? 'px-3 py-1.5 rounded text-sm' : 'px-4 py-3 rounded-lg focus:ring-2 focus:ring-[#fee715]/50'}`}
+        className={`w-full bg-[#1a1d24] border text-white focus:outline-none focus:ring-1 focus:ring-[#fee715]/30 transition-colors flex items-center justify-between ${
+          isOpen ? 'border-[#fee715]/40 ring-1 ring-[#fee715]/20' : 'border-white/[0.08] hover:border-white/[0.14]'
+        } ${isSm ? 'px-2.5 py-1.5 rounded-md text-[12px]' : 'px-3 py-2 rounded-md text-[13px]'}`}
       >
-        <span className={selectedOption ? 'text-white' : 'text-gray-400'}>
+        <span className={selectedOption ? 'text-white truncate' : 'text-white/35 truncate'}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <svg
-          className={`text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${isSm ? 'w-4 h-4' : 'w-5 h-5'}`}
+          className={`text-white/40 transition-transform duration-150 shrink-0 ${isOpen ? 'rotate-180' : ''} ${isSm ? 'w-3.5 h-3.5' : 'w-4 h-4'}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -125,9 +125,9 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
         <div
           ref={dropdownRef}
           style={dropdownStyle}
-          className={`bg-[#101820] border border-white/15 overflow-hidden ${isSm ? 'rounded shadow-lg' : 'rounded-lg shadow-xl'}`}
+          className="bg-[#13151a] border border-white/[0.08] overflow-hidden rounded-md shadow-2xl shadow-black/50"
         >
-          <div className="max-h-48 overflow-y-auto">
+          <div className="max-h-56 overflow-y-auto py-0.5">
             {options.map((option) => (
               <button
                 key={option.value}
@@ -136,18 +136,14 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                 className={`w-full text-left transition-colors ${
                   value === option.value
                     ? 'bg-[#fee715]/10 text-[#fee715]'
-                    : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                } ${isSm ? 'px-3 py-2 text-sm' : 'px-4 py-3'}`}
+                    : 'text-white/75 hover:bg-white/[0.05] hover:text-white'
+                } ${isSm ? 'px-2.5 py-1.5 text-[12px]' : 'px-3 py-1.5 text-[13px]'}`}
               >
-                <div className="flex items-center justify-between">
-                  <span>{option.label}</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="truncate">{option.label}</span>
                   {value === option.value && (
-                    <svg className={`text-[#fee715] flex-shrink-0 ${isSm ? 'w-4 h-4' : 'w-5 h-5'}`} fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
+                    <svg className="text-[#fee715] flex-shrink-0 w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                     </svg>
                   )}
                 </div>

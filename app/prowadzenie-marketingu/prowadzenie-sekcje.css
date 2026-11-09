@@ -1,0 +1,512 @@
+/* ============================================================
+   /prowadzenie-marketingu: sekcje pod hero w motywie hero (pola
+   o zaokrąglonych narożnikach łączone skosami). Prefiksy: hmw- (na czym
+   polega), hmz- (zakres), hmst- (start), hmr- (rozliczenie). Kształty liczą
+   ShapeCanvas i SlantRow (app/components/shapes); poniżej progu pola stoją
+   pod sobą jako prostokąty. Hero i reszta stron w prowadzenie-marketingu.css.
+   ============================================================ */
+
+/* --- Na czym polega: lustro hero. Ciemne pole ze sceną po lewej,
+   tekst na papierze po prawej, korzyści w jasnym polu pod nim --- */
+.hmw {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hmw-text {
+  order: -1;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 40rem;
+  padding-bottom: 28px;
+}
+.hmw-field {
+  position: relative;
+  border-radius: var(--radius);
+}
+.hmw-o {
+  display: flex;
+  justify-content: center;
+  /* obrócony kwadrat pierścienia wystawałby poza ekran telefonu */
+  overflow: clip;
+  padding: 32px 16px;
+  background: var(--dark);
+}
+.hmw-orbit {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.hmw-t {
+  padding: 28px 24px;
+  background: var(--paper-tint);
+}
+.hmw .hm-benefits {
+  margin-top: 0;
+}
+.hmw .hm-benefit-check {
+  background: var(--paper-white);
+}
+/* scena na ciemnym polu: ikony w ciemnych kołach, zapalona ikona jasna */
+.hmw .hm-orbit-icon {
+  background: var(--dark-2);
+  color: var(--paper);
+  box-shadow: none; /* taste-skill-ignore: zdejmuje cień z data-ui na ciemnym polu */
+}
+.hmw .hm-orbit-on {
+  background: var(--paper);
+  color: var(--ink);
+}
+.hmw .hm-orbit-label {
+  background: var(--paper);
+  box-shadow: none; /* taste-skill-ignore: zdejmuje cień z data-ui na ciemnym polu */
+}
+@media (min-width: 960px) {
+  .hmw {
+    position: relative;
+    display: block;
+    height: clamp(640px, 50vw, 740px);
+  }
+  .hmw-text {
+    position: absolute;
+    z-index: 1;
+    left: 58%;
+    right: 0;
+    top: 0;
+    height: 58%;
+    max-width: none;
+    justify-content: center;
+    gap: 24px;
+    padding: 0;
+  }
+  .hmw-field {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border-radius: 0;
+  }
+  .hmw-o {
+    display: block;
+    clip-path: var(--clip-o);
+  }
+  .hmw-orbit {
+    position: absolute;
+    left: 2%;
+    width: 42%;
+    top: 50%;
+    translate: 0 -50%;
+  }
+  .hmw-t {
+    clip-path: var(--clip-t);
+  }
+  .hmw .hm-benefits {
+    position: absolute;
+    left: 53%;
+    right: 40px;
+    top: 80%;
+    translate: 0 -50%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 28px;
+  }
+}
+
+/* --- Zakres: trzy rzędy pól zazębionych skosami, w pierwszym ciemne pole z nagłówkiem --- */
+.hmz {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hmz-row {
+  display: grid;
+  gap: 12px;
+}
+.hmz-head,
+.hmz-item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px 24px 30px;
+  border-radius: var(--radius);
+}
+.hmz-head {
+  justify-content: space-between;
+  gap: 20px;
+  background: var(--dark);
+}
+.hmz-head .hp-h2 {
+  color: var(--paper);
+}
+.hmz-head .hp-body {
+  color: rgba(246, 245, 241, 0.86);
+  max-width: 24rem;
+}
+.hmz-item {
+  padding-inline: 16px;
+}
+/* telefon i tablet: jedno jasne pole z ciemnym nagłówkiem w środku */
+@media (max-width: 959px) {
+  .hmz {
+    gap: 0;
+    padding: 12px 12px 16px;
+    border-radius: var(--radius);
+    background: var(--paper-tint);
+  }
+  .hmz-row {
+    gap: 0;
+  }
+  .hmz-head {
+    margin-bottom: 8px;
+    border-radius: calc(var(--radius) - 8px);
+  }
+}
+.hmz-item-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hmz-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: var(--paper-white);
+  color: var(--ink);
+}
+.hmz-h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(24px, 1.9vw, 28px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.hmz-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  max-width: 24rem;
+}
+@media (min-width: 600px) and (max-width: 959px) {
+  .hmz-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .hmz-head {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 960px) {
+  .hmz-row {
+    display: flex;
+    align-items: stretch;
+  }
+  .hmz-item {
+    background: var(--paper-tint);
+  }
+  .hmz-head,
+  .hmz-item {
+    flex: 1 1 0;
+    min-width: 0;
+    border-radius: 0;
+    padding: 36px calc(var(--s, 0px) + 20px) 40px calc(var(--s, 0px) + 28px);
+  }
+  .hmz-row > :first-child {
+    padding-left: 40px;
+  }
+  .hmz-row > :last-child {
+    padding-right: 40px;
+  }
+  .hmz-head {
+    flex-grow: 1.4;
+  }
+  .hmz-item-top {
+    min-height: 60px;
+  }
+}
+
+/* --- Start: pięć kroków jako ciemne strzałki wsunięte jedna w drugą --- */
+.hmst {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.hmst-row {
+  display: grid;
+  gap: 32px;
+  margin: 0;
+  padding: 36px 24px 40px;
+  list-style: none;
+  border-radius: var(--radius);
+  background: var(--dark);
+}
+.hmst-step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.hmst-step .hm-h3 {
+  color: var(--paper);
+}
+.hmst-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(246, 245, 241, 0.86);
+}
+.hmst-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  background: var(--dark-2);
+  color: var(--paper);
+}
+.hmst-on {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--paper);
+  color: var(--ink);
+  opacity: 0;
+  animation: hmst-light 10s var(--ease-out) calc(var(--i) * 2s) infinite;
+}
+@keyframes hmst-light {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  4%,
+  17% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  22%,
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+@media (min-width: 700px) and (max-width: 1199px) {
+  .hmst-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 32px;
+    padding: 48px 40px 52px;
+  }
+}
+@media (min-width: 1200px) {
+  .hmst-row {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+  }
+  .hmst-step {
+    background: var(--dark);
+    flex: 1 1 0;
+    min-width: 0;
+    border-radius: 0;
+    padding: 36px calc(var(--s, 0px) + 16px) 40px calc(var(--s, 0px) + 26px);
+  }
+  .hmst-step:first-child {
+    padding-left: 36px;
+  }
+  .hmst-step:last-child {
+    padding-right: 36px;
+  }
+}
+
+/* --- Rozliczenie: tekst i warunki po lewej, zdjęcie ze skosem po prawej --- */
+.hmr {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.hmr-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+}
+.hmr-photo {
+  order: -1;
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: var(--paper-tint);
+}
+.hmr-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+.hmr-facts {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  max-width: 44rem;
+  margin: 0;
+}
+.hmr-fact {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 14px;
+  padding: 16px 20px 16px 16px;
+  border-radius: var(--radius);
+  background: var(--paper-tint);
+}
+.hmr-fact-icon {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--paper-white);
+  color: var(--ink);
+}
+.hmr-fact .hp-fact-value {
+  margin-top: 2px;
+}
+@media (min-width: 600px) and (max-width: 959px) {
+  .hmr-photo {
+    aspect-ratio: 4 / 3;
+  }
+}
+@media (min-width: 960px) {
+  .hmr {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .hmr-body {
+    flex: 7 1 0;
+    min-width: 0;
+    justify-content: center;
+    padding: 24px calc(var(--s, 0px) + 32px) 24px 0;
+  }
+  .hmr-photo {
+    order: 0;
+    flex: 5 1 0;
+    min-width: 0;
+    min-height: 640px;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+  .hmr-facts {
+    display: flex;
+    align-items: stretch;
+  }
+  .hmr-fact {
+    flex: 1 1 0;
+    min-width: 0;
+    grid-template-columns: 1fr;
+    row-gap: 4px;
+    border-radius: 0;
+    padding: 22px calc(var(--s, 0px) + 12px) 24px calc(var(--s, 0px) + 18px);
+  }
+  .hmr-fact:first-child {
+    padding-left: 24px;
+  }
+  .hmr-fact:last-child {
+    padding-right: 24px;
+  }
+  .hmr-fact-icon {
+    grid-row: auto;
+    margin-bottom: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-pub .hmst-on {
+    animation: none !important;
+  }
+  .hmst-step:first-child .hmst-on {
+    opacity: 1;
+  }
+}
+
+/* --- Przykładowe zakresy: nagłówek na całą szerokość kolumny (scena ze skosem w prowadzenie-marketingu.css) --- */
+@media (min-width: 960px) {
+  .hm-ex .hm-examples-head {
+    max-width: 36rem;
+  }
+}
+
+/* --- Telefon: zakres w zwartych wierszach (ikona z lewej), start jako oś czasu --- */
+@media (max-width: 599px) {
+  .hmz-item {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    column-gap: 14px;
+    row-gap: 4px;
+    padding: 14px 10px 14px 12px;
+  }
+  .hmz-item-top {
+    display: contents;
+  }
+  .hmz-icon {
+    grid-row: 1 / span 2;
+    width: 44px;
+    height: 44px;
+  }
+  .hmz-h3 {
+    padding-top: 9px;
+    font-size: 22px;
+  }
+}
+@media (max-width: 699px) {
+  .hmst {
+    gap: 28px;
+  }
+  .hmst-row {
+    gap: 0;
+    padding: 32px 20px 36px;
+  }
+  .hmst-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 4px;
+    padding-bottom: 28px;
+  }
+  .hmst-step:last-child {
+    padding-bottom: 0;
+  }
+  .hmst-step::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 56px;
+    bottom: 8px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--dark-2);
+  }
+  .hmst-step:last-child::before {
+    display: none;
+  }
+  .hmst-icon {
+    grid-row: 1 / span 2;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+  }
+  .hmst-step .hm-h3 {
+    padding-top: 10px;
+  }
+}

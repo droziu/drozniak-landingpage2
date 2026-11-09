@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { FileText, BookOpen, PresentationChart, User, FolderOpen } from 'phosphor-react';
 import { useAuth } from '@/app/hooks/useAuth';
 import { useClientPanel, type ViewTag } from '@/app/hooks/useClientPanel';
 import { UserMenu } from '@/app/components/UserMenu';
@@ -13,12 +14,12 @@ import { ClientProjectsView } from '@/components/ClientProjectsView';
 import { ClientCoursesView } from '@/app/components/ClientCoursesView';
 import { LoadingState } from '@/components/LoadingState';
 
-const TAB: Record<ViewTag, { path: string; label: string }> = {
-  documents: { path: 'documents', label: 'Umowy i dokumenty' },
-  courses: { path: 'courses', label: 'Kursy' },
-  marketing: { path: 'marketing', label: 'Marketing' },
-  data: { path: 'data', label: 'Dane' },
-  projects: { path: 'projects', label: 'Projekty' },
+const TAB: Record<ViewTag, { path: string; label: string; icon: React.ReactNode }> = {
+  documents: { path: 'documents', label: 'Dokumenty', icon: <FileText size={16} weight="regular" /> },
+  courses: { path: 'courses', label: 'Kursy', icon: <BookOpen size={16} weight="regular" /> },
+  marketing: { path: 'marketing', label: 'Marketing', icon: <PresentationChart size={16} weight="regular" /> },
+  data: { path: 'data', label: 'Dane', icon: <User size={16} weight="regular" /> },
+  projects: { path: 'projects', label: 'Projekty', icon: <FolderOpen size={16} weight="regular" /> },
 };
 
 /** Kolejność widoków w menu: najpierw Dane, potem reszta */
@@ -71,10 +72,10 @@ export default function ClientPanelPage({ params }: { params: Promise<{ slug?: s
 
   if (!panelClient) {
     return (
-      <div className="min-h-screen bg-[#101820] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#050714] flex items-center justify-center px-4">
         <div className="text-center max-w-md">
-          <p className="text-gray-400 text-sm mb-2">Nie masz przypisanego konta klienta.</p>
-          <p className="text-gray-500 text-xs">Skontaktuj się z administratorem.</p>
+          <p className="text-white/70 text-sm mb-2">Nie masz przypisanego konta klienta.</p>
+          <p className="text-white/40 text-xs">Skontaktuj się z administratorem.</p>
         </div>
       </div>
     );
@@ -82,10 +83,10 @@ export default function ClientPanelPage({ params }: { params: Promise<{ slug?: s
 
   if (viewGrants.length === 0) {
     return (
-      <div className="min-h-screen bg-[#101820] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#050714] flex items-center justify-center px-4">
         <div className="text-center max-w-md">
-          <p className="text-gray-400 text-sm mb-2">Brak przypisanych modułów.</p>
-          <p className="text-gray-500 text-xs">Skontaktuj się z administratorem.</p>
+          <p className="text-white/70 text-sm mb-2">Brak przypisanych modułów.</p>
+          <p className="text-white/40 text-xs">Skontaktuj się z administratorem.</p>
         </div>
       </div>
     );
@@ -152,46 +153,80 @@ export default function ClientPanelPage({ params }: { params: Promise<{ slug?: s
     return null;
   };
 
+  const currentTab = activeTab && TAB[activeTab as ViewTag];
+
   return (
-    <div className="min-h-screen bg-[#101820] text-white flex flex-col">
-      <header className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#101820]/95">
-        <h1 className="font-[Montserrat] text-base font-semibold text-white">Panel klienta</h1>
-        <UserMenu onPasswordChange={onPasswordChange} onProfileClick={onProfileClick} />
-      </header>
+    <div className="min-h-screen bg-[#050714] text-white flex">
+      {/* Sidebar - spójny z Admin Panel (Linear style) */}
+      <aside className="w-60 shrink-0 border-r border-white/[0.06] bg-[#0a0d1f]/85 backdrop-blur-xl flex flex-col">
+        {/* Brand */}
+        <div className="px-4 py-4 border-b border-white/[0.06]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-md bg-[#fee715] flex items-center justify-center shrink-0">
+              <span className="text-[#050714] font-bold text-sm">D</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[13px] font-semibold text-white tracking-tight truncate">Drozniak</div>
+              <div className="text-[10px] font-mono text-white/40 uppercase tracking-wider">Panel klienta</div>
+            </div>
+          </div>
+        </div>
 
-      <div className="flex flex-1 min-h-0">
-        <aside className="flex-shrink-0 w-48 border-r border-white/10 bg-white/[0.02] py-3">
-          <nav className="px-2 space-y-0.5">
-            {orderedGrants.map((t) => {
-              const { path, label } = TAB[t];
-              const href = `/panel/${path}`;
-              const isActive = activeTab === t;
-              return (
-                <Link
-                  key={t}
-                  href={href}
-                  className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-                    isActive ? 'bg-[#fee715]/20 text-[#fee715]' : 'text-gray-400 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  {label}
-                </Link>
-              );
-            })}
-          </nav>
-        </aside>
+        {/* Navigation */}
+        <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
+          <div className="px-2 py-1.5 text-[10px] font-mono font-semibold text-white/30 uppercase tracking-[0.16em]">Moduły</div>
+          {orderedGrants.map((t) => {
+            const { path, label, icon } = TAB[t];
+            const href = `/panel/${path}`;
+            const isActive = activeTab === t;
+            return (
+              <Link
+                key={t}
+                href={href}
+                className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] font-medium transition-colors ${
+                  isActive
+                    ? 'bg-white/[0.06] text-white'
+                    : 'text-white/60 hover:bg-white/[0.04] hover:text-white/90'
+                }`}
+              >
+                <span className={`shrink-0 transition-colors ${isActive ? 'text-[#fee715]' : 'text-white/40'}`}>
+                  {icon}
+                </span>
+                <span className="truncate tracking-tight">{label}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-        <main className="flex-1 overflow-auto px-4 py-4">
-          {renderContent()}
-        </main>
-      </div>
+        {/* User footer */}
+        <div className="px-2 py-3 border-t border-white/[0.06]">
+          <UserMenu onPasswordChange={onPasswordChange} onProfileClick={onProfileClick} />
+        </div>
+      </aside>
+
+      {/* Main */}
+      <main className="flex-1 flex flex-col min-w-0">
+        {/* Topbar */}
+        <header className="h-12 border-b border-white/[0.06] bg-[#0a0d1f]/85 backdrop-blur-xl flex items-center px-5 shrink-0">
+          <h1 className="text-[14px] font-semibold text-white tracking-tight">
+            {currentTab?.label || 'Panel klienta'}
+          </h1>
+        </header>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-6 py-6 max-w-6xl mx-auto">
+            {renderContent()}
+          </div>
+        </div>
+      </main>
 
       {/* Modal zmiany hasła */}
       {showPasswordModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center px-4">
-          <div className="bg-[#18232F] border border-white/10 rounded-xl p-6 md:p-8 max-w-md w-full shadow-2xl">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="font-[Montserrat] text-base font-bold text-white">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+          <div className="bg-[#0a0d1f] border border-white/[0.08] rounded-xl p-6 max-w-md w-full shadow-2xl">
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-base font-semibold text-white tracking-tight">
                 Zmień hasło
               </h2>
               <button
@@ -232,9 +267,8 @@ export default function ClientPanelPage({ params }: { params: Promise<{ slug?: s
               )}
 
               <div>
-                <label htmlFor="newPassword" className="block text-sm font-medium text-gray-300 mb-2">
-                  Nowe hasło
-                  <span className="text-gray-500 text-xs ml-2">(min. 6 znaków)</span>
+                <label htmlFor="newPassword" className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">
+                  Nowe hasło <span className="text-white/30 ml-1 normal-case font-sans tracking-normal">(min. 6 znaków)</span>
                 </label>
                 <input
                   id="newPassword"
@@ -243,13 +277,13 @@ export default function ClientPanelPage({ params }: { params: Promise<{ slug?: s
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-transparent transition-all"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                   placeholder="••••••••"
                 />
               </div>
 
               <div>
-                <label htmlFor="confirmNewPassword" className="block text-sm font-medium text-gray-300 mb-2">
+                <label htmlFor="confirmNewPassword" className="block text-[10px] font-mono font-semibold text-white/50 uppercase tracking-[0.14em] mb-1.5">
                   Potwierdź nowe hasło
                 </label>
                 <input
@@ -259,12 +293,12 @@ export default function ClientPanelPage({ params }: { params: Promise<{ slug?: s
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#fee715] focus:border-transparent transition-all"
+                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-md px-3 py-2 text-[13px] text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-[#fee715]/40 focus:border-[#fee715]/30 transition-colors"
                   placeholder="••••••••"
                 />
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -274,14 +308,14 @@ export default function ClientPanelPage({ params }: { params: Promise<{ slug?: s
                     setNewPassword('');
                     setConfirmNewPassword('');
                   }}
-                  className="flex-1 bg-white/10 text-white font-[Montserrat] font-bold py-3 px-6 rounded-lg hover:bg-white/20 transition-all duration-300"
+                  className="flex-1 bg-white/[0.04] border border-white/[0.08] text-white/80 text-sm font-medium py-2 px-4 rounded-md hover:bg-white/[0.08] hover:text-white transition-colors"
                 >
                   Anuluj
                 </button>
                 <button
                   type="submit"
                   disabled={passwordLoading}
-                  className="flex-1 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold py-3 px-6 rounded-lg hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="flex-1 bg-[#fee715] text-[#050714] text-sm font-semibold py-2 px-4 rounded-md hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm shadow-[#fee715]/20"
                 >
                   {passwordLoading ? (
                     <span className="flex items-center justify-center gap-2">

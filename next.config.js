@@ -46,6 +46,13 @@ const nextConfig = {
         destination: 'https://drozniak.pl/:path*',
         permanent: true,
       },
+      // Oferta bez stron www (listopad 2026): stare podstrony prowadzą na stronę główną
+      { source: '/strony-www', destination: '/', permanent: true },
+      { source: '/system-sprzedazowy', destination: '/', permanent: true },
+      { source: '/system', destination: '/', permanent: true },
+      { source: '/portfolio-pasw', destination: '/', permanent: true },
+      { source: '/portfolio-redlin', destination: '/', permanent: true },
+      { source: '/freelancer', destination: '/', permanent: true },
       // Trailing slash removal (except root)
       {
         source: '/:path+/',

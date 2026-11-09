@@ -78,69 +78,78 @@ export const ClientDocumentsView: React.FC = () => {
     return labels[status] || status;
   };
 
-  const getStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
-      draft: 'text-gray-400',
-      sent: 'text-blue-400',
-      viewed: 'text-purple-400',
-      accepted: 'text-green-400',
-      expired: 'text-gray-500',
-      archived: 'text-gray-500',
+  const getStatusBadge = (status: string) => {
+    const map: Record<string, string> = {
+      draft: 'bg-amber-500/15 border-amber-500/30 text-amber-300',
+      sent: 'bg-blue-500/15 border-blue-500/30 text-blue-300',
+      viewed: 'bg-purple-500/15 border-purple-500/30 text-purple-300',
+      accepted: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300',
+      expired: 'bg-white/[0.04] border-white/[0.08] text-white/50',
+      archived: 'bg-white/[0.04] border-white/[0.08] text-white/50',
     };
-    return colors[status] || 'text-gray-400';
+    return map[status] || map.draft;
   };
 
   const handleOpenProposal = (proposal: Proposal) => {
     if (proposal.access_link) {
-      // Otwórz publiczny link w nowej karcie
       window.open(`/p/${proposal.access_link.token}`, '_blank');
     }
   };
 
   if (loading) {
-    return <LoadingState variant="block" label="Ładowanie dokumentów…" />;
+    return <LoadingState variant="block" label="Ładowanie…" />;
   }
 
   const hasContent = docs.length > 0 || proposals.length > 0;
 
   if (!hasContent) {
     return (
-      <div className="py-8 px-4 rounded-lg bg-white/5 border border-white/10 text-center">
-        <p className="text-gray-400 text-sm">Brak dokumentów i ofert</p>
-        <p className="text-gray-500 text-xs mt-1">Oferty, faktury i umowy pojawią się tutaj po dodaniu przez administratora.</p>
+      <div className="max-w-2xl">
+        <div className="mb-5">
+          <h2 className="text-xl font-semibold text-white tracking-tight">Dokumenty</h2>
+          <p className="text-[13px] text-white/50 mt-0.5">Oferty, umowy i faktury przypisane do Twojego konta</p>
+        </div>
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-lg p-12 text-center">
+          <FileText size={32} weight="thin" className="mx-auto mb-3 text-white/20" />
+          <p className="text-[13px] text-white/70 mb-1">Brak dokumentów</p>
+          <p className="text-[12px] text-white/40">Oferty, faktury i umowy pojawią się tutaj po dodaniu przez administratora</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-3xl space-y-6">
+      <div>
+        <h2 className="text-xl font-semibold text-white tracking-tight">Dokumenty</h2>
+        <p className="text-[13px] text-white/50 mt-0.5">Oferty, umowy i faktury przypisane do Twojego konta</p>
+      </div>
+
       {/* Oferty */}
       {proposals.length > 0 && (
-        <div>
-          <h2 className="text-base font-semibold text-white mb-3 flex items-center gap-2">
-            <FileText size={18} weight="regular" />
-            Oferty
-          </h2>
-          <ul className="divide-y divide-white/10">
+        <section>
+          <div className="text-[10px] font-mono font-semibold text-white/30 uppercase tracking-[0.16em] mb-2.5">Oferty</div>
+          <div className="border border-white/[0.06] rounded-lg overflow-hidden bg-[#0a0d1f]/40">
             {proposals.map((prop) => (
-              <li key={prop.id} className="py-3 flex items-center justify-between gap-3">
-                <div className="flex-1">
+              <div key={prop.id} className="group flex items-center justify-between gap-4 px-4 py-3 border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.03] transition-colors">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-white text-sm">{prop.title}</span>
+                    <FileText size={14} weight="regular" className="text-white/40 shrink-0" />
+                    <span className="text-[13px] font-medium text-white truncate">{prop.title}</span>
                     {prop.status === 'accepted' && (
-                      <CheckCircle size={16} weight="bold" className="text-green-400" />
+                      <CheckCircle size={14} weight="fill" className="text-emerald-400 shrink-0" />
                     )}
                   </div>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className={`text-xs ${getStatusColor(prop.status)}`}>
+                  <div className="flex items-center gap-2 mt-1 ml-6">
+                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border ${getStatusBadge(prop.status)}`}>
                       {getStatusLabel(prop.status)}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-[11px] text-white/40 font-mono">
                       {new Date(prop.created_at).toLocaleDateString('pl-PL')}
                     </span>
                     {prop.valid_until && (
-                      <span className="text-xs text-gray-500">
-                        Ważna do: {new Date(prop.valid_until).toLocaleDateString('pl-PL')}
+                      <span className="text-[11px] text-white/40">
+                        do {new Date(prop.valid_until).toLocaleDateString('pl-PL')}
                       </span>
                     )}
                   </div>
@@ -148,45 +157,45 @@ export const ClientDocumentsView: React.FC = () => {
                 {prop.access_link ? (
                   <button
                     onClick={() => handleOpenProposal(prop)}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-[#fee715] text-[#101820] rounded-lg hover:bg-[#fee715]/90 text-xs font-semibold transition-all"
+                    className="flex items-center gap-1.5 px-2.5 py-1 bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] text-white/80 hover:text-white rounded text-[12px] font-medium transition-colors"
                   >
-                    <Eye size={14} weight="regular" />
+                    <Eye size={13} weight="regular" />
                     Otwórz
                   </button>
                 ) : (
-                  <span className="text-xs text-gray-500">Brak linku</span>
+                  <span className="text-[11px] text-white/30">Brak linku</span>
                 )}
-              </li>
+              </div>
             ))}
-          </ul>
-        </div>
+          </div>
+        </section>
       )}
 
-      {/* Dokumenty */}
+      {/* Umowy / dokumenty */}
       {docs.length > 0 && (
-        <div>
-          <h2 className="text-base font-semibold text-white mb-3">Umowy i dokumenty</h2>
-          <ul className="divide-y divide-white/10">
+        <section>
+          <div className="text-[10px] font-mono font-semibold text-white/30 uppercase tracking-[0.16em] mb-2.5">Umowy i dokumenty</div>
+          <div className="border border-white/[0.06] rounded-lg overflow-hidden bg-[#0a0d1f]/40">
             {docs.map((d) => (
-              <li key={d.id} className="py-3 flex items-center justify-between gap-3">
-                <div>
-                  <span className="text-white text-sm">{d.name}</span>
-                  <span className="ml-2 text-xs text-gray-500">({typeLabel[d.doc_type] || d.doc_type})</span>
+              <div key={d.id} className="flex items-center justify-between gap-4 px-4 py-3 border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.03] transition-colors">
+                <div className="min-w-0 flex-1">
+                  <div className="text-[13px] font-medium text-white truncate">{d.name}</div>
+                  <div className="text-[11px] text-white/35 font-mono mt-0.5">{typeLabel[d.doc_type] || d.doc_type}</div>
                 </div>
                 {d.file_url && (
                   <a
                     href={d.file_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-[#00C9A7] hover:underline"
+                    className="px-2.5 py-1 bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.15] text-white/80 hover:text-white rounded text-[12px] font-medium transition-colors"
                   >
                     Pobierz
                   </a>
                 )}
-              </li>
+              </div>
             ))}
-          </ul>
-        </div>
+          </div>
+        </section>
       )}
     </div>
   );

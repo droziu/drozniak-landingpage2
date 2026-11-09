@@ -144,14 +144,24 @@ export const ProposalsList: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
-      draft: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50',
-      sent: 'bg-blue-500/20 text-blue-300 border-blue-500/50',
-      viewed: 'bg-purple-500/20 text-purple-300 border-purple-500/50',
-      accepted: 'bg-green-500/20 text-green-300 border-green-500/50',
-      expired: 'bg-gray-500/20 text-gray-300 border-gray-500/50',
-      archived: 'bg-gray-500/20 text-gray-300 border-gray-500/50',
+      draft: 'bg-amber-500/15 border-amber-500/30 text-amber-300',
+      sent: 'bg-blue-500/15 border-blue-500/30 text-blue-300',
+      viewed: 'bg-purple-500/15 border-purple-500/30 text-purple-300',
+      accepted: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300',
+      expired: 'bg-white/[0.04] border-white/[0.08] text-white/50',
+      archived: 'bg-white/[0.04] border-white/[0.08] text-white/50',
     };
     return colors[status] || colors.draft;
+  };
+
+  const formatRelativeDate = (iso: string): string => {
+    const d = new Date(iso);
+    const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if (days === 0) return 'dziś';
+    if (days === 1) return 'wczoraj';
+    if (days < 7) return `${days} dni temu`;
+    if (days < 30) return `${Math.floor(days / 7)} tyg. temu`;
+    return d.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short' });
   };
 
   const filteredProposals = filterStatus === 'all'
@@ -160,102 +170,103 @@ export const ProposalsList: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
         <div>
-          <h2 className="font-[Montserrat] text-2xl font-bold text-white mb-2">
-            Oferty
-          </h2>
-          <p className="text-gray-400 text-sm">
-            Twórz i zarządzaj ofertami dla swoich klientów
-          </p>
+          <h2 className="text-xl font-semibold text-white tracking-tight">Oferty</h2>
+          <p className="text-[13px] text-white/50 mt-0.5">Twórz i zarządzaj ofertami dla klientów</p>
         </div>
         <button
           onClick={() => router.push('/admin/proposals/new')}
-          className="px-6 py-3 bg-gradient-to-r from-[#fee715] to-[#00C9A7] text-[#101820] font-[Montserrat] font-bold rounded-xl hover:shadow-2xl hover:shadow-[#fee715]/40 transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#fee715] text-[#050714] rounded-md text-[13px] font-semibold hover:brightness-110 transition-all shadow-sm shadow-[#fee715]/20"
         >
-          <FileText size={20} weight="bold" />
-          Nowa Oferta
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          </svg>
+          Nowa oferta
         </button>
       </div>
 
-      {/* Filtry */}
-      <div className="mb-6 flex gap-2 flex-wrap">
+      {/* Filter chips */}
+      <div className="mb-5 flex gap-1 p-1 bg-white/[0.03] border border-white/[0.06] rounded-md w-fit overflow-x-auto">
         {(['all', 'draft', 'sent', 'viewed', 'accepted', 'expired', 'archived'] as const).map((status) => (
           <button
             key={status}
             onClick={() => setFilterStatus(status)}
-            className={`px-4 py-2 rounded-lg font-semibold transition-all text-sm ${
+            className={`px-2.5 py-1 rounded text-[12px] font-medium transition-colors whitespace-nowrap ${
               filterStatus === status
-                ? status === 'all'
-                  ? 'bg-[#fee715] text-[#101820]'
-                  : getStatusColor(status).replace('/20', '').replace('/50', '')
-                : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                ? 'bg-white/[0.08] text-white'
+                : 'text-white/55 hover:text-white/80'
             }`}
           >
             {status === 'all' ? 'Wszystkie' : getStatusLabel(status)}
+            {status !== 'all' && (
+              <span className="ml-1.5 text-[10px] text-white/30 font-mono">
+                {proposals.filter((p) => p.status === status).length}
+              </span>
+            )}
           </button>
         ))}
       </div>
 
-      {/* Lista ofert */}
+      {/* Lista */}
       {loading ? (
-        <LoadingState variant="block" skeleton="cards" label="Ładowanie ofert…" />
+        <LoadingState variant="block" skeleton="cards" label="Ładowanie…" />
       ) : filteredProposals.length === 0 ? (
-        <div className="bg-white/5 rounded-xl p-12 text-center text-gray-400">
-          <FileText size={48} weight="thin" className="mx-auto mb-4 text-gray-500" />
-          <p className="text-lg mb-2">Brak ofert</p>
-          <p className="text-sm">Kliknij "Nowa Oferta", aby rozpocząć</p>
+        <div className="bg-white/[0.02] border border-white/[0.06] rounded-lg p-12 text-center">
+          <FileText size={32} weight="thin" className="mx-auto mb-3 text-white/20" />
+          <p className="text-[13px] text-white/70 mb-1">
+            {filterStatus === 'all' ? 'Brak ofert' : 'Brak ofert w tej kategorii'}
+          </p>
+          <p className="text-[12px] text-white/40">Kliknij "Nowa oferta", aby rozpocząć</p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredProposals.map((proposal) => (
-            <div
-              key={proposal.id}
-              className="bg-gradient-to-br from-white/5 to-white/3 rounded-xl p-6 border-2 border-white/10 hover:border-[#fee715]/50 transition-all duration-300 cursor-pointer"
-              onClick={() => router.push(`/admin/proposals/${proposal.id}`)}
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="font-[Montserrat] font-bold text-white text-lg mb-1">
-                    {proposal.title}
-                  </h3>
-                  {(proposal.client || proposal.marketing_client) && (
-                    <p className="text-gray-400 text-sm">
-                      {proposal.client?.name || proposal.marketing_client?.name}
-                      {proposal.client?.company_name && ` • ${proposal.client.company_name}`}
-                      {proposal.marketing_client?.company_name && ` • ${proposal.marketing_client.company_name}`}
-                    </p>
+        <div className="border border-white/[0.06] rounded-lg overflow-hidden bg-[#0a0d1f]/40">
+          <div className="grid grid-cols-[1fr_200px_140px_120px] gap-4 px-4 py-2.5 border-b border-white/[0.06] bg-white/[0.02] text-[10px] font-mono font-semibold text-white/40 uppercase tracking-[0.14em]">
+            <div>Oferta</div>
+            <div>Klient</div>
+            <div>Status</div>
+            <div className="text-right">Data</div>
+          </div>
+          {filteredProposals.map((proposal) => {
+            const clientName = proposal.client?.name || proposal.marketing_client?.name;
+            const companyName = proposal.client?.company_name || proposal.marketing_client?.company_name;
+            const lastDate = proposal.accepted_at || proposal.last_viewed_at || proposal.created_at;
+            return (
+              <div
+                key={proposal.id}
+                className="grid grid-cols-[1fr_200px_140px_120px] gap-4 px-4 py-3 border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.03] transition-colors cursor-pointer items-center"
+                onClick={() => router.push(`/admin/proposals/${proposal.id}`)}
+              >
+                <div className="min-w-0">
+                  <div className="text-[13px] font-medium text-white truncate">{proposal.title}</div>
+                  <div className="text-[10px] text-white/35 font-mono mt-0.5">
+                    {proposal.accepted_at ? `zaakceptowana ${formatRelativeDate(proposal.accepted_at)}` :
+                     proposal.last_viewed_at ? `otwarta ${formatRelativeDate(proposal.last_viewed_at)}` :
+                     `utworzona ${formatRelativeDate(proposal.created_at)}`}
+                  </div>
+                </div>
+                <div className="text-[12px] text-white/60 min-w-0">
+                  {clientName ? (
+                    <>
+                      <div className="truncate">{clientName}</div>
+                      {companyName && <div className="text-[11px] text-white/35 truncate">{companyName}</div>}
+                    </>
+                  ) : (
+                    <span className="text-white/30">—</span>
                   )}
                 </div>
-                <span
-                  className={`px-2 py-1 rounded-lg text-xs font-semibold border ${getStatusColor(proposal.status)}`}
-                >
-                  {getStatusLabel(proposal.status)}
-                </span>
+                <div>
+                  <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium border ${getStatusColor(proposal.status)}`}>
+                    {getStatusLabel(proposal.status)}
+                  </span>
+                </div>
+                <div className="text-[12px] text-white/50 font-mono text-right">
+                  {formatRelativeDate(lastDate)}
+                </div>
               </div>
-
-              <div className="text-xs text-gray-500 mb-4 space-y-1">
-                {proposal.last_viewed_at && (
-                  <div>Ostatnie otwarcie: {new Date(proposal.last_viewed_at).toLocaleDateString('pl-PL')}</div>
-                )}
-                {proposal.accepted_at && (
-                  <div>Zaakceptowana: {new Date(proposal.accepted_at).toLocaleDateString('pl-PL')}</div>
-                )}
-                {!proposal.last_viewed_at && !proposal.accepted_at && (
-                  <div>Utworzona: {new Date(proposal.created_at).toLocaleDateString('pl-PL')}</div>
-                )}
-              </div>
-
-              <div className="flex gap-2 pt-4 border-t border-white/10" onClick={(e) => e.stopPropagation()}>
-                <button
-                  onClick={() => router.push(`/admin/proposals/${proposal.id}`)}
-                  className="flex-1 px-4 py-2 bg-[#fee715] text-[#101820] rounded-lg transition-all text-sm font-semibold hover:bg-[#fee715]/90"
-                >
-                  Otwórz
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

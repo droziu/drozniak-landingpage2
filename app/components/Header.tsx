@@ -1,318 +1,156 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Logo } from '@/components/icons/Logo';
+import { usePathname, useRouter } from 'next/navigation';
 
+// Blog na razie poza menu: strona działa pod /blog, ale nie prowadzimy do niej ze strony
+const NAV_LINKS: { href: string; label: string }[] = [
+  { href: '/#wspolpraca', label: 'Współpraca' },
+  { href: '/szkolenia', label: 'Szkolenia' },
+  { href: '/#o-mnie', label: 'O mnie' },
+  { href: '/kontakt', label: 'Kontakt' },
+];
+
+const MENU_LINKS: { href: string; label: string }[] = [{ href: '/', label: 'Strona główna' }, ...NAV_LINKS];
+
+/** Wszystkie „Umów rozmowę” prowadzą prosto do kalendarza. */
+const BOOKING_HREF = '/umow';
+
+const EXIT_MS = 160;
+
+/**
+ * Pasek: wordmark, linki, jeden przycisk do kalendarza. Na telefonie przycisk „Menu”
+ * otwiera pełnoekranowe menu, które wyrasta z przycisku i do niego wraca.
+ */
 export const Header: React.FC = () => {
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
-  const isSystemPage = pathname === '/system';
-  const isStronyWWWPage = pathname === '/strony-www';
-  const isSzkoleniaPage = pathname === '/szkolenia';
-  const isContactPage = pathname === '/kontakt';
-  const isBlogPage = pathname.startsWith('/blog');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const menuBtnRef = useRef<HTMLButtonElement>(null);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsServicesOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    window.addEventListener('scroll', onScroll, { passive: true });
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const isService = isSystemPage || isStronyWWWPage || isSzkoleniaPage;
+  // Menu zostaje w DOM na czas animacji zamknięcia
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      return;
+    }
+    const t = window.setTimeout(() => setMounted(false), EXIT_MS);
+    return () => window.clearTimeout(t);
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        menuBtnRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const raf = requestAnimationFrame(() => firstLinkRef.current?.focus());
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+      cancelAnimationFrame(raf);
+    };
+  }, [open]);
+
+  // Link do strony głównej, kliknięty na stronie głównej: Next nic nie robi, więc wracamy na górę sami
+  const toTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== '/' || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    setOpen(false);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    // Przez router, nie history.replaceState: inaczej Next dalej „myśli”, że jest pod /#o-mnie,
+    // i kolejne kliknięcie w ten sam link nic nie robi
+    if (window.location.hash) router.replace('/', { scroll: false });
+  };
+
+  const isCurrent = (href: string) => (href === '/' ? pathname === '/' : !href.includes('#') && pathname.startsWith(href));
 
   return (
-    <motion.header
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
-      className="fixed top-0 left-0 right-0 z-50"
-    >
-      {/* Top fade veil */}
-      <div
-        className={`absolute inset-x-0 top-0 h-20 transition-opacity duration-500 ${
-          scrolled ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{
-          background: 'linear-gradient(180deg, rgba(10,10,11,0.85) 0%, rgba(10,10,11,0) 100%)',
-        }}
-      />
-
-      <div className="relative mx-auto max-w-6xl px-4 md:px-6">
-        <div
-          className={`mt-3 md:mt-4 flex items-center justify-between gap-4 px-4 md:px-5 h-12 md:h-14 rounded-full transition-all duration-400 ${
-            scrolled
-              ? 'glass shadow-[0_8px_32px_-12px_rgba(0,0,0,0.6)]'
-              : 'bg-transparent border border-transparent'
-          }`}
-        >
-          <Link
-            href="/"
-            className="flex items-center text-[#fee715] cursor-pointer"
-            aria-label="Strona główna"
-          >
-            <Logo />
+    <>
+      <a href="#tresc" className="site-skip">
+        Przejdź do treści
+      </a>
+      <header className="site-header" data-scrolled={scrolled ? 'true' : 'false'} data-menu={open ? 'true' : 'false'}>
+        <div className="site-wrap site-header-row">
+          <Link href="/" aria-label="Stanisław Drożniak, strona główna" className="site-wordmark" onClick={toTop} style={open ? { color: 'var(--paper)' } : undefined}>
+            DROZNIAK<span className="site-wordmark-dot">.</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
-            <NavLink href="/" active={isHomePage}>Kim jestem</NavLink>
-
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setIsServicesOpen(!isServicesOpen)}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors duration-200 cursor-pointer ${
-                  isService ? 'text-white' : 'text-white/60 hover:text-white'
-                }`}
-                aria-expanded={isServicesOpen}
-              >
-                Co oferuję
-                <svg
-                  className={`w-3 h-3 transition-transform duration-300 ${isServicesOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              <AnimatePresence>
-                {isServicesOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -6, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -6, scale: 0.98 }}
-                    transition={{ duration: 0.18, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-72 rounded-2xl overflow-hidden p-1.5 bg-[#050714]/95 backdrop-blur-2xl border border-white/12 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]"
-                  >
-                    <DropdownLink
-                      href="/strony-www"
-                      title="Strony internetowe"
-                      desc="Premium strony szyte na miarę"
-                      active={isStronyWWWPage}
-                      onClick={() => setIsServicesOpen(false)}
-                    />
-                    <DropdownLink
-                      href="/system"
-                      title="System pozyskiwania klientów"
-                      desc="Strategia + automatyzacje + AI"
-                      active={isSystemPage}
-                      onClick={() => setIsServicesOpen(false)}
-                    />
-                    <DropdownLink
-                      href="/szkolenia"
-                      title="Szkolenia z AI"
-                      desc="Warsztaty dla zespołów"
-                      active={isSzkoleniaPage}
-                      onClick={() => setIsServicesOpen(false)}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <NavLink href="/blog" active={isBlogPage}>Blog</NavLink>
-            <NavLink href="/kontakt" active={isContactPage}>Kontakt</NavLink>
+          <nav className="site-nav" aria-label="Menu główne">
+            {NAV_LINKS.map((l) => (
+              <Link key={l.href} href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>
+                {l.label}
+              </Link>
+            ))}
+            <Link href={BOOKING_HREF} className="site-btn site-btn-ink site-btn-small">
+              Umów rozmowę
+            </Link>
           </nav>
 
-          <div className="hidden md:flex items-center gap-2">
-            <Link
-              href="/kontakt"
-              className="btn btn-primary"
-              style={{ height: 36, padding: '0 14px', fontSize: 13 }}
-            >
-              Umów rozmowę
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
-          </div>
-
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
-            aria-expanded={isMobileMenuOpen}
-            className="md:hidden relative w-9 h-9 flex flex-col justify-center items-center gap-1.5 cursor-pointer rounded-full hover:bg-white/5 transition-colors"
+            ref={menuBtnRef}
+            type="button"
+            className="site-menu-btn"
+            aria-expanded={open}
+            aria-controls="site-menu"
+            onClick={() => setOpen((o) => !o)}
           >
-            <div className={`w-4 h-0.5 bg-white rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
-            <div className={`w-4 h-0.5 bg-white rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`} />
-            <div className={`w-4 h-0.5 bg-white rounded-full transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
+            {open ? 'Zamknij' : 'Menu'}
           </button>
         </div>
+      </header>
 
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.22, ease: [0.22, 0.61, 0.36, 1] as [number, number, number, number] }}
-              className="md:hidden absolute left-4 right-4 mt-2 rounded-2xl overflow-hidden bg-[#050714]/95 backdrop-blur-2xl border border-white/12 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]"
-            >
-              <div className="p-2 space-y-0.5">
-                <MobileLink href="/" active={isHomePage} onClick={() => setIsMobileMenuOpen(false)}>
-                  Kim jestem
-                </MobileLink>
-
-                <button
-                  onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-left text-sm font-medium transition-all cursor-pointer ${
-                    isService ? 'text-[#fee715] bg-[#fee715]/8' : 'text-white/80 hover:bg-white/5'
-                  }`}
-                >
-                  <span>Co oferuję</span>
-                  <svg
-                    className={`w-3.5 h-3.5 transition-transform duration-300 ${isMobileServicesOpen ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                <AnimatePresence>
-                  {isMobileServicesOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden"
+      {mounted && (
+        <div id="site-menu" className="site-menu" data-state={open ? 'open' : 'closed'} role="dialog" aria-modal="true" aria-label="Menu">
+          <div className="site-wrap" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+            <nav aria-label="Menu główne">
+              <ul>
+                {MENU_LINKS.map((l, i) => (
+                  <li key={l.href} style={{ ['--i' as string]: i }}>
+                    <Link
+                      ref={i === 0 ? firstLinkRef : undefined}
+                      href={l.href}
+                      className="site-menu-link"
+                      aria-current={isCurrent(l.href) ? 'page' : undefined}
+                      onClick={l.href === '/' ? toTop : () => setOpen(false)}
                     >
-                      <div className="pl-3 ml-3 space-y-0.5 border-l border-white/10 my-1">
-                        <MobileLink
-                          href="/strony-www"
-                          active={isStronyWWWPage}
-                          small
-                          onClick={() => {
-                            setIsMobileMenuOpen(false);
-                            setIsMobileServicesOpen(false);
-                          }}
-                        >
-                          Strony internetowe
-                        </MobileLink>
-                        <MobileLink
-                          href="/system"
-                          active={isSystemPage}
-                          small
-                          onClick={() => {
-                            setIsMobileMenuOpen(false);
-                            setIsMobileServicesOpen(false);
-                          }}
-                        >
-                          System pozyskiwania klientów
-                        </MobileLink>
-                        <MobileLink
-                          href="/szkolenia"
-                          active={isSzkoleniaPage}
-                          small
-                          onClick={() => {
-                            setIsMobileMenuOpen(false);
-                            setIsMobileServicesOpen(false);
-                          }}
-                        >
-                          Szkolenia z AI
-                        </MobileLink>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <MobileLink href="/blog" active={isBlogPage} onClick={() => setIsMobileMenuOpen(false)}>
-                  Blog
-                </MobileLink>
-                <MobileLink href="/kontakt" active={isContactPage} onClick={() => setIsMobileMenuOpen(false)}>
-                  Kontakt
-                </MobileLink>
-
-                <div className="pt-2 px-1">
-                  <Link
-                    href="/kontakt"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="btn btn-primary w-full"
-                  >
-                    Umów rozmowę
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.header>
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <div className="site-menu-foot">
+              <a href="mailto:stanislaw@drozniak.com">stanislaw@drozniak.com</a>
+              <a href="tel:+48792491196">+48 792 491 196</a>
+              <Link href={BOOKING_HREF} className="site-btn site-btn-accent" onClick={() => setOpen(false)}>
+                Umów rozmowę
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
-
-const NavLink: React.FC<{ href: string; active: boolean; children: React.ReactNode }> = ({
-  href,
-  active,
-  children,
-}) => (
-  <Link
-    href={href}
-    className={`px-3 py-1.5 rounded-full text-[13px] font-medium transition-colors duration-200 cursor-pointer ${
-      active ? 'text-white' : 'text-white/60 hover:text-white'
-    }`}
-  >
-    {children}
-  </Link>
-);
-
-const DropdownLink: React.FC<{
-  href: string;
-  title: string;
-  desc: string;
-  active: boolean;
-  onClick: () => void;
-}> = ({ href, title, desc, active, onClick }) => (
-  <Link
-    href={href}
-    onClick={onClick}
-    className={`block px-3.5 py-2.5 rounded-xl transition-all duration-200 cursor-pointer ${
-      active ? 'bg-[#fee715]/8' : 'hover:bg-white/5'
-    }`}
-  >
-    <div className={`text-sm font-medium ${active ? 'text-[#fee715]' : 'text-white'}`}>{title}</div>
-    <div className="text-xs text-white/50 mt-0.5">{desc}</div>
-  </Link>
-);
-
-const MobileLink: React.FC<{
-  href: string;
-  active: boolean;
-  onClick: () => void;
-  small?: boolean;
-  children: React.ReactNode;
-}> = ({ href, active, onClick, small = false, children }) => (
-  <Link
-    href={href}
-    onClick={onClick}
-    className={`block px-4 ${small ? 'py-2 text-[13px]' : 'py-3 text-sm'} rounded-xl font-medium transition-all cursor-pointer ${
-      active ? 'text-[#fee715] bg-[#fee715]/8' : 'text-white/80 hover:text-white hover:bg-white/5'
-    }`}
-  >
-    {children}
-  </Link>
-);

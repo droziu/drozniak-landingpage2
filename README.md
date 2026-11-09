@@ -1,20 +1,24 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# drozniak.pl
 
-# Run and deploy your AI Studio app
+Strona Stanisława Drożniaka (marketing i pozyskiwanie klientów dla firm) oraz panel klienta i admina.
+Next.js (App Router) na Vercelu, Supabase (baza, logowanie, pliki), Resend (maile).
 
-This contains everything you need to run your app locally.
+## Uruchomienie
 
-View your app in AI Studio: https://ai.studio/apps/drive/1aGlwYV1IKlk7fOt4eoiMUQeK1qMtplKd
+```bash
+npm install
+npm run dev
+```
 
-## Run Locally
+Zmienne środowiskowe są w `.env.local` (poza repozytorium), na produkcji w ustawieniach projektu w Vercelu.
 
-**Prerequisites:**  Node.js
+## Gdzie co jest
 
+- `app/` strony publiczne, panel (`/panel`), admin (`/admin`), oferty (`/o`, `/p`), API (`app/api`)
+- `app/umow/`, `lib/booking/` umawianie rozmów, opis i konfiguracja w `docs/UMAWIANIE_SPOTKAN.md`
+- `components/` komponenty panelu i admina
+- `config/` treść szkoleń w panelu
+- `docs/` dokumentacja i notatki z redesignu
+- `scripts/` skrypty jednorazowe
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Push robi właściciel ręcznie, każdy push buduje produkcję na Vercelu.

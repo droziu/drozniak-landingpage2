@@ -1,0 +1,433 @@
+/* Strona kontaktu (listopad 2026). Tokeny z pub-v2.css, klasy z prefiksem kt-. */
+
+.kt {
+  padding-top: clamp(32px, 6vh, 72px);
+  padding-bottom: clamp(96px, 12vw, 176px);
+}
+/* Panel z formularzem: jedno pole koloru, bez karty w karcie */
+.kt-panel {
+  border-radius: var(--radius);
+  background: var(--paper-tint);
+  padding: 28px 20px 24px;
+}
+.kt-panel-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+
+.kt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.kt-row {
+  display: grid;
+  gap: 20px;
+}
+.kt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.kt-field label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.kt-optional {
+  font-weight: 400;
+  color: var(--ink-2);
+}
+/* Pola bez obrysu: tło o ton jaśniejsze, atrament dopiero przy fokusie */
+.kt-field input,
+.kt-field textarea {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid transparent;
+  background: #fff;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  transition: border-color 160ms var(--ease-out);
+}
+.kt-field textarea {
+  resize: vertical;
+  min-height: 160px;
+}
+.kt-field input::placeholder,
+.kt-field textarea::placeholder {
+  color: #8C8877;
+}
+.kt-field input:hover,
+.kt-field textarea:hover {
+  border-color: var(--line-strong);
+}
+.kt-field input:focus-visible,
+.kt-field textarea:focus-visible {
+  outline: none;
+  border-color: var(--ink);
+}
+.kt-field [aria-invalid='true'] {
+  border-color: #B4442C;
+}
+.kt-error {
+  font-size: 15px;
+  color: #9E3A24;
+}
+
+.kt-submit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 4px;
+}
+.kt-submit .site-btn[disabled] {
+  cursor: progress;
+}
+.kt-legal {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: 30rem;
+}
+.kt-status:empty {
+  display: none;
+}
+.kt-status {
+  font-size: 16px;
+  color: #9E3A24;
+}
+.kt-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(22, 21, 17, 0.25);
+  border-top-color: var(--ink);
+  animation: kt-spin 700ms linear infinite;
+}
+@keyframes kt-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.kt-trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px; /* taste-skill-ignore: ukryte pole-pułapka, nie linia */
+  overflow: hidden;
+}
+
+.kt-sent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 8px 0;
+}
+.kt-sent-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+@media (min-width: 720px) {
+  .kt-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .kt-panel {
+    padding: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .kt-panel {
+    padding: 48px;
+  }
+}
+
+/* Cloudflare Turnstile: zwykle niewidoczny, pole pojawia się tylko przy wątpliwościach */
+.kt-turnstile:empty {
+  display: none;
+}
+
+/* --- Układ w motywie hero: płótno z polami (ShapeCanvas) i rząd formularza ze skosem (SlantRow) ---
+   Telefon i tablet: tekst, zdjęcie, ciemny pas z kanałami, formularz i rezerwacja pod sobą.
+   Od 960 px płótno przycięte kształtami (--clip-b, --clip-c), formularz i rezerwacja w jednym rzędzie. */
+.kt-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.kt-h1 {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(56px, 8vw, 128px);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  margin-left: -0.04em;
+  color: var(--ink);
+}
+.kt-a {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 20px;
+}
+.kt-lead {
+  max-width: 30rem;
+}
+.kt-shape {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.kt-b {
+  aspect-ratio: 1 / 1;
+  background: var(--paper-tint);
+}
+.kt-b img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  animation: hp-settle 1400ms var(--ease-soft) both;
+}
+.kt-c {
+  padding: 28px 24px;
+  background: var(--dark);
+  color: var(--paper);
+}
+.kt-channels {
+  display: grid;
+  gap: 24px;
+}
+.kt-channels li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 2px;
+}
+.kt-channel-icon {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.kt-channel-main {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(19px, 1.7vw, 26px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  color: var(--paper);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: rgba(246, 245, 241, 0.3);
+  transition: text-decoration-color 200ms var(--ease-out);
+}
+.kt-channel-main:hover {
+  text-decoration-color: var(--paper);
+}
+.kt-channel-main:focus-visible {
+  outline-color: var(--paper);
+}
+.kt-channel-note {
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba(246, 245, 241, 0.78);
+}
+
+.kt-row-forms {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: clamp(64px, 8vw, 120px);
+}
+.kt-book {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  background: var(--dark);
+  color: var(--paper);
+}
+.kt-book .kt-panel-title {
+  color: var(--paper);
+  margin-bottom: 0;
+}
+.kt-book-icon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.kt-book-text {
+  font-size: var(--t-body);
+  line-height: 1.55;
+  color: rgba(246, 245, 241, 0.86);
+  max-width: 22rem;
+}
+.kt-book-btn {
+  margin-top: 8px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.kt-book-btn:hover {
+  background: var(--paper-white);
+}
+.kt-book-btn:focus-visible {
+  outline-color: var(--paper);
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .kt-b {
+    aspect-ratio: 4 / 3;
+  }
+  .kt-channels {
+    grid-template-columns: max-content max-content;
+    gap: 24px 40px;
+  }
+}
+@media (min-width: 960px) {
+  .kt-canvas {
+    position: relative;
+    display: block;
+    height: clamp(580px, calc(100svh - 124px), 740px);
+  }
+  .kt-a {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 56%;
+    height: 70%;
+    justify-content: center;
+    padding: 0 0 24px;
+  }
+  .kt-shape {
+    position: absolute;
+    inset: 0;
+    border-radius: 0;
+    aspect-ratio: auto;
+    padding: 0;
+  }
+  .kt-b {
+    clip-path: var(--clip-b);
+  }
+  .kt-b img {
+    position: absolute;
+    left: 59%;
+    top: 0;
+    width: 41%;
+    height: 100%;
+  }
+  .kt-c {
+    clip-path: var(--clip-c);
+  }
+  .kt-channels {
+    position: absolute;
+    left: 40px;
+    width: calc(56% - 72px);
+    top: 86.7%;
+    translate: 0 -50%;
+    grid-template-columns: max-content max-content;
+    gap: 24px clamp(24px, 3vw, 48px);
+  }
+  .kt-row-forms {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .kt-panel {
+    flex: 8 1 0;
+    min-width: 0;
+    border-radius: 0;
+    padding: 48px calc(var(--s, 0px) + 40px) 48px 48px;
+  }
+  .kt-book {
+    flex: 4 1 0;
+    min-width: 0;
+    justify-content: flex-end;
+    border-radius: 0;
+    padding: 48px 44px 52px calc(var(--s, 0px) + 36px);
+  }
+}
+
+/* --- Telefon i tablet: rezerwacja rozmowy przed formularzem ---
+   Każde „Umów rozmowę” na stronie prowadzi tutaj, więc na telefonie przycisk terminu
+   stoi zaraz pod mailem i telefonem, a nie pod długim formularzem. */
+@media (max-width: 959px) {
+  .kt-row-forms {
+    margin-top: 12px;
+  }
+  .kt-book {
+    order: -1;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 12px;
+    padding: 24px;
+  }
+  .kt-book-icon {
+    width: 52px;
+    height: 52px;
+  }
+  .kt-book-text,
+  .kt-book-btn {
+    grid-column: 1 / -1;
+  }
+  .kt-book-btn {
+    margin-top: 4px;
+    justify-self: stretch;
+  }
+  .kt-panel {
+    margin-top: 28px;
+  }
+}
+@media (max-width: 599px) {
+  .kt-a {
+    gap: 18px;
+    padding-bottom: 12px;
+  }
+  /* zdjęcie niższe, żeby kontakt był bliżej góry */
+  .kt-b {
+    aspect-ratio: 3 / 2;
+  }
+  .kt-b img {
+    object-position: 50% 18%;
+  }
+  .kt-c {
+    padding: 22px 20px;
+  }
+  .kt-channels {
+    gap: 18px;
+  }
+}
