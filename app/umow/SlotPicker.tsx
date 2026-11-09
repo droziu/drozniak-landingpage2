@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { DaySlots } from '@/lib/booking/slots';
+import { BrandLoader } from '../components/BrandLogo';
 
 const TZ = 'Europe/Warsaw';
 const WEEK = ['pon.', 'wt.', 'śr.', 'czw.', 'pt.', 'sob.', 'niedz.'];
@@ -221,7 +222,8 @@ export function SlotPickerSkeleton({ title = 'Wybierz dzień' }: { title?: strin
           ))}
         </div>
       </div>
-      <div className="bk-times">
+      <div className="bk-times bk-times-loading">
+        <BrandLoader />
         <p className="bk-times-empty">Sprawdzam wolne terminy…</p>
       </div>
     </div>

@@ -436,9 +436,8 @@ export function BookingFlow() {
                   {formError}
                 </p>
               )}
-              <button type="submit" className="site-btn site-btn-accent" disabled={sending}>
-                {sending && <span className="bk-spinner" aria-hidden="true" />}
-                Umów rozmowę
+              <button type="submit" className="site-btn site-btn-accent" disabled={sending} aria-busy={sending}>
+                {sending ? 'Umawiam…' : 'Umów rozmowę'}
               </button>
               <p className="bk-hint">
                 Na podany adres przyjdzie zaproszenie do kalendarza. Dane posłużą tylko do umówienia i przeprowadzenia

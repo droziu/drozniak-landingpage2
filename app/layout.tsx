@@ -1,23 +1,25 @@
 import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
-import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google';
+import { Brygada_1918, Schibsted_Grotesk } from 'next/font/google';
 import './globals.css';
 import './pub-v2.css';
 import { LayoutClient } from './components/LayoutClient';
+import { INTRO_SCRIPT } from './components/SiteIntro';
 import { Analytics } from '@vercel/analytics/next';
 
 const BASE_URL = 'https://drozniak.pl';
 
-// Fonty publicznej części („Editorial Ink & Paper"): serif display + geometryczny sans.
-// Panel/admin pozostają na Geist (body className poniżej).
-const fraunces = Fraunces({
+// Fonty publicznej części według księgi marki (docs/brand): Brygada 1918 do nagłówków,
+// Schibsted Grotesk do tekstu. Panel/admin pozostają na Geist (body className poniżej).
+// Brygada tylko w 500–700: style z font-weight 400 dostają wtedy 500, jak zaleca księga.
+const brygada = Brygada_1918({
   subsets: ['latin', 'latin-ext'],
+  weight: ['500', '600', '700'],
   variable: '--font-display',
-  axes: ['opsz', 'SOFT', 'WONK'],
   display: 'swap',
 });
-const jakarta = Plus_Jakarta_Sans({
+const schibsted = Schibsted_Grotesk({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-sans-pub',
   display: 'swap',
@@ -84,7 +86,7 @@ const globalSchemas = {
     '@type': 'Organization',
     name: 'Stanisław Drożniak',
     url: BASE_URL,
-    logo: `${BASE_URL}/images/DROZNIAK_LOGO.svg`,
+    logo: `${BASE_URL}/images/brand/drozniak-znak-512.png`,
     description: 'Marketing i pozyskiwanie klientów dla firm.',
     sameAs: ['https://www.linkedin.com/in/stanislawdrozniak'],
     contactPoint: {
@@ -167,8 +169,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pl" data-scroll-behavior="smooth" className={`${GeistSans.variable} ${GeistMono.variable} ${fraunces.variable} ${jakarta.variable}`}>
+    <html lang="pl" data-scroll-behavior="smooth" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable} ${brygada.variable} ${schibsted.variable}`}>
       <head>
+        {/* Intro przy pierwszym wejściu: decyzja przed pierwszym malowaniem (patrz SiteIntro.tsx) */}
+        <script id="site-intro" dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(globalSchemas.organization) }}

@@ -179,14 +179,14 @@
 .hmz-h3 {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(24px, 1.9vw, 28px);
+  font-size: var(--t-h3);
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--ink);
   text-wrap: balance;
 }
 .hmz-text {
-  font-size: 16px;
+  font-size: var(--t-body);
   line-height: 1.5;
   color: var(--ink);
   max-width: 24rem;
@@ -253,7 +253,7 @@
   color: var(--paper);
 }
 .hmst-text {
-  font-size: 16px;
+  font-size: var(--t-body);
   line-height: 1.5;
   color: rgba(246, 245, 241, 0.86);
 }
@@ -465,7 +465,7 @@
   }
   .hmz-h3 {
     padding-top: 9px;
-    font-size: 22px;
+    font-size: var(--t-h3);
   }
 }
 @media (max-width: 699px) {

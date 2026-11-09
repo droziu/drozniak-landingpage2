@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { Wordmark } from './BrandLogo';
 
 // Blog na razie poza menu: strona działa pod /blog, ale nie prowadzimy do niej ze strony
 const NAV_LINKS: { href: string; label: string }[] = [
@@ -94,7 +95,7 @@ export const Header: React.FC = () => {
       <header className="site-header" data-scrolled={scrolled ? 'true' : 'false'} data-menu={open ? 'true' : 'false'}>
         <div className="site-wrap site-header-row">
           <Link href="/" aria-label="Stanisław Drożniak, strona główna" className="site-wordmark" onClick={toTop} style={open ? { color: 'var(--paper)' } : undefined}>
-            DROZNIAK<span className="site-wordmark-dot">.</span>
+            <Wordmark className="site-wordmark-svg" />
           </Link>
 
           <nav className="site-nav" aria-label="Menu główne">

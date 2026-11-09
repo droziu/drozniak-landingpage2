@@ -6,6 +6,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { CookieConsent } from './CookieConsent';
 import { Tracking } from './Tracking';
+import { SiteIntro } from './SiteIntro';
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -86,6 +87,7 @@ export const LayoutClient: React.FC<LayoutClientProps> = ({ children }) => {
   // Publiczna część - jasny motyw „Editorial Ink & Paper" (scope .site-pub)
   return (
     <div className="site-pub">
+      <SiteIntro />
       <Header />
       <div id="tresc" tabIndex={-1} className="pt-[72px] lg:pt-[84px] outline-none">{children}</div>
       <Footer compact={pathname === '/kontakt'} />

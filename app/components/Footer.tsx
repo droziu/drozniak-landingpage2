@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { openCookieSettings } from './CookieConsent';
+import { Wordmark } from './BrandLogo';
 
 /**
  * Jedno zamknięcie strony: kontakt i stopka w jednym ciemnym polu,
@@ -11,6 +12,26 @@ import { openCookieSettings } from './CookieConsent';
  */
 export const Footer: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
   const year = new Date().getFullYear();
+  const nameRef = useRef<HTMLDivElement>(null);
+
+  // Kropka nad „ż” ląduje, gdy duży napis wjeżdża w widok (raz). Bez JS po prostu stoi.
+  useEffect(() => {
+    const el = nameRef.current;
+    if (!el || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    el.dataset.anim = 'ready';
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          el.dataset.anim = 'in';
+          io.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <footer className="site-footer" aria-labelledby={compact ? undefined : 'site-contact'} data-compact={compact ? 'true' : undefined}>
@@ -53,9 +74,9 @@ export const Footer: React.FC<{ compact?: boolean }> = ({ compact = false }) => 
           </span>
         </div>
       </div>
-      <span className="site-footer-name" aria-hidden="true">
-        DROZNIAK<span>.</span>
-      </span>
+      <div className="site-footer-name" ref={nameRef}>
+        <Wordmark className="site-footer-name-svg" />
+      </div>
     </footer>
   );
 };

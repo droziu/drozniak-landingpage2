@@ -3,10 +3,10 @@ import React from 'react';
 
 export const Logo: React.FC = () => (
     <img 
-        src="/images/LOGO_DROZNIAK.svg" 
-        alt="Drozniak Logo" 
-        width={120}
-        height={28}
+        src="/images/brand/drozniak-napis-negatyw.svg"
+        alt="Drożniak"
+        width={140}
+        height={24}
         className="h-6 md:h-7 w-auto"
     />
 );

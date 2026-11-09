@@ -757,21 +757,27 @@ body::before {
    ============================================================ */
 
 .site-pub {
-  /* Tokens */
-  --paper: #F6F5F1;
+  /* Tokeny według księgi marki (docs/brand/brand-book/drozniak-zasady-marki.pdf) */
+  --paper: #F6F5F1;        /* papier: tło */
   --paper-white: #FFFFFF;
-  --paper-tint: #EFEDE6;
-  --ink: #161511;
-  --ink-2: #4A4740;
-  --ink-3: #85816F;
+  --paper-tint: #ECEAE3;   /* kamień: jeden krok od papieru */
+  --ink: #161511;          /* atrament: tekst, logo, przyciski */
+  --ink-2: #161511;        /* tekst ciągły też w atramencie */
+  --ink-3: #5E5A50;        /* grafit: tekst pomocniczy (6,3:1 na papierze) */
   --line: #E4E1D8;
   --line-strong: #D6D2C6;
-  --gold: #C9A227;
-  --gold-deep: #8F7418;
-  --gold-bright: #F2CE4B;
-  --gold-wash: #F1EBDA;
-  --dark: #171512;
-  --dark-2: #211F1A;
+  --green: #14945E;        /* zieleń sygnałowa: tylko kropka, nigdy tekst ani tło przycisku */
+  --deep: #0E2A20;         /* głęboka zieleń: jedna ciemna płaszczyzna */
+  --deep-2: #163728;       /* krok jaśniej na głębokiej zieleni */
+  --deep-ink-2: #B4C2B9;   /* tekst pomocniczy na głębokiej zieleni (8,3:1) */
+
+  /* Stare nazwy zostają jako zamienniki dla stylów, które ich jeszcze używają */
+  --gold: var(--green);
+  --gold-deep: var(--ink-3);
+  --gold-bright: #E3E0D7;
+  --gold-wash: var(--paper-tint);
+  --dark: var(--deep);
+  --dark-2: var(--deep-2);
 
   font-family: var(--font-sans-pub), var(--font-geist-sans), sans-serif;
   color: var(--ink-2);
@@ -781,7 +787,7 @@ body::before {
 /* Body przełącza się na jasny motyw tylko, gdy renderujemy publiczną część */
 body:has(.site-pub) {
   background: #F6F5F1;
-  color: #4A4740;
+  color: #161511;
 }
 body:has(.site-pub)::before {
   content: none;
@@ -821,11 +827,12 @@ html:has(.site-pub)::-webkit-scrollbar-thumb:hover {
   line-height: 1.08;
   color: var(--ink);
 }
+/* Księga marki: jeden nagłówek, jeden krój. Druga linia nie zmienia już kroju. */
 .pub-h-sans {
-  font-family: var(--font-sans-pub), sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.04;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 450;
+  letter-spacing: -0.015em;
+  line-height: 1.08;
   color: var(--ink);
 }
 
@@ -851,7 +858,7 @@ html:has(.site-pub)::-webkit-scrollbar-thumb:hover {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
   font-feature-settings: 'onum';
-  color: var(--gold);
+  color: var(--ink-3);
   line-height: 1;
 }
 
@@ -866,7 +873,7 @@ html:has(.site-pub)::-webkit-scrollbar-thumb:hover {
   padding: 0 1.65rem;
   border-radius: 2px;
   font-family: var(--font-sans-pub), sans-serif;
-  font-size: 0.92rem;
+  font-size: var(--t-body, 17px);
   font-weight: 600;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -876,7 +883,7 @@ html:has(.site-pub)::-webkit-scrollbar-thumb:hover {
 .pub-btn-sm {
   height: 40px;
   padding: 0 1.15rem;
-  font-size: 0.85rem;
+  font-size: var(--t-small, 14px);
 }
 .pub-btn-primary {
   background: var(--ink);
@@ -885,7 +892,6 @@ html:has(.site-pub)::-webkit-scrollbar-thumb:hover {
 .pub-btn-primary:hover {
   background: #0C0B08;
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px -14px rgba(22, 21, 17, 0.45);
 }
 .pub-btn-primary:active { transform: translateY(0); }
 .pub-btn-outline {
@@ -969,16 +975,16 @@ html:has(.site-pub)::-webkit-scrollbar-thumb:hover {
   transform: translateY(-2px);
 }
 
+/* Księga marki: bez wersalików i rozstrzelonych etykiet; kształt jak przyciski */
 .pub-chip {
   display: inline-flex;
   align-items: center;
-  padding: 0.28rem 0.6rem;
+  min-height: 36px;
+  padding: 0.35rem 0.9rem;
   border: 1px solid var(--line-strong);
-  border-radius: 2px;
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
   color: var(--ink-3);
   white-space: nowrap;
 }
@@ -1059,18 +1065,21 @@ html:has(.site-pub)::-webkit-scrollbar-thumb:hover {
   50% { transform: scale(1.09); }
 }
 
-/* Treści blogowe z CMS zawierają klasę link-yellow (neonowy żółty) —
-   w jasnym motywie nadpisujemy ją na redakcyjne złoto. */
+/* Treści blogowe z CMS zawierają klasę link-yellow (neonowy żółty).
+   Według księgi marki linki są w atramencie i podkreślone, bez tła. */
 .site-pub .blog-content a.link-yellow {
   color: #161511 !important;
-  background-color: #F1EBDA !important;
+  background-color: transparent !important;
   text-decoration: underline !important;
-  text-decoration-color: #8F7418 !important;
+  text-decoration-color: rgba(22, 21, 17, 0.4) !important;
+  text-decoration-thickness: 1.5px !important;
+  text-underline-offset: 0.18em !important;
   font-weight: 600 !important;
-  padding: 2px 4px !important;
+  padding: 0 !important;
 }
 .site-pub .blog-content a.link-yellow:hover {
-  background-color: #F2CE4B !important;
+  background-color: transparent !important;
+  text-decoration-color: #161511 !important;
   opacity: 1 !important;
 }
 

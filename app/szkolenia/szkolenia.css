@@ -7,7 +7,7 @@
 .sz-h3 {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(26px, 2.3vw, 34px);
+  font-size: var(--t-h3);
   line-height: 1.08;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -28,7 +28,7 @@
 .sz-title {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: 14vw;
+  font-size: var(--t-display);
   line-height: 0.94;
   margin-left: -0.04em;
   letter-spacing: -0.04em;
@@ -60,7 +60,7 @@
 }
 @media (min-width: 600px) {
   .sz-title {
-    font-size: 11vw;
+    font-size: var(--t-display);
   }
   .sz-hero-photo {
     aspect-ratio: 4 / 3;
@@ -79,7 +79,7 @@
     padding-bottom: 4px;
   }
   .sz-title {
-    font-size: min(8.6vw, 136px);
+    font-size: var(--t-display);
     line-height: 0.92;
   }
   .sz-hero-photo {
@@ -332,7 +332,7 @@
 }
 .sz-funding-text {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(24px, 2.3vw, 34px);
+  font-size: var(--t-h3);
   line-height: 1.25;
   letter-spacing: -0.015em;
   color: var(--ink);
@@ -446,7 +446,7 @@
     margin: 0;
   }
   .sz-step .sz-h3 {
-    font-size: 24px;
+    font-size: var(--t-h3);
     padding-top: 10px;
   }
   .sz-materials-graphic {

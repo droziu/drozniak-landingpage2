@@ -11,12 +11,14 @@
   --radius: 24px;
   --radius-sm: 16px;
 
-  /* Pięć rozmiarów pisma */
-  --t-display: clamp(52px, 7.4vw, 128px);
-  --t-h2: clamp(36px, 4.3vw, 66px);
-  --t-lead: clamp(20px, 1.8vw, 26px);
-  --t-body: 18px;
-  --t-small: 14px;
+  /* Pięć rozmiarów pisma (księga marki, „Skala pisma”). Innych rozmiarów nie dodajemy;
+     wyjątkiem są tylko ilustracje interfejsu (hp-ui, sc-, sys-flow, sz-loop, hm-orbit). */
+  --t-display: clamp(44px, 7.4vw, 112px); /* H1 stron */
+  --t-h2: clamp(32px, 3.9vw, 56px);       /* nagłówki sekcji, tytuł dokumentu */
+  --t-h3: clamp(22px, 1.9vw, 28px);       /* tytuły kart i paneli, wstępy, wyróżnione zdania */
+  --t-lead: var(--t-h3);
+  --t-body: 17px;                         /* tekst, przyciski, menu */
+  --t-small: 14px;                        /* etykiety, podpisy, chipy, pola formularzy */
 
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
@@ -32,6 +34,14 @@
   outline: 2px solid var(--ink);
   outline-offset: 3px;
   border-radius: 6px;
+}
+/* Na głębokiej zieleni atramentowa obwódka znika (1,2:1), więc tam jest papierowa */
+.site-footer :focus-visible,
+.site-menu :focus-visible,
+.hpk-dark :focus-visible,
+.hmh-c :focus-visible,
+.kt-c :focus-visible {
+  outline-color: var(--paper);
 }
 
 .site-wrap {
@@ -66,7 +76,7 @@
   min-height: 52px;
   padding: 0 28px;
   border-radius: 999px;
-  font-size: 16px;
+  font-size: var(--t-body);
   font-weight: 600;
   letter-spacing: -0.005em;
   white-space: nowrap;
@@ -78,11 +88,30 @@
   transform: scale(0.97);
 }
 .site-btn-accent {
-  background: var(--gold-bright);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+/* Główny przycisk: zielona kropka przy napisie (księga marki: kropka = dostępny) */
+.site-btn-accent::before {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--green);
 }
 .site-btn-accent:hover {
-  background: #F7D965;
+  background: #2C2A24;
+}
+/* Na głębokiej zieleni (stopka, menu) przycisk odwraca się na papier */
+.site-footer .site-btn-accent,
+.site-menu .site-btn-accent {
+  background: var(--paper);
+  color: var(--ink);
+}
+.site-footer .site-btn-accent:hover,
+.site-menu .site-btn-accent:hover {
+  background: #FFFFFF;
 }
 .site-btn-ink {
   background: var(--ink);
@@ -94,7 +123,7 @@
 .site-btn-small {
   min-height: 44px;
   padding: 0 22px;
-  font-size: 15px;
+  font-size: var(--t-body);
 }
 .site-btn .site-btn-arrow {
   transition: transform 200ms var(--ease-out);
@@ -143,7 +172,7 @@
   gap: 32px;
 }
 .site-nav a:not(.site-btn) {
-  font-size: 15px;
+  font-size: var(--t-body);
   font-weight: 500;
   color: var(--ink-2);
   transition: color 160ms var(--ease-out);
@@ -160,7 +189,7 @@
   border-radius: 999px;
   background: var(--ink);
   color: var(--paper);
-  font-size: 15px;
+  font-size: var(--t-body);
   font-weight: 600;
   cursor: pointer;
 }
@@ -202,13 +231,20 @@
   display: block;
   padding: 6px 0;
   font-family: var(--font-display), Georgia, serif;
-  font-size: 44px;
+  font-size: var(--t-h2);
   line-height: 1.1;
   letter-spacing: -0.025em;
   color: var(--paper);
 }
-.site-menu-link[aria-current='page'] {
-  color: var(--gold-bright);
+.site-menu-link[aria-current='page']::before {
+  content: '';
+  display: inline-block;
+  width: 0.2em;
+  height: 0.2em;
+  margin-right: 0.3em;
+  border-radius: 999px;
+  background: var(--green);
+  vertical-align: 0.12em;
 }
 .site-menu-foot {
   margin-top: auto;
@@ -216,7 +252,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  font-size: 17px;
+  font-size: var(--t-body);
   color: rgba(246, 245, 241, 0.82);
 }
 .site-menu-foot .site-btn {
@@ -225,15 +261,16 @@
 
 /* --- Wordmark --- */
 .site-wordmark {
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 500;
-  font-size: 22px;
-  letter-spacing: 0.02em;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--ink);
 }
-.site-wordmark-dot {
-  color: var(--gold);
+/* Napis z księgi marki: 132 px szerokości, w kolorze od 120 px */
+.site-wordmark-svg {
+  display: block;
+  height: 23px;
+  width: auto;
 }
 
 /* --- Wspólne nagłówki sekcji --- */
@@ -298,7 +335,7 @@
 }
 .hp-hero-role {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(24px, 2.6vw, 38px);
+  font-size: var(--t-h3);
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -328,7 +365,7 @@
 }
 @media (max-width: 599px) {
   .hp-name {
-    font-size: 15vw;
+    font-size: var(--t-display);
   }
 }
 @media (min-width: 960px) {
@@ -346,7 +383,7 @@
     padding-bottom: 4px;
   }
   .hp-name {
-    font-size: min(9.4vw, 148px);
+    font-size: var(--t-display);
     line-height: 0.92;
   }
   .hp-hero-photo {
@@ -366,7 +403,7 @@
 }
 .hp-clients-text {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(22px, 2.15vw, 31px);
+  font-size: var(--t-h3);
   line-height: 1.28;
   letter-spacing: -0.015em;
   color: var(--ink-2);
@@ -407,7 +444,7 @@
 .hp-form h3 {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(28px, 2.6vw, 38px);
+  font-size: var(--t-h3);
   line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -468,7 +505,7 @@
   padding: 14px 20px;
   text-align: left;
   font-family: var(--font-display), Georgia, serif;
-  font-size: 24px;
+  font-size: var(--t-h3);
   line-height: 1.15;
   letter-spacing: -0.015em;
   color: var(--ink);
@@ -560,7 +597,7 @@
   width: 100%;
   text-align: left;
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(30px, 2.8vw, 44px);
+  font-size: var(--t-h3);
   line-height: 1.1;
   letter-spacing: -0.025em;
   color: #77735F;
@@ -611,7 +648,7 @@
 }
 /* Wyjaśnienie nad grafiką: duże, w atramencie, czytane razem z obrazem */
 .hp-frag-note {
-  font-size: clamp(20px, 1.7vw, 25px);
+  font-size: var(--t-h3);
   line-height: 1.35;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -635,7 +672,7 @@
 .hp-training-title {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(28px, 2.6vw, 38px);
+  font-size: var(--t-h3);
   line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -676,7 +713,7 @@
 }
 .hp-about-text {
   max-width: 36rem;
-  font-size: clamp(18px, 1.5vw, 21px);
+  font-size: var(--t-body);
   line-height: 1.6;
   color: var(--ink);
 }
@@ -698,7 +735,7 @@
 .hp-fact-value {
   display: block;
   margin-top: 4px;
-  font-size: 17px;
+  font-size: var(--t-body);
   font-weight: 600;
   color: var(--ink);
 }
@@ -744,7 +781,8 @@
 .site-footer-mail {
   display: inline-block;
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(28px, 3.6vw, 56px);
+  /* na telefonie podtytuł, żeby adres mieścił się w jednej linii; od 600 px nagłówek sekcji */
+  font-size: var(--t-h3);
   letter-spacing: -0.025em;
   line-height: 1.1;
   color: var(--paper);
@@ -756,14 +794,14 @@
   transition: text-decoration-color 200ms var(--ease-out);
 }
 .site-footer-mail:hover {
-  text-decoration-color: var(--gold-bright);
+  text-decoration-color: var(--paper);
 }
 .site-footer-links {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0;
-  font-size: 17px;
+  font-size: var(--t-body);
 }
 .site-footer-links a {
   display: inline-flex;
@@ -773,7 +811,9 @@
   transition: color 160ms var(--ease-out);
 }
 .site-footer-links a:hover {
-  color: var(--gold-bright);
+  color: #FFFFFF;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 .site-footer-legal {
   margin-top: clamp(64px, 8vw, 120px);
@@ -787,22 +827,30 @@
 .site-footer-legal a:hover {
   color: var(--paper);
 }
-.site-footer-name {
-  display: block;
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 500;
-  font-size: 23.5vw;
-  line-height: 0.8;
-  letter-spacing: -0.045em;
-  white-space: nowrap;
-  color: var(--paper);
-  transform: translateY(14%);
-  margin-top: 16px;
-  padding-left: var(--gutter);
-  user-select: none;
+@media (min-width: 600px) {
+  .site-footer-mail {
+    font-size: var(--t-h2);
+  }
 }
-.site-footer-name span {
-  color: var(--gold);
+/* pole do kliknięcia palcem co najmniej 44 px wysokości */
+.site-footer-legal a,
+.site-footer-legal button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+/* Napis na całą szerokość jako zamknięcie strony. Cały, bez przycinania krawędzią:
+   księga marki wymaga pola ochronnego wokół logo. */
+.site-footer-name {
+  max-width: var(--maxw);
+  margin: clamp(48px, 7vw, 96px) auto 0;
+  padding: 0 var(--gutter) clamp(32px, 5vw, 64px);
+  color: var(--paper);
+}
+.site-footer-name-svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 @media (min-width: 960px) {
   .site-footer-main {
@@ -918,8 +966,8 @@
 .hp-ui-pill-wide {
   align-self: stretch;
   min-height: 40px;
-  background: var(--gold-bright);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
 }
 .hp-ui-tag {
   display: inline-flex;
@@ -934,7 +982,8 @@
   white-space: nowrap;
 }
 .hp-ui-tag[data-tone='gold'] {
-  background: var(--gold-bright);
+  background: var(--ink);
+  color: var(--paper);
 }
 .hp-ui-tag[data-tone='ink'] {
   background: var(--ink);
@@ -966,7 +1015,7 @@
 .hp-ui-creative-sub {
   font-size: 14px;
   font-weight: 600;
-  color: var(--gold-bright);
+  color: var(--paper);
 }
 .hp-ui-phone-hero {
   height: 38%;
@@ -980,7 +1029,7 @@
 .hp-ui-phone-brand {
   font-size: 12px;
   font-weight: 600;
-  color: var(--gold-bright);
+  color: var(--paper);
 }
 .hp-ui-phone-title {
   font-family: var(--font-display), Georgia, serif;
@@ -1304,14 +1353,14 @@
 .cc-title {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 500;
-  font-size: clamp(28px, 3vw, 34px);
+  font-size: var(--t-h3);
   line-height: 1.05;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
 .cc-text {
   margin-top: 14px;
-  font-size: 16px;
+  font-size: var(--t-body);
   line-height: 1.55;
   color: var(--ink-2);
   text-wrap: pretty;
@@ -1375,11 +1424,11 @@
   min-width: 0;
 }
 .cc-toggle-label {
-  font-size: 15px;
+  font-size: var(--t-body);
   font-weight: 600;
 }
 .cc-toggle-desc {
-  font-size: 13.5px;
+  font-size: var(--t-small);
   line-height: 1.45;
   color: var(--ink-2);
 }
@@ -1427,12 +1476,12 @@
   width: 100%;
   min-height: 50px;
   padding: 0 18px;
-  font-size: 15.5px;
+  font-size: var(--t-body);
 }
 .cc-btn-line {
   background: var(--paper-white);
   color: var(--ink);
-  box-shadow: inset 0 0 0 1.5px var(--ink); /* taste-skill-ignore */
+  border: 1.5px solid var(--ink);
 }
 .cc-btn-line:hover {
   background: var(--paper);
@@ -1539,4 +1588,231 @@
 .site-footer[data-compact='true'] .site-footer-legal {
   margin-top: 0;
   padding-top: 48px;
+}
+
+/* ============================================================
+   Ruch marki: kropka (księga marki, rozdział „Ruch”).
+   Kropka przechodzi przez otwarte D i idzie po linii.
+   Tylko transform i opacity. Przy wyłączonym ruchu wszystko stoi.
+   ============================================================ */
+
+/* --- Intro przy pierwszym wejściu ---
+   Widoczne tylko, gdy skrypt w <head> ustawi html[data-intro='play']
+   (pierwsza wizyta w sesji, bez wejścia z reklamy, bez wyłączonego ruchu).
+   Bez JS go nie ma, a gdy JS padnie po starcie, panel i tak znika sam z siebie. */
+.site-intro {
+  display: none;
+}
+html[data-intro='play'] .site-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--deep);
+  color: var(--paper);
+  cursor: pointer;
+  animation: site-intro-lift 480ms cubic-bezier(0.65, 0, 0.35, 1) 700ms forwards;
+}
+html[data-intro='play'] .site-intro[data-skip] {
+  animation: site-intro-fade 180ms var(--ease-out) forwards;
+}
+.site-intro-mark {
+  width: clamp(72px, 8vw, 104px);
+  height: auto;
+  overflow: visible;
+}
+html[data-intro='play'] .site-intro .bm-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bm-exit 600ms var(--ease-soft) 80ms both;
+}
+@keyframes site-intro-lift {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+@keyframes site-intro-fade {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+/* Kropka zaczyna w środku D i wychodzi przez przerwę w łuku (oś 45°) */
+@keyframes bm-exit {
+  0% {
+    transform: translate(-163%, -163%) scale(0.45);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Okno cookies wchodzi dopiero po intro, nie pod nim */
+html[data-intro='play'] .cc-backdrop {
+  animation-delay: 1100ms;
+}
+html[data-intro='play'] .cc-dialog {
+  animation-delay: 1160ms;
+}
+
+/* --- Kropka ląduje nad „ż” w napisie ---
+   W nagłówku tylko po intro (ostatni takt), w stopce przy przewinięciu do niej. */
+@keyframes wm-land {
+  0% {
+    transform: translateY(-260%) scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(10%) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+html[data-intro='play'] .site-wordmark-svg .wm-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wm-land 640ms var(--ease-soft) 1020ms both;
+}
+.site-footer-name[data-anim='ready'] .wm-dot {
+  opacity: 0;
+}
+.site-footer-name[data-anim='in'] .wm-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wm-land 760ms var(--ease-soft) 120ms both;
+}
+
+/* --- Ładowanie: kropka w pętli wychodzi z D --- */
+.brand-loader {
+  display: inline-grid;
+  place-items: center;
+  color: var(--ink);
+}
+.brand-loader svg {
+  display: block;
+  width: 44px;
+  height: auto;
+  overflow: visible;
+}
+.brand-loader .bm-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bm-loop 1600ms var(--ease-soft) infinite;
+}
+@keyframes bm-loop {
+  0% {
+    transform: translate(-163%, -163%) scale(0.45);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  55%,
+  80% {
+    transform: none;
+    opacity: 1;
+  }
+  100% {
+    transform: translate(45%, 45%);
+    opacity: 0;
+  }
+}
+
+/* --- Przycisk w trakcie wysyłania: kropka pulsuje --- */
+.site-btn-ink[aria-busy='true']::before {
+  content: '';
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--green);
+}
+.site-btn[aria-busy='true']::before {
+  animation: dot-wait 900ms ease-in-out infinite;
+}
+@keyframes dot-wait {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.45;
+  }
+}
+
+/* --- Schemat współpracy: zamiast strzałek linia, po której idzie kropka ---
+   Kropka chowa się pod kółkiem etapu i wychodzi, gdy zapala się następny (6 s, jak hpw-light).
+   Pasek ::after ma dokładnie długość linii (od środka pierwszego do środka ostatniego kółka,
+   plus promień kropki z obu stron), a kropka jest jego tłem. Ruch to background-position,
+   więc nic nie wystaje poza stronę; maluje się tylko pasek 12 px wysokości. */
+.hpw-steps {
+  position: relative;
+}
+.hpw-steps .hpw-step + .hpw-step::before {
+  content: none;
+}
+.hpw-steps::before,
+.hpw-steps::after {
+  content: '';
+  position: absolute;
+  left: calc((100% - 16px) / 6 - 6px);
+  right: calc((100% - 16px) / 6 - 6px);
+}
+.hpw-steps::before {
+  top: 27px;
+  height: 2px;
+  margin-inline: 6px;
+  background: var(--line-strong);
+}
+.hpw-steps::after {
+  top: 22px;
+  height: 12px;
+  background: radial-gradient(circle closest-side, var(--green) 92%, transparent 100%) 0 0 / 12px 12px no-repeat;
+  animation: hpw-run 6s var(--ease-soft) infinite;
+}
+.hpw-steps .hpw-dot {
+  z-index: 1;
+}
+@keyframes hpw-run {
+  0%,
+  24% {
+    background-position: 0% 0;
+  }
+  33.3%,
+  57% {
+    background-position: 50% 0;
+  }
+  66.6%,
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-intro='play'] .site-intro {
+    display: none;
+  }
+  .brand-loader .bm-dot,
+  .site-btn[aria-busy='true']::before,
+  .site-footer-name[data-anim] .wm-dot,
+  html[data-intro='play'] .site-wordmark-svg .wm-dot {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .hpw-steps::after {
+    display: none;
+  }
 }

@@ -13,7 +13,7 @@
 .kt-panel-title {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(28px, 2.6vw, 38px);
+  font-size: var(--t-h3);
   line-height: 1.05;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -35,7 +35,7 @@
   gap: 8px;
 }
 .kt-field label {
-  font-size: 16px;
+  font-size: var(--t-small);
   font-weight: 600;
   color: var(--ink);
 }
@@ -53,7 +53,7 @@
   border: 1.5px solid transparent;
   background: #fff;
   font: inherit;
-  font-size: 16px;
+  font-size: var(--t-body);
   line-height: 1.5;
   color: var(--ink);
   transition: border-color 160ms var(--ease-out);
@@ -79,7 +79,7 @@
   border-color: #B4442C;
 }
 .kt-error {
-  font-size: 15px;
+  font-size: var(--t-small);
   color: #9E3A24;
 }
 
@@ -94,7 +94,7 @@
   cursor: progress;
 }
 .kt-legal {
-  font-size: 16px;
+  font-size: var(--t-small);
   line-height: 1.5;
   color: var(--ink-2);
   max-width: 30rem;
@@ -103,7 +103,7 @@
   display: none;
 }
 .kt-status {
-  font-size: 16px;
+  font-size: var(--t-body);
   color: #9E3A24;
 }
 .kt-spinner {
@@ -137,7 +137,7 @@
 }
 .kt-sent-title {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(28px, 2.6vw, 38px);
+  font-size: var(--t-h3);
   line-height: 1.05;
   color: var(--ink);
 }
@@ -173,7 +173,7 @@
 .kt-h1 {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(56px, 8vw, 128px);
+  font-size: var(--t-display);
   line-height: 0.94;
   letter-spacing: -0.04em;
   margin-left: -0.04em;
@@ -237,7 +237,7 @@
   align-items: center;
   min-height: 44px;
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(19px, 1.7vw, 26px);
+  font-size: var(--t-h3);
   line-height: 1.2;
   letter-spacing: -0.015em;
   white-space: nowrap;
@@ -255,7 +255,7 @@
   outline-color: var(--paper);
 }
 .kt-channel-note {
-  font-size: 15px;
+  font-size: var(--t-small);
   line-height: 1.45;
   color: rgba(246, 245, 241, 0.78);
 }

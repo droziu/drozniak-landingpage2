@@ -166,7 +166,7 @@ export default function ClientPanelPage({ params }: { params: Promise<{ slug?: s
               <span className="text-[#050714] font-bold text-sm">D</span>
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-[13px] font-semibold text-white tracking-tight truncate">Drozniak</div>
+              <div className="text-[13px] font-semibold text-white tracking-tight truncate">Drożniak</div>
               <div className="text-[10px] font-mono text-white/40 uppercase tracking-wider">Panel klienta</div>
             </div>
           </div>

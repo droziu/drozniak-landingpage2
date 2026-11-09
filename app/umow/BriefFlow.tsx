@@ -171,8 +171,7 @@ export function BriefFlow({ token, onSaved }: Props) {
       )}
 
       <div className="bf-nav">
-        <button type="button" className="site-btn site-btn-ink site-btn-small" onClick={next} disabled={sending}>
-          {sending && <span className="bk-spinner" aria-hidden="true" />}
+        <button type="button" className="site-btn site-btn-ink site-btn-small" onClick={next} disabled={sending} aria-busy={sending}>
           {last ? 'Wyślij odpowiedzi' : hasValue ? 'Dalej' : 'Pomiń'}
         </button>
         {index > 0 && (

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { DaySlots } from '@/lib/booking/slots';
 import type { PublicBooking } from '@/lib/booking/service';
 import { BriefFlow } from './BriefFlow';
+import { BrandLoader } from '../components/BrandLogo';
 import { SlotPicker, SlotPickerSkeleton, formatDayLong, formatTime } from './SlotPicker';
 
 type Mode = 'view' | 'reschedule' | 'confirm-move' | 'cancel';
@@ -116,7 +117,10 @@ export function ManageBooking({ token }: { token: string }) {
     return (
       <section className="bk-manage-box" aria-busy="true">
         <h1 className="bk-h1">Twoja rezerwacja</h1>
-        <p className="bk-lead">Wczytuję szczegóły…</p>
+        <div className="bk-loading">
+          <BrandLoader />
+          <p className="bk-lead">Wczytuję szczegóły…</p>
+        </div>
       </section>
     );
   }
@@ -245,9 +249,9 @@ export function ManageBooking({ token }: { token: string }) {
               type="button"
               className="site-btn site-btn-accent site-btn-small"
               disabled={busy}
+              aria-busy={busy}
               onClick={() => act({ action: 'reschedule', start }, 'Gotowe, rozmowa jest przełożona. Potwierdzenie wysłałem mailem.')}
             >
-              {busy && <span className="bk-spinner" aria-hidden="true" />}
               Przełóż rozmowę
             </button>
             <button type="button" className="bk-text-btn" onClick={() => setMode('reschedule')}>
@@ -276,8 +280,7 @@ export function ManageBooking({ token }: { token: string }) {
             <textarea id="bk-reason" name="reason" rows={3} autoComplete="off" placeholder="Na przykład: temat jest już nieaktualny…" />
           </div>
           <div className="bk-actions">
-            <button type="submit" className="site-btn site-btn-ink site-btn-small" disabled={busy}>
-              {busy && <span className="bk-spinner" aria-hidden="true" />}
+            <button type="submit" className="site-btn site-btn-ink site-btn-small" disabled={busy} aria-busy={busy}>
               Tak, odwołaj rozmowę
             </button>
             <button type="button" className="bk-text-btn" onClick={() => setMode('view')}>

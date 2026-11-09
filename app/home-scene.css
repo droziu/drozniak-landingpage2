@@ -75,8 +75,8 @@
   white-space: nowrap;
 }
 .sc-pill-gold {
-  background: var(--gold-bright);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
   font-weight: 600;
 }
 
@@ -111,8 +111,8 @@
   margin-top: 10px;
   padding: 0 18px;
   border-radius: 999px;
-  background: var(--gold-bright);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
@@ -195,7 +195,7 @@
   width: 18px;
   height: 18px;
   border-radius: 999px;
-  background: var(--gold-bright);
+  background: var(--green);
 }
 
 /* Słupki z rokiem: zimowe miesiące na złoto */
@@ -211,7 +211,7 @@
   background: var(--sc-strong, var(--line-strong));
 }
 .sc-bar[data-low] {
-  background: var(--gold-bright);
+  background: var(--green);
 }
 
 /* Łańcuch kroków automatyzacji */

@@ -11,7 +11,7 @@
 .hm-h3 {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: clamp(24px, 2vw, 30px);
+  font-size: var(--t-h3);
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--ink);
@@ -39,7 +39,7 @@
 .hmh-title {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
-  font-size: 11vw;
+  font-size: var(--t-display);
   line-height: 0.94;
   margin-left: -0.04em;
   letter-spacing: -0.04em;
@@ -89,7 +89,7 @@
 }
 .hmh-c-title {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(24px, 2vw, 30px);
+  font-size: var(--t-h3);
   line-height: 1.12;
   letter-spacing: -0.015em;
   color: var(--paper);
@@ -135,7 +135,7 @@
   transform: scale(1.1);
 }
 .hmh-step-label {
-  font-size: 15px;
+  font-size: var(--t-small);
   font-weight: 500;
   line-height: 1.2;
   color: rgba(246, 245, 241, 0.55);
@@ -160,19 +160,19 @@
 }
 .hmh-d-big {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(30px, 2.6vw, 40px);
+  font-size: var(--t-h3);
   line-height: 1.02;
   letter-spacing: -0.02em;
   color: var(--ink);
 }
 .hmh-d-small {
-  font-size: 15px;
+  font-size: var(--t-small);
   line-height: 1.4;
   color: var(--ink-2);
 }
 @media (min-width: 600px) {
   .hmh-title {
-    font-size: 10vw;
+    font-size: var(--t-display);
   }
   .hmh-b {
     aspect-ratio: 4 / 3;
@@ -180,9 +180,15 @@
 }
 @media (min-width: 960px) {
   .hmh-canvas {
+    /* wielki nagłówek ze skali, ale nie szerszy niż pole tekstu w tej kompozycji */
+    --hmh-title: min(var(--t-display), 5.6vw);
     position: relative;
     display: block;
-    height: clamp(600px, calc(100svh - 84px - 40px), 820px);
+    /* Pole z tekstem ma 54% wysokości płótna, ciemne pole zaczyna się na 56,8%.
+       Trzy linie nagłówka (2,76 × rozmiar) plus akapit i przycisk (ok. 220 px) muszą się
+       zmieścić nad ciemnym polem, więc na niskich ekranach płótno rośnie, zamiast wpychać
+       przycisk na ciemne pole. */
+    height: max(clamp(600px, calc(100svh - 84px - 40px), 820px), calc(var(--hmh-title) * 5.2 + 420px));
   }
   .hmh-a {
     position: absolute;
@@ -192,10 +198,12 @@
     width: 46%;
     height: 54%;
     padding: 8px 0 0;
-    justify-content: space-between;
+    /* nagłówek, akapit i przycisk razem u góry; wolne miejsce zostaje nad ciemnym polem */
+    justify-content: flex-start;
+    gap: clamp(24px, 3vw, 40px);
   }
   .hmh-title {
-    font-size: min(6.1vw, 100px);
+    font-size: var(--hmh-title);
     line-height: 0.92;
   }
   .hmh-copy {
@@ -310,7 +318,7 @@
 /* --- Na czym polega (układ w prowadzenie-sekcje.css, prefiks hmw) --- */
 .hm-statement {
   font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(24px, 2.3vw, 34px);
+  font-size: var(--t-h3);
   line-height: 1.25;
   letter-spacing: -0.015em;
   color: var(--ink);
@@ -325,7 +333,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  font-size: 18px;
+  font-size: var(--t-body);
   font-weight: 500;
   line-height: 1.35;
   color: var(--ink);
@@ -496,7 +504,7 @@
   border-radius: 999px;
   background: var(--paper-tint);
   color: var(--ink);
-  font-size: 16px;
+  font-size: var(--t-small);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out), transform 160ms var(--ease-out);
@@ -597,7 +605,7 @@
 .hm-task-text {
   flex: 1;
   min-width: 0;
-  font-size: 16px;
+  font-size: var(--t-body);
   font-weight: 500;
   line-height: 1.3;
   color: var(--ink);
@@ -623,7 +631,7 @@
 /* --- Rozliczenie (układ w prowadzenie-sekcje.css, prefiks hmr) --- */
 .hm-terms-text {
   max-width: 38rem;
-  font-size: clamp(18px, 1.5vw, 20px);
+  font-size: var(--t-body);
   line-height: 1.6;
   color: var(--ink);
 }

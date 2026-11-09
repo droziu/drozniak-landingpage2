@@ -84,7 +84,7 @@ export const AdminShell: React.FC<AdminShellProps> = ({ children, title, actions
             <span className="text-[#050714] font-bold text-[13px]">D</span>
           </div>
           <div className="min-w-0">
-            <div className="text-[13px] font-semibold text-white tracking-tight">Drozniak</div>
+            <div className="text-[13px] font-semibold text-white tracking-tight">Drożniak</div>
             <div className="text-[9px] font-mono text-white/40 uppercase tracking-[0.18em]">Admin</div>
           </div>
         </Link>

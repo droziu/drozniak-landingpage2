@@ -30,13 +30,27 @@ export default function UmowPage() {
 
       <section className="bk-aside" aria-labelledby="bk-how">
         <h2 id="bk-how" className="bk-h2">
-          Jak wygląda rozmowa
+          Rozmowa i oferta
         </h2>
-        <ul className="bk-list">
-          <li>Opowiadasz, czym zajmuje się firma i skąd dziś przychodzą klienci.</li>
-          <li>Mówię, od czego bym zaczął i ile mniej więcej by to kosztowało.</li>
-          <li>Niczego nie musisz przygotowywać, a rozmowa do niczego nie zobowiązuje.</li>
-        </ul>
+        {/* Kroki na linii z kropką (księga marki): zielona kropka to krok, który się teraz umawia */}
+        <ol className="bk-steps">
+          <li>
+            <p className="bk-steps-name">Rozmowa, 20&nbsp;minut</p>
+            <p className="bk-steps-text">
+              Opowiadasz o&nbsp;firmie i&nbsp;o&nbsp;tym, skąd dziś przychodzą klienci. Nie musisz niczego przygotowywać.
+            </p>
+          </li>
+          <li>
+            <p className="bk-steps-name">Oferta</p>
+            <p className="bk-steps-text">
+              Po rozmowie przygotowuję ofertę i&nbsp;ją przedstawiam: co zrobię, w&nbsp;jakiej kolejności i&nbsp;ile to kosztuje.
+            </p>
+          </li>
+          <li>
+            <p className="bk-steps-name">Decyzja</p>
+            <p className="bk-steps-text">Rozmowa i&nbsp;oferta do niczego nie zobowiązują.</p>
+          </li>
+        </ol>
 
         <div className="bk-host">
           <img src="/images/home/portret-omnie.jpg" alt="" width={900} height={900} className="bk-host-photo" />
