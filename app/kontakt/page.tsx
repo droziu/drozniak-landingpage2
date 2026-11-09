@@ -64,7 +64,7 @@ export default function KontaktPage() {
                 <a href="tel:+48792491196" className="kt-channel-main">
                   +48 792 491 196
                 </a>
-                <span className="kt-channel-note">Poniedziałek-piątek, 10:00-16:00</span>
+                <span className="kt-channel-note">Jeśli nie odbiorę, oddzwonię</span>
               </li>
             </ul>
           </div>
