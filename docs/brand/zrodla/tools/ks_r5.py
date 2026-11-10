@@ -195,7 +195,7 @@ def build():
             ["Postój", f"{kk(HP['hold_ms'] / 1000)} s", f"Na ostatnim punkcie {kk(HP['last_hold_ms'] / 1000)} s"],
             ["Powrót na początek", f"{HP['pop_ms']} ms", "Kropka znika skalą i pojawia się skalą na pierwszym punkcie"],
         ], cls="tb xs", widths=["27%", "30%", "43%"])
-        + notes([("Kierunek", "Góra to zawsze góra ekranu. W schemacie pionowym kropka lekko podskakuje i spada na niższy punkt."),
+        + notes([("Kierunek", "Góra to zawsze góra ekranu. Prosto w dół kropka nie podskakuje, tylko od razu spada na niższy punkt, jak z łuku, i ląduje z tym samym ugięciem. Lot trwa wtedy krócej."),
                  ("Gdzie", "Schematy procesów, osie czasu, ilustracje interfejsu. Podpis kroku pogrubia się w chwili lądowania. Na okręgu kropka dalej obiega okrąg.")]),
         f'''<div class="figc" style="display:grid;grid-template-columns:minmax(0,1fr) 190px;grid-template-rows:minmax(0,1fr) auto;gap:0 24px;height:100%">
 <div class="panel white pad-s">{rz.hop_figure("row", n=3)}</div><div class="panel white pad-s">{rz.hop_figure("col", n=3, gap=200)}</div>

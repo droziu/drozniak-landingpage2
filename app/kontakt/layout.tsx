@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     title: 'Kontakt | Stanisław Drożniak',
     description: DESCRIPTION,
     url: 'https://drozniak.pl/kontakt',
+    images: [{ url: 'https://drozniak.pl/images/brand/drozniak-udostepnianie.jpg', width: 1200, height: 630, alt: 'Stanisław Drożniak' }],
   },
   alternates: {
     canonical: 'https://drozniak.pl/kontakt',

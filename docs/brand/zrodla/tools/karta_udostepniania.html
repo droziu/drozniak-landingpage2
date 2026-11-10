@@ -1,0 +1,37 @@
+<!doctype html>
+<!--
+  Karta do udostępniania linku (og:image), 1200 × 630 px. Głęboka zieleń, napis w negatywie, dopisek marki
+  i adres strony, po prawej prawdziwe zdjęcie. Gotowy plik: public/images/brand/drozniak-udostepnianie.jpg.
+  Budowanie (z folderu tools):
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars \
+    --window-size=1200,630 --screenshot=karta.png karta_udostepniania.html && sips -s format jpeg -s formatOptions 90 karta.png --out ../../../../public/images/brand/drozniak-udostepnianie.jpg
+-->
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Drożniak, karta do udostępniania</title>
+<style>
+  @font-face { font-family: 'Brygada 1918'; src: url('../fonts/Brygada1918[wght].ttf') format('truetype'); font-weight: 400 700; }
+  @font-face { font-family: 'Schibsted Grotesk'; src: url('../fonts/SchibstedGrotesk[wght].ttf') format('truetype'); font-weight: 400 900; }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0A3D27; }
+  .karta { position: relative; width: 1200px; height: 630px; display: grid; grid-template-columns: 1fr 440px; }
+  .tekst { display: flex; flex-direction: column; justify-content: space-between; padding: 64px 0 60px 64px; }
+  .napis { width: 230px; height: auto; display: block; }
+  h1 { margin: 0; max-width: 600px; font: 600 60px/1.08 'Brygada 1918', Georgia, serif; color: #F6F5F1; letter-spacing: -0.01em; }
+  .stopka { display: flex; flex-direction: column; gap: 6px; font: 500 26px/1.3 'Schibsted Grotesk', Arial, sans-serif; color: #B8CEC0; }
+  .stopka b { font-weight: 600; color: #F6F5F1; }
+  .zdjecie { position: relative; overflow: hidden; }
+  .zdjecie img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
+</style>
+</head>
+<body>
+<div class="karta">
+  <div class="tekst">
+    <img class="napis" src="../../../../public/images/brand/drozniak-napis-negatyw.svg" alt="Drożniak">
+    <h1>Marketing i&nbsp;pozyskiwanie klientów dla&nbsp;firm</h1>
+    <div class="stopka"><b>Stanisław Drożniak</b><span>drozniak.pl</span></div>
+  </div>
+  <div class="zdjecie"><img src="../../../../public/images/Drozniak_Zdjecie_Suit_2.webp" alt=""></div>
+</div>
+</body>
+</html>

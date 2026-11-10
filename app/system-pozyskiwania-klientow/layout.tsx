@@ -19,13 +19,13 @@ export const metadata: Metadata = {
     title: `${TITLE} | Stanisław Drożniak`,
     description: DESCRIPTION,
     url: URL,
-    images: [{ url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp', width: 1200, height: 630, alt: 'Stanisław Drożniak' }],
+    images: [{ url: 'https://drozniak.pl/images/brand/drozniak-udostepnianie.jpg', width: 1200, height: 630, alt: 'Stanisław Drożniak' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${TITLE} | Stanisław Drożniak`,
     description: DESCRIPTION,
-    images: ['https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'],
+    images: ['https://drozniak.pl/images/brand/drozniak-udostepnianie.jpg'],
   },
   alternates: { canonical: URL },
 };

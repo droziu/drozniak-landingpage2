@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { supabaseServer } from '@/lib/supabase-server';
+import { brandHtml, sentenceCase } from './brandHtml';
 // ContentBlock type definition (copied from hooks/useBlogPost.ts to avoid importing Vite-specific code)
 export interface ContentBlock {
   type: 'text' | 'image' | 'quote' | 'code' | 'video' | 'cta' | 'custom' | 'highlight' | 'separator' | 'heading' | 'numbered-section';
@@ -110,7 +111,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
           } ${
             hasH3 ? 'prose-h3:text-[length:var(--t-body)] prose-h3:mb-5 prose-h3:mt-12 prose-h3:md:mt-14 prose-h3:font-semibold prose-h3:tracking-[-0.02em] prose-h3:text-[#161511] prose-h3:leading-[1.2] prose-h3:py-2' : ''
           } prose-p:leading-[1.55] prose-p:text-[#161511] prose-p:text-[length:var(--t-body)] prose-p:mb-6 prose-ul:my-8 prose-li:my-2 prose-li:text-[#161511] prose-li:leading-[1.55] prose-strong:text-[#161511] prose-strong:font-semibold prose-a:text-[#161511] prose-a:underline prose-a:decoration-[#161511]/40 prose-a:decoration-2 prose-a:underline-offset-2 prose-a:hover:text-[#161511] prose-a:hover:decoration-[#161511] prose-a:transition-colors`}
-          dangerouslySetInnerHTML={{ __html: textContent }}
+          dangerouslySetInnerHTML={{ __html: brandHtml(textContent) }}
         />
       );
 
@@ -167,7 +168,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
         <div id={block.id} className="mt-16 md:mt-20 mb-6 scroll-mt-28">
           <h2
             className="pub-serif text-[length:var(--t-h3)] font-semibold text-[#161511] leading-[1.2] tracking-[-0.01em] !m-0 !p-0"
-            dangerouslySetInnerHTML={{ __html: block.data.text || '' }}
+            dangerouslySetInnerHTML={{ __html: brandHtml(block.data.text || '') }}
           />
         </div>
       );
@@ -187,7 +188,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
           <div className="pt-8 md:pt-10 pb-8 md:pb-10">
             {block.data.title && (
               <h3 className="pub-serif text-[length:var(--t-h3)] font-semibold text-[#161511] tracking-[-0.01em] leading-[1.2] !m-0 !mb-6 md:!mb-8 !p-0">
-                {block.data.title}
+                {sentenceCase(block.data.title)}
               </h3>
             )}
             {block.data.subtitle && (
@@ -196,7 +197,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
             {block.data.text && (
               <div
                 className="prose prose-lg text-[length:var(--t-body)] max-w-none prose-ul:my-8 prose-ul:list-none prose-ul:pl-0 prose-li:my-5 prose-li:pl-0 prose-p:text-[#161511] prose-p:text-[length:var(--t-body)] prose-p:leading-[1.7] prose-p:mb-6 prose-strong:text-[#161511] prose-strong:font-extrabold"
-                dangerouslySetInnerHTML={{ __html: processedText }}
+                dangerouslySetInnerHTML={{ __html: brandHtml(processedText) }}
               />
             )}
           </div>

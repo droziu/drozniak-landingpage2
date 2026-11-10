@@ -200,7 +200,7 @@ def short_frame(u, ink=T.PAPER, dot=T.GREEN_L):
 # ------------------------------------------------------------------ przeskok kropki między punktami
 # Kropka w schematach nie przesuwa się po linii, tylko przeskakuje z punktu na punkt: wybija się w górę, leci łukiem
 # jak rzucona (stała prędkość w poziomie, w pionie rzut), ląduje, ugina się raz poniżej i wraca. Góra to zawsze góra
-# ekranu. Te same liczby są na stronie w app/components/brand/dotHop.ts.
+# ekranu. Prosto w dół kropka nie podskakuje, tylko od razu spada. Te same liczby są na stronie w app/components/brand/dotHop.ts.
 HOP = dict(base_ms=380, ms_per_px=0.9, min_ms=440, max_ms=680,     # czas lotu
            rise=0.16, min_rise=0.7, max_rise=3,                     # wysokość łuku: część drogi w poziomie, w średnicach kropki
            dip=0.12, min_dip=0.2, max_dip=0.45,                     # ugięcie: część wysokości opadania, w średnicach kropki
@@ -209,16 +209,19 @@ HOP = dict(base_ms=380, ms_per_px=0.9, min_ms=440, max_ms=680,     # czas lotu
 def hop(dx, dy, size, step=1000 / 60):
     """Przeskok o (dx, dy) pikseli dla kropki o średnicy size: (klatki [(ms, x, y)], czas lotu, czas całości, ugięcie)."""
     cl = lambda v, lo, hi: min(hi, max(lo, v))
-    dist = math.hypot(dx, dy); flight = cl(HOP["base_ms"] + HOP["ms_per_px"] * dist, HOP["min_ms"], HOP["max_ms"])
+    dist = math.hypot(dx, dy); arc = cl(HOP["base_ms"] + HOP["ms_per_px"] * dist, HOP["min_ms"], HOP["max_ms"])
     rise = cl(HOP["rise"] * abs(dx), HOP["min_rise"] * size, HOP["max_rise"] * size)
     top = rise + max(0, -dy); a = 2 * top + 2 * math.sqrt(top * (top + dy)); fall = top + dy
+    # Prosto w dół kropka nie podskakuje (stałaby na górze łuku jak zacięta): lot zaczyna się tam, gdzie łuk mija
+    # wysokość startu (u0), więc kropka od razu jedzie w dół i ląduje z tą samą prędkością, a lot jest krótszy.
+    drop = dy > 0 and abs(dx) < size; u0 = a / (dy + a) if drop else 0.0; flight = arc * (1 - u0)
     dip = cl(HOP["dip"] * fall, HOP["min_dip"] * size, HOP["max_dip"] * size)
     decay = DAMPING * OMEGA / math.sqrt(1 - DAMPING ** 2); peak = math.atan(OMEGA / decay) / OMEGA
     amp = dip / (math.exp(-decay * peak) * math.sin(OMEGA * peak))
     total = flight + HOP["settle_ms"]; frames = []; t = 0.0
     while t < total:
         if t <= flight:
-            u = t / flight; frames.append((t, dx * u, -a * u + (dy + a) * u * u))
+            p = t / flight; u = u0 + (1 - u0) * p; frames.append((t, dx * p, -a * u + (dy + a) * u * u))
         else:
             q = (t - flight) / 1000; frames.append((t, dx, dy + amp * math.exp(-decay * q) * math.sin(OMEGA * q)))
         t += step

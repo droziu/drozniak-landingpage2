@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Blog o marketingu dla małych firm i freelancerów',
-  description: 'Blog o marketingu dla małych firm i freelancerów. Praktyczne porady o pozyskiwaniu klientów, stronach WWW, reklamach, SEO i AI w marketingu.',
-  keywords: ['blog marketing', 'marketing małych firm', 'pozyskiwanie klientów', 'strony www', 'reklamy', 'SEO', 'AI w marketingu'],
+  title: 'Blog o marketingu i pozyskiwaniu klientów',
+  description: 'Praktyczne porady dla firm: skąd brać klientów, jak prowadzić reklamy, jak przygotować ofertę i obsługiwać zapytania, jak mierzyć sprzedaż.',
+  keywords: ['blog o marketingu', 'marketing dla firm', 'pozyskiwanie klientów', 'reklamy w internecie', 'obsługa zapytań', 'automatyzacje marketingu'],
   openGraph: {
-    title: 'Blog o marketingu dla małych firm i freelancerów',
-    description: 'Praktyczne porady o marketingu dla małych firm: pozyskiwanie klientów, strony WWW, reklamy, SEO i AI.',
+    title: 'Blog o marketingu i pozyskiwaniu klientów',
+    description: 'Praktyczne porady dla firm: skąd brać klientów, jak prowadzić reklamy, jak przygotować ofertę i obsługiwać zapytania, jak mierzyć sprzedaż.',
     url: 'https://drozniak.pl/blog',
     images: [
       {
-        url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp',
+        url: 'https://drozniak.pl/images/brand/drozniak-udostepnianie.jpg',
         width: 1200,
         height: 630,
         alt: 'Stanisław Drożniak',
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Blog o marketingu dla małych firm i freelancerów',
-    description: 'Praktyczne porady o marketingu dla małych firm: pozyskiwanie klientów, strony WWW, reklamy, SEO i AI.',
-    images: ['https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'],
+    title: 'Blog o marketingu i pozyskiwaniu klientów',
+    description: 'Praktyczne porady dla firm: skąd brać klientów, jak prowadzić reklamy, jak przygotować ofertę i obsługiwać zapytania, jak mierzyć sprzedaż.',
+    images: ['https://drozniak.pl/images/brand/drozniak-udostepnianie.jpg'],
   },
   alternates: {
     canonical: 'https://drozniak.pl/blog',

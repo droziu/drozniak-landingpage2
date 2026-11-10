@@ -739,7 +739,8 @@ button.bk-day[data-selected] {
   stroke-linejoin: round;
 }
 .bk-check-ring {
-  stroke: var(--gold);
+  /* Stan „sukces” z księgi; zieleń sygnałowa jest tylko dla kropki */
+  stroke: var(--sukces, #06784A);
   stroke-width: 3;
   stroke-dasharray: 164;
   stroke-dashoffset: 164;

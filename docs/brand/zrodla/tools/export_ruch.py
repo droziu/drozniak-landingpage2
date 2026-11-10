@@ -121,13 +121,14 @@ data = {
               "sprezyna": {"tlumienie": rz.DAMPING, "czestosc_rad_s": rz.OMEGA}},
     "krzywe_css": {"kropka": rz.linear(), "kreski": rz.linear(clamp=True), "czas_ms": rz.ROUTE_MS, "opoznienie_ms": t0,
                    "ladowanie": T.EASE_LAND, "ladowanie_czas_ms": T.LAND_MS},
-    "przeskok": {"opis": "Kropka w schematach przeskakuje z punktu na punkt: lot łukiem, lądowanie, jedno ugięcie. Góra to góra ekranu.",
+    "przeskok": {"opis": "Kropka w schematach przeskakuje z punktu na punkt: lot łukiem, lądowanie, jedno ugięcie. Góra to góra ekranu. Prosto w dół bez podskoku: od razu spada, dalszą częścią łuku.",
                  "czas_lotu_ms": {"stala": rz.HOP["base_ms"], "na_piksel": rz.HOP["ms_per_px"], "min": rz.HOP["min_ms"], "max": rz.HOP["max_ms"]},
                  "wysokosc_luku": {"czesc_drogi_w_poziomie": rz.HOP["rise"], "min_srednic": rz.HOP["min_rise"], "max_srednic": rz.HOP["max_rise"]},
                  "ugiecie": {"czesc_opadania": rz.HOP["dip"], "min_srednic": rz.HOP["min_dip"], "max_srednic": rz.HOP["max_dip"],
                              "sprezyna": {"tlumienie": rz.DAMPING, "czestosc_rad_s": rz.OMEGA}, "czas_ms": rz.HOP["settle_ms"]},
                  "postoj_ms": rz.HOP["hold_ms"], "postoj_na_ostatnim_ms": rz.HOP["last_hold_ms"], "pojawienie_skala_ms": rz.HOP["pop_ms"],
-                 "wzor": "u = t / czas_lotu; x = dx*u; y = -a*u + (dy + a)*u*u; a = 2*top + 2*sqrt(top*(top + dy)); top = luk + max(0, -dy)",
+                 "wzor": "p = t / czas_lotu; u = u0 + (1 - u0)*p; x = dx*p; y = -a*u + (dy + a)*u*u; a = 2*top + 2*sqrt(top*(top + dy)); top = luk + max(0, -dy); u0 = a/(dy + a) gdy dy > 0 i |dx| < średnica (prosto w dół), inaczej 0; czas_lotu = czas łuku * (1 - u0)",
+                 "przyklad_spadek_56px_kropka_10px": [[round(t), round(x, 1), round(y, 1)] for t, x, y in rz.hop(0, 56, 10)[0]],
                  "przyklad_240px_kropka_24px": [[round(t), round(x, 1), round(y, 1)] for t, x, y in rz.hop(240, 0, 24)[0]]},
     "fps": FPS,
     "klatki_opis": ["ms", "x kropki", "y kropki", "skala kropki", "rysowanie 0-1"],
@@ -178,13 +179,15 @@ demo = f"""<!doctype html>
     return out;
   }}
   function hop(dx, dy, size) {{
-    var dist = Math.hypot(dx, dy), flight = clamp(HOP.base_ms + HOP.ms_per_px * dist, HOP.min_ms, HOP.max_ms);
+    var dist = Math.hypot(dx, dy), arc = clamp(HOP.base_ms + HOP.ms_per_px * dist, HOP.min_ms, HOP.max_ms);
     var rise = clamp(HOP.rise * Math.abs(dx), HOP.min_rise * size, HOP.max_rise * size), top = rise + Math.max(0, -dy);
     var a = 2 * top + 2 * Math.sqrt(top * (top + dy)), dip = clamp(HOP.dip * (top + dy), HOP.min_dip * size, HOP.max_dip * size);
+    // prosto w dół bez podskoku: lot od chwili, w której łuk mija wysokość startu
+    var u0 = dy > 0 && Math.abs(dx) < size ? a / (dy + a) : 0, flight = arc * (1 - u0);
     var decay = DAMPING * OMEGA / Math.sqrt(1 - DAMPING * DAMPING), peak = Math.atan(OMEGA / decay) / OMEGA;
     var amp = dip / (Math.exp(-decay * peak) * Math.sin(OMEGA * peak)), total = flight + HOP.settle_ms, frames = [];
     for (var t = 0; t < total; t += 1000 / 60) {{
-      if (t <= flight) {{ var u = t / flight; frames.push([t / total, dx * u, -a * u + (dy + a) * u * u]); }}
+      if (t <= flight) {{ var p = t / flight, u = u0 + (1 - u0) * p; frames.push([t / total, dx * p, -a * u + (dy + a) * u * u]); }}
       else {{ var s = (t - flight) / 1000; frames.push([t / total, dx, dy + amp * Math.exp(-decay * s) * Math.sin(OMEGA * s)]); }}
     }}
     frames.push([1, dx, dy]);

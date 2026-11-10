@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AreaIcon, type IconName } from '../AreaIcon';
 import { useInView, useReducedMotion } from './useMotion';
 import { playHop } from './dotHop';
@@ -38,7 +38,9 @@ export const UiRows: React.FC<{ rows: UiRow[]; current?: number; className?: str
   const prevDot = useRef(dot);
 
   // Przeskok kropki na następny wiersz. Położenie końcowe daje CSS (--i), animacja tylko je poprzedza.
-  useEffect(() => {
+  // Efekt układu, nie zwykły: zwykły rusza po odmalowaniu i wtedy kropka mignęłaby na dolnym wierszu,
+  // zanim zacznie skok z górnego.
+  useLayoutEffect(() => {
     const from = prevDot.current;
     prevDot.current = dot;
     const el = dotRef.current;

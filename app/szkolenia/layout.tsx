@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: 'https://drozniak.pl/szkolenia',
     images: [
       {
-        url: 'https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp',
+        url: 'https://drozniak.pl/images/brand/drozniak-udostepnianie.jpg',
         width: 1200,
         height: 630,
         alt: 'Stanisław Drożniak',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${TITLE} | Stanisław Drożniak`,
     description: DESCRIPTION,
-    images: ['https://drozniak.pl/images/Drozniak_Zdjecie_Suit_2.webp'],
+    images: ['https://drozniak.pl/images/brand/drozniak-udostepnianie.jpg'],
   },
   alternates: {
     canonical: 'https://drozniak.pl/szkolenia',

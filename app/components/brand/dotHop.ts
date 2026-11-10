@@ -3,8 +3,8 @@
  *
  * Kropka nie przesuwa się po linii, tylko przeskakuje z punktu na punkt: wybija się w górę, leci łukiem
  * jak rzucona (stała prędkość w poziomie, w pionie rzut), ląduje na następnym punkcie, ugina się raz
- * poniżej i wraca. Góra to zawsze góra ekranu, więc w pionowym schemacie kropka lekko podskakuje
- * i spada na niższy punkt.
+ * poniżej i wraca. Góra to zawsze góra ekranu. Prosto w dół kropka nie podskakuje, tylko od razu spada
+ * na niższy punkt (dalsza część tego samego łuku) i ląduje z tym samym ugięciem.
  *
  * Te same liczby są w docs/brand/zrodla/tools/ruch_znaku.py (rysunki w księdze). Zmiana tutaj wymaga
  * tej samej zmiany tam.
@@ -46,12 +46,18 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
 /** Przeskok o (dx, dy) pikseli dla kropki o średnicy size. */
 export function hop(dx: number, dy: number, size: number): Hop {
   const dist = Math.hypot(dx, dy);
-  const flightMs = clamp(HOP.baseMs + HOP.msPerPx * dist, HOP.minMs, HOP.maxMs);
+  const arcMs = clamp(HOP.baseMs + HOP.msPerPx * dist, HOP.minMs, HOP.maxMs);
   const rise = clamp(HOP.rise * Math.abs(dx), HOP.minRise * size, HOP.maxRise * size);
   // Rzut: y(u) = −a·u + (dy + a)·u². Najwyższy punkt leży `rise` nad wyższym z punktów.
   const top = rise + Math.max(0, -dy);
   const a = 2 * top + 2 * Math.sqrt(top * (top + dy));
   const fall = top + dy;
+  // Prosto w dół kropka nie podskakuje: bez ruchu w bok podskok wygląda jak zacięcie, bo kropka staje
+  // na górze łuku. Lot zaczyna się od chwili, w której łuk mija wysokość startu (u0): kropka od razu
+  // jedzie w dół i ląduje z tą samą prędkością co z łuku, a lot jest krótszy.
+  const drop = dy > 0 && Math.abs(dx) < size;
+  const u0 = drop ? a / (dy + a) : 0;
+  const flightMs = arcMs * (1 - u0);
   const dip = clamp(HOP.dip * fall, HOP.minDip * size, HOP.maxDip * size);
   const decay = (HOP.damping * HOP.omega) / Math.sqrt(1 - HOP.damping ** 2);
   const peakAt = Math.atan(HOP.omega / decay) / HOP.omega;
@@ -62,8 +68,9 @@ export function hop(dx: number, dy: number, size: number): Hop {
   const step = 1000 / 60;
   for (let t = 0; t < totalMs; t += step) {
     if (t <= flightMs) {
-      const u = t / flightMs;
-      frames.push({ t: t / totalMs, x: dx * u, y: -a * u + (dy + a) * u * u });
+      const p = t / flightMs;
+      const u = u0 + (1 - u0) * p;
+      frames.push({ t: t / totalMs, x: dx * p, y: -a * u + (dy + a) * u * u });
     } else {
       const s = (t - flightMs) / 1000;
       frames.push({ t: t / totalMs, x: dx, y: dy + amp * Math.exp(-decay * s) * Math.sin(HOP.omega * s) });

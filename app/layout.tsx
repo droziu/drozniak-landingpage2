@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     description: 'Marketing i pozyskiwanie klientów dla firm: reklamy, strona, obsługa zapytań, mailing i automatyzacje planowane razem.',
     images: [
       {
-        url: `${BASE_URL}/images/Drozniak_Zdjecie_Suit_2.webp`,
+        url: `${BASE_URL}/images/brand/drozniak-udostepnianie.jpg`,
         width: 1200,
         height: 630,
         alt: 'Stanisław Drożniak',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Stanisław Drożniak | Marketing i pozyskiwanie klientów',
     description: 'Marketing i pozyskiwanie klientów dla firm: reklamy, strona, obsługa zapytań, mailing i automatyzacje planowane razem.',
-    images: [`${BASE_URL}/images/Drozniak_Zdjecie_Suit_2.webp`],
+    images: [`${BASE_URL}/images/brand/drozniak-udostepnianie.jpg`],
   },
   robots: {
     index: true,
@@ -73,12 +73,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
-      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico?v=2', sizes: '48x48', type: 'image/x-icon' },
+      { url: '/favicon.svg?v=2', type: 'image/svg+xml' },
     ],
-    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+    apple: [{ url: '/apple-touch-icon.png?v=2', sizes: '180x180', type: 'image/png' }],
   },
-  manifest: '/site.webmanifest',
+  manifest: '/site.webmanifest?v=2',
 };
 
 const globalSchemas = {

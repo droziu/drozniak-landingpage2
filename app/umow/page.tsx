@@ -11,7 +11,12 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
-  openGraph: { title: TITLE, description: DESCRIPTION, url: 'https://drozniak.pl/umow' },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: 'https://drozniak.pl/umow',
+    images: [{ url: 'https://drozniak.pl/images/brand/drozniak-udostepnianie.jpg', width: 1200, height: 630, alt: 'Stanisław Drożniak' }],
+  },
   alternates: { canonical: 'https://drozniak.pl/umow' },
 };
 
