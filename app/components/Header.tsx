@@ -104,7 +104,7 @@ export const Header: React.FC = () => {
                 {l.label}
               </Link>
             ))}
-            <Link href={BOOKING_HREF} className="site-btn site-btn-ink site-btn-small">
+            <Link href={BOOKING_HREF} className="site-btn site-btn-accent site-btn-small">
               Umów rozmowę
             </Link>
           </nav>

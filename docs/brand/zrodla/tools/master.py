@@ -1,17 +1,39 @@
-"""Final master geometry for the Drożniak marks."""
+"""Geometria logo Drożniak: napis, znak (D z kropką nad literą) i poprzedni znak z wersji 1.0."""
 import sys, os, math
 sys.path.insert(0, os.path.dirname(__file__))
-from brandlib import wordmark, bbox_of
+from brandlib import wordmark, bbox_of, load, glyph_d, glyph_bounds
 S = os.environ.get("S", ""); F = f"{S}/fonts"; BRY = f"{F}/Brygada1918[wght].ttf"
 
-def symbol(wv=34, wh=32, L=44, T=40, B=216, cx=130, dot_r=22, push=30, gap=10, ang=45, delta_deg=22.5):
+# Proporcje kropki wzięte z napisu: średnica K i odstęp od litery równy 0,457 K.
+GAP_K = 0.457
+
+def symbol(wght=600, k=0.32, cap=176, dx=0.012):
+    """Znak: wersalik D z Brygady 1918 i okrągła kropka nad literą.
+    k = średnica kropki względem wysokości litery, dx = przesunięcie kropki w prawo względem szerokości litery."""
+    tt, _ = load(BRY, wght)
+    s = cap / tt['OS/2'].sCapHeight
+    b = glyph_bounds(tt, 'D')
+    w = (b[2] - b[0]) * s
+    K = k * cap; r = K / 2; gap = GAP_K * K
+    top = K + gap                      # górna krawędź litery
+    base = top + cap                   # linia pisma
+    d = glyph_d(tt, 'D', s, -b[0] * s, base)
+    cx = w / 2 + dx * w; cy = r
+    motion = f"M{-1.6*w:.2f} {cy:.2f}H{cx:.2f}"   # kropka wjeżdża po linii z lewej i staje nad literą
+    return dict(d=d, dot=(round(cx, 2), round(cy, 2), round(r, 2)), bb=(0, 0, round(w, 2), round(base, 2)), motion=motion,
+                params=dict(cap=cap, w=w, K=K, gap=gap, top=top, base=base, wght=wght, k=k, s=s))
+
+SMALL = dict(wght=700, k=0.40)
+
+def symbol_v1(wv=34, wh=32, L=44, T=40, B=216, cx=130, dot_r=22, push=30, gap=10, ang=45, delta_deg=22.5):
+    """Znak z wersji 1.0 (bezszeryfowe D z kropką u dołu po prawej). Zostaje tylko do porównań."""
     R = (B - T) / 2; cy = (T + B) / 2
     rx, ry = R - wv, R - wh
     Rc = R - (wv + wh) / 4
     a = math.radians(ang)
     rd = Rc + push
     dcx, dcy = cx + rd * math.cos(a), cy + rd * math.sin(a)
-    delta = math.radians(delta_deg) if delta_deg else max(math.asin(min(1, (dot_r + gap) / rd)), (dot_r + gap) / R)
+    delta = math.radians(delta_deg)
     a1, a2 = a - delta, a + delta
     def ell(t):
         r = 1 / math.sqrt((math.cos(t) / rx) ** 2 + (math.sin(t) / ry) ** 2)
@@ -21,14 +43,8 @@ def symbol(wv=34, wh=32, L=44, T=40, B=216, cx=130, dot_r=22, push=30, gap=10, a
     f = lambda p: f"{p[0]:.2f} {p[1]:.2f}"
     d = (f"M{L} {T}H{cx}A{R:g} {R:g} 0 0 1 {f(o1)}L{f(i1)}A{rx:g} {ry:g} 0 0 0 {cx} {T+wh}"
          f"H{L+wv}V{B-wh}H{cx}A{rx:g} {ry:g} 0 0 0 {f(i2)}L{f(o2)}A{R:g} {R:g} 0 0 1 {cx} {B}H{L}Z")
-    # centre-line route for animation: stem bottom -> up -> top bar -> arc -> out through the gap to the dot
-    c45 = (cx + Rc * math.cos(a), cy + Rc * math.sin(a))
-    motion = f"M{L+wv/2:g} {B-wh/2:g}V{T+wh/2:g}H{cx}A{Rc:g} {Rc:g} 0 0 1 {f(c45)}L{dcx:.2f} {dcy:.2f}"
     bb = (L, T, max(cx + R, dcx + dot_r), max(B, dcy + dot_r))
-    return dict(d=d, dot=(round(dcx, 2), round(dcy, 2), dot_r), bb=bb, motion=motion,
-                params=dict(wv=wv, wh=wh, R=R, rx=rx, ry=ry, cx=cx, cy=cy, L=L, T=T, B=B, dot_r=dot_r, gap=gap, delta=math.degrees(delta), a1=math.degrees(a1), a2=math.degrees(a2), rd=rd))
-
-SMALL = dict(wv=46, wh=44, dot_r=29, push=26, gap=15, delta_deg=30)
+    return dict(d=d, dot=(round(dcx, 2), round(dcy, 2), dot_r), bb=bb)
 
 def word(cap=100):
     m = wordmark(BRY, 600, "Drożniak", cap, x0=0, base=cap, dot=dict(scale=1.25))

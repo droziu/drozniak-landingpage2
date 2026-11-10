@@ -19,7 +19,7 @@ export const ShapeCanvas: React.FC<{
   radius?: number;
   media?: string;
   children: React.ReactNode;
-}> = ({ shapes, space, className, radius = 28, media = '(min-width: 960px)', children }) => {
+}> = ({ shapes, space, className, radius = 16, media = '(min-width: 960px)', children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const clips = useShapeClips(ref, shapes, space, radius, media);
 

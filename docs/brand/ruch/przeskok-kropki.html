@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drożniak, przeskok kropki</title>
+<!--
+  Przeskok kropki między punktami, marka Drożniak 2.0. Plik powstaje z docs/brand/zrodla/tools/export_ruch.py, nie edytuj go ręcznie.
+  Parametry w adresie: ?punkty=4 (od 2 do 8), ?tlo=zielen (domyślnie papier), ?pion=1 (schemat pionowy), ?l=8 (grubość linii w px).
+  Linia L, punkty 2L, zielona kropka 3L. Kropka przeskakuje z punktu na punkt i ląduje z jednym ugięciem.
+-->
+<style>
+  :root { --tlo: #F6F5F1; --linia: #161511; --kropka: #14945E; --ruch: cubic-bezier(0.22, 0.61, 0.36, 1); --l: 8px; }
+  :root.zielen { --tlo: #0A3D27; --linia: #F6F5F1; --kropka: #23C27D; }
+  html, body { height: 100%; margin: 0; }
+  body { display: grid; place-items: center; background: var(--tlo); }
+  .tor { position: relative; width: min(70vw, 900px); height: calc(var(--l) * 3); }
+  .tor.pion { width: calc(var(--l) * 3); height: min(70vh, 640px); }
+  .tor::before { content: ''; position: absolute; background: var(--linia); left: calc(var(--l) * 1.5); right: calc(var(--l) * 1.5); top: var(--l); height: var(--l); }
+  .tor.pion::before { top: calc(var(--l) * 1.5); bottom: calc(var(--l) * 1.5); left: var(--l); right: auto; width: var(--l); height: auto; }
+  .pt { position: absolute; width: calc(var(--l) * 2); height: calc(var(--l) * 2); margin: calc(var(--l) * -1) 0 0 calc(var(--l) * -1); border-radius: 50%; background: var(--linia); }
+  .kropka { position: absolute; left: 0; top: 0; width: calc(var(--l) * 3); height: calc(var(--l) * 3); margin: calc(var(--l) * -1.5) 0 0 calc(var(--l) * -1.5); }
+  .kropka::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: var(--kropka); transition: scale 200ms var(--ruch); }
+  .kropka.ukryta::before { scale: 0; }
+</style>
+</head>
+<body>
+<div class="tor" id="tor"><span class="kropka ukryta" id="kropka"></span></div>
+<script>
+  var HOP = {"base_ms": 380, "ms_per_px": 0.9, "min_ms": 440, "max_ms": 680, "rise": 0.16, "min_rise": 0.7, "max_rise": 3, "dip": 0.12, "min_dip": 0.2, "max_dip": 0.45, "settle_ms": 380, "pop_ms": 200, "hold_ms": 1300, "last_hold_ms": 2200}, DAMPING = 0.45, OMEGA = 14;
+  var q = new URLSearchParams(location.search), root = document.documentElement, tor = document.getElementById('tor'), dot = document.getElementById('kropka');
+  if (q.get('tlo') === 'zielen') root.classList.add('zielen');
+  if (q.get('l')) root.style.setProperty('--l', parseFloat(q.get('l')) + 'px');
+  var pion = !!q.get('pion'), n = Math.min(8, Math.max(2, parseInt(q.get('punkty')) || 4));
+  if (pion) tor.classList.add('pion');
+  var clamp = function (v, lo, hi) { return Math.min(hi, Math.max(lo, v)); };
+  function punkty() {
+    var L = dot.offsetWidth / 3, w = tor.clientWidth, h = tor.clientHeight, out = [];
+    for (var i = 0; i < n; i++) out.push(pion ? { x: 1.5 * L, y: 1.5 * L + (h - 3 * L) * i / (n - 1) } : { x: 1.5 * L + (w - 3 * L) * i / (n - 1), y: 1.5 * L });
+    return out;
+  }
+  function hop(dx, dy, size) {
+    var dist = Math.hypot(dx, dy), flight = clamp(HOP.base_ms + HOP.ms_per_px * dist, HOP.min_ms, HOP.max_ms);
+    var rise = clamp(HOP.rise * Math.abs(dx), HOP.min_rise * size, HOP.max_rise * size), top = rise + Math.max(0, -dy);
+    var a = 2 * top + 2 * Math.sqrt(top * (top + dy)), dip = clamp(HOP.dip * (top + dy), HOP.min_dip * size, HOP.max_dip * size);
+    var decay = DAMPING * OMEGA / Math.sqrt(1 - DAMPING * DAMPING), peak = Math.atan(OMEGA / decay) / OMEGA;
+    var amp = dip / (Math.exp(-decay * peak) * Math.sin(OMEGA * peak)), total = flight + HOP.settle_ms, frames = [];
+    for (var t = 0; t < total; t += 1000 / 60) {
+      if (t <= flight) { var u = t / flight; frames.push([t / total, dx * u, -a * u + (dy + a) * u * u]); }
+      else { var s = (t - flight) / 1000; frames.push([t / total, dx, dy + amp * Math.exp(-decay * s) * Math.sin(OMEGA * s)]); }
+    }
+    frames.push([1, dx, dy]);
+    return { frames: frames, total: total };
+  }
+  var P = punkty(), i = 0;
+  P.forEach(function (p) { var s = document.createElement('span'); s.className = 'pt'; s.style.left = p.x + 'px'; s.style.top = p.y + 'px'; tor.insertBefore(s, dot); });
+  function ustaw(p) { dot.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)'; }
+  function dalej() {
+    if (i === n - 1) {
+      dot.classList.add('ukryta');
+      setTimeout(function () { i = 0; ustaw(P[0]); dot.classList.remove('ukryta'); setTimeout(dalej, HOP.hold_ms + HOP.pop_ms); }, HOP.pop_ms);
+      return;
+    }
+    var from = P[i], to = P[++i], h = hop(to.x - from.x, to.y - from.y, dot.offsetWidth);
+    ustaw(to);
+    dot.animate(h.frames.map(function (f) { return { offset: f[0], transform: 'translate(' + (from.x + f[1]) + 'px,' + (from.y + f[2]) + 'px)' }; }), { duration: h.total, easing: 'linear' });
+    setTimeout(dalej, h.total + (i === n - 1 ? HOP.last_hold_ms : HOP.hold_ms));
+  }
+  ustaw(P[0]);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) dot.classList.remove('ukryta');
+  else setTimeout(function () { dot.classList.remove('ukryta'); setTimeout(dalej, HOP.hold_ms); }, 100);
+</script>
+</body>
+</html>

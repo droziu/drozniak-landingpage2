@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { MagnifyingGlass, ArrowRight } from '@/app/components/BlogIcons';
-import { FadeUp, Stagger, StaggerItem } from '@/app/components/premium/Motion';
+import { MagnifyingGlass } from '@/app/components/BlogIcons';
+import { HomeMotion } from '@/app/components/home/HomeMotion';
+import { BrandLoader } from '@/app/components/BrandLogo';
 
 interface BlogPost {
   id: string;
@@ -62,158 +63,88 @@ export default function BlogListClient({ initialPosts, blogTopics, categoryName 
     setLoading(false);
   }, [searchQuery, initialPosts]);
 
+  const fmtDate = (iso: string | null) =>
+    iso ? new Date(iso).toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+
   return (
-    <main className="min-h-screen">
-      {/* ==================== HERO ==================== */}
-      <section className="relative px-5 md:px-10 pt-10 md:pt-16 pb-12 md:pb-16">
-        <div className="mx-auto max-w-[88rem]">
-          <div className="max-w-3xl mx-auto text-center">
-            <FadeUp whenInView={false}>
-              <h1 className="text-[length:var(--t-display)]">
-                {categoryName ? (
-                  <span className="pub-h-serif block">Blog: {categoryName}</span>
-                ) : (
-                  <span className="pub-h-serif block">Blog o marketingu dla firm</span>
-                )}
-              </h1>
-              <div className="mt-8 space-y-3 text-[length:var(--t-body)] text-[#161511] leading-[1.7] text-balance">
-                <p>
-                  Dzielę się tu doświadczeniami z marketingu i sprzedaży w małych firmach,
-                  freelancerce i projektach online. Piszę o tym, jak w praktyce wygląda zdobywanie
-                  klientów i budowanie stabilnej sprzedaży.
-                </p>
-                <p className="text-[length:var(--t-small)] text-[#5E5A50]">
-                  Również o <span className="text-[#161511] font-semibold">AI i automatyzacjach w marketingu</span>,
-                  tworzeniu treści oraz pomiarze i analityce.
-                </p>
-              </div>
-            </FadeUp>
+    <main id="bl-root" className="bl">
+      <HomeMotion rootId="bl-root" />
 
-            {/* Search */}
-            <FadeUp delay={0.15} whenInView={false} className="mt-10 max-w-xl mx-auto">
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#5E5A50]" aria-hidden>
-                  <MagnifyingGlass size={16} weight="bold" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Szukaj artykułów…"
-                  aria-label="Szukaj artykułów"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-12 pl-11 pr-4 rounded-[2px] bg-[#FFFFFF] border border-[#E4E1D8] text-[#161511] placeholder-[#5E5A50] text-[length:var(--t-small)] transition-colors duration-200 focus:outline-none focus:border-[#161511] focus-visible:ring-1 focus-visible:ring-[#161511]"
-                />
-              </div>
-            </FadeUp>
+      {/* Nagłówek: tytuł, jedno zdanie, wyszukiwarka i tematy, wszystko na lewej krawędzi */}
+      <section className="site-wrap bl-head" aria-labelledby="bl-title">
+        <h1 id="bl-title" className="hp-name bl-title" data-reveal>
+          {categoryName ? `Blog: ${categoryName}` : 'Blog o marketingu dla firm'}
+        </h1>
+        <p className="hp-body bl-lead" data-reveal style={{ ['--d' as string]: 1 }}>
+          Piszę o tym, jak w praktyce wygląda pozyskiwanie klientów: reklamy, oferta, obsługa zapytań, mailing
+          i&nbsp;automatyzacje z&nbsp;pomocą AI.
+        </p>
 
-            {/* Tematy - chipy filtrów */}
-            <FadeUp delay={0.25} whenInView={false} className="mt-7">
-              <div className="flex flex-wrap justify-center gap-2">
-                {blogTopics.map((topic) => {
-                  const topicTerm = topic.searchTags?.[0] || topic.name.toLowerCase();
-                  const active = searchQuery === topicTerm;
-                  return (
-                    <button
-                      key={topic.slug}
-                      type="button"
-                      onClick={() => setSearchQuery(active ? '' : topicTerm)}
-                      aria-pressed={active}
-                      className={`pub-chip cursor-pointer transition-colors duration-200 focus:outline-none focus-visible:ring-1 focus-visible:ring-[#161511] focus-visible:ring-offset-1 ${
-                        active
-                          ? '!bg-[#161511] !border-[#161511] !text-[#F6F5F1]'
-                          : 'hover:border-[#161511] hover:text-[#161511]'
-                      }`}
-                    >
-                      {topic.name}
-                    </button>
-                  );
-                })}
-              </div>
-            </FadeUp>
+        <div className="bl-tools" data-reveal style={{ ['--d' as string]: 2 }}>
+          <label className="bl-search">
+            <MagnifyingGlass size={20} aria-hidden="true" />
+            <input
+              type="search"
+              placeholder="Szukaj artykułów"
+              aria-label="Szukaj artykułów"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </label>
+          <div className="bl-topics" role="group" aria-label="Tematy">
+            {blogTopics.map((topic) => {
+              const topicTerm = topic.searchTags?.[0] || topic.name.toLowerCase();
+              const active = searchQuery === topicTerm;
+              return (
+                <button
+                  key={topic.slug}
+                  type="button"
+                  className="bl-topic"
+                  onClick={() => setSearchQuery(active ? '' : topicTerm)}
+                  aria-pressed={active}
+                >
+                  {topic.name}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ==================== WPISY ==================== */}
-      <section className="relative px-5 md:px-10 pb-20 md:pb-32 pt-12 md:pt-16 border-t border-[#E4E1D8]">
-        <div className="mx-auto max-w-[88rem]">
-          {loading ? (
-            <div className="text-center py-20">
-              <div className="w-10 h-10 border-2 border-[#E4E1D8] border-t-[#161511] rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-[length:var(--t-small)] text-[#5E5A50]">Szukanie…</p>
-            </div>
-          ) : posts.length === 0 ? (
-            <div className="pub-card max-w-md mx-auto p-10 text-center">
-              <div className="w-12 h-12 mx-auto mb-5 rounded-[2px] bg-[#F6F5F1] border border-[#E4E1D8] flex items-center justify-center text-[#5E5A50]">
-                <MagnifyingGlass size={20} weight="bold" />
-              </div>
-              <p className="text-[length:var(--t-body)] text-[#161511]">Brak artykułów spełniających kryteria.</p>
-            </div>
-          ) : (
-            <Stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-              {posts.map((post) => (
-                <StaggerItem key={post.id} className="h-full">
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="group pub-card overflow-hidden flex flex-col h-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#161511] focus-visible:ring-offset-2"
-                  >
-                    {post.featured_image_url && (
-                      <div className="relative w-full aspect-[16/10] overflow-hidden border-b border-[#E4E1D8] bg-[#F6F5F1]">
-                        <img
-                          src={post.featured_image_url}
-                          alt={post.title}
-                          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-
-                    <div className="p-6 md:p-7 flex flex-col flex-1">
-                      {post.category_name && (
-                        <span className="self-start mb-4 pub-chip">{post.category_name}</span>
-                      )}
-
-                      <h2 className="pub-serif text-[length:var(--t-h3)] font-semibold tracking-[-0.01em] text-[#161511] leading-snug mb-3 group-hover:underline underline-offset-4 decoration-[#161511]/40 transition-colors">
-                        {post.title}
-                      </h2>
-
-                      {post.excerpt && (
-                        <p className="text-[length:var(--t-small)] text-[#161511] mb-5 leading-[1.7] line-clamp-3">
-                          {post.excerpt}
-                        </p>
-                      )}
-
-                      <div className="mt-auto pt-4 border-t border-[#E4E1D8] flex items-center justify-between text-[length:var(--t-small)] font-medium text-[#5E5A50]">
-                        <div className="flex items-center gap-2">
-                          <span>
-                            {post.published_at
-                              ? new Date(post.published_at).toLocaleDateString('pl-PL', {
-                                  year: 'numeric',
-                                  month: 'short',
-                                  day: 'numeric',
-                                })
-                              : ''}
-                          </span>
-                          {post.reading_time && (
-                            <>
-                              <span className="text-[#D6D2C6]">·</span>
-                              <span>{post.reading_time} min</span>
-                            </>
-                          )}
-                        </div>
-                        <ArrowRight
-                          size={14}
-                          weight="bold"
-                          className="text-[#161511] opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
-                        />
-                      </div>
-                    </div>
-                  </Link>
-                </StaggerItem>
-              ))}
-            </Stagger>
-          )}
-        </div>
+      {/* Wpisy */}
+      <section className="site-wrap bl-list" aria-label="Wpisy">
+        {loading ? (
+          <div className="bl-empty">
+            <BrandLoader label="Szukanie" />
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="bl-empty">
+            <p className="hp-body">Nie ma artykułów na ten temat. Wyczyść wyszukiwanie albo wybierz inny temat.</p>
+          </div>
+        ) : (
+          <ul className="bl-grid">
+            {posts.map((post, i) => (
+              <li key={post.id} data-reveal style={{ ['--d' as string]: i % 3 }}>
+                <Link href={`/blog/${post.slug}`} className="bl-card">
+                  {post.featured_image_url && (
+                    <span className="bl-card-img">
+                      <img src={post.featured_image_url} alt="" loading="lazy" />
+                    </span>
+                  )}
+                  <span className="bl-card-body">
+                    {post.category_name && <span className="bl-card-cat">{post.category_name}</span>}
+                    <h2 className="bl-card-title">{post.title}</h2>
+                    {post.excerpt && <span className="bl-card-text">{post.excerpt}</span>}
+                    <span className="bl-card-meta">
+                      {fmtDate(post.published_at)}
+                      {post.reading_time ? `, ${post.reading_time} min czytania` : ''}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </main>
   );

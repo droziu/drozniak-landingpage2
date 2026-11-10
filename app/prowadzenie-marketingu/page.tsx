@@ -3,7 +3,8 @@ import { HomeMotion } from '../components/home/HomeMotion';
 import { Examples } from './Examples';
 import { HeroCanvas } from './HeroCanvas';
 import { AreaIcon, type IconName } from '../components/AreaIcon';
-import { OrbitScene } from './OrbitScene';
+import { TorRing } from '../components/brand/TorRing';
+import { Tor } from '../components/brand/Tor';
 import { ShapeCanvas } from '../components/shapes/ShapeCanvas';
 import { SlantRow } from '../components/shapes/SlantRow';
 import type { Pt } from '../components/useShapeClips';
@@ -44,19 +45,15 @@ const TERMS: { icon: IconName; label: string; value: string }[] = [
   { icon: 'sliders', label: 'Zakres', value: 'Do zmiany w trakcie' },
 ];
 
-const STEPS: { icon: IconName; title: string; text: string }[] = [
-  { icon: 'inquiry', title: 'Rozmowa', text: 'Poznaję firmę i to, skąd dziś przychodzą klienci.' },
-  { icon: 'search', title: 'Analiza', text: 'Przeglądam reklamy, stronę, maile i obsługę zapytań.' },
-  { icon: 'plan', title: 'Plan', text: 'Plan na pierwsze miesiące, zakres i cena. Podpisujemy umowę.' },
-  { icon: 'launch', title: 'Pierwszy miesiąc', text: 'Porządkuję pomiar i zaczynam od najważniejszych zmian.' },
-  { icon: 'repeat', title: 'Kolejne miesiące', text: 'Prowadzę marketing, a zakres zmieniamy, gdy trzeba.' },
+const STEPS: { title: string; text: string }[] = [
+  { title: 'Rozmowa', text: 'Poznaję firmę i to, skąd dziś przychodzą klienci.' },
+  { title: 'Analiza', text: 'Przeglądam reklamy, stronę, maile i obsługę zapytań.' },
+  { title: 'Plan', text: 'Plan na pierwsze miesiące, zakres i cena. Podpisujemy umowę.' },
+  { title: 'Pierwszy miesiąc', text: 'Porządkuję pomiar i zaczynam od najważniejszych zmian.' },
+  { title: 'Kolejne miesiące', text: 'Prowadzę marketing, a zakres zmieniamy, gdy trzeba.' },
 ];
 
-const ArrowIcon = () => (
-  <svg className="site-btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+const RING = ['Reklamy', 'Strona', 'Oferta', 'Zapytania', 'Mailing', 'Pomiar'];
 
 // Jednoliterowe spójniki i przyimki nie zostają na końcu wiersza
 const nb = (s: string) => s.replace(/(^|\s)([aiouwzAIOUWZ])\s/g, '$1$2 ');
@@ -82,7 +79,6 @@ export default function ProwadzenieMarketinguPage() {
             <div className="hmh-actions">
               <Link href="/umow" className="site-btn site-btn-accent">
                 Umów rozmowę
-                <ArrowIcon />
               </Link>
             </div>
           </div>
@@ -94,7 +90,13 @@ export default function ProwadzenieMarketinguPage() {
         <ShapeCanvas className="hmw" shapes={ABOUT_SHAPES} space={ABOUT_SPACE}>
           <div className="hmw-field hmw-o">
             <div className="hmw-orbit" data-reveal style={d(1)}>
-              <OrbitScene />
+              <TorRing
+                labels={RING}
+                label="Jedna osoba prowadzi wszystkie części marketingu: reklamy, stronę, ofertę, zapytania, mailing i pomiar"
+                center={
+                  <img src="/images/home/portret-omnie-600.jpg" alt="" width={600} height={600} loading="lazy" />
+                }
+              />
             </div>
           </div>
           <div className="hmw-text">
@@ -109,11 +111,6 @@ export default function ProwadzenieMarketinguPage() {
             <ul className="hm-benefits" data-reveal style={d(2)}>
               {BENEFITS.map((b) => (
                 <li key={b} className="hm-benefit">
-                  <span className="hm-benefit-check" aria-hidden="true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
                   {nb(b)}
                 </li>
               ))}
@@ -140,9 +137,7 @@ export default function ProwadzenieMarketinguPage() {
               {row.map((s, i) => (
                 <div key={s.title} className="hmz-item" data-reveal style={d(i + (r === 0 ? 1 : 0))}>
                   <div className="hmz-item-top">
-                    <span className="hmz-icon" aria-hidden="true">
-                      <AreaIcon name={s.icon} size={24} />
-                    </span>
+                    <AreaIcon name={s.icon} size={24} />
                     <h3 className="hmz-h3">{nb(s.title)}</h3>
                   </div>
                   <p className="hmz-text">{nb(s.text)}</p>
@@ -169,26 +164,21 @@ export default function ProwadzenieMarketinguPage() {
         />
       </section>
 
-      {/* Start: pięć kroków jako strzałki zazębione jedna w drugą */}
+      {/* Start: pięć kroków na jednej linii, kropka przechodzi od kroku do kroku */}
       <section className="hp-section site-wrap" aria-labelledby="hm-steps" style={{ paddingTop: 0 }}>
         <div className="hmst">
           <h2 id="hm-steps" className="hp-h2" data-reveal>
             Jak wygląda start
           </h2>
-          <SlantRow as="ol" className="hmst-row" kind="chevron" k={0.1} media="(min-width: 1200px)">
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="hmst-step" data-reveal style={{ ...d(i + 1), ['--i' as string]: i }}>
-                <span className="hmst-icon" data-ui aria-hidden="true">
-                  <AreaIcon name={s.icon} size={24} />
-                  <span className="hmst-on">
-                    <AreaIcon name={s.icon} size={24} />
-                  </span>
-                </span>
-                <h3 className="hm-h3">{nb(s.title)}</h3>
-                <p className="hmst-text">{nb(s.text)}</p>
-              </li>
-            ))}
-          </SlantRow>
+          <div className="pole" data-reveal style={d(1)}>
+            <Tor
+              dir="auto"
+              wide="(min-width: 1100px)"
+              className="tor-lg tor-left"
+              steps={STEPS.map((s) => ({ label: s.title, text: nb(s.text) }))}
+              aria-label="Kolejne kroki na starcie współpracy"
+            />
+          </div>
         </div>
       </section>
 
@@ -202,9 +192,7 @@ export default function ProwadzenieMarketinguPage() {
             <SlantRow as="dl" className="hmr-facts" k={0.3}>
               {TERMS.map((t, i) => (
                 <div key={t.label} className="hmr-fact" data-reveal style={d(i + 1)}>
-                  <span className="hmr-fact-icon" aria-hidden="true">
-                    <AreaIcon name={t.icon} size={22} />
-                  </span>
+                  <AreaIcon name={t.icon} size={24} />
                   <dt className="hp-fact-label">{t.label}</dt>
                   <dd className="hp-fact-value">{t.value}</dd>
                 </div>
@@ -221,9 +209,8 @@ export default function ProwadzenieMarketinguPage() {
               </p>
             </div>
             <div data-reveal style={d(3)}>
-              <Link href="/umow" className="site-btn site-btn-ink">
+              <Link href="/umow" className="site-btn site-btn-accent">
                 Umów rozmowę
-                <ArrowIcon />
               </Link>
             </div>
           </div>

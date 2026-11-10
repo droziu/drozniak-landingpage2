@@ -33,23 +33,22 @@
   justify-content: center;
   min-height: 72px;
   padding: 12px 30px;
-  border-radius: 18px;
+  border-radius: var(--promien);
   background: var(--paper-tint);
   transform: skewX(-16deg);
 }
-.hpc-chip-dark {
-  background: var(--dark);
+.hpc-chip {
+  transition: background-color var(--czas-krotki) var(--ruch);
 }
-.hpc-chip-dark .hpc-chip-text {
-  color: var(--paper);
+/* Podsumowanie listy: białe pole z obrysem (księga: karta biała, linia 1,5 px) */
+.hpc-chip-total {
+  background: var(--biel);
+  box-shadow: inset 0 0 0 var(--grubosc-linii) var(--linia-mocna); /* taste-skill-ignore: obrys karty 1,5 px z księgi marki */
 }
 .hpc-chip-text {
   display: block;
   transform: skewX(16deg);
-  font-family: var(--font-display), Georgia, serif;
   font-size: var(--t-h3);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
   white-space: nowrap;
   color: var(--ink);
 }
@@ -91,160 +90,67 @@
 .hpw-c {
   background: var(--paper-tint);
 }
+/* Na telefonie i tablecie najpierw opis wdrożenia, potem jego kolejne kroki */
+.hpw-a {
+  order: -1;
+}
+/* Stała współpraca: główna forma, więc białe pole obok kamiennych */
 .hpw-b {
-  background: var(--dark);
-  color: var(--paper);
+  background: var(--biel);
 }
 .hpw-inner {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 .hpw-h3 {
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 400;
   font-size: var(--t-h3);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  color: inherit;
+  color: var(--ink);
 }
 .hpw-text {
   font-size: var(--t-body);
-  line-height: 1.5;
+  line-height: 1.55;
   max-width: 26rem;
-}
-.hpw-b .hpw-text {
-  color: rgba(246, 245, 241, 0.86);
+  color: var(--ink);
 }
 .hpw-b-text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
+  gap: 16px;
 }
-.hpw-btn {
-  margin-top: 10px;
-  background: var(--paper);
-  color: var(--ink);
-}
-.hpw-btn:hover {
-  background: var(--paper-white);
-}
+.hpw-btn,
 .hpw-btn-a {
-  margin-top: 10px;
+  margin-top: 8px;
   align-self: flex-start;
 }
-.hpw-b :focus-visible {
-  outline-color: var(--paper);
-}
-
-/* Kolejność pracy: trzy ikony, zapalają się po kolei */
-.hpw-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.hpw-step {
-  position: relative;
+.hpw-c {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  font-size: var(--t-small);
-  font-weight: 600;
-  text-align: center;
-  color: var(--ink);
 }
-/* strzałka między krokami */
-.hpw-step + .hpw-step::before {
-  content: '';
-  position: absolute;
-  top: 18px;
-  left: -14px;
-  width: 20px;
-  height: 20px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2385816F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14m-6-6 6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+.hpw-road {
+  width: 100%;
 }
-.hpw-dot,
-.hpw-area {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-}
-.hpw-dot {
-  background: var(--paper-white);
-  color: var(--ink);
-}
-.hpw-dot-on,
-.hpw-area-on {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  border-radius: inherit;
-  opacity: 0;
-}
-.hpw-dot-on {
-  background: var(--ink);
-  color: var(--paper);
-  animation: hpw-light 6s var(--ease-out) calc(var(--i) * 2s) infinite;
-}
-
-/* Obszary prowadzone co miesiąc: pięć ikon, zapalają się po kolei */
+/* Obszary prowadzone co miesiąc: ikona w kolorze tekstu obok słowa (księga, „Ikony”) */
 .hpw-areas {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 28px;
+  gap: 12px 24px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
 }
 .hpw-area {
-  background: var(--dark-2);
-  color: var(--paper);
-}
-.hpw-area-on {
-  background: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--t-body);
+  font-weight: 500;
   color: var(--ink);
-  animation: hpw-light-5 10s var(--ease-out) calc(var(--i) * 2s) infinite;
 }
-@keyframes hpw-light {
-  0% {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  6%,
-  28% {
-    opacity: 1;
-    transform: scale(1.06);
-  }
-  36%,
-  100% {
-    opacity: 0;
-    transform: scale(1);
-  }
+.hpw-area svg {
+  flex: none;
 }
-@keyframes hpw-light-5 {
-  0% {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  4%,
-  17% {
-    opacity: 1;
-    transform: scale(1.06);
-  }
-  22%,
-  100% {
-    opacity: 0;
-    transform: scale(1);
-  }
-}
-
 @media (min-width: 640px) {
   .hpw-canvas {
     grid-template-columns: 1fr 1fr;
@@ -293,10 +199,13 @@
     height: calc(63.46% - 80px);
     justify-content: space-between;
   }
-  .hpw-steps {
+  .hpw-c {
+    display: block;
+  }
+  .hpw-road {
     position: absolute;
-    left: 28px;
-    width: calc(50% - 40px);
+    left: 24px;
+    width: calc(50% - 32px);
     top: 82.9%;
     translate: 0 -50%;
   }
@@ -310,11 +219,9 @@
     gap: 24px;
   }
   .hpw-areas {
+    flex-direction: column;
+    gap: 14px;
     margin-bottom: 0;
-  }
-  .hpw-text {
-    font-size: var(--t-lead);
-    line-height: 1.38;
   }
 }
 
@@ -330,15 +237,6 @@
   border-radius: var(--radius);
   background: var(--paper-tint);
 }
-.hpt-icon {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-  background: var(--paper-white);
-  color: var(--ink);
-}
 .hpt-title {
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
@@ -347,38 +245,12 @@
   letter-spacing: -0.02em;
   color: var(--ink);
 }
-.hpt-link {
+.hpt-go {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-height: 96px;
   padding: 24px;
   border-radius: var(--radius);
-  background: var(--dark);
-  color: var(--paper);
-  font-family: var(--font-display), Georgia, serif;
-  font-size: var(--t-h3);
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  transition: background-color 200ms var(--ease-out);
-}
-.hpt-link .site-btn-arrow {
-  flex: none;
-  width: 28px;
-  height: 28px;
-  transition: transform 200ms var(--ease-out);
-}
-.hpt-link:hover {
-  background: var(--dark-2);
-}
-.hpt-link:hover .site-btn-arrow {
-  transform: translateX(4px);
-}
-.hpt-link:focus-visible {
-  outline: 2px solid var(--paper);
-  outline-offset: -12px;
-  border-radius: var(--radius);
+  background: var(--biel);
 }
 @media (min-width: 960px) {
   .hpt {
@@ -387,7 +259,7 @@
   }
   .hpt-main {
     flex: 1 1 auto;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: 32px;
     padding: 40px calc(var(--s, 0px) + 36px) 40px 40px;
@@ -396,10 +268,10 @@
   .hpt-main .hp-body {
     max-width: 34rem;
   }
-  .hpt-link {
+  .hpt-go {
     flex: 0 0 auto;
     min-width: 30%;
-    white-space: nowrap;
+    justify-content: center;
     padding: 36px 44px 36px calc(var(--s, 0px) + 36px);
     border-radius: 0;
   }
@@ -455,23 +327,15 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  min-height: 48px;
-  padding: 0 20px 0 6px;
-  border-radius: 999px;
-  background: var(--paper-white);
-  font-size: var(--t-small);
+  min-height: 44px;
+  padding-right: 16px;
+  font-size: var(--t-body);
   font-weight: 500;
   white-space: nowrap;
   color: var(--ink);
 }
-.hpa-fact-icon {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  background: var(--paper-tint);
-  color: var(--ink);
+.hpa-fact svg {
+  flex: none;
 }
 @media (min-width: 600px) and (max-width: 959px) {
   .hpa-photo {
@@ -524,18 +388,6 @@
   }
 }
 
-/* Przy ograniczonym ruchu ikony stoją, zapalona pierwsza */
-@media (prefers-reduced-motion: reduce) {
-  .site-pub .hpw-dot-on,
-  .site-pub .hpw-area-on {
-    animation: none !important;
-  }
-  .hpw-step:first-child .hpw-dot-on,
-  .hpw-area:first-child .hpw-area-on {
-    opacity: 1;
-  }
-}
-
 /* --- Co biorę pod uwagę (ScopeList.tsx), prefiks hpk-.
    Kafelki naprzemiennie ciemne i jasne. Od 768 px (i 620 px wysokości) sekcja przypina się,
    a przewijanie strony w dół przesuwa pas w bok; wysokość .hpk-pin to ekran plus długość pasa
@@ -575,10 +427,10 @@
   transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out), transform 160ms var(--ease-out);
 }
 .hpk-btn:hover:not(:disabled) {
-  background: var(--dark-2);
+  background: var(--atrament-najechanie);
 }
 .hpk-btn:active:not(:disabled) {
-  transform: scale(0.94);
+  transform: translateY(1px);
 }
 .hpk-btn:disabled {
   background: var(--paper-tint);
@@ -601,40 +453,24 @@
   list-style: none;
 }
 .hpk-tile {
-  /* kolory grafiki na jasnym kafelku */
-  --sc-fg: var(--ink);
-  --sc-muted: var(--ink-2);
-  --sc-surface: var(--paper-tint);
-  --sc-strong: var(--line-strong);
-  --sc-out-bg: var(--ink);
-  --sc-out-fg: var(--paper);
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 28px 24px 24px;
   border-radius: var(--radius);
-  background: var(--paper-white);
+  background: var(--biel);
   color: var(--ink);
 }
-.hpk-dark {
-  /* i na ciemnym */
-  --sc-fg: var(--paper);
-  --sc-muted: rgba(246, 245, 241, 0.72);
-  --sc-surface: rgba(246, 245, 241, 0.09);
-  --sc-strong: rgba(246, 245, 241, 0.2);
-  --sc-out-bg: var(--paper);
-  --sc-out-fg: var(--ink);
-  background: var(--dark);
-  color: var(--paper);
+/* Kafelki na zmianę białe i kamienne: warstwy odróżnia kolor tła, nie cień */
+.hpk-alt {
+  background: var(--kamien);
+}
+.hpk-alt .ui-card {
+  box-shadow: none; /* taste-skill-ignore: data-ui */
 }
 .hpk-h3 {
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 400;
   font-size: var(--t-h3);
-  line-height: 1.06;
-  letter-spacing: -0.02em;
   color: inherit;
-  text-wrap: balance;
 }
 .hpk-note {
   font-size: var(--t-small);
@@ -642,9 +478,6 @@
   color: inherit;
   max-width: 24rem;
   text-wrap: pretty;
-}
-.hpk-dark .hpk-note {
-  color: rgba(246, 245, 241, 0.86);
 }
 .hpk-art {
   display: grid;
@@ -746,7 +579,8 @@
     margin-top: -8px;
   }
   .hpk-count {
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-naglowki);
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 1;
     color: var(--ink);
@@ -776,7 +610,7 @@
     gap: 24px;
   }
   /* najdłuższe pole łamie się na wąskich telefonach (320 px), zamiast wypychać stronę */
-  .hpc-chip-dark .hpc-chip-text {
+  .hpc-chip-total .hpc-chip-text {
     white-space: normal;
     text-align: center;
     text-wrap: balance;
@@ -788,7 +622,7 @@
   .hpc-chip {
     min-height: 54px;
     padding: 8px 20px;
-    border-radius: 14px;
+    border-radius: var(--promien-maly);
   }
   .hpc-chip-text {
     font-size: var(--t-h3);

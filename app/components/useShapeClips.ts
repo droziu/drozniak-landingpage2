@@ -35,7 +35,7 @@ export const useShapeClips = (
   ref: RefObject<HTMLElement | null>,
   shapes: Record<string, Pt[]>,
   space: { w: number; h: number },
-  radius = 30,
+  radius = 16, // księga marki: karty, panele i zdjęcia mają promień 16 px
   media = '(min-width: 960px)'
 ) => {
   const [clips, setClips] = useState<Record<string, string> | null>(null);

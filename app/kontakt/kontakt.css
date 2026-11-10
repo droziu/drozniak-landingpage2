@@ -11,11 +11,7 @@
   padding: 28px 20px 24px;
 }
 .kt-panel-title {
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 400;
   font-size: var(--t-h3);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
   color: var(--ink);
   margin-bottom: 28px;
 }
@@ -36,22 +32,23 @@
 }
 .kt-field label {
   font-size: var(--t-small);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--ink);
 }
 .kt-optional {
   font-weight: 400;
   color: var(--ink-2);
 }
-/* Pola bez obrysu: tło o ton jaśniejsze, atrament dopiero przy fokusie */
+/* Pole formularza według księgi: promień 8 px, obrys 1,5 px w kolorze linii mocnej,
+   przy fokusie obrys 2 px w atramencie */
 .kt-field input,
 .kt-field textarea {
   width: 100%;
   min-height: 52px;
   padding: 14px 16px;
-  border-radius: 14px;
-  border: 1.5px solid transparent;
-  background: #fff;
+  border-radius: var(--promien-maly);
+  border: var(--grubosc-linii) solid var(--linia-mocna);
+  background: var(--biel);
   font: inherit;
   font-size: var(--t-body);
   line-height: 1.5;
@@ -64,23 +61,24 @@
 }
 .kt-field input::placeholder,
 .kt-field textarea::placeholder {
-  color: #8C8877;
+  color: var(--popiol);
 }
 .kt-field input:hover,
 .kt-field textarea:hover {
-  border-color: var(--line-strong);
+  border-color: var(--grafit);
 }
 .kt-field input:focus-visible,
 .kt-field textarea:focus-visible {
-  outline: none;
-  border-color: var(--ink);
+  outline: 2px solid var(--atrament);
+  outline-offset: 0;
+  border-color: var(--atrament);
 }
 .kt-field [aria-invalid='true'] {
-  border-color: #B4442C;
+  border-color: var(--blad);
 }
 .kt-error {
   font-size: var(--t-small);
-  color: #9E3A24;
+  color: var(--blad);
 }
 
 .kt-submit {
@@ -104,22 +102,8 @@
 }
 .kt-status {
   font-size: var(--t-body);
-  color: #9E3A24;
+  color: var(--blad);
 }
-.kt-spinner {
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  border: 2px solid rgba(22, 21, 17, 0.25);
-  border-top-color: var(--ink);
-  animation: kt-spin 700ms linear infinite;
-}
-@keyframes kt-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .kt-trap {
   position: absolute;
   left: -9999px;
@@ -136,9 +120,7 @@
   padding: 8px 0;
 }
 .kt-sent-title {
-  font-family: var(--font-display), Georgia, serif;
   font-size: var(--t-h3);
-  line-height: 1.05;
   color: var(--ink);
 }
 
@@ -171,11 +153,7 @@
   gap: 12px;
 }
 .kt-h1 {
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 400;
   font-size: var(--t-display);
-  line-height: 0.94;
-  letter-spacing: -0.04em;
   margin-left: -0.04em;
   color: var(--ink);
 }
@@ -203,12 +181,12 @@
   height: 100%;
   object-fit: cover;
   object-position: 50% 22%;
-  animation: hp-settle 1400ms var(--ease-soft) both;
+  animation: hp-settle var(--czas-wejscia) var(--ruch) both;
 }
 .kt-c {
   padding: 28px 24px;
-  background: var(--dark);
-  color: var(--paper);
+  background: var(--paper-tint);
+  color: var(--ink);
 }
 .kt-channels {
   display: grid;
@@ -221,43 +199,32 @@
   column-gap: 14px;
   row-gap: 2px;
 }
-.kt-channel-icon {
+.kt-channels li > svg {
   grid-row: span 2;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  background: var(--paper);
-  color: var(--ink);
+  align-self: start;
+  margin-top: 12px;
 }
 .kt-channel-main {
   justify-self: start;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-family: var(--font-display), Georgia, serif;
   font-size: var(--t-h3);
-  line-height: 1.2;
-  letter-spacing: -0.015em;
   white-space: nowrap;
-  color: var(--paper);
+  color: var(--ink);
   text-decoration: underline;
-  text-decoration-thickness: 1.5px;
+  text-decoration-thickness: 2px;
   text-underline-offset: 0.18em;
-  text-decoration-color: rgba(246, 245, 241, 0.3);
-  transition: text-decoration-color 200ms var(--ease-out);
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--czas-krotki) var(--ruch);
 }
 .kt-channel-main:hover {
-  text-decoration-color: var(--paper);
-}
-.kt-channel-main:focus-visible {
-  outline-color: var(--paper);
+  text-decoration-color: currentColor;
 }
 .kt-channel-note {
   font-size: var(--t-small);
   line-height: 1.45;
-  color: rgba(246, 245, 241, 0.78);
+  color: var(--ink-3);
 }
 
 .kt-row-forms {
@@ -273,38 +240,20 @@
   gap: 16px;
   padding: 32px 24px;
   border-radius: var(--radius);
-  background: var(--dark);
-  color: var(--paper);
+  background: var(--biel);
+  color: var(--ink);
 }
 .kt-book .kt-panel-title {
-  color: var(--paper);
   margin-bottom: 0;
-}
-.kt-book-icon {
-  display: grid;
-  place-items: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 999px;
-  background: var(--paper);
-  color: var(--ink);
 }
 .kt-book-text {
   font-size: var(--t-body);
   line-height: 1.55;
-  color: rgba(246, 245, 241, 0.86);
+  color: var(--ink);
   max-width: 22rem;
 }
 .kt-book-btn {
   margin-top: 8px;
-  background: var(--paper);
-  color: var(--ink);
-}
-.kt-book-btn:hover {
-  background: var(--paper-white);
-}
-.kt-book-btn:focus-visible {
-  outline-color: var(--paper);
 }
 
 @media (min-width: 600px) and (max-width: 959px) {
@@ -389,24 +338,11 @@
   }
   .kt-book {
     order: -1;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
-    column-gap: 16px;
-    row-gap: 12px;
     padding: 24px;
-  }
-  .kt-book-icon {
-    width: 52px;
-    height: 52px;
-  }
-  .kt-book-text,
-  .kt-book-btn {
-    grid-column: 1 / -1;
   }
   .kt-book-btn {
     margin-top: 4px;
-    justify-self: stretch;
+    align-self: stretch;
   }
   .kt-panel {
     margin-top: 28px;

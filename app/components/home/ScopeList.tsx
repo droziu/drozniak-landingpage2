@@ -1,27 +1,79 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  FragAds,
-  FragAutomation,
-  FragEmail,
-  FragInquiry,
-  FragLanding,
-  FragMedia,
-  FragReport,
-  FragSeason,
-} from './Fragments';
 import { SlantRow } from '../shapes/SlantRow';
+import { UiRows, type UiRow } from '../brand/UiRows';
+import { SeasonBars } from '../brand/SeasonBars';
 
-const ITEMS: { title: string; note: string; Frag: React.FC }[] = [
-  { title: 'Reklamy w internecie', note: 'Czy reklamy trafiają do ludzi, którzy mogą kupić.', Frag: FragAds },
-  { title: 'Grafiki, filmy i animacje', note: 'Czy grafiki i filmy zatrzymują wzrok.', Frag: FragMedia },
-  { title: 'Strona i oferta', note: 'Czy oferta jest dobrze skonstruowana i spójna.', Frag: FragLanding },
-  { title: 'Obsługa zapytań', note: 'Czy klient szybko dostaje odpowiedź.', Frag: FragInquiry },
-  { title: 'Maile do klientów', note: 'Czy klient, który już kupił, wraca po więcej.', Frag: FragEmail },
-  { title: 'Sezonowość i branża', note: 'Czy firma ma plan na słabsze miesiące.', Frag: FragSeason },
-  { title: 'Pomiar sprzedaży', note: 'Czy wiadomo, skąd przychodzą klienci.', Frag: FragReport },
-  { title: 'Automatyzacje i AI', note: 'Czy zespół nie traci czasu na ręczną robotę.', Frag: FragAutomation },
+/**
+ * Grafiki w kafelkach według księgi marki („Ilustracje interfejsu”): biała karta, najwyżej trzy wiersze
+ * po kilka słów, jedna zielona kropka. Przykłady dotyczą jednej firmy, która montuje klimatyzację.
+ */
+const ITEMS: { title: string; note: string; rows?: UiRow[] }[] = [
+  {
+    title: 'Reklamy w internecie',
+    note: 'Czy reklamy trafiają do ludzi, którzy mogą kupić.',
+    rows: [
+      { icon: 'ads', label: 'Reklama w Meta i Google' },
+      { icon: 'target', label: 'Osoby z okolicy' },
+      { icon: 'inquiry', label: 'Nowe zapytanie' },
+    ],
+  },
+  {
+    title: 'Grafiki, filmy i animacje',
+    note: 'Czy grafiki i filmy zatrzymują wzrok.',
+    rows: [
+      { icon: 'film', label: 'Film 15 sekund' },
+      { icon: 'photo', label: 'Zdjęcia z montażu' },
+      { icon: 'text', label: 'Grafika z ceną' },
+    ],
+  },
+  {
+    title: 'Strona i oferta',
+    note: 'Czy oferta jest dobrze skonstruowana i spójna.',
+    rows: [
+      { icon: 'site', label: 'Strona pod ofertę' },
+      { icon: 'offer', label: 'Cena i zakres' },
+      { icon: 'inquiry', label: 'Krótki formularz' },
+    ],
+  },
+  {
+    title: 'Obsługa zapytań',
+    note: 'Czy klient szybko dostaje odpowiedź.',
+    rows: [
+      { icon: 'mail', label: 'Nowe zapytanie' },
+      { icon: 'phone', label: 'Oddzwonić dziś' },
+      { icon: 'calendar', label: 'Rozmowa w czwartek' },
+    ],
+  },
+  {
+    title: 'Maile do klientów',
+    note: 'Czy klient, który już kupił, wraca po więcej.',
+    rows: [
+      { icon: 'mail', label: 'Mail po montażu' },
+      { icon: 'calendar', label: 'Przegląd po roku' },
+      { icon: 'deal', label: 'Kolejne zlecenie' },
+    ],
+  },
+  { title: 'Sezonowość i branża', note: 'Czy firma ma plan na słabsze miesiące.' },
+  {
+    title: 'Pomiar sprzedaży',
+    note: 'Czy wiadomo, skąd przychodzą klienci.',
+    rows: [
+      { icon: 'search', label: 'Źródło: wyszukiwarka' },
+      { icon: 'money', label: 'Koszt jednego zlecenia' },
+      { icon: 'deal', label: 'Sprzedaż z reklamy' },
+    ],
+  },
+  {
+    title: 'Automatyzacje i AI',
+    note: 'Czy zespół nie traci czasu na ręczną robotę.',
+    rows: [
+      { icon: 'auto', label: 'Zapytanie trafia do arkusza' },
+      { icon: 'phone', label: 'Powiadomienie na telefon' },
+      { icon: 'mail', label: 'Odpowiedź w 5 minut' },
+    ],
+  },
 ];
 
 /** Od tej szerokości i wysokości okna pas jest przypięty i przewija się w bok; niżej zwykła lista */
@@ -30,42 +82,24 @@ const PIN_MEDIA = '(min-width: 768px) and (min-height: 620px)';
 const SPEED = 1.5;
 
 /**
- * Kafelki naprzemiennie ciemne i jasne, zazębione skosami (SlantRow).
+ * Kafelki naprzemiennie białe i kamienne, zazębione skosami (SlantRow).
  * Na dużym ekranie sekcja przypina się na czas przejścia przez wszystkie kafelki: przewijanie strony
  * w dół przesuwa pas w poziomie, potem strona jedzie dalej. Strzałki i klawisze ← → przewijają stronę
  * o jeden kafelek. Na telefonie i w niskim oknie pas jest zwykłą karuzelą
  * przesuwaną palcem (scroll-snap), pod nim licznik i strzałki przewijające o jeden kafelek.
- * Grafika w kafelku montuje się, gdy kafelek pierwszy raz wejdzie w widok, i zostaje.
- * Style w home-sections.css (prefiks hpk), grafiki w home-scene.css (prefiks sc).
+ * Ilustracje w kafelkach same ruszają, gdy są w widoku (UiRows, SeasonBars).
+ * Style w home-sections.css (prefiks hpk), ilustracje w brand-elements.css.
  */
 export const ScopeList: React.FC<{ head: React.ReactNode }> = ({ head }) => {
   const pinRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLElement | null>(null);
   const dist = useRef(0);
-  const [shown, setShown] = useState<boolean[]>(() => ITEMS.map(() => false));
   const [pinned, setPinned] = useState(false);
   const [edge, setEdge] = useState({ start: true, end: false });
   /** Karuzela (telefon): numer kafelka przy lewej krawędzi i skrajne położenia */
   const [slide, setSlide] = useState(0);
   const [slideEdge, setSlideEdge] = useState({ start: true, end: false });
-
-  // Grafika montuje się, gdy kafelek pierwszy raz wejdzie w widok (okno i przycięcie pasa)
-  useEffect(() => {
-    const row = trackRef.current?.firstElementChild;
-    if (!row) return;
-    const tiles = Array.from(row.children);
-    const io = new IntersectionObserver(
-      (entries) => {
-        const hit = entries.filter((e) => e.isIntersecting).map((e) => tiles.indexOf(e.target));
-        if (!hit.length) return;
-        setShown((prev) => (hit.every((i) => prev[i]) ? prev : prev.map((v, i) => v || hit.includes(i))));
-      },
-      { threshold: 0.35 }
-    );
-    tiles.forEach((t) => io.observe(t));
-    return () => io.disconnect();
-  }, []);
 
   // Przypięcie: postęp przewijania w pionie przekłada się na przesunięcie pasa w poziomie
   useEffect(() => {
@@ -233,13 +267,11 @@ export const ScopeList: React.FC<{ head: React.ReactNode }> = ({ head }) => {
           onKeyDown={onKey}
         >
           <SlantRow as="ul" className="hpk-row" k={0.09} media={PIN_MEDIA}>
-            {ITEMS.map(({ title, note, Frag }, i) => (
-              <li key={title} className={i % 2 === 0 ? 'hpk-tile hpk-dark' : 'hpk-tile'}>
+            {ITEMS.map(({ title, note, rows }, i) => (
+              <li key={title} className={i % 2 === 0 ? 'hpk-tile' : 'hpk-tile hpk-alt'}>
                 <h3 className="hpk-h3">{title}</h3>
                 <p className="hpk-note">{note}</p>
-                <div className="hpk-art" aria-hidden="true">
-                  {shown[i] ? <Frag /> : null}
-                </div>
+                <div className="hpk-art">{rows ? <UiRows rows={rows} /> : <SeasonBars />}</div>
               </li>
             ))}
           </SlantRow>

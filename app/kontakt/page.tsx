@@ -12,18 +12,12 @@ const BOOKING_URL = '/umow';
 const d = (n: number) => ({ ['--d' as string]: n });
 
 // Płótno jak hero strony głównej: zdjęcie po prawej z nosem w stronę tekstu,
-// pod tekstem ciemny pas z mailem i telefonem. Przestrzeń 1000 x 600, szczelina 12 jednostek.
+// pod tekstem kamienny pas z mailem i telefonem. Przestrzeń 1000 x 600, szczelina 12 jednostek.
 const SPACE = { w: 1000, h: 600 };
 const SHAPES: Record<'b' | 'c', Pt[]> = {
   b: [[640, 0], [1000, 0], [1000, 600], [680, 600], [590, 450], [640, 360]],
   c: [[0, 440], [570, 440], [666, 600], [0, 600]],
 };
-
-const ArrowIcon = () => (
-  <svg className="site-btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 export default function KontaktPage() {
   return (
@@ -49,18 +43,14 @@ export default function KontaktPage() {
           <div className="kt-shape kt-c">
             <ul className="kt-channels">
               <li data-reveal style={d(2)}>
-                <span className="kt-channel-icon" aria-hidden="true">
-                  <AreaIcon name="mail" size={22} />
-                </span>
+                <AreaIcon name="mail" size={24} />
                 <a href="mailto:stanislaw@drozniak.com" className="kt-channel-main">
                   stanislaw@drozniak.com
                 </a>
                 <span className="kt-channel-note">Odpowiadam w&nbsp;ciągu 24 godzin w&nbsp;dni robocze</span>
               </li>
               <li data-reveal style={d(3)}>
-                <span className="kt-channel-icon" aria-hidden="true">
-                  <AreaIcon name="phone" size={22} />
-                </span>
+                <AreaIcon name="phone" size={24} />
                 <a href="tel:+48792491196" className="kt-channel-main">
                   +48 792 491 196
                 </a>
@@ -80,16 +70,12 @@ export default function KontaktPage() {
         </section>
 
         <section className="kt-book" aria-labelledby="kt-book-title" data-reveal style={d(1)}>
-          <span className="kt-book-icon" aria-hidden="true" data-reveal style={d(2)}>
-            <AreaIcon name="calendar" size={28} />
-          </span>
           <h2 id="kt-book-title" className="kt-panel-title">
             Umów rozmowę
           </h2>
           <p className="kt-book-text">20 minut przez Google Meet, w&nbsp;wybranym przez Ciebie terminie.</p>
-          <a href={BOOKING_URL} className="site-btn kt-book-btn">
+          <a href={BOOKING_URL} className="site-btn site-btn-accent kt-book-btn">
             Wybierz termin
-            <ArrowIcon />
           </a>
         </section>
       </SlantRow>

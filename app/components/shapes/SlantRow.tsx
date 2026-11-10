@@ -41,7 +41,7 @@ export const SlantRow: React.FC<{
   media?: string;
   children: React.ReactNode;
   'aria-label'?: string;
-}> = ({ as = 'div', className, kind = 'slant', k = 0.24, radius = 26, media = '(min-width: 960px)', children, ...rest }) => {
+}> = ({ as = 'div', className, kind = 'slant', k = 0.24, radius = 16, media = '(min-width: 960px)', children, ...rest }) => {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {

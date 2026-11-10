@@ -1,0 +1,432 @@
+/* ============================================================
+   Elementy marki rysowane w kodzie (księga marki 2.0, rozdział „Elementy”).
+   Tor (linia z punktami), pętla (okrąg z kropką) i ilustracja interfejsu.
+   Wszystko z linii i kropki, jedna zielona kropka na rysunek, bez cieni i strzałek.
+   ============================================================ */
+
+/* --- Tor: linia L, punkty 2L, zielona kropka 3L --- */
+.tor {
+  --tor-l: 4px;
+  --tor-ink: var(--atrament);
+  --tor-dot: var(--kropka);
+  position: relative;
+}
+.on-green .tor {
+  --tor-ink: var(--papier);
+  --tor-dot: var(--kropka-na-zieleni);
+}
+.tor-list {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* Linia od pierwszego do ostatniego punktu; położenie z pomiaru (Tor.tsx),
+   a zanim pomiar przyjdzie, w układzie poziomym liczy je CSS z liczby kroków */
+.tor::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  background: var(--tor-ink);
+}
+.tor[data-dir='row']::before {
+  left: var(--tor-x0, calc(100% / var(--n) / 2));
+  width: calc(var(--tor-x1, calc(100% - 100% / var(--n) / 2)) - var(--tor-x0, calc(100% / var(--n) / 2)));
+  top: calc(var(--tor-y0, 6px) - var(--tor-l) / 2);
+  height: var(--tor-l);
+}
+.tor[data-dir='col']::before {
+  top: var(--tor-y0, 12px);
+  height: calc(var(--tor-y1, 100%) - var(--tor-y0, 12px));
+  left: calc(var(--tor-x0, 6px) - var(--tor-l) / 2);
+  width: var(--tor-l);
+}
+.tor[data-dir='row'] .tor-list {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+  gap: 24px;
+}
+.tor[data-dir='col'] .tor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.tor-step {
+  position: relative;
+  min-width: 0;
+}
+.tor[data-dir='row'] .tor-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.tor[data-dir='col'] .tor-step {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  column-gap: 20px;
+  align-items: start;
+}
+.tor-pt {
+  display: block;
+  width: calc(var(--tor-l) * 2);
+  height: calc(var(--tor-l) * 2);
+  border-radius: 50%;
+  background: var(--tor-ink);
+}
+.tor[data-dir='col'] .tor-pt {
+  justify-self: center;
+  /* środek punktu na wysokości pierwszej linii podpisu (mały: 14 px, interlinia 1,45) */
+  margin-top: calc(var(--t-maly) * 0.725 - var(--tor-l));
+}
+.tor-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.tor-when {
+  font-size: var(--t-maly);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--grafit);
+}
+.on-green .tor-when {
+  color: var(--pomocniczy-na-zieleni);
+}
+.tor-label {
+  font-size: var(--t-maly);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--tor-ink);
+}
+.tor[data-dir='col'] .tor-step .tor-label {
+  line-height: 1.45;
+}
+.tor-step[data-on] .tor-label {
+  font-weight: 600;
+}
+.tor-text {
+  margin-top: 4px;
+  font-size: var(--t-tekst);
+  line-height: 1.55;
+  color: var(--atrament);
+}
+/* Kroki z podpisem w roli podtytułu (np. „Plan na start”) */
+.tor-lg .tor-label {
+  font-family: var(--font-naglowki);
+  font-size: var(--t-podtytul);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.tor-lg.tor[data-dir='col'] .tor-pt {
+  margin-top: calc(var(--t-podtytul) * 0.6 - var(--tor-l));
+}
+.tor-lg .tor-when + .tor-label {
+  margin-top: 2px;
+}
+.tor-lg.tor[data-dir='col'] .tor-step:has(.tor-when) .tor-pt {
+  margin-top: calc(var(--t-maly) * 0.725 - var(--tor-l));
+}
+/* Kroki z dłuższym tekstem: w układzie poziomym do lewej, nie do środka */
+.tor-left.tor[data-dir='row'] .tor-step {
+  align-items: flex-start;
+  text-align: left;
+}
+.tor-left.tor[data-dir='row'] .tor-list {
+  gap: 32px;
+}
+/* Pole marki: kamienna powierzchnia z promieniem 16 px, w której stoi schemat albo ilustracja */
+.pole {
+  padding: 40px 24px;
+  border-radius: var(--promien);
+  background: var(--kamien);
+}
+@media (min-width: 1100px) {
+  .pole {
+    padding: 56px 48px 60px;
+  }
+}
+.pole-srodek {
+  display: grid;
+  place-items: center;
+}
+
+/* Zielona kropka: stoi na środku aktywnego punktu, a na następny przeskakuje łukiem (Tor.tsx, dotHop.ts).
+   Położenie ustawia skrypt na elemencie, sama kropka to ::before, żeby mogła pojawiać się i znikać skalą
+   (nie kryciem) niezależnie od położenia. */
+.tor-dot {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: calc(var(--tor-l) * 3);
+  height: calc(var(--tor-l) * 3);
+  margin: calc(var(--tor-l) * -1.5) 0 0 calc(var(--tor-l) * -1.5);
+  will-change: transform;
+}
+.tor-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--tor-dot);
+  transition: scale 200ms var(--ruch);
+}
+.tor-dot[data-hide]::before,
+.tor-dot:not([data-ready])::before {
+  scale: 0;
+}
+
+/* --- Pętla: okrąg z punktami, kropka na obwodzie --- */
+.petla {
+  position: relative;
+  width: min(100%, 520px);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+.petla-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.petla-line {
+  fill: none;
+  stroke: var(--atrament);
+  stroke-width: 0.75;
+}
+.petla-pt {
+  fill: var(--atrament);
+}
+.petla-run {
+  transform-origin: 50px 50px;
+  transform-box: view-box;
+  transition: transform 800ms var(--ruch);
+}
+.petla-dot {
+  fill: var(--kropka);
+}
+.petla-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 46%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--kamien);
+}
+.petla-center img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.petla-labels {
+  position: absolute;
+  inset: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.petla-label {
+  position: absolute;
+  font-size: var(--t-maly);
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--atrament);
+  transition: font-weight 0s;
+}
+.petla-label[data-on] {
+  font-weight: 600;
+}
+/* Podpis po zewnętrznej stronie punktu */
+.petla-label[data-side='right'] {
+  transform: translate(14px, -50%);
+}
+.petla-label[data-side='left'] {
+  transform: translate(calc(-100% - 14px), -50%);
+}
+.petla-label[data-side='mid'][data-vert='top'] {
+  transform: translate(-50%, calc(-100% - 12px));
+}
+.petla-label[data-side='mid'][data-vert='bottom'] {
+  transform: translate(-50%, 12px);
+}
+.petla-label[data-side='mid'][data-vert='mid'] {
+  transform: translate(14px, -50%);
+}
+
+/* --- Ilustracja interfejsu: biała karta, trzy wiersze, jedna kropka --- */
+.ui-card {
+  --ui-row: 48px;
+  --ui-gap: 8px;
+  position: relative;
+  width: min(100%, 360px);
+  padding: 12px;
+  border-radius: var(--promien);
+  background: var(--biel);
+  box-shadow: inset 0 0 0 var(--grubosc-linii) var(--linia); /* taste-skill-ignore: data-ui, obrys 1,5 px z księgi */
+  color: var(--atrament);
+  transition: opacity 400ms var(--ruch);
+}
+.ui-card[data-fading] {
+  opacity: 0;
+}
+.ui-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ui-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--ui-row);
+  padding: 0 40px 0 14px;
+  border-radius: var(--promien-maly);
+  background: var(--kamien);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--czas-wejscia) var(--ruch), transform var(--czas-wejscia) var(--ruch);
+}
+.ui-row[data-in] {
+  opacity: 1;
+  transform: none;
+}
+.ui-row svg {
+  flex: none;
+}
+.ui-row-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Kropka przy bieżącym wierszu. Na następny wiersz przeskakuje (UiRows.tsx, dotHop.ts),
+   pojawia się i znika skalą, nie kryciem: sama kropka to ::before. */
+.ui-dot {
+  position: absolute;
+  right: 28px;
+  top: calc(12px + var(--ui-row) / 2 - 5px);
+  width: 10px;
+  height: 10px;
+  transform: translateY(calc(var(--i, 0) * (var(--ui-row) + var(--ui-gap))));
+}
+.ui-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--kropka);
+  scale: 0;
+  transition: scale 200ms var(--ruch);
+}
+.ui-dot[data-in]::before {
+  scale: 1;
+}
+
+/* --- Wykres słupkowy (SeasonBars): jedna rzecz w zieleni, reszta szara, podpis przy słupku --- */
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 16px 14px;
+}
+.bars-plot {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: end;
+  gap: 6px;
+  height: 150px;
+}
+.bars-col {
+  position: relative;
+  grid-row: 1;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+}
+.bars-bar {
+  display: block;
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  background: var(--wykres-reszta);
+  transform: translateY(101%);
+  transition: transform var(--czas-wejscia) var(--ruch);
+  transition-delay: calc(var(--i, 0) * 50ms);
+}
+.bars[data-go] .bars-bar {
+  transform: none;
+}
+.bars-col[data-focus] .bars-bar {
+  background: var(--wykres-1);
+}
+/* Podpis wyróżnionego słupka: leży w tej samej kolumnie siatki co słupek, ale poza jego przycięciem.
+   --bar to wysokość słupka, --rise to różnica do najwyższego sąsiada. Podpis stoi 8 px nad tym sąsiadem,
+   a od słupka prowadzi do niego linia 1,5 px. Wchodzi kryciem, gdy słupki już stoją. */
+.bars-note {
+  position: relative;
+  grid-row: 1;
+  align-self: stretch;
+  justify-self: center;
+  width: 0;
+  opacity: 0;
+  transition: opacity var(--czas-wejscia) var(--ruch) 700ms;
+  pointer-events: none;
+}
+.bars[data-go] .bars-note {
+  opacity: 1;
+}
+.bars-note::before {
+  content: '';
+  position: absolute;
+  left: -0.75px;
+  bottom: calc(var(--bar) + 4px);
+  width: 1.5px;
+  height: calc(var(--rise) + 2px);
+  background: var(--atrament);
+}
+.bars-label {
+  position: absolute;
+  bottom: calc(var(--bar) + var(--rise) + 8px);
+  left: 0;
+  translate: -50% 0;
+  font-size: var(--t-maly);
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--atrament);
+}
+.bars-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--t-maly);
+  font-weight: 500;
+  color: var(--grafit);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bars-bar,
+  .bars-note,
+  .tor-dot::before,
+  .ui-dot::before,
+  .petla-run,
+  .ui-card,
+  .ui-row {
+    transition: none !important;
+  }
+}

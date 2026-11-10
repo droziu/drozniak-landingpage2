@@ -1,17 +1,16 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { AreaIcon, type IconName } from '../components/AreaIcon';
+import React, { useRef } from 'react';
 import { useShapeClips, type Pt } from '../components/useShapeClips';
+import { Tor } from '../components/brand/Tor';
 
 /**
  * Hero z zazębiających się pól: tytuł i oferta w lewym górnym rogu, zdjęcie po prawej,
- * ciemne pole z osią drogi klienta na dole, kafelek z rozliczeniem w rogu. Po osi przesuwa się
- * podświetlenie: kolejne kroki prowadzi ta sama osoba.
- * Kształty są opisane w umownej przestrzeni 1000 x 620 i od 960 px przycinane przez clip-path.
- * Bez JS działają wielokąty w procentach z CSS (ostre narożniki); po pomiarze komponent
- * podmienia je na ścieżki z zaokrąglonymi narożnikami w pikselach. Poniżej 960 px pola
- * stoją pod sobą jako zwykłe prostokąty. Style w prowadzenie-marketingu.css (prefiks hmh).
+ * kamienne pole z drogą klienta na dole (linia z punktami, kropka przechodzi od kroku do kroku),
+ * biały kafelek z rozliczeniem w rogu. Kształty są opisane w umownej przestrzeni 1000 x 620
+ * i od 960 px przycinane przez clip-path. Bez JS działają wielokąty w procentach z CSS;
+ * po pomiarze komponent podmienia je na ścieżki z zaokrąglonymi narożnikami. Poniżej 960 px
+ * pola stoją pod sobą jako zwykłe prostokąty. Style w prowadzenie-marketingu.css (prefiks hmh).
  */
 
 const SPACE = { w: 1000, h: 620 };
@@ -24,59 +23,12 @@ const SHAPES: Record<'b' | 'c' | 'd', Pt[]> = {
 };
 
 // Droga klienta: sześć kroków, które prowadzę razem
-export type PathStep = { icon: IconName; label: string };
-
-const STEPS: PathStep[] = [
-  { icon: 'ads', label: 'Reklama' },
-  { icon: 'site', label: 'Strona' },
-  { icon: 'inquiry', label: 'Zapytanie' },
-  { icon: 'offer', label: 'Oferta' },
-  { icon: 'mail', label: 'Mailing' },
-  { icon: 'data', label: 'Pomiar' },
-];
-
-const STEP_MS = 1300;
-const HOLD_MS = 2600;
-
-const reducedQuery = '(prefers-reduced-motion: reduce)';
-const subscribeReduced = (cb: () => void) => {
-  const mq = window.matchMedia(reducedQuery);
-  mq.addEventListener('change', cb);
-  return () => mq.removeEventListener('change', cb);
-};
-const useReducedMotion = () =>
-  useSyncExternalStore(
-    subscribeReduced,
-    () => window.matchMedia(reducedQuery).matches,
-    () => false
-  );
-
-/** Krok podświetlony na osi; po ostatnim chwila postoju i od początku */
-const usePathStep = (n: number) => {
-  const [step, setStep] = useState(n - 1);
-  const reduced = useReducedMotion();
-
-  useEffect(() => {
-    if (reduced) return;
-    let i = 0;
-    let t: number;
-    const tick = () => {
-      setStep(i);
-      const last = i === n - 1;
-      i = last ? 0 : i + 1;
-      t = window.setTimeout(tick, last ? HOLD_MS : STEP_MS);
-    };
-    tick();
-    return () => window.clearTimeout(t);
-  }, [n, reduced]);
-
-  return reduced ? n - 1 : step;
-};
+const STEPS = ['Reklama', 'Strona', 'Zapytanie', 'Oferta', 'Mailing', 'Pomiar'];
 
 type HeroCanvasProps = {
   children: React.ReactNode;
-  /** Kroki na osi w ciemnym polu (domyślnie droga klienta przy stałej współpracy). */
-  steps?: PathStep[];
+  /** Kroki na drodze klienta (domyślnie przy stałej współpracy). */
+  steps?: string[];
   /** Zdanie nad osią. */
   pathTitle?: React.ReactNode;
   /** Kafelek w prawym dolnym rogu. */
@@ -91,7 +43,6 @@ export const HeroCanvas: React.FC<HeroCanvasProps> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const clips = useShapeClips(ref, SHAPES, SPACE);
-  const step = usePathStep(steps.length);
 
   return (
     <div ref={ref} className="hmh-canvas" style={clips ?? undefined}>
@@ -111,21 +62,11 @@ export const HeroCanvas: React.FC<HeroCanvasProps> = ({
 
       <div className="hmh-shape hmh-c">
         <p className="hmh-c-title">{pathTitle}</p>
-        <ol
+        <Tor
+          steps={steps.map((label) => ({ label }))}
           className="hmh-path"
-          data-ui
-          aria-label="Droga klienta"
-          style={{ ['--p' as string]: step / (steps.length - 1) }}
-        >
-          {steps.map((s, i) => (
-            <li key={s.label} className="hmh-step" data-on={i === step || undefined} data-done={i < step || undefined}>
-              <span className="hmh-step-dot" aria-hidden="true">
-                <AreaIcon name={s.icon} size={24} />
-              </span>
-              <span className="hmh-step-label">{s.label}</span>
-            </li>
-          ))}
-        </ol>
+          aria-label={`Droga klienta: ${steps.join(', ').toLowerCase()}`}
+        />
       </div>
 
       <div className="hmh-shape hmh-d">

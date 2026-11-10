@@ -50,9 +50,8 @@
 .bk-lead {
   margin-top: 24px;
   max-width: 30rem;
-  font-size: var(--t-lead);
-  line-height: 1.38;
-  letter-spacing: -0.01em;
+  font-size: var(--t-tekst);
+  line-height: 1.55;
   color: var(--ink);
   text-wrap: pretty;
 }
@@ -150,7 +149,7 @@
 .bk-demo {
   margin-bottom: 24px;
   padding: 10px 16px;
-  border-radius: 12px;
+  border-radius: var(--promien-maly);
   background: var(--paper-tint);
   font-size: var(--t-small);
   color: var(--ink-2);
@@ -205,7 +204,7 @@
   background: var(--paper-tint);
 }
 .bk-icon-btn:active:not(:disabled) {
-  transform: scale(0.94);
+  transform: translateY(1px);
 }
 .bk-icon-btn:disabled {
   opacity: 0.3;
@@ -253,7 +252,7 @@ button.bk-day:hover {
   background: var(--gold-bright);
 }
 button.bk-day:active {
-  transform: scale(0.94);
+  transform: translateY(1px);
 }
 button.bk-day[data-selected] {
   background: var(--ink);
@@ -324,7 +323,7 @@ button.bk-day[data-selected] {
   background: var(--gold-bright);
 }
 .bk-time:active:not(:disabled) {
-  transform: scale(0.97);
+  transform: translateY(1px);
 }
 .bk-time[data-selected] {
   background: var(--ink);
@@ -421,8 +420,8 @@ button.bk-day[data-selected] {
   width: 100%;
   min-height: 52px;
   padding: 13px 16px;
-  border: 1px solid var(--line-strong);
-  border-radius: 14px;
+  border: var(--grubosc-linii) solid var(--line-strong);
+  border-radius: var(--promien-maly);
   background: var(--paper);
   color: var(--ink);
   font: inherit;
@@ -448,12 +447,12 @@ button.bk-day[data-selected] {
   border-color: var(--ink);
 }
 .bk-field [aria-invalid='true'] {
-  border-color: #b3261e;
+  border-color: var(--blad);
 }
 .bk-field-error {
   font-size: var(--t-small);
   font-weight: 600;
-  color: #a3261b;
+  color: var(--blad);
 }
 .bk-hint {
   font-size: var(--t-small);
@@ -478,26 +477,12 @@ button.bk-day[data-selected] {
   opacity: 0.85;
 }
 
-.bk-spinner {
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  animation: bk-spin 700ms linear infinite;
-}
-@keyframes bk-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .bk-alert {
   margin-bottom: 20px;
   padding: 14px 18px;
-  border-radius: 14px;
-  background: #fbeae7;
-  color: #6f1a10;
+  border-radius: var(--promien-maly);
+  background: var(--blad-tlo);
+  color: var(--blad);
   font-size: var(--t-body);
   line-height: 1.5;
 }
@@ -507,7 +492,7 @@ button.bk-day[data-selected] {
 .bk-success {
   margin-top: 24px;
   padding: 14px 18px;
-  border-radius: 14px;
+  border-radius: var(--promien-maly);
   background: var(--gold-wash);
   color: var(--ink);
   font-size: var(--t-body);
@@ -609,9 +594,6 @@ button.bk-day[data-selected] {
   .bk-day-ghost {
     animation: none;
   }
-  .bk-spinner {
-    animation-duration: 2s;
-  }
   .bk-icon-btn,
   button.bk-day,
   .bk-time {
@@ -643,7 +625,7 @@ button.bk-day[data-selected] {
 @keyframes bk-settle {
   from {
     opacity: 0;
-    transform: scale(0.97) translateY(-6px);
+    transform: translateY(-8px);
   }
 }
 .bk-trail-what {
@@ -682,7 +664,7 @@ button.bk-day[data-selected] {
   gap: 6px;
   min-height: 176px;
   padding: 24px;
-  border-radius: 20px;
+  border-radius: var(--promien);
   background: var(--paper);
   color: var(--ink);
   text-align: left;
@@ -698,7 +680,7 @@ button.bk-day[data-selected] {
   transform: translateY(-3px);
 }
 .bk-mode:active {
-  transform: scale(0.98);
+  transform: translateY(1px);
 }
 .bk-mode[data-on] {
   background: var(--ink);
@@ -717,7 +699,7 @@ button.bk-day[data-selected] {
 }
 .bk-mode:hover .bk-mode-icon,
 .bk-mode[data-on] .bk-mode-icon {
-  transform: scale(1.08) rotate(-6deg);
+  transform: translateY(-2px);
 }
 .bk-mode-title {
   font-family: var(--font-display), Georgia, serif;
@@ -737,7 +719,7 @@ button.bk-day[data-selected] {
 }
 @keyframes bk-pop {
   40% {
-    transform: scale(1.05);
+    transform: translateY(-2px);
   }
 }
 .bk-form {
@@ -799,7 +781,7 @@ button.bk-day[data-selected] {
 .bk-brief-box {
   margin-top: 32px;
   padding: clamp(20px, 3vw, 32px);
-  border-radius: 20px;
+  border-radius: var(--promien);
   background: var(--gold-wash);
   animation: bk-in 600ms var(--ease-soft) 480ms both;
 }
@@ -828,7 +810,7 @@ button.bk-day[data-selected] {
 .bf-progress {
   height: 6px;
   border-radius: 999px;
-  background: rgba(22, 21, 17, 0.08);
+  background: var(--linia);
   overflow: hidden;
 }
 .bf-progress-fill {
@@ -867,8 +849,8 @@ button.bk-day[data-selected] {
   width: 100%;
   margin-top: 6px;
   padding: 14px 16px;
-  border: 1px solid var(--line-strong); /* taste-skill-ignore: pole formularza */
-  border-radius: 14px;
+  border: var(--grubosc-linii) solid var(--line-strong); /* taste-skill-ignore: pole formularza */
+  border-radius: var(--promien-maly);
   background: var(--paper-white);
   color: var(--ink);
   font: inherit;
@@ -913,7 +895,7 @@ button.bk-day[data-selected] {
   background: var(--gold-bright);
 }
 .bf-option:active {
-  transform: scale(0.96);
+  transform: translateY(1px);
 }
 .bf-option[data-on] {
   background: var(--ink);
@@ -935,7 +917,6 @@ button.bk-day[data-selected] {
 .bf-option[data-on] .bf-tick {
   background: var(--ink);
   color: var(--paper);
-  transform: scale(1.1);
 }
 .bf-nav {
   display: flex;
@@ -1020,61 +1001,18 @@ button.bk-day[data-selected] {
   margin: 0;
 }
 
-/* Rozmowa i oferta: kroki na linii z kropką (księga marki, „Linia i kropka”).
-   Zielona tylko pierwsza kropka, bo to krok, który się teraz umawia. */
-.bk-steps {
-  margin: 20px 0 0;
-  padding: 0;
-  list-style: none;
+/* Rozmowa i oferta: pionowy tor z księgi marki (Tor), kropka stoi na pierwszym kroku */
+.bk-tor {
+  margin-top: 20px;
   max-width: 30rem;
 }
-.bk-steps li {
-  position: relative;
-  display: grid;
-  gap: 4px;
-  padding: 0 0 28px 32px;
-}
-.bk-steps li:last-child {
-  padding-bottom: 0;
-}
-.bk-steps li::before {
-  content: '';
-  position: absolute;
-  left: 3px;
-  top: 7px;
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: var(--ink);
-}
-.bk-steps li:first-child::before {
-  left: 1px;
-  top: 5px;
-  width: 14px;
-  height: 14px;
-  background: var(--green);
-}
-.bk-steps li::after {
-  content: '';
-  position: absolute;
-  left: 7px;
-  top: 24px;
-  bottom: -2px;
-  width: 2px;
-  background: var(--line-strong);
-}
-.bk-steps li:last-child::after {
-  content: none;
-}
-.bk-steps-name {
-  font-size: var(--t-body);
+.bk-tor .tor-label {
+  font-size: var(--t-tekst);
   font-weight: 600;
-  line-height: 1.4;
-  color: var(--ink);
 }
-.bk-steps-text {
-  font-size: var(--t-body);
-  line-height: 1.5;
-  color: var(--ink-3);
-  text-wrap: pretty;
+.bk-tor.tor[data-dir='col'] .tor-pt {
+  margin-top: calc(var(--t-tekst) * 0.725 - var(--tor-l));
+}
+.bk-tor .tor-list {
+  gap: 24px;
 }

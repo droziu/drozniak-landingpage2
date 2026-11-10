@@ -1,0 +1,100 @@
+/* Drożniak, tokeny marki 2.0 (listopad 2026). Plik powstaje z docs/brand/zrodla/tools/tokens.py, nie edytuj go ręcznie. */
+:root {
+  /* kolory, powierzchnia papierowa */
+  --papier: #F6F5F1;
+  --kamien: #ECEAE3;
+  --biel: #FFFFFF;
+  --linia: #E4E1D8;
+  --linia-mocna: #D6D2C6;
+  --atrament: #161511;
+  --atrament-najechanie: #2B2923;
+  --grafit: #5E5A50;
+  --popiol: #8A867A;
+  --kropka: #14945E;
+
+  /* kolory, powierzchnia zielona */
+  --gleboka-zielen: #0A3D27;
+  --gleboka-zielen-2: #154D34;
+  --tekst-na-zieleni: #F6F5F1;
+  --pomocniczy-na-zieleni: #B8CEC0;
+  --kropka-na-zieleni: #23C27D;
+
+  /* skale tonalne: interfejs, wykresy, stany */
+  --zielen-50: #ECFAF1;
+  --zielen-100: #D8F6E3;
+  --zielen-200: #B3ECCA;
+  --zielen-300: #7DDBA7;
+  --zielen-400: #23C27D;
+  --zielen-500: #14945E;
+  --zielen-600: #06784A;
+  --zielen-700: #065F3B;
+  --zielen-800: #0B4C2F;
+  --zielen-900: #0A3D27;
+  --zielen-950: #072918;
+  --szarosc-0: #FFFFFF;
+  --szarosc-50: #F6F5F1;
+  --szarosc-100: #ECEAE3;
+  --szarosc-200: #E4E1D8;
+  --szarosc-300: #D6D2C6;
+  --szarosc-400: #AFAB9E;
+  --szarosc-500: #8A867A;
+  --szarosc-600: #5E5A50;
+  --szarosc-700: #424037;
+  --szarosc-800: #2B2923;
+  --szarosc-900: #161511;
+
+  /* stany: tekst i tło */
+  --sukces: #06784A;
+  --sukces-tlo: #E0F7E9;
+  --uwaga: #895709;
+  --uwaga-tlo: #FDEFD2;
+  --blad: #A52A24;
+  --blad-tlo: #FFE9E5;
+  --informacja: #2D5E8B;
+  --informacja-tlo: #E5F2FF;
+
+  /* wykresy, w kolejności użycia */
+  --wykres-1: #14945E;
+  --wykres-2: #16456D;
+  --wykres-3: #D2992E;
+  --wykres-4: #932412;
+  --wykres-reszta: #C4C0B4;
+
+  /* pismo */
+  --font-naglowki: "Brygada 1918", Georgia, "Times New Roman", serif;
+  --font-tekst: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-kod: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --t-wielki: clamp(44px, 7.4vw, 112px);
+  --t-naglowek: clamp(32px, 3.9vw, 56px);
+  --t-podtytul: clamp(22px, 1.9vw, 28px);
+  --t-tekst: 17px;
+  --t-maly: 14px;
+
+  /* odstępy, kształty, ruch */
+  --odstep-4: 4px;
+  --odstep-8: 8px;
+  --odstep-12: 12px;
+  --odstep-16: 16px;
+  --odstep-24: 24px;
+  --odstep-32: 32px;
+  --odstep-48: 48px;
+  --odstep-64: 64px;
+  --odstep-96: 96px;
+  --odstep-128: 128px;
+  --odstep-192: 192px;
+  --promien-maly: 8px;
+  --promien: 16px;
+  --promien-pelny: 999px;
+  --grubosc-linii: 1.5px;
+  --ruch: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ruch-ladowanie: cubic-bezier(0.3, 1.5, 0.6, 1);
+  --czas-krotki: 200ms;
+  --czas-wejscia: 500ms;
+  --czas-ladowania: 600ms;
+}
+/* Lądowanie kropki: sprężyna z jednym ugięciem. Starsze przeglądarki zostają przy krzywej zapasowej powyżej. */
+@supports (animation-timing-function: linear(0, 1)) {
+  :root {
+    --ruch-ladowanie: linear(0, 0.068, 0.234, 0.449, 0.671, 0.869, 1.024, 1.131, 1.189, 1.205, 1.191, 1.156, 1.112, 1.067, 1.026, 0.994, 0.973, 0.961, 0.958, 0.961, 0.968, 0.977, 0.987, 0.995, 1);
+  }
+}

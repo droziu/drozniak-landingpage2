@@ -6,8 +6,9 @@ import { SlantRow } from '../components/shapes/SlantRow';
 
 /**
  * Przykładowe zakresy współpracy: trzy rodzaje firm w zakładkach (wzorzec APG: strzałki, Home, End),
- * obok miesiąc pracy jako kilka krótkich zadań z ikonami. Zadania wchodzą po kolei, odhaczają się
- * i lista zaczyna od nowa, dopóki jest w widoku. Przy ograniczonym ruchu stoi odhaczona.
+ * obok miesiąc pracy jako kilka krótkich zadań z ikonami, w białej karcie jak ilustracja interfejsu
+ * z księgi marki. Zadania wchodzą po kolei, potem zielona kropka przechodzi od zadania do zadania
+ * i lista zaczyna od nowa, dopóki jest w widoku. Przy ograniczonym ruchu stoi cała, kropka przy ostatnim.
  * Treść poglądowa, do potwierdzenia przez Stanisława.
  */
 
@@ -179,21 +180,13 @@ export const Examples: React.FC<{ head: React.ReactNode; examples?: Example[] }>
                   data-in={j < l.shown || undefined}
                   data-done={j < l.done || undefined}
                 >
-                  <span className="hm-task-icon">
-                    <AreaIcon name={t.icon} size={22} />
-                  </span>
+                  <AreaIcon name={t.icon} size={22} />
                   <span className="hm-task-text">{nb(t.text)}</span>
-                  <span className="hm-task-check" aria-hidden="true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M5 13l4 4L19 7"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
+                  <span
+                    className="hm-task-dot"
+                    aria-hidden="true"
+                    data-on={j === Math.min(l.done, ex.tasks.length) - 1 || undefined}
+                  />
                 </li>
               ))}
             </ul>

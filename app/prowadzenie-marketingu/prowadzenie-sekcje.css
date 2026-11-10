@@ -28,39 +28,23 @@
 .hmw-o {
   display: flex;
   justify-content: center;
-  /* obrócony kwadrat pierścienia wystawałby poza ekran telefonu */
-  overflow: clip;
-  padding: 32px 16px;
-  background: var(--dark);
+  padding: 48px 24px;
+  background: var(--paper-tint);
 }
 .hmw-orbit {
   display: flex;
   justify-content: center;
   width: 100%;
 }
+.hmw-orbit .petla {
+  width: min(100%, 420px);
+}
 .hmw-t {
   padding: 28px 24px;
-  background: var(--paper-tint);
+  background: var(--biel);
 }
 .hmw .hm-benefits {
   margin-top: 0;
-}
-.hmw .hm-benefit-check {
-  background: var(--paper-white);
-}
-/* scena na ciemnym polu: ikony w ciemnych kołach, zapalona ikona jasna */
-.hmw .hm-orbit-icon {
-  background: var(--dark-2);
-  color: var(--paper);
-  box-shadow: none; /* taste-skill-ignore: zdejmuje cień z data-ui na ciemnym polu */
-}
-.hmw .hm-orbit-on {
-  background: var(--paper);
-  color: var(--ink);
-}
-.hmw .hm-orbit-label {
-  background: var(--paper);
-  box-shadow: none; /* taste-skill-ignore: zdejmuje cień z data-ui na ciemnym polu */
 }
 @media (min-width: 960px) {
   .hmw {
@@ -92,8 +76,8 @@
   }
   .hmw-orbit {
     position: absolute;
-    left: 2%;
-    width: 42%;
+    left: 6%;
+    width: 34%;
     top: 50%;
     translate: 0 -50%;
   }
@@ -112,7 +96,7 @@
   }
 }
 
-/* --- Zakres: trzy rzędy pól zazębionych skosami, w pierwszym ciemne pole z nagłówkiem --- */
+/* --- Zakres: trzy rzędy pól zazębionych skosami, w pierwszym białe pole z nagłówkiem --- */
 .hmz {
   display: flex;
   flex-direction: column;
@@ -133,19 +117,15 @@
 .hmz-head {
   justify-content: space-between;
   gap: 20px;
-  background: var(--dark);
-}
-.hmz-head .hp-h2 {
-  color: var(--paper);
+  background: var(--biel);
 }
 .hmz-head .hp-body {
-  color: rgba(246, 245, 241, 0.86);
   max-width: 24rem;
 }
 .hmz-item {
   padding-inline: 16px;
 }
-/* telefon i tablet: jedno jasne pole z ciemnym nagłówkiem w środku */
+/* telefon i tablet: jedno kamienne pole z białym nagłówkiem w środku */
 @media (max-width: 959px) {
   .hmz {
     gap: 0;
@@ -166,24 +146,12 @@
   align-items: center;
   gap: 14px;
 }
-.hmz-icon {
+.hmz-item-top svg {
   flex: none;
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 999px;
-  background: var(--paper-white);
-  color: var(--ink);
 }
 .hmz-h3 {
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 400;
   font-size: var(--t-h3);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
   color: var(--ink);
-  text-wrap: balance;
 }
 .hmz-text {
   font-size: var(--t-body);
@@ -228,105 +196,13 @@
   }
 }
 
-/* --- Start: pięć kroków jako ciemne strzałki wsunięte jedna w drugą --- */
+/* --- Start: pięć kroków na jednej linii (Tor), w kamiennym polu --- */
 .hmst {
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
-.hmst-row {
-  display: grid;
-  gap: 32px;
-  margin: 0;
-  padding: 36px 24px 40px;
-  list-style: none;
-  border-radius: var(--radius);
-  background: var(--dark);
-}
-.hmst-step {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
-.hmst-step .hm-h3 {
-  color: var(--paper);
-}
-.hmst-text {
-  font-size: var(--t-body);
-  line-height: 1.5;
-  color: rgba(246, 245, 241, 0.86);
-}
-.hmst-icon {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  margin-bottom: 8px;
-  border-radius: 999px;
-  background: var(--dark-2);
-  color: var(--paper);
-}
-.hmst-on {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  border-radius: inherit;
-  background: var(--paper);
-  color: var(--ink);
-  opacity: 0;
-  animation: hmst-light 10s var(--ease-out) calc(var(--i) * 2s) infinite;
-}
-@keyframes hmst-light {
-  0% {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  4%,
-  17% {
-    opacity: 1;
-    transform: scale(1.06);
-  }
-  22%,
-  100% {
-    opacity: 0;
-    transform: scale(1);
-  }
-}
-@media (min-width: 700px) and (max-width: 1199px) {
-  .hmst-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 40px 32px;
-    padding: 48px 40px 52px;
-  }
-}
-@media (min-width: 1200px) {
-  .hmst-row {
-    display: flex;
-    align-items: stretch;
-    gap: 12px;
-    padding: 0;
-    border-radius: 0;
-    background: none;
-  }
-  .hmst-step {
-    background: var(--dark);
-    flex: 1 1 0;
-    min-width: 0;
-    border-radius: 0;
-    padding: 36px calc(var(--s, 0px) + 16px) 40px calc(var(--s, 0px) + 26px);
-  }
-  .hmst-step:first-child {
-    padding-left: 36px;
-  }
-  .hmst-step:last-child {
-    padding-right: 36px;
-  }
-}
 
-/* --- Rozliczenie: tekst i warunki po lewej, zdjęcie ze skosem po prawej --- */
 .hmr {
   display: flex;
   flex-direction: column;
@@ -368,15 +244,8 @@
   border-radius: var(--radius);
   background: var(--paper-tint);
 }
-.hmr-fact-icon {
+.hmr-fact > svg {
   grid-row: span 2;
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 999px;
-  background: var(--paper-white);
-  color: var(--ink);
 }
 .hmr-fact .hp-fact-value {
   margin-top: 2px;
@@ -424,18 +293,9 @@
   .hmr-fact:last-child {
     padding-right: 24px;
   }
-  .hmr-fact-icon {
+  .hmr-fact > svg {
     grid-row: auto;
     margin-bottom: 10px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .site-pub .hmst-on {
-    animation: none !important;
-  }
-  .hmst-step:first-child .hmst-on {
-    opacity: 1;
   }
 }
 
@@ -450,7 +310,7 @@
 @media (max-width: 599px) {
   .hmz-item {
     display: grid;
-    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-columns: 24px minmax(0, 1fr);
     column-gap: 14px;
     row-gap: 4px;
     padding: 14px 10px 14px 12px;
@@ -458,55 +318,11 @@
   .hmz-item-top {
     display: contents;
   }
-  .hmz-icon {
+  .hmz-item-top svg {
     grid-row: 1 / span 2;
-    width: 44px;
-    height: 44px;
+    margin-top: 4px;
   }
   .hmz-h3 {
-    padding-top: 9px;
     font-size: var(--t-h3);
-  }
-}
-@media (max-width: 699px) {
-  .hmst {
-    gap: 28px;
-  }
-  .hmst-row {
-    gap: 0;
-    padding: 32px 20px 36px;
-  }
-  .hmst-step {
-    position: relative;
-    display: grid;
-    grid-template-columns: 48px minmax(0, 1fr);
-    column-gap: 16px;
-    row-gap: 4px;
-    padding-bottom: 28px;
-  }
-  .hmst-step:last-child {
-    padding-bottom: 0;
-  }
-  .hmst-step::before {
-    content: '';
-    position: absolute;
-    left: 23px;
-    top: 56px;
-    bottom: 8px;
-    width: 2px;
-    border-radius: 2px;
-    background: var(--dark-2);
-  }
-  .hmst-step:last-child::before {
-    display: none;
-  }
-  .hmst-icon {
-    grid-row: 1 / span 2;
-    width: 48px;
-    height: 48px;
-    margin: 0;
-  }
-  .hmst-step .hm-h3 {
-    padding-top: 10px;
   }
 }

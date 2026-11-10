@@ -28,6 +28,12 @@ import {
   ShoppingBag,
   Tag,
   Target,
+  FileText,
+  ClipboardText,
+  Sparkle,
+  PuzzlePiece,
+  ChatsCircle,
+  EnvelopeSimpleOpen,
 } from 'phosphor-react';
 
 /**
@@ -61,6 +67,12 @@ const ICONS = {
   deal: Handshake,
   medal: Medal,
   phone: Phone,
+  doc: FileText,
+  clipboard: ClipboardText,
+  ai: Sparkle,
+  custom: PuzzlePiece,
+  talk: ChatsCircle,
+  mailOpen: EnvelopeSimpleOpen,
 } as const;
 
 export type IconName = keyof typeof ICONS;

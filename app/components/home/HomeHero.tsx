@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { AREAS, AreaIcon } from '../AreaIcon';
 import { useShapeClips, type Pt } from '../useShapeClips';
+import { Tor } from '../brand/Tor';
 
 /**
  * Hero strony głównej w tej samej rodzinie co /prowadzenie-marketingu, tylko spokojniejsze:
  * dwa pola zamiast czterech. Zdjęcie po prawej z tym samym skosem w stronę tekstu,
- * pod tekstem jasny pas, w którym przesuwają się obszary pracy. Kształty w przestrzeni
- * 1000 x 620, od 960 px przycinane przez clip-path (useShapeClips); niżej pola stoją pod sobą.
- * Style w home-hero.css (prefiks hph).
+ * pod tekstem jasny pas z drogą klienta z księgi marki (linia z punktami, kropka idzie po kolei
+ * od reklamy do sprzedaży). Kształty w przestrzeni 1000 x 620, od 960 px przycinane przez clip-path
+ * (useShapeClips); niżej pola stoją pod sobą. Style w home-hero.css (prefiks hph).
  */
 
 const SPACE = { w: 1000, h: 620 };
@@ -20,24 +20,11 @@ const SHAPES: Record<'b' | 'c', Pt[]> = {
   c: [[0, 482], [493.6, 482], [585.6, 620], [0, 620]],
 };
 
-const ROW = [0, 3, 1, 5, 2, 6, 4, 7, 8];
+const ROAD = ['Reklama', 'Strona', 'Zapytanie', 'Rozmowa', 'Sprzedaż'].map((label) => ({ label }));
 
 export const HomeHero: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const clips = useShapeClips(ref, SHAPES, SPACE);
-
-  const set = (copy: number) => (
-    <span className="hph-set" key={copy}>
-      {ROW.map((k) => (
-        <span key={k} className="hph-pill">
-          <span className="hph-pill-icon">
-            <AreaIcon name={AREAS[k].icon} size={20} />
-          </span>
-          {AREAS[k].label}
-        </span>
-      ))}
-    </span>
-  );
 
   return (
     <div ref={ref} className="hph-canvas" style={clips ?? undefined}>
@@ -55,16 +42,8 @@ export const HomeHero: React.FC<{ children: React.ReactNode }> = ({ children }) 
         />
       </figure>
 
-      <div
-        className="hph-shape hph-c"
-        data-ui
-        role="img"
-        aria-label={`Obszary pracy: ${AREAS.map((a) => a.label.toLowerCase()).join(', ')}`}
-      >
-        <span className="hph-row" aria-hidden="true">
-          {set(0)}
-          {set(1)}
-        </span>
+      <div className="hph-shape hph-c">
+        <Tor steps={ROAD} current={2} className="hph-road" aria-label="Droga klienta: reklama, strona, zapytanie, rozmowa, sprzedaż" />
       </div>
     </div>
   );

@@ -1,0 +1,230 @@
+{
+  "wersja": "2.0",
+  "data": "Listopad 2026",
+  "kolory": {
+    "papier": "#F6F5F1",
+    "kamien": "#ECEAE3",
+    "biel": "#FFFFFF",
+    "linia": "#E4E1D8",
+    "linia-mocna": "#D6D2C6",
+    "atrament": "#161511",
+    "grafit": "#5E5A50",
+    "popiol": "#8A867A",
+    "gleboka-zielen": "#0A3D27",
+    "gleboka-zielen-2": "#154D34",
+    "pomocniczy-na-zieleni": "#B8CEC0",
+    "zielen-sygnalowa": "#14945E",
+    "zielen-sygnalowa-jasna": "#23C27D"
+  },
+  "skale": {
+    "zielen": {
+      "50": "#ECFAF1",
+      "100": "#D8F6E3",
+      "200": "#B3ECCA",
+      "300": "#7DDBA7",
+      "400": "#23C27D",
+      "500": "#14945E",
+      "600": "#06784A",
+      "700": "#065F3B",
+      "800": "#0B4C2F",
+      "900": "#0A3D27",
+      "950": "#072918"
+    },
+    "szarosc": {
+      "0": "#FFFFFF",
+      "50": "#F6F5F1",
+      "100": "#ECEAE3",
+      "200": "#E4E1D8",
+      "300": "#D6D2C6",
+      "400": "#AFAB9E",
+      "500": "#8A867A",
+      "600": "#5E5A50",
+      "700": "#424037",
+      "800": "#2B2923",
+      "900": "#161511"
+    }
+  },
+  "stany": {
+    "Sukces": {
+      "tekst": "#06784A",
+      "tlo": "#E0F7E9"
+    },
+    "Uwaga": {
+      "tekst": "#895709",
+      "tlo": "#FDEFD2"
+    },
+    "Błąd": {
+      "tekst": "#A52A24",
+      "tlo": "#FFE9E5"
+    },
+    "Informacja": {
+      "tekst": "#2D5E8B",
+      "tlo": "#E5F2FF"
+    }
+  },
+  "wykresy": [
+    "#14945E",
+    "#16456D",
+    "#D2992E",
+    "#932412",
+    "#C4C0B4"
+  ],
+  "pismo": {
+    "naglowki": "Brygada 1918",
+    "tekst": "Schibsted Grotesk",
+    "role": [
+      {
+        "rola": "Wielki nagłówek",
+        "kroj": "Brygada 1918",
+        "odmiana": 500,
+        "interlinia": "1,0",
+        "swiatlo": "−2%"
+      },
+      {
+        "rola": "Nagłówek",
+        "kroj": "Brygada 1918",
+        "odmiana": 600,
+        "interlinia": "1,05",
+        "swiatlo": "−1,5%"
+      },
+      {
+        "rola": "Podtytuł",
+        "kroj": "Brygada 1918",
+        "odmiana": 600,
+        "interlinia": "1,2",
+        "swiatlo": "−1%"
+      },
+      {
+        "rola": "Tekst",
+        "kroj": "Schibsted Grotesk",
+        "odmiana": 400,
+        "interlinia": "1,55",
+        "swiatlo": "0"
+      },
+      {
+        "rola": "Mały",
+        "kroj": "Schibsted Grotesk",
+        "odmiana": 500,
+        "interlinia": "1,45",
+        "swiatlo": "0"
+      }
+    ],
+    "rozmiary": [
+      {
+        "format": "Strona internetowa",
+        "jednostka": "px",
+        "wielki-naglowek": "44–112",
+        "naglowek": "32–56",
+        "podtytul": "22–28",
+        "tekst": "17",
+        "maly": "14"
+      },
+      {
+        "format": "Dokument A4",
+        "jednostka": "pt",
+        "wielki-naglowek": "36–48",
+        "naglowek": "20–26",
+        "podtytul": "13–14",
+        "tekst": "10,5",
+        "maly": "8"
+      },
+      {
+        "format": "Slajd 1920 × 1080",
+        "jednostka": "px",
+        "wielki-naglowek": "120–160",
+        "naglowek": "64–80",
+        "podtytul": "36–44",
+        "tekst": "28",
+        "maly": "22"
+      },
+      {
+        "format": "Post 1080 × 1350",
+        "jednostka": "px",
+        "wielki-naglowek": "96–128",
+        "naglowek": "60–72",
+        "podtytul": "40",
+        "tekst": "30",
+        "maly": "24"
+      },
+      {
+        "format": "Relacja i rolka 1080 × 1920",
+        "jednostka": "px",
+        "wielki-naglowek": "104–136",
+        "naglowek": "64–80",
+        "podtytul": "44",
+        "tekst": "36",
+        "maly": "28"
+      },
+      {
+        "format": "Miniatura 1280 × 720",
+        "jednostka": "px",
+        "wielki-naglowek": "150–175",
+        "naglowek": "115–130",
+        "podtytul": "nie używamy",
+        "tekst": "w karcie od 40",
+        "maly": "nie używamy"
+      },
+      {
+        "format": "Film 1920 × 1080",
+        "jednostka": "px",
+        "wielki-naglowek": "96–120",
+        "naglowek": "64",
+        "podtytul": "44",
+        "tekst": "nie używamy",
+        "maly": "30"
+      },
+      {
+        "format": "Mail 600 px",
+        "jednostka": "px",
+        "wielki-naglowek": "32–36",
+        "naglowek": "24–26",
+        "podtytul": "19",
+        "tekst": "16",
+        "maly": "13"
+      }
+    ]
+  },
+  "odstepy": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64,
+    96,
+    128,
+    192
+  ],
+  "promienie": {
+    "mały": 8,
+    "średni": 16,
+    "pełny": 999
+  },
+  "ruch": {
+    "krzywa": "cubic-bezier(0.22, 0.61, 0.36, 1)",
+    "ladowanie": {
+      "krzywa": "linear(0, 0.068, 0.234, 0.449, 0.671, 0.869, 1.024, 1.131, 1.189, 1.205, 1.191, 1.156, 1.112, 1.067, 1.026, 0.994, 0.973, 0.961, 0.958, 0.961, 0.968, 0.977, 0.987, 0.995, 1)",
+      "krzywa-zapasowa": "cubic-bezier(0.3, 1.5, 0.6, 1)",
+      "tlumienie": 0.45,
+      "czestosc-rad-s": 14,
+      "czas-ms": 600
+    },
+    "czasy": {
+      "Najechanie, przycisk, link": "150–250 ms",
+      "Wejście elementu": "400–600 ms, przesunięcie 16–32 px",
+      "Przeskok kropki między punktami": "440–680 ms",
+      "Lądowanie kropki": "600 ms, jedno ugięcie",
+      "Animacja znaku": "2,4 s",
+      "Animacja znaku, wersja krótka": "0,6 s",
+      "Przejście między planszami w filmie": "400 ms"
+    }
+  },
+  "kontakt": {
+    "strona": "drozniak.pl",
+    "mail": "stanislaw@drozniak.com",
+    "telefon": "+48 792 491 196",
+    "dopisek": "Marketing i pozyskiwanie klientów dla firm"
+  }
+}

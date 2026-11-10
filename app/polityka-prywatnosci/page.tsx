@@ -1,110 +1,92 @@
 'use client';
 
 import React from 'react';
-import { FadeUp } from '@/app/components/premium/Motion';
+import { HomeMotion } from '@/app/components/home/HomeMotion';
 
 const tocItems = [
-  { num: '01', id: 'administrator-danych', title: 'Administrator danych' },
-  { num: '02', id: 'kontakt-dane-osobowe', title: 'Kontakt w sprawie danych osobowych' },
-  { num: '03', id: 'zakres-i-cele', title: 'Zakres i cele przetwarzania danych' },
-  { num: '04', id: 'podstawy-prawne', title: 'Podstawy prawne przetwarzania' },
-  { num: '05', id: 'odbiorcy-danych', title: 'Odbiorcy danych' },
-  { num: '06', id: 'czas-przechowywania', title: 'Czas przechowywania danych' },
-  { num: '07', id: 'cookies', title: 'Pliki cookies i narzędzia śledzące' },
-  { num: '08', id: 'twoje-prawa', title: 'Twoje prawa (RODO)' },
-  { num: '09', id: 'bezpieczenstwo', title: 'Bezpieczeństwo danych' },
+  { num: '1', id: 'administrator-danych', title: 'Administrator danych' },
+  { num: '2', id: 'kontakt-dane-osobowe', title: 'Kontakt w sprawie danych osobowych' },
+  { num: '3', id: 'zakres-i-cele', title: 'Zakres i cele przetwarzania danych' },
+  { num: '4', id: 'podstawy-prawne', title: 'Podstawy prawne przetwarzania' },
+  { num: '5', id: 'odbiorcy-danych', title: 'Odbiorcy danych' },
+  { num: '6', id: 'czas-przechowywania', title: 'Czas przechowywania danych' },
+  { num: '7', id: 'cookies', title: 'Pliki cookies i narzędzia śledzące' },
+  { num: '8', id: 'twoje-prawa', title: 'Twoje prawa (RODO)' },
+  { num: '9', id: 'bezpieczenstwo', title: 'Bezpieczeństwo danych' },
   { num: '10', id: 'zmiany', title: 'Zmiany w polityce prywatności' },
 ];
 
-const focusRing =
-  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#161511]';
-
 export default function PrivacyPolicyPage() {
   return (
-    <main className="relative">
+    <main id="pp-root" className="pp">
+      <HomeMotion rootId="pp-root" />
       {/* ==================== NAGŁÓWEK DOKUMENTU ==================== */}
-      <header className="px-5 md:px-10 pt-14 md:pt-24 pb-10 md:pb-14">
-        <div className="mx-auto max-w-3xl">
-          <FadeUp whenInView={false}>
-            <h1 className="text-[length:var(--t-h2)]">
-              <span className="pub-h-serif block">Polityka prywatności</span>
-            </h1>
-            <p className="mt-7 text-[length:var(--t-small)] text-[#5E5A50]">
-              Obowiązuje od 9.11.2026
+      <header className="site-wrap pp-head">
+        <div className="pp-col">
+          <div data-reveal>
+            <h1 className="hp-h2 pp-title">Polityka prywatności</h1>
+            <p className="pp-meta">
+              Jak przetwarzam dane osobowe na stronie drozniak.pl. Obowiązuje od 9 listopada 2026.
             </p>
-          </FadeUp>
+          </div>
         </div>
       </header>
 
       {/* ==================== SPIS TREŚCI ==================== */}
-      <section className="px-5 md:px-10">
-        <div className="mx-auto max-w-3xl">
-          <FadeUp whenInView={false} delay={0.15}>
-            <nav
-              aria-label="Spis treści"
-              className="bg-[#FFFFFF] border border-[#E4E1D8] rounded-[4px] p-6 md:p-9"
-            >
-              <p className="text-[length:var(--t-small)] font-medium text-[#5E5A50] mb-4">
-                Spis treści
-              </p>
-              <ol className="list-none">
+      <section className="site-wrap">
+        <div className="pp-col">
+          <div data-reveal style={{ ['--d' as string]: 1 }}>
+            <nav aria-label="Spis treści" className="pp-toc">
+              <p className="pp-toc-title">Spis treści</p>
+              <ol className="pp-toc-list">
                 {tocItems.map((item) => (
-                  <li key={item.id} className="border-t border-[#E4E1D8] last:border-b">
-                    <a
-                      href={`#${item.id}`}
-                      className={`group flex items-baseline gap-4 py-3 px-1 transition-colors ${focusRing}`}
-                    >
-                      <span className="pub-serif text-[length:var(--t-small)] text-[#5E5A50] w-6 flex-shrink-0">
-                        {item.num}
-                      </span>
-                      <span className="text-[length:var(--t-small)] font-medium text-[#161511] group-hover:underline underline-offset-4 decoration-[#161511]/40 transition-colors">
-                        {item.title}
-                      </span>
+                  <li key={item.id}>
+                    <a href={`#${item.id}`} className="pp-toc-link">
+                      <span className="pp-num">{Number(item.num)}.</span>
+                      {item.title}
                     </a>
                   </li>
                 ))}
               </ol>
             </nav>
-          </FadeUp>
+          </div>
         </div>
       </section>
 
       {/* ==================== TREŚĆ ==================== */}
-      <section className="px-5 md:px-10 pb-24 md:pb-36">
-        <div className="mx-auto max-w-3xl">
-          {/* 01 - Administrator */}
-          <FadeUp>
-            <DocSection id="administrator-danych" number="01" title="Administrator danych">
+      <section className="site-wrap pp-body">
+        <div className="pp-col">
+          {/* 1. Administrator */}
+          <div data-reveal>
+            <DocSection id="administrator-danych" number="1" title="Administrator danych">
               <p className="mb-5">Administratorem danych osobowych jest:</p>
-              <div className="bg-[#FFFFFF] border border-[#E4E1D8] rounded-[4px] p-6 md:p-8">
-                <p className="text-[#161511] font-semibold">MONLINE Stanisław Drożniak</p>
-                <p className="mt-1.5">ul. Krzycka 107/19, 53-019 Wrocław</p>
-                <p className="mt-1.5 text-[length:var(--t-small)] tracking-[0.04em] text-[#5E5A50]">
-                  NIP: 6332237557 &middot; REGON: 368769391
-                </p>
-                <div className="mt-5 pt-5 border-t border-[#E4E1D8] space-y-2.5">
+              <div className="pp-box">
+                <p className="pp-strong">MONLINE Stanisław Drożniak</p>
+                <p>ul. Krzycka 107/19, 53-019 Wrocław</p>
+                <p className="pp-small">NIP: 6332237557, REGON: 368769391</p>
+                <div className="pp-contact">
                   <ContactRow label="E-mail" href="mailto:stanislaw@drozniak.com" value="stanislaw@drozniak.com" />
                   <ContactRow label="Telefon" href="tel:+48792491196" value="+48 792 491 196" />
                 </div>
               </div>
             </DocSection>
-          </FadeUp>
+          </div>
 
-          {/* 02 - Kontakt */}
-          <FadeUp>
-            <DocSection id="kontakt-dane-osobowe" number="02" title="Kontakt w sprawie danych osobowych">
+          {/* 2. Kontakt */}
+          <div data-reveal>
+            <DocSection id="kontakt-dane-osobowe" number="2" title="Kontakt w sprawie danych osobowych">
               <p>
                 W sprawach dotyczących przetwarzania danych osobowych możesz skontaktować się przez{' '}
                 <InlineLink href="mailto:stanislaw@drozniak.com">stanislaw@drozniak.com</InlineLink>.
               </p>
             </DocSection>
-          </FadeUp>
+          </div>
 
-          {/* 03 - Zakres i cele */}
-          <FadeUp>
-            <DocSection id="zakres-i-cele" number="03" title="Zakres i cele przetwarzania danych">
+          {/* 3. Zakres i cele */}
+          <div data-reveal>
+            <DocSection id="zakres-i-cele" number="3" title="Zakres i cele przetwarzania danych">
               <p className="mb-6">Przetwarzam dane osobowe wyłącznie w celu:</p>
-              <div className="space-y-3">
+              <div className="pp-stack">
                 <PurposeItem
                   num="3.1"
                   title="Obsługa formularza kontaktowego"
@@ -127,7 +109,7 @@ export default function PrivacyPolicyPage() {
                   title="Wysyłka newslettera (MailerLite)"
                   bullets={[
                     'Dane: e-mail, data zapisu, aktywności newsletterowe.',
-                    'Cel: przesyłanie treści i informacji marketingowych - tylko po wyrażeniu zgody.',
+                    'Cel: przesyłanie treści i informacji marketingowych, tylko po wyrażeniu zgody.',
                     'System: MailerLite UAB.',
                   ]}
                 />
@@ -168,51 +150,51 @@ export default function PrivacyPolicyPage() {
                 />
               </div>
             </DocSection>
-          </FadeUp>
+          </div>
 
-          {/* 04 - Podstawy prawne */}
-          <FadeUp>
-            <DocSection id="podstawy-prawne" number="04" title="Podstawy prawne przetwarzania">
+          {/* 4. Podstawy prawne */}
+          <div data-reveal>
+            <DocSection id="podstawy-prawne" number="4" title="Podstawy prawne przetwarzania">
               <p className="mb-5">Dane są przetwarzane na podstawie:</p>
-              <ul className="space-y-3">
+              <ul className="pp-list">
                 <Bullet>
-                  <Strong>art. 6 ust. 1 lit. a RODO</Strong> - zgoda (np. newsletter, cookies
+                  <Strong>art. 6 ust. 1 lit. a RODO</Strong>: zgoda (np. newsletter, cookies
                   marketingowe).
                 </Bullet>
                 <Bullet>
-                  <Strong>art. 6 ust. 1 lit. b RODO</Strong> - wykonanie umowy lub działania
+                  <Strong>art. 6 ust. 1 lit. b RODO</Strong>: wykonanie umowy lub działania
                   na Twoje żądanie (kontakt, konsultacje, płatności).
                 </Bullet>
                 <Bullet>
-                  <Strong>art. 6 ust. 1 lit. f RODO</Strong> - uzasadniony interes
+                  <Strong>art. 6 ust. 1 lit. f RODO</Strong>: uzasadniony interes
                   administratora (analityka, marketing własnych usług, bezpieczeństwo).
                 </Bullet>
               </ul>
             </DocSection>
-          </FadeUp>
+          </div>
 
-          {/* 05 - Odbiorcy */}
-          <FadeUp>
-            <DocSection id="odbiorcy-danych" number="05" title="Odbiorcy danych">
+          {/* 5. Odbiorcy */}
+          <div data-reveal>
+            <DocSection id="odbiorcy-danych" number="5" title="Odbiorcy danych">
               <p className="mb-6">
                 Dane mogą być przekazywane do podmiotów przetwarzających je w moim imieniu:
               </p>
-              <div className="grid sm:grid-cols-2 gap-3">
+              <div className="pp-grid">
                 <RecipientCard
                   label="Hosting i infrastruktura"
-                  items={['Vercel Inc. - hosting, utrzymanie strony i statystyki bez cookies']}
+                  items={['Vercel Inc.: hosting, utrzymanie strony i statystyki bez cookies']}
                 />
                 <RecipientCard
                   label="Analityka i reklama"
                   items={[
-                    'Google Ireland Ltd. - Analytics, Tag Manager, Ads',
-                    'Meta Platforms Ireland Ltd. - Pixel, API Conversions',
+                    'Google Ireland Ltd.: Analytics, Tag Manager, Ads',
+                    'Meta Platforms Ireland Ltd.: Pixel, API Conversions',
                   ]}
                 />
                 <RecipientCard label="Newsletter" items={['MailerLite UAB']} />
                 <RecipientCard
                   label="Umawianie rozmów"
-                  items={['Google Ireland Ltd. - Kalendarz, Meet, Dysk', 'Supabase Inc. - baza danych', 'Resend - wysyłka e-maili']}
+                  items={['Google Ireland Ltd.: Kalendarz, Meet, Dysk', 'Supabase Inc.: baza danych', 'Resend: wysyłka e-maili']}
                 />
                 <RecipientCard label="Płatności" items={['Stripe Payments Europe Ltd.']} />
                 <RecipientCard
@@ -222,49 +204,49 @@ export default function PrivacyPolicyPage() {
                   ]}
                 />
               </div>
-              <p className="mt-6 text-[length:var(--t-small)] text-[#5E5A50] leading-[1.7]">
+              <p className="mt-6">
                 Wszystkie podmioty realizują przetwarzanie zgodnie z RODO i wyłącznie na moje
                 polecenie.
               </p>
             </DocSection>
-          </FadeUp>
+          </div>
 
-          {/* 06 - Czas przechowywania */}
-          <FadeUp>
-            <DocSection id="czas-przechowywania" number="06" title="Czas przechowywania danych">
-              <ul className="space-y-3">
+          {/* 6. Czas przechowywania */}
+          <div data-reveal>
+            <DocSection id="czas-przechowywania" number="6" title="Czas przechowywania danych">
+              <ul className="pp-list">
                 <Bullet>
-                  <Strong>Dane z formularza kontaktowego</Strong> - do 12 miesięcy po
+                  <Strong>Dane z formularza kontaktowego</Strong>: do 12 miesięcy po
                   zakończeniu kontaktu.
                 </Bullet>
                 <Bullet>
-                  <Strong>Dane klientów</Strong> - przez okres obsługi oraz do 5 lat
+                  <Strong>Dane klientów</Strong>: przez okres obsługi oraz do 5 lat
                   (obowiązki podatkowe).
                 </Bullet>
                 <Bullet>
-                  <Strong>Dane z umawiania rozmów</Strong> - do 12 miesięcy po rozmowie, chyba że
+                  <Strong>Dane z umawiania rozmów</Strong>: do 12 miesięcy po rozmowie, chyba że
                   rozpoczniemy współpracę.
                 </Bullet>
                 <Bullet>
-                  <Strong>Dane newsletterowe</Strong> - do czasu wycofania zgody.
+                  <Strong>Dane newsletterowe</Strong>: do czasu wycofania zgody.
                 </Bullet>
                 <Bullet>
-                  <Strong>Dane z cookies</Strong> - zgodnie z czasem przechowywania ustawionym
+                  <Strong>Dane z cookies</Strong>: zgodnie z czasem przechowywania ustawionym
                   w przeglądarce lub do usunięcia.
                 </Bullet>
                 <Bullet>
-                  <Strong>Dane płatnicze (Stripe)</Strong> - zgodnie z przepisami
+                  <Strong>Dane płatnicze (Stripe)</Strong>: zgodnie z przepisami
                   rozliczeniowymi i księgowymi.
                 </Bullet>
               </ul>
             </DocSection>
-          </FadeUp>
+          </div>
 
-          {/* 07 - Cookies */}
-          <FadeUp>
-            <DocSection id="cookies" number="07" title="Pliki cookies i narzędzia śledzące">
+          {/* 7. Cookies */}
+          <div data-reveal>
+            <DocSection id="cookies" number="7" title="Pliki cookies i narzędzia śledzące">
               <p className="mb-5">Strona korzysta z plików cookies w celu:</p>
-              <ul className="space-y-3 mb-6">
+              <ul className="pp-list mb-6">
                 <Bullet>zapewnienia prawidłowego działania strony</Bullet>
                 <Bullet>tworzenia statystyk (Google Analytics)</Bullet>
                 <Bullet>personalizacji reklam i remarketingu (Meta Pixel, Google Ads)</Bullet>
@@ -283,13 +265,13 @@ export default function PrivacyPolicyPage() {
               </p>
               <p>Ustawieniami cookies możesz też zarządzać w swojej przeglądarce.</p>
             </DocSection>
-          </FadeUp>
+          </div>
 
-          {/* 08 - Prawa */}
-          <FadeUp>
-            <DocSection id="twoje-prawa" number="08" title="Twoje prawa (RODO)">
+          {/* 8. Prawa */}
+          <div data-reveal>
+            <DocSection id="twoje-prawa" number="8" title="Twoje prawa (RODO)">
               <p className="mb-5">Masz prawo do:</p>
-              <ul className="space-y-3 mb-6">
+              <ul className="pp-list mb-6">
                 <Bullet>dostępu do swoich danych</Bullet>
                 <Bullet>sprostowania lub usunięcia danych</Bullet>
                 <Bullet>ograniczenia przetwarzania</Bullet>
@@ -303,13 +285,13 @@ export default function PrivacyPolicyPage() {
                 <InlineLink href="mailto:stanislaw@drozniak.com">stanislaw@drozniak.com</InlineLink>.
               </p>
             </DocSection>
-          </FadeUp>
+          </div>
 
-          {/* 09 - Bezpieczeństwo */}
-          <FadeUp>
-            <DocSection id="bezpieczenstwo" number="09" title="Bezpieczeństwo danych">
+          {/* 9. Bezpieczeństwo */}
+          <div data-reveal>
+            <DocSection id="bezpieczenstwo" number="9" title="Bezpieczeństwo danych">
               <p className="mb-5">Dane chronione są przy użyciu:</p>
-              <ul className="space-y-3 mb-6">
+              <ul className="pp-list mb-6">
                 <Bullet>szyfrowania SSL</Bullet>
                 <Bullet>zabezpieczonych serwerów (Vercel)</Bullet>
                 <Bullet>kontroli dostępu</Bullet>
@@ -317,35 +299,34 @@ export default function PrivacyPolicyPage() {
               </ul>
               <p>Dostęp mają wyłącznie osoby upoważnione.</p>
             </DocSection>
-          </FadeUp>
+          </div>
 
           {/* 10 - Zmiany */}
-          <FadeUp>
+          <div data-reveal>
             <DocSection id="zmiany" number="10" title="Zmiany w polityce prywatności">
               <p>
                 Polityka prywatności może być aktualizowana w przypadku zmian prawnych lub
                 technicznych. Nowa wersja zostanie opublikowana na stronie drozniak.pl.
               </p>
             </DocSection>
-          </FadeUp>
+          </div>
 
           {/* Stopka dokumentu */}
-          <FadeUp>
-            <div className="mt-16 md:mt-20 pt-8 border-t border-[#E4E1D8] text-center">
-              <p className="text-[length:var(--t-small)] text-[#5E5A50] leading-[1.7]">
-                &copy; {new Date().getFullYear()} MONLINE Stanisław Drożniak
-                <br />
-                Wszelkie prawa zastrzeżone.
-              </p>
-            </div>
-          </FadeUp>
+          <div data-reveal>
+            <p className="pp-end">
+              &copy; {new Date().getFullYear()} MONLINE Stanisław Drożniak. Wszelkie prawa zastrzeżone.
+            </p>
+          </div>
         </div>
       </section>
     </main>
   );
 }
 
-/* ==================== PRYMITYWY DOKUMENTU ==================== */
+/* ==================== PRYMITYWY DOKUMENTU ====================
+   Skład dokumentu według księgi marki: jedna kolumna tekstu na lewej krawędzi strony,
+   tekst 17 px w atramencie, sekcje oddziela odstęp, a nie linia; ramki zastępuje kamienne pole.
+   Style w pub-v2.css (prefiks pp-). */
 
 const DocSection: React.FC<{
   id: string;
@@ -353,52 +334,35 @@ const DocSection: React.FC<{
   title: string;
   children: React.ReactNode;
 }> = ({ id, number, title, children }) => (
-  <section id={id} className="scroll-mt-28 mt-12 md:mt-14 pt-10 md:pt-12 border-t border-[#E4E1D8]">
-    <div className="flex items-baseline gap-4 mb-6">
-      <span className="pub-num text-[length:var(--t-h3)] flex-shrink-0">{number}</span>
-      <h2 className="pub-serif text-[length:var(--t-h3)] font-semibold tracking-[-0.01em] text-[#161511] leading-tight">
-        {title}
-      </h2>
-    </div>
-    <div className="text-[length:var(--t-small)] text-[#161511] leading-[1.75]">{children}</div>
+  <section id={id} className="pp-section">
+    <h2 className="pp-h2">
+      <span className="pp-num">{Number(number)}.</span>
+      {title}
+    </h2>
+    <div className="pp-text">{children}</div>
   </section>
 );
 
-const Strong: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="text-[#161511] font-semibold">{children}</span>
-);
+const Strong: React.FC<{ children: React.ReactNode }> = ({ children }) => <strong className="pp-strong">{children}</strong>;
 
 const InlineLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => (
-  <a
-    href={href}
-    className={`text-[#161511] font-medium underline decoration-[#161511]/40 underline-offset-[3px] hover:decoration-[#161511] transition-colors ${focusRing}`}
-  >
+  <a href={href} className="site-link">
     {children}
   </a>
 );
 
-const Bullet: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <li className="flex items-start gap-3 text-[#161511] leading-[1.75]">
-    <span aria-hidden="true" className="mt-[0.7em] w-1 h-1 bg-[#161511] flex-shrink-0" />
-    <span>{children}</span>
-  </li>
-);
+const Bullet: React.FC<{ children: React.ReactNode }> = ({ children }) => <li className="pp-li">{children}</li>;
 
-const PurposeItem: React.FC<{ num: string; title: string; bullets: string[] }> = ({
-  num,
-  title,
-  bullets,
-}) => (
-  <div className="bg-[#FFFFFF] border border-[#E4E1D8] rounded-[4px] p-5 md:p-6">
-    <div className="flex items-baseline gap-3 mb-3.5">
-      <span className="pub-serif text-[length:var(--t-small)] text-[#5E5A50]">{num}</span>
-      <h3 className="text-[length:var(--t-small)] font-semibold text-[#161511]">{title}</h3>
-    </div>
-    <ul className="space-y-2">
+const PurposeItem: React.FC<{ num: string; title: string; bullets: string[] }> = ({ num, title, bullets }) => (
+  <div className="pp-box">
+    <h3 className="pp-h3">
+      <span className="pp-num">{num}</span>
+      {title}
+    </h3>
+    <ul className="pp-list">
       {bullets.map((b, i) => (
-        <li key={i} className="flex items-start gap-3 text-[length:var(--t-small)] text-[#5E5A50] leading-[1.7]">
-          <span aria-hidden="true" className="mt-[0.68em] w-1 h-1 bg-[#D6D2C6] flex-shrink-0" />
-          <span>{b}</span>
+        <li key={i} className="pp-li">
+          {b}
         </li>
       ))}
     </ul>
@@ -406,13 +370,11 @@ const PurposeItem: React.FC<{ num: string; title: string; bullets: string[] }> =
 );
 
 const RecipientCard: React.FC<{ label: string; items: string[] }> = ({ label, items }) => (
-  <div className="bg-[#FFFFFF] border border-[#E4E1D8] rounded-[4px] p-5">
-    <p className="text-[length:var(--t-small)] font-medium text-[#5E5A50] mb-3">
-      {label}
-    </p>
-    <ul className="space-y-2">
+  <div className="pp-box">
+    <p className="pp-h3">{label}</p>
+    <ul className="pp-list">
       {items.map((item, i) => (
-        <li key={i} className="text-[length:var(--t-small)] text-[#5E5A50] leading-[1.7]">
+        <li key={i} className="pp-li">
           {item}
         </li>
       ))}
@@ -420,20 +382,11 @@ const RecipientCard: React.FC<{ label: string; items: string[] }> = ({ label, it
   </div>
 );
 
-const ContactRow: React.FC<{ label: string; href: string; value: string }> = ({
-  label,
-  href,
-  value,
-}) => (
-  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-    <span className="w-16 text-[length:var(--t-small)] font-medium text-[#5E5A50]">
-      {label}
-    </span>
-    <a
-      href={href}
-      className={`text-[length:var(--t-small)] text-[#161511] font-medium hover:underline underline-offset-4 transition-colors ${focusRing}`}
-    >
+const ContactRow: React.FC<{ label: string; href: string; value: string }> = ({ label, href, value }) => (
+  <p className="pp-contact-row">
+    <span className="pp-small">{label}</span>
+    <a href={href} className="site-link">
       {value}
     </a>
-  </div>
+  </p>
 );

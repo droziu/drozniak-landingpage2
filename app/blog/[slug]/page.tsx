@@ -31,7 +31,6 @@ export interface ContentBlock {
   };
 }
 // Icons - using Client Component to avoid SSR issues with phosphor-react
-import { CaretRight, Clock, Calendar } from '@/app/components/BlogIcons';
 
 const BASE_URL = 'https://drozniak.pl';
 
@@ -110,7 +109,7 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
             hasH2 ? 'prose-headings:font-[family-name:var(--font-display),Georgia,serif] prose-headings:font-semibold prose-headings:tracking-[-0.01em] prose-headings:text-[#161511] prose-h2:text-[length:var(--t-h3)] prose-h2:mb-6 prose-h2:mt-16 prose-h2:md:mt-20 prose-h2:leading-[1.12] prose-h2:py-2' : ''
           } ${
             hasH3 ? 'prose-h3:text-[length:var(--t-body)] prose-h3:mb-5 prose-h3:mt-12 prose-h3:md:mt-14 prose-h3:font-semibold prose-h3:tracking-[-0.02em] prose-h3:text-[#161511] prose-h3:leading-[1.2] prose-h3:py-2' : ''
-          } prose-p:leading-[1.7] prose-p:text-[#161511] prose-p:text-[length:var(--t-body)] prose-p:mb-8 prose-ul:my-10 prose-li:my-4 prose-li:text-[#161511] prose-li:leading-[1.7] prose-strong:text-[#161511] prose-strong:font-extrabold prose-a:text-[#161511] prose-a:underline prose-a:decoration-[#161511]/40 prose-a:decoration-2 prose-a:underline-offset-2 prose-a:hover:text-[#161511] prose-a:hover:decoration-[#161511] prose-a:transition-colors`}
+          } prose-p:leading-[1.55] prose-p:text-[#161511] prose-p:text-[length:var(--t-body)] prose-p:mb-6 prose-ul:my-8 prose-li:my-2 prose-li:text-[#161511] prose-li:leading-[1.55] prose-strong:text-[#161511] prose-strong:font-semibold prose-a:text-[#161511] prose-a:underline prose-a:decoration-[#161511]/40 prose-a:decoration-2 prose-a:underline-offset-2 prose-a:hover:text-[#161511] prose-a:hover:decoration-[#161511] prose-a:transition-colors`}
           dangerouslySetInnerHTML={{ __html: textContent }}
         />
       );
@@ -134,11 +133,11 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
           <img
             src={imageSrc}
             alt={block.data.alt || ''}
-            className="w-full border border-[#E4E1D8] rounded-[4px]"
+            className="w-full rounded-[16px]"
             loading="lazy"
           />
           {block.data.caption && (
-            <figcaption className="text-center text-[length:var(--t-body)] text-[#5E5A50] mt-6 font-medium">
+            <figcaption className="text-[length:var(--t-small)] text-[#5E5A50] mt-3 font-medium">
               {block.data.caption}
             </figcaption>
           )}
@@ -147,37 +146,29 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
 
     case 'quote':
       return (
-        <blockquote className="border-l-2 border-[#161511] pl-8 md:pl-10 py-6 my-16 md:my-20">
-          <p className="m-0 pub-serif italic text-[length:var(--t-h3)] text-[#161511] leading-[1.55]">
+        <blockquote className="my-12 md:my-16 p-6 md:p-8 rounded-[16px] bg-[#ECEAE3]">
+          <p className="m-0 pub-serif italic font-medium text-[length:var(--t-h3)] text-[#161511] leading-[1.3]">
             &bdquo;{block.data.quote}&rdquo;
           </p>
           {block.data.author && (
-            <footer className="text-[length:var(--t-small)] mt-5 font-semibold text-[#5E5A50] not-italic m-0">
-              - {block.data.author}
+            <footer className="text-[length:var(--t-small)] mt-4 font-medium text-[#5E5A50] not-italic m-0">
+              {block.data.author}
             </footer>
           )}
         </blockquote>
       );
 
     case 'separator':
-      return (
-        <div className="my-16 md:my-20 flex items-center gap-4" aria-hidden>
-          <span className="w-12 h-[2px] bg-[#161511]"></span>
-          <span className="flex-1 h-px bg-[#E4E1D8]"></span>
-        </div>
-      );
+      // Księga marki: sekcje oddziela odstęp, a nie linia
+      return <div className="my-12 md:my-16" aria-hidden />;
 
     case 'heading':
       return (
-        <div id={block.id} className="my-12 md:my-16 scroll-mt-20">
-          <div className="max-w-6xl mx-auto">
-            <div className="bg-[#ECEAE3] border border-[#E4E1D8] rounded-[4px] px-8 md:px-14 lg:px-16 flex items-center justify-center min-h-[60px] md:min-h-[70px] py-6 md:py-7">
-              <h2
-                className="pub-serif text-[length:var(--t-h3)] font-semibold text-[#161511] leading-[1.3] tracking-[-0.01em] text-center !m-0 !p-0 max-w-5xl"
-                dangerouslySetInnerHTML={{ __html: block.data.text || '' }}
-              />
-            </div>
-          </div>
+        <div id={block.id} className="mt-16 md:mt-20 mb-6 scroll-mt-28">
+          <h2
+            className="pub-serif text-[length:var(--t-h3)] font-semibold text-[#161511] leading-[1.2] tracking-[-0.01em] !m-0 !p-0"
+            dangerouslySetInnerHTML={{ __html: block.data.text || '' }}
+          />
         </div>
       );
 
@@ -187,17 +178,13 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
       
       let processedText = highlightText;
       if (hasList) {
-        processedText = processedText.replace(/<ul>/g, '<ul class="space-y-5 list-none pl-0">');
-        processedText = processedText.replace(
-          /<li>/g,
-          '<li class="flex items-start gap-4"><span class="flex-shrink-0 mt-0.5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="#161511"/><path d="M8 12l2 2 4-4" stroke="#F6F5F1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="flex-1 text-[length:var(--t-body)] leading-relaxed">'
-        );
-        processedText = processedText.replace(/<\/li>/g, '</span></li>');
+        // Lista bez znaczków w kółkach (księga: ikony nie są punktorami), punkty oddziela odstęp
+        processedText = processedText.replace(/<ul>/g, '<ul class="space-y-3 list-none pl-0">');
       }
 
       return (
-        <div className="my-16 md:my-20 px-8 md:px-12 lg:px-16 bg-[#F6F5F1] text-[#161511] border border-[#E4E1D8] rounded-[4px]">
-          <div className="pt-10 md:pt-12 lg:pt-14 pb-10 md:pb-12 lg:pb-14">
+        <div className="my-12 md:my-16 px-6 md:px-10 bg-[#ECEAE3] text-[#161511] rounded-[16px]">
+          <div className="pt-8 md:pt-10 pb-8 md:pb-10">
             {block.data.title && (
               <h3 className="pub-serif text-[length:var(--t-h3)] font-semibold text-[#161511] tracking-[-0.01em] leading-[1.2] !m-0 !mb-6 md:!mb-8 !p-0">
                 {block.data.title}
@@ -219,40 +206,20 @@ const ContentBlockRenderer: React.FC<{ block: ContentBlock; inPair?: boolean }> 
     case 'numbered-section':
       return (
         <div id={block.id} className="my-12 md:my-16 scroll-mt-20">
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center gap-4 md:gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-14 h-14 md:w-16 md:h-16 bg-[#161511] rounded-[2px] flex items-center justify-center">
-                  <span className="pub-serif text-[length:var(--t-h3)] text-[#F6F5F1]">
-                    {block.data.number || ''}
-                  </span>
-                </div>
-              </div>
-              <div className="flex-1">
-                <div className="h-14 md:h-16 bg-[#F6F5F1] border border-[#E4E1D8] rounded-[2px] px-4 md:px-6 flex items-center">
-                  <h2 className="pub-serif text-[length:var(--t-h3)] font-semibold text-[#161511] leading-tight tracking-[-0.01em] m-0 p-0">
-                    {block.data.text || ''}
-                  </h2>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h2 className="pub-serif text-[length:var(--t-h3)] font-semibold text-[#161511] leading-[1.2] tracking-[-0.01em] m-0 p-0">
+            {block.data.number ? `${block.data.number}. ` : ''}
+            {block.data.text || ''}
+          </h2>
         </div>
       );
 
     case 'cta':
       return (
-        <div className="my-16 md:my-20 text-center py-10 md:py-12 px-8 md:px-12 bg-[#ECEAE3] border border-[#E4E1D8] rounded-[4px] flex flex-col items-center justify-center">
-          <p className="pub-serif text-[length:var(--t-h3)] font-semibold tracking-[-0.01em] text-[#161511] mb-7 leading-[1.4] m-0">{block.data.ctaText}</p>
+        <div className="my-12 md:my-16 py-8 md:py-10 px-6 md:px-10 bg-[#ECEAE3] rounded-[16px] flex flex-col items-start">
+          <p className="pub-serif text-[length:var(--t-h3)] font-semibold tracking-[-0.01em] text-[#161511] mb-6 leading-[1.2] m-0">{block.data.ctaText}</p>
           {block.data.ctaLink && (
-            <a
-              href={block.data.ctaLink}
-              className={block.data.ctaStyle === 'primary' ? 'pub-btn pub-btn-primary' : 'pub-btn pub-btn-outline'}
-            >
-              Dowiedz się więcej
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+            <a href={block.data.ctaLink} className="site-btn site-btn-ink">
+              Zobacz szczegóły
             </a>
           )}
         </div>
@@ -438,12 +405,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   };
 
   const layoutType = (post.layout_type || 'standard') as 'standard' | 'wide' | 'narrow' | 'custom';
-  const maxWidthClass = {
-    narrow: 'max-w-3xl',
-    standard: 'max-w-5xl',
-    wide: 'max-w-6xl',
-    custom: 'max-w-5xl',
-  }[layoutType];
 
   return (
     <>
@@ -459,211 +420,88 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         id="schema-breadcrumb"
       />
 
-      <article className="min-h-screen bg-[#FFFFFF] text-[#161511]">
-        {/* Breadcrumbs */}
-        <div className="container mx-auto px-4 md:px-6 py-6 md:py-8 max-w-7xl border-b border-[#E4E1D8]">
-          <nav aria-label="Okruszki" className="flex items-center gap-1.5 md:gap-2 flex-wrap text-[length:var(--t-small)]">
-            <Link
-              href="/"
-              className="text-[#5E5A50] hover:text-[#161511] px-2 py-1.5 transition-colors font-medium rounded-[2px] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#161511]"
-            >
-              Strona główna
-            </Link>
-            <CaretRight size={14} weight="bold" className="text-[#D6D2C6] flex-shrink-0" />
-            <Link
-              href="/blog"
-              className="text-[#5E5A50] hover:text-[#161511] px-2 py-1.5 transition-colors font-medium rounded-[2px] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#161511]"
-            >
-              Blog
-            </Link>
-            {post.category_name && (
-              <>
-                <CaretRight size={14} weight="bold" className="text-[#D6D2C6] flex-shrink-0" />
-                <Link
-                  href={`/blog/kategoria/${post.category_slug}`}
-                  className="text-[#5E5A50] hover:text-[#161511] px-2 py-1.5 transition-colors font-medium rounded-[2px] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#161511]"
-                >
-                  {post.category_name}
-                </Link>
-              </>
-            )}
-            <CaretRight size={14} weight="bold" className="text-[#5E5A50] flex-shrink-0" />
-            <span className="text-[#161511] font-semibold px-2 py-1.5 max-w-[600px] truncate">
-              {post.title}
-            </span>
-          </nav>
-        </div>
-
-        {/* Content */}
-        <div className={`container mx-auto px-4 md:px-6 py-16 md:py-20 lg:py-24 ${maxWidthClass}`}>
-          {/* Category and date - stable DOM order to avoid hydration mismatch */}
-          <div className="flex items-center gap-4 md:gap-6 mb-8 md:mb-10 flex-wrap">
-            <div className="flex items-center gap-2">
-              {post.category_name ? (
-                <>
-                  <span className="w-2 h-2 bg-[#161511]" aria-hidden />
-                  <span className="pub-chip">{post.category_name}</span>
-                </>
-              ) : null}
-            </div>
-            <div className="flex items-center gap-2 text-[#5E5A50]">
-              {post.published_at ? (
-                <>
-                  <Calendar size={16} weight="regular" className="text-[#5E5A50] flex-shrink-0" />
-                  <span className="text-[length:var(--t-small)]" suppressHydrationWarning>
-                    {new Date(post.published_at).toLocaleDateString('pl-PL', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </span>
-                </>
-              ) : null}
-            </div>
-            <div className="flex items-center gap-2 text-[#5E5A50]">
-              {post.reading_time ? (
-                <>
-                  <Clock size={16} weight="regular" className="text-[#5E5A50] flex-shrink-0" />
-                  <span className="text-[length:var(--t-small)]">{post.reading_time} min</span>
-                </>
-              ) : null}
-            </div>
-          </div>
-
-          {/* Title */}
-          <h1 className="pub-h-serif text-[length:var(--t-h2)] py-4 md:py-6">
-            {post.title}
-          </h1>
-
-          {/* Excerpt */}
-          {post.excerpt && (
-            <p className="text-[length:var(--t-body)] font-medium text-[#161511] mb-8 md:mb-10 leading-[1.6] text-pretty">
-              {post.excerpt}
-            </p>
+      <article className="bp site-wrap">
+        {/* Okruszki */}
+        <nav aria-label="Okruszki" className="bp-crumbs">
+          <Link href="/blog">Blog</Link>
+          {post.category_name && (
+            <>
+              <span aria-hidden="true">/</span>
+              <Link href={`/blog/kategoria/${post.category_slug}`}>{post.category_name}</Link>
+            </>
           )}
+        </nav>
 
-          {/* Hero image */}
+        <div className={`bp-col ${layoutType === 'wide' ? 'bp-col-wide' : ''}`}>
+          <header className="bp-head">
+            <h1 className="hp-h2 bp-title">{post.title}</h1>
+            <p className="bp-meta" suppressHydrationWarning>
+              {post.published_at
+                ? new Date(post.published_at).toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' })
+                : ''}
+              {post.reading_time ? `, ${post.reading_time} min czytania` : ''}
+            </p>
+            {post.excerpt && <p className="bp-lead">{post.excerpt}</p>}
+          </header>
+
           {post.featured_image_url && (
-            <div className="w-full my-12 md:my-16 overflow-hidden rounded-[4px] border border-[#E4E1D8] bg-[#F6F5F1]">
+            <figure className="bp-hero">
               <img
                 src={getDesktopImageUrl(post.featured_image_url) || post.featured_image_url}
                 srcSet={getHeroImageSrcSet(post.featured_image_url)}
-                sizes="100vw"
+                sizes="(min-width: 1100px) 860px, 100vw"
                 alt={post.title}
-                className="w-full h-auto object-cover"
                 loading="eager"
                 fetchPriority="high"
               />
-            </div>
+            </figure>
           )}
 
-          {/* Separator */}
-          <div className="w-16 h-[3px] bg-[#161511] mb-16 md:mb-20" aria-hidden></div>
-
-          {/* Content blocks */}
-          <div className="blog-content text-[#161511]">
+          {/* Treść wpisu */}
+          <div className="blog-content bp-content">
             {post.content?.blocks?.map((block: ContentBlock, index: number) => {
               const prevBlock = index > 0 ? post.content?.blocks[index - 1] : null;
               const nextBlock = index < (post.content?.blocks?.length ?? 0) - 1 ? post.content?.blocks[index + 1] : null;
-              const isNewSection = block.type === 'text' && block.data.text && 
-                (block.data.text.includes('<h2>') || block.data.text.includes('<h2 '));
               const prevWasSeparator = prevBlock?.type === 'separator';
               const currentIsSeparator = block.type === 'separator';
-              const shouldAddSeparator = isNewSection && index > 0 && prevBlock && !prevWasSeparator;
               const isSecondOfImagePair = prevBlock?.type === 'image' && block.type === 'image';
               const isFirstOfImagePair = block.type === 'image' && nextBlock?.type === 'image';
-              
-              if (currentIsSeparator && prevWasSeparator) {
-                return null;
-              }
-              if (isSecondOfImagePair) {
-                return null;
-              }
-              
+
+              if (currentIsSeparator && prevWasSeparator) return null;
+              if (isSecondOfImagePair) return null;
+
               if (isFirstOfImagePair && nextBlock) {
                 return (
-                  <div key={`${block.id}-${nextBlock.id}`}>
-                    {shouldAddSeparator && (
-                      <div className="my-16 md:my-20 flex items-center gap-4" aria-hidden>
-                        <span className="w-12 h-[2px] bg-[#161511]"></span>
-                        <span className="flex-1 h-px bg-[#E4E1D8]"></span>
-                      </div>
-                    )}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 my-16 md:my-20 max-w-5xl mx-auto">
-                      <ContentBlockRenderer block={block} inPair />
-                      <ContentBlockRenderer block={nextBlock} inPair />
-                    </div>
+                  <div key={`${block.id}-${nextBlock.id}`} className="grid grid-cols-1 md:grid-cols-2 gap-4 my-12 md:my-16">
+                    <ContentBlockRenderer block={block} inPair />
+                    <ContentBlockRenderer block={nextBlock} inPair />
                   </div>
                 );
               }
-              
+
               return (
                 <div key={block.id}>
-                  {shouldAddSeparator && (
-                    <div className="my-16 md:my-20 flex items-center gap-4" aria-hidden>
-                      <span className="w-12 h-[2px] bg-[#161511]"></span>
-                      <span className="flex-1 h-px bg-[#E4E1D8]"></span>
-                    </div>
-                  )}
                   <ContentBlockRenderer block={block} />
                 </div>
               );
             })}
           </div>
 
-          {/* Tags */}
+          {/* Tagi */}
           {post.tags && post.tags.length > 0 && (
-            <div className="mt-16 md:mt-20 pt-10 border-t border-[#E4E1D8]">
-              <p className="text-[length:var(--t-small)] font-medium text-[#5E5A50] mb-5">
-                Tagi
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag: string) => (
-                  <span key={tag} className="pub-chip">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <ul className="bp-tags" aria-label="Tagi">
+              {post.tags.map((tag: string) => (
+                <li key={tag}>{tag}</li>
+              ))}
+            </ul>
           )}
 
           {/* Autor */}
-          <div className="mt-16 md:mt-20 pt-10 border-t border-[#E4E1D8] flex items-center gap-5">
-            <img
-              src="/images/Drozniak_photo_suit_1.webp"
-              alt="Stanisław Drożniak"
-              className="w-14 h-14 md:w-16 md:h-16 object-cover rounded-[4px] border border-[#E4E1D8]"
-              loading="lazy"
-            />
+          <div className="bp-author">
+            <img src="/images/home/portret-omnie-600.jpg" alt="" width={64} height={64} loading="lazy" />
             <div>
-              <p className="text-[length:var(--t-small)] font-medium text-[#5E5A50]">
-                Autor
-              </p>
-              <p className="mt-1 pub-serif text-[length:var(--t-body)] text-[#161511]">Stanisław Drożniak</p>
-              <p className="text-[length:var(--t-small)] text-[#5E5A50]">
-                Marketing, strony www i AI - w jednych rękach
-              </p>
-            </div>
-          </div>
-
-          {/* CTA na końcu artykułu */}
-          <div className="mt-12 md:mt-16 p-8 md:p-12 bg-[#ECEAE3] border border-[#E4E1D8] rounded-[4px] text-center">
-            <h2 className="text-[length:var(--t-h3)]">
-              <span className="pub-h-serif block">Masz projekt, który chcesz dopracować?</span>
-            </h2>
-            <p className="mt-5 text-[length:var(--t-body)] text-[#161511] leading-[1.7]">
-              Napisz do mnie - odpowiadam w 24 godziny.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/kontakt" className="pub-btn pub-btn-primary">
-                Porozmawiajmy
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link href="/blog" className="pub-btn pub-btn-outline">
-                Wróć do bloga
-              </Link>
+              <p className="bp-author-name">Stanisław Drożniak</p>
+              <p className="bp-author-role">Marketing i pozyskiwanie klientów dla firm</p>
             </div>
           </div>
         </div>

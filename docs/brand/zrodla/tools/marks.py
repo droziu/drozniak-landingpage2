@@ -35,8 +35,8 @@ def A_geom(w=34, L=44, T=40, B=216, cx=130, dot_r=22, push=30, gap=10, ang=45):
     return dict(d=d, dot=(round(dcx, 2), round(dcy, 2), dot_r), motion=motion, bb=bb)
 
 def A_symbol(pad=6):
-    from master import symbol
-    g = symbol(); x0, y0, x1, y1 = g['bb']
+    from master import symbol_v1
+    g = symbol_v1(); x0, y0, x1, y1 = g['bb']
     vb = (x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad)
     cx, cy, r = g['dot']
     return vb, f'<path fill="currentColor" d="{g["d"]}"/><circle cx="{cx}" cy="{cy}" r="{r}" {DOT}/>', g

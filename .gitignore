@@ -7,3 +7,6 @@ dist/
 tsconfig.tsbuildinfo
 .taste-skill/
 .claude/settings.local.json
+
+# środowisko Pythona do budowania księgi marki
+docs/brand/zrodla/.venv/

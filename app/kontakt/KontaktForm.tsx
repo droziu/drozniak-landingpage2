@@ -106,7 +106,7 @@ export const KontaktForm: React.FC<{ bookingUrl: string }> = ({ bookingUrl }) =>
   if (status === 'sent') {
     return (
       <div className="kt-sent" role="status">
-        <p className="kt-sent-title">Wiadomość wysłana.</p>
+        <p className="kt-sent-title">Wiadomość wysłana</p>
         <p className="hp-body">
           Odpowiem w ciągu 24 godzin w dni robocze. Jeśli wolisz porozmawiać od razu, wybierz termin rozmowy online.
         </p>
@@ -198,8 +198,7 @@ export const KontaktForm: React.FC<{ bookingUrl: string }> = ({ bookingUrl }) =>
       <Turnstile ref={turnstileRef} onToken={setToken} />
 
       <div className="kt-submit">
-        <button type="submit" className="site-btn site-btn-accent" disabled={status === 'sending'} aria-busy={status === 'sending'}>
-          {status === 'sending' && <span className="kt-spinner" aria-hidden="true" />}
+        <button type="submit" className="site-btn site-btn-ink" disabled={status === 'sending'} aria-busy={status === 'sending'}>
           {status === 'sending' ? 'Wysyłanie…' : 'Wyślij wiadomość'}
         </button>
         <p className="kt-legal">

@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { Reveal } from './Reveal';
-import { MaterialsLoop } from './Graphics';
-import { SzIcon, type SzIconName } from './Icon';
+import { HomeMotion } from '../components/home/HomeMotion';
+import { AreaIcon, type IconName } from '../components/AreaIcon';
+import { Tor } from '../components/brand/Tor';
+import { UiRows } from '../components/brand/UiRows';
 
-const TOPICS: { icon: SzIconName; title: string; text: string }[] = [
+const TOPICS: { icon: IconName; title: string; text: string }[] = [
   { icon: 'ads', title: 'Marketing i pozyskiwanie klientów', text: 'Jak planować reklamy i budżet, żeby było widać, co przynosi klientów.' },
   { icon: 'inquiry', title: 'Obsługa zapytań', text: 'Szybka odpowiedź i porządek w kontaktach, żeby żadne zapytanie nie zginęło.' },
   { icon: 'auto', title: 'Automatyzacje', text: 'Powtarzalne zadania, które mogą robić narzędzia zamiast ludzi.' },
@@ -11,18 +12,18 @@ const TOPICS: { icon: SzIconName; title: string; text: string }[] = [
   { icon: 'custom', title: 'Program na zamówienie', text: 'Kilka tematów w jednym szkoleniu, dobranych do firmy.' },
 ];
 
-const STEPS: { icon: SzIconName; title: string; text: string }[] = [
-  { icon: 'talk', title: 'Rozmowa', text: 'Pytam, jak zespół pracuje i co chce robić sprawniej.' },
-  { icon: 'plan', title: 'Program', text: 'Przed szkoleniem dostajesz zakres i harmonogram.' },
-  { icon: 'teach', title: 'Szkolenie', text: 'Online albo na miejscu, na przykładach z firmy.' },
-  { icon: 'month', title: 'Miesiąc po szkoleniu', text: 'Odpowiadam na pytania zespołu.' },
+const STEPS: { title: string; text: string }[] = [
+  { title: 'Rozmowa', text: 'Pytam, jak zespół pracuje i co chce robić sprawniej.' },
+  { title: 'Program', text: 'Przed szkoleniem dostajesz zakres i harmonogram.' },
+  { title: 'Szkolenie', text: 'Online albo na miejscu, na przykładach z firmy.' },
+  { title: 'Miesiąc po szkoleniu', text: 'Odpowiadam na pytania zespołu.' },
 ];
 
-const ArrowIcon = () => (
-  <svg className="site-btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+const MATERIALS = [
+  { icon: 'doc' as const, label: 'Instrukcje do narzędzi' },
+  { icon: 'plan' as const, label: 'Checklisty dla zespołu' },
+  { icon: 'clipboard' as const, label: 'Procedury krok po kroku' },
+];
 
 // Jednoliterowe spójniki i przyimki nie zostają na końcu wiersza
 const nb = (s: string) => s.replace(/(^|\s)([aiouwzAIOUWZ])\s/g, '$1$2\u00a0');
@@ -32,7 +33,7 @@ const d = (n: number) => ({ ['--d' as string]: n });
 export default function SzkoleniaPage() {
   return (
     <main id="sz-root" className="sz">
-      <Reveal rootId="sz-root" />
+      <HomeMotion rootId="sz-root" />
 
       {/* Hero */}
       <section className="sz-hero site-wrap" aria-labelledby="sz-title">
@@ -47,9 +48,8 @@ export default function SzkoleniaPage() {
               prowadzę online albo na miejscu.
             </p>
             <div className="sz-hero-actions">
-              <Link href="/kontakt" className="site-btn site-btn-accent">
-                Zapytaj o&nbsp;szkolenie
-                <ArrowIcon />
+              <Link href="/umow" className="site-btn site-btn-accent">
+                Umów rozmowę
               </Link>
             </div>
           </div>
@@ -81,9 +81,7 @@ export default function SzkoleniaPage() {
         <ul className="sz-topic-grid">
           {TOPICS.map((t, i) => (
             <li key={t.title} className="sz-topic" data-reveal style={d(i % 3)}>
-              <span className="sz-topic-icon">
-                <SzIcon name={t.icon} />
-              </span>
+              <AreaIcon name={t.icon} size={28} />
               <div className="sz-topic-body">
                 <h3 className="sz-h3">{nb(t.title)}</h3>
                 <p className="hp-body">{nb(t.text)}</p>
@@ -125,20 +123,15 @@ export default function SzkoleniaPage() {
           <h2 id="sz-steps" className="hp-h2" data-reveal>
             Jak wygląda szkolenie
           </h2>
-          <ol className="sz-step-list" data-ui>
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="sz-step" data-reveal style={{ ...d(i + 1), ['--i' as string]: i }}>
-                <span className="sz-step-icon">
-                  <SzIcon name={s.icon} />
-                  <span className="sz-step-on" aria-hidden="true">
-                    <SzIcon name={s.icon} />
-                  </span>
-                </span>
-                <h3 className="sz-h3">{nb(s.title)}</h3>
-                <p className="hp-body">{nb(s.text)}</p>
-              </li>
-            ))}
-          </ol>
+          <div className="pole" data-reveal style={d(1)}>
+            <Tor
+              dir="auto"
+              wide="(min-width: 1100px)"
+              className="tor-lg tor-left"
+              steps={STEPS.map((s) => ({ label: nb(s.title), text: nb(s.text) }))}
+              aria-label="Przebieg szkolenia"
+            />
+          </div>
         </div>
       </section>
 
@@ -153,8 +146,8 @@ export default function SzkoleniaPage() {
               Zespół dostaje materiały dopasowane do swoich narzędzi. Można do nich wrócić albo przekazać je nowej osobie.
             </p>
           </div>
-          <div className="sz-materials-graphic" data-ui data-reveal style={d(2)}>
-            <MaterialsLoop />
+          <div className="sz-materials-graphic pole pole-srodek" data-reveal style={d(2)}>
+            <UiRows rows={MATERIALS} label="Materiały po szkoleniu: instrukcje, checklisty i procedury" />
           </div>
         </div>
       </section>
@@ -174,9 +167,8 @@ export default function SzkoleniaPage() {
               zgłoszeniu.
             </p>
             <div data-reveal style={d(3)}>
-              <Link href="/kontakt" className="site-btn site-btn-ink">
+              <Link href="/kontakt" className="site-btn site-btn-line">
                 Zapytaj o&nbsp;dofinansowanie
-                <ArrowIcon />
               </Link>
             </div>
           </div>

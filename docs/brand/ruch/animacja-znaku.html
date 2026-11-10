@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drożniak, animacja znaku</title>
+<!--
+  Animacja znaku marki Drożniak 2.0. Plik powstaje z docs/brand/zrodla/tools/export_ruch.py, nie edytuj go ręcznie.
+  Kliknięcie albo spacja: od początku. Parametry w adresie:
+    ?tlo=papier     jasne tło (domyślnie głęboka zieleń)
+    ?skala=3        wielkość znaku względem pliku logo (domyślnie dopasowana do okna)
+    ?petla=1        powtarzanie co 3.4 s
+    ?t=1200         zatrzymana klatka po tylu milisekundach
+  Przebieg: kropka pojawia się (0,1 s), rysuje literę (do 1,1 s), wyskakuje z końca trzonu,
+  ląduje z jednym ugięciem (ok. 1,45 s), znak stoi do 2,4 s.
+-->
+<style>
+  :root { --tlo: #0A3D27; --litera: #F6F5F1; --kropka: #23C27D; --ruch: cubic-bezier(0.22, 0.61, 0.36, 1); --skala: 2; }
+  :root.papier { --tlo: #F6F5F1; --litera: #161511; --kropka: #14945E; }
+  html, body { height: 100%; margin: 0; }
+  body { display: grid; place-items: center; overflow: hidden; background: var(--tlo); color: var(--litera); cursor: pointer; }
+  .znak { position: relative; width: 174.95px; height: 258.06px; transform: scale(var(--skala)); }
+  .znak svg { display: block; overflow: visible; }
+  .kropka { position: absolute; left: 0; top: 0; width: 56.32px; height: 56.32px; border-radius: 50%; background: var(--kropka);
+    offset-path: path("M-30.00 86.66L56.00 86.66L85.14 86.66C125.52 86.66 158.26 123.29 158.26 168.48C158.26 215.39 125.61 253.46 85.33 253.46L60.00 253.46L51.73 253.46C42.89 253.46 35.73 246.30 35.73 237.46L35.73 82.00C35.73 32.38 47.78 -7.84 62.65 -7.84C77.52 -7.84 89.57 8.28 89.57 28.16L89.57 52.16"); offset-anchor: 50% 50%; offset-rotate: 0deg; offset-distance: 96.7895%; }
+  .gra .kropka { animation: pojawienie 200ms var(--ruch) 100ms both, jazda 1880ms linear(0, 0.0067, 0.0138, 0.0219, 0.0316, 0.0437, 0.0588, 0.0767, 0.0955, 0.1143, 0.133, 0.1518, 0.1706, 0.1894, 0.2081, 0.2269, 0.2457, 0.2644, 0.2832, 0.302, 0.3208, 0.3395, 0.3583, 0.3771, 0.3959, 0.4146, 0.4334, 0.4522, 0.4709, 0.4896, 0.508, 0.5253, 0.5411, 0.5553, 0.5688, 0.5829, 0.5985, 0.6159, 0.6349, 0.655, 0.6761, 0.6981, 0.7211, 0.7451, 0.7699, 0.7952, 0.8194, 0.8412, 0.8606, 0.8777, 0.8924, 0.9048, 0.9148, 0.9225, 0.9278, 0.9307, 0.9316, 0.936, 0.9448, 0.9562, 0.9684, 0.9804, 0.991, 0.9998, 1.0065, 1.011, 1.0134, 1.0141, 1.0134, 1.0118, 1.0095, 1.007, 1.0046, 1.0023, 1.0004, 0.9989, 0.9979, 0.9973, 0.9971, 0.9972, 0.9975, 0.9979, 0.9984, 0.999, 0.9994, 0.9998, 1.0002, 1.0004, 1.0005, 1.0006, 1.0006, 1.0005, 1.0004, 1.0003, 1) 180ms both; }
+  .gra .kreska { animation: pismo 1880ms linear(0, 0.0067, 0.0138, 0.0219, 0.0316, 0.0437, 0.0588, 0.0767, 0.0955, 0.1143, 0.133, 0.1518, 0.1706, 0.1894, 0.2081, 0.2269, 0.2457, 0.2644, 0.2832, 0.302, 0.3208, 0.3395, 0.3583, 0.3771, 0.3959, 0.4146, 0.4334, 0.4522, 0.4709, 0.4896, 0.508, 0.5253, 0.5411, 0.5553, 0.5688, 0.5829, 0.5985, 0.6159, 0.6349, 0.655, 0.6761, 0.6981, 0.7211, 0.7451, 0.7699, 0.7952, 0.8194, 0.8412, 0.8606, 0.8777, 0.8924, 0.9048, 0.9148, 0.9225, 0.9278, 0.9307, 0.9316, 0.936, 0.9448, 0.9562, 0.9684, 0.9804, 0.991, 0.9998, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.9989, 0.9979, 0.9973, 0.9971, 0.9972, 0.9975, 0.9979, 0.9984, 0.999, 0.9994, 0.9998, 1, 1, 1, 1, 1, 1, 1, 1, 1) 180ms both; }
+  .gra .calosc { animation: calosc 2060ms step-end both; }
+  .stop * { animation-play-state: paused !important; }
+  @keyframes pojawienie { from { transform: scale(0); } }
+  @keyframes jazda { from { offset-distance: 0%; } }
+  @keyframes pismo { from { stroke-dashoffset: 100; } }
+  @keyframes calosc { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .gra * { animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="znak" id="znak">
+  <svg viewBox="0 0 174.95 258.06" width="174.95" height="258.06" aria-hidden="true">
+    <defs><clipPath id="poza-trzonem"><path clip-rule="evenodd" d="M-40 -10h260v290h-260zM16 91.25h39v148.75h-39zM19.9 240h31.65v8.86h-31.65z"/></clipPath>
+      <mask id="pismo" maskUnits="userSpaceOnUse" x="-40" y="-10" width="260" height="290">
+        <g fill="none" stroke="#fff"><g clip-path="url(#poza-trzonem)"><path class="kreska" d="M-30.00 86.66L56.00 86.66L85.14 86.66" pathLength="15.9134" stroke-width="16" stroke-dasharray="100.0000 300"/></g><path class="kreska" d="M56.00 86.66L85.14 86.66C125.52 86.66 158.26 123.29 158.26 168.48C158.26 215.39 125.61 253.46 85.33 253.46L60.00 253.46L51.73 253.46" pathLength="42.6732" stroke-width="44" stroke-dasharray="88.1140 300"/><g clip-path="url(#poza-trzonem)"><path class="kreska" d="M60.00 253.46L51.73 253.46C42.89 253.46 35.73 246.30 35.73 237.46" pathLength="4.6171" stroke-width="82" stroke-dasharray="46.5838 300"/></g><path class="kreska" d="M51.73 253.46C42.89 253.46 35.73 246.30 35.73 237.46L35.73 82.00" pathLength="24.9601" stroke-width="44" stroke-dasharray="45.4408 300"/></g>
+        <rect class="calosc" x="-40" y="-10" width="260" height="290" fill="#fff"/>
+      </mask>
+    </defs>
+    <path fill="currentColor" d="M85.63582089552239 82.05824000000001Q104.2865671641791 82.05824000000001 120.57313432835821 87.3119713432836Q136.8597014925373 92.56570268656719 149.07462686567163 103.20450865671644Q161.28955223880595 113.84331462686569 168.1194029850746 129.60450865671643Q174.94925373134328 145.36570268656718 174.94925373134328 166.3806280597015Q174.94925373134328 187.13286686567164 167.72537313432835 203.9448071641791Q160.50149253731342 220.75674746268658 148.0238805970149 232.8403295522388Q135.54626865671642 244.92391164179105 119.52238805970148 251.49107582089553Q103.49850746268656 258.05824 85.63582089552239 258.05824H0.0V248.86421014925375H17.86268656716418L19.964179104477612 247.0254041791045V93.09107582089553L17.86268656716418 91.25226985074627H0.0V82.05824000000001ZM80.64477611940298 248.86421014925375Q98.50746268656715 248.86421014925375 112.16716417910446 239.4074937313433Q125.82686567164177 229.95077731343284 133.70746268656717 212.21943402985073Q141.58805970149254 194.48809074626865 141.58805970149254 170.05824Q141.58805970149254 146.6791355223881 133.3134328358209 128.8164489552239Q125.03880597014924 110.95376238805972 110.72238805970147 101.103016119403Q96.40597014925372 91.25226985074627 78.01791044776118 91.25226985074627H53.32537313432836L51.48656716417911 93.09107582089553V247.0254041791045L53.32537313432836 248.86421014925375Z" mask="url(#pismo)"/>
+  </svg>
+  <span class="kropka"></span>
+</div>
+<script>
+  var q = new URLSearchParams(location.search), root = document.documentElement, znak = document.getElementById('znak');
+  if (q.get('tlo') === 'papier') root.classList.add('papier');
+  var skala = parseFloat(q.get('skala')) || Math.max(0.5, Math.min(innerWidth / 455, innerHeight / 490));
+  root.style.setProperty('--skala', skala);
+  function graj() { znak.classList.remove('gra'); void znak.offsetWidth; znak.classList.add('gra'); }
+  graj();
+  if (q.get('t') !== null) {
+    znak.classList.add('stop');
+    znak.querySelectorAll('.kropka, .kreska, .calosc').forEach(function (el) {
+      el.getAnimations().forEach(function (a) { a.currentTime = parseFloat(q.get('t')) || 0; });
+    });
+  } else {
+    addEventListener('click', graj);
+    addEventListener('keydown', function (e) { if (e.key === ' ') graj(); });
+    if (q.get('petla')) setInterval(graj, 3400);
+  }
+</script>
+</body>
+</html>

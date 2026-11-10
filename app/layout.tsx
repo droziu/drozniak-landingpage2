@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { Brygada_1918, Schibsted_Grotesk } from 'next/font/google';
+import '../docs/brand/tokens/drozniak-tokens.css';
 import './globals.css';
 import './pub-v2.css';
+import './components/brand/brand-elements.css';
 import { LayoutClient } from './components/LayoutClient';
 import { INTRO_SCRIPT } from './components/SiteIntro';
 import { Analytics } from '@vercel/analytics/next';
@@ -73,7 +75,6 @@ export const metadata: Metadata = {
     icon: [
       { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
     ],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
@@ -86,7 +87,7 @@ const globalSchemas = {
     '@type': 'Organization',
     name: 'Stanisław Drożniak',
     url: BASE_URL,
-    logo: `${BASE_URL}/images/brand/drozniak-znak-512.png`,
+    logo: `${BASE_URL}/images/brand/drozniak-ikona-1024.png`,
     description: 'Marketing i pozyskiwanie klientów dla firm.',
     sameAs: ['https://www.linkedin.com/in/stanislawdrozniak'],
     contactPoint: {

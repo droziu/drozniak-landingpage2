@@ -757,29 +757,36 @@ body::before {
    ============================================================ */
 
 .site-pub {
-  /* Tokeny według księgi marki (docs/brand/brand-book/drozniak-zasady-marki.pdf) */
-  --paper: #F6F5F1;        /* papier: tło */
-  --paper-white: #FFFFFF;
-  --paper-tint: #ECEAE3;   /* kamień: jeden krok od papieru */
-  --ink: #161511;          /* atrament: tekst, logo, przyciski */
-  --ink-2: #161511;        /* tekst ciągły też w atramencie */
-  --ink-3: #5E5A50;        /* grafit: tekst pomocniczy (6,3:1 na papierze) */
-  --line: #E4E1D8;
-  --line-strong: #D6D2C6;
-  --green: #14945E;        /* zieleń sygnałowa: tylko kropka, nigdy tekst ani tło przycisku */
-  --deep: #0E2A20;         /* głęboka zieleń: jedna ciemna płaszczyzna */
-  --deep-2: #163728;       /* krok jaśniej na głębokiej zieleni */
-  --deep-ink-2: #B4C2B9;   /* tekst pomocniczy na głębokiej zieleni (8,3:1) */
+  /* Wartości pochodzą z tokenów księgi marki 2.0 (docs/brand/tokens/drozniak-tokens.css,
+     podpięte w app/layout.tsx). Tu tylko starsze, angielskie nazwy ról wskazują na te tokeny,
+     więc zmiana w księdze to jedna zmiana w kodzie. Nowe style piszemy na nazwach z księgi. */
+  --font-naglowki: var(--font-display), Georgia, 'Times New Roman', serif;
+  --font-tekst: var(--font-sans-pub), 'Helvetica Neue', Arial, sans-serif;
+
+  --paper: var(--papier);            /* tło */
+  --paper-white: var(--biel);        /* karty */
+  --paper-tint: var(--kamien);       /* druga powierzchnia */
+  --ink: var(--atrament);            /* tekst, logo, przyciski */
+  --ink-2: var(--atrament);          /* tekst ciągły też w atramencie */
+  --ink-3: var(--grafit);            /* tekst pomocniczy */
+  --line: var(--linia);
+  --line-strong: var(--linia-mocna);
+  --green: var(--kropka);            /* zieleń sygnałowa: tylko kropka */
+  --deep: var(--gleboka-zielen);     /* głęboka zieleń: jedna płaszczyzna na stronę (stopka) */
+  --deep-2: var(--gleboka-zielen-2); /* panel i pole na głębokiej zieleni */
+  --deep-ink-2: var(--pomocniczy-na-zieleni);
+  --green-on-deep: var(--kropka-na-zieleni);
+  --logo-kropka: var(--kropka);
 
   /* Stare nazwy zostają jako zamienniki dla stylów, które ich jeszcze używają */
   --gold: var(--green);
   --gold-deep: var(--ink-3);
-  --gold-bright: #E3E0D7;
+  --gold-bright: var(--linia);
   --gold-wash: var(--paper-tint);
   --dark: var(--deep);
   --dark-2: var(--deep-2);
 
-  font-family: var(--font-sans-pub), var(--font-geist-sans), sans-serif;
+  font-family: var(--font-tekst);
   color: var(--ink-2);
   background: var(--paper);
 }

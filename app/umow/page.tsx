@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { BookingFlow } from './BookingFlow';
 import './umow.css';
+import { Tor } from '../components/brand/Tor';
 
 const TITLE = 'Umów rozmowę | Stanisław Drożniak';
 const DESCRIPTION =
@@ -33,24 +34,23 @@ export default function UmowPage() {
           Rozmowa i oferta
         </h2>
         {/* Kroki na linii z kropką (księga marki): zielona kropka to krok, który się teraz umawia */}
-        <ol className="bk-steps">
-          <li>
-            <p className="bk-steps-name">Rozmowa, 20&nbsp;minut</p>
-            <p className="bk-steps-text">
-              Opowiadasz o&nbsp;firmie i&nbsp;o&nbsp;tym, skąd dziś przychodzą klienci. Nie musisz niczego przygotowywać.
-            </p>
-          </li>
-          <li>
-            <p className="bk-steps-name">Oferta</p>
-            <p className="bk-steps-text">
-              Po rozmowie przygotowuję ofertę i&nbsp;ją przedstawiam: co zrobię, w&nbsp;jakiej kolejności i&nbsp;ile to kosztuje.
-            </p>
-          </li>
-          <li>
-            <p className="bk-steps-name">Decyzja</p>
-            <p className="bk-steps-text">Rozmowa i&nbsp;oferta do niczego nie zobowiązują.</p>
-          </li>
-        </ol>
+        <Tor
+          dir="col"
+          loop={false}
+          className="bk-tor"
+          aria-label="Rozmowa i oferta"
+          steps={[
+            {
+              label: <>Rozmowa, 20&nbsp;minut</>,
+              text: <>Opowiadasz o&nbsp;firmie i&nbsp;o&nbsp;tym, skąd dziś przychodzą klienci. Nie musisz niczego przygotowywać.</>,
+            },
+            {
+              label: 'Oferta',
+              text: <>Po rozmowie przygotowuję ofertę i&nbsp;ją przedstawiam: co zrobię, w&nbsp;jakiej kolejności i&nbsp;ile to kosztuje.</>,
+            },
+            { label: 'Decyzja', text: <>Rozmowa i&nbsp;oferta do niczego nie zobowiązują.</> },
+          ]}
+        />
 
         <div className="bk-host">
           <img src="/images/home/portret-omnie.jpg" alt="" width={900} height={900} className="bk-host-photo" />

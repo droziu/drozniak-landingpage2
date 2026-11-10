@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { HomeMotion } from '../components/home/HomeMotion';
 import { AreaIcon, type IconName } from '../components/AreaIcon';
 import { InquiryScene } from './InquiryScene';
+import { Tor } from '../components/brand/Tor';
 import './system.css';
 
 /**
@@ -115,18 +116,6 @@ const FAQ: { q: string; a: string }[] = [
   },
 ];
 
-const ArrowIcon = () => (
-  <svg className="site-btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const Check = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 // Jednoliterowe spójniki i przyimki nie zostają na końcu wiersza
 const nb = (s: string) => s.replace(/(^|\s)([aiouwzAIOUWZ])\s/g, '$1$2 ');
 
@@ -159,9 +148,8 @@ export default function SystemPozyskiwaniaPage() {
             <div className="sys-actions" data-reveal style={d(3)}>
               <Link href="/umow" className="site-btn site-btn-accent">
                 Umów rozmowę
-                <ArrowIcon />
               </Link>
-              <a href="#cena" className="site-btn sys-btn-line">
+              <a href="#cena" className="site-btn site-btn-line">
                 Zakres i cena
               </a>
             </div>
@@ -197,9 +185,7 @@ export default function SystemPozyskiwaniaPage() {
           <ul className="sys-when-list">
             {SITUATIONS.map((s, i) => (
               <li key={s.text} className="sys-when-item" data-reveal style={d(i + 1)}>
-                <span className="sys-when-icon" aria-hidden="true">
-                  <AreaIcon name={s.icon} size={26} />
-                </span>
+                <AreaIcon name={s.icon} size={28} />
                 <p>{nb(s.text)}</p>
               </li>
             ))}
@@ -219,17 +205,14 @@ export default function SystemPozyskiwaniaPage() {
               tygodni.
             </p>
           </div>
-          <ol className="sys-timeline">
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="sys-step" data-reveal style={d(i % 2)}>
-                <span className="sys-step-when">{s.when}</span>
-                <div className="sys-step-body">
-                  <h3 className="sys-h3">{s.title}</h3>
-                  <p>{nb(s.text)}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <div className="sys-timeline" data-reveal style={d(1)}>
+            <Tor
+              dir="col"
+              className="tor-lg"
+              steps={STEPS.map((s) => ({ when: s.when, label: s.title, text: nb(s.text) }))}
+              aria-label="Przebieg wdrożenia"
+            />
+          </div>
         </div>
       </section>
 
@@ -278,9 +261,7 @@ export default function SystemPozyskiwaniaPage() {
             <ul className="sys-talk-list">
               {TALK.map((t) => (
                 <li key={t.text}>
-                  <span className="sys-talk-icon" aria-hidden="true">
-                    <AreaIcon name={t.icon} size={20} />
-                  </span>
+                  <AreaIcon name={t.icon} size={24} />
                   {nb(t.text)}
                 </li>
               ))}
@@ -290,7 +271,6 @@ export default function SystemPozyskiwaniaPage() {
             </p>
             <Link href="/umow" className="site-btn site-btn-accent sys-talk-btn">
               Umów rozmowę
-              <ArrowIcon />
             </Link>
           </aside>
         </div>
@@ -306,9 +286,7 @@ export default function SystemPozyskiwaniaPage() {
           <ul className="sys-typical-list" data-reveal style={d(2)}>
             {TYPICAL.map((t) => (
               <li key={t.label}>
-                <span className="sys-typical-icon" aria-hidden="true">
-                  <AreaIcon name={t.icon} size={22} />
-                </span>
+                <AreaIcon name={t.icon} size={24} />
                 {nb(t.label)}
               </li>
             ))}
@@ -325,12 +303,7 @@ export default function SystemPozyskiwaniaPage() {
             </h2>
             <ul className="sys-list" data-reveal style={d(1)}>
               {TERMS.map((t) => (
-                <li key={t}>
-                  <span className="sys-list-check" aria-hidden="true">
-                    <Check />
-                  </span>
-                  {nb(t)}
-                </li>
+                <li key={t}>{nb(t)}</li>
               ))}
             </ul>
           </div>
@@ -338,12 +311,7 @@ export default function SystemPozyskiwaniaPage() {
             <h3 className="sys-h3">Na start potrzebuję</h3>
             <ul className="sys-list">
               {NEEDED.map((t) => (
-                <li key={t}>
-                  <span className="sys-list-check" aria-hidden="true">
-                    <Check />
-                  </span>
-                  {nb(t)}
-                </li>
+                <li key={t}>{nb(t)}</li>
               ))}
             </ul>
           </div>
@@ -377,7 +345,7 @@ export default function SystemPozyskiwaniaPage() {
             <h2 id="sys-after" className="hp-h2">
               Po wdrożeniu
             </h2>
-            <p className="hp-lead">
+            <p className="hp-body">
               System zostaje u&nbsp;Ciebie. Możesz prowadzić go sam albo przejść na stałą współpracę, w&nbsp;której co
               miesiąc prowadzę cały marketing firmy.
             </p>
@@ -385,9 +353,8 @@ export default function SystemPozyskiwaniaPage() {
           <div className="sys-after-actions">
             <Link href="/umow" className="site-btn site-btn-accent">
               Umów rozmowę
-              <ArrowIcon />
             </Link>
-            <Link href="/prowadzenie-marketingu" className="site-btn sys-btn-line">
+            <Link href="/prowadzenie-marketingu" className="site-btn site-btn-line">
               Zobacz stałą współpracę
             </Link>
           </div>

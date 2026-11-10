@@ -24,17 +24,23 @@ function when(b: Booking) {
   return `${formatRange(new Date(b.start_at), new Date(b.end_at))} (czas polski)`;
 }
 
-/** Prosty, czytelny szablon w kolorach strony. */
+/**
+ * Szablon według księgi marki („Podpis maila i newsletter”): szerokość 600 px, tekst Arial 16 px
+ * z interlinią 1,55, napis jako PNG z tłem w kolorze papieru (tryb ciemny nie zrobi z niego czarnego
+ * napisu na czarnym tle), stopka 13 px w graficie z dopiskiem, telefonem i adresem strony.
+ */
 function layout(body: string) {
   return `<!doctype html><html lang="pl"><body style="margin:0;background:#F6F5F1;font-family:Arial,Helvetica,sans-serif;color:#161511;">
-<div style="max-width:560px;margin:0 auto;padding:32px 20px;">
-<div style="background:#FFFFFF;border-radius:16px;padding:32px 28px;font-size:16px;line-height:1.6;">${body}</div>
-<p style="font-size:13px;color:#85816F;margin:20px 4px 0;">Stanisław Drożniak, marketing i pozyskiwanie klientów<br><a href="${BOOKING.siteUrl}" style="color:#85816F;">drozniak.pl</a></p>
+<div style="max-width:600px;margin:0 auto;padding:32px 20px;">
+<p style="margin:0 0 20px;"><a href="${BOOKING.siteUrl}"><img src="${BOOKING.siteUrl}/images/brand/drozniak-napis-mail-240.png" width="128" alt="Drożniak" style="display:block;border:0;"></a></p>
+<div style="background:#FFFFFF;border-radius:16px;padding:32px;font-size:16px;line-height:1.55;">${body}</div>
+<p style="font-size:13px;line-height:1.5;color:#5E5A50;margin:20px 4px 0;">Stanisław Drożniak<br>Marketing i pozyskiwanie klientów dla firm<br>+48 792 491 196 | <a href="${BOOKING.siteUrl}" style="color:#5E5A50;">drozniak.pl</a></p>
 </div></body></html>`;
 }
 
+/** Przycisk atramentowy, co najmniej 44 px wysokości, tekst 16 px pogrubiony, bez kropki. */
 function button(href: string, label: string) {
-  return `<a href="${href}" style="display:inline-block;background:#F2CE4B;color:#161511;font-weight:bold;text-decoration:none;padding:13px 24px;border-radius:999px;">${label}</a>`;
+  return `<a href="${href}" style="display:inline-block;background:#161511;color:#F6F5F1;font-size:16px;font-weight:bold;line-height:20px;text-decoration:none;padding:14px 24px;border-radius:999px;">${label}</a>`;
 }
 
 function meetBlock(b: Booking) {
@@ -49,15 +55,15 @@ function meetBlock(b: Booking) {
 /** Zachęta do odpowiedzi na pytania, dopóki klient ich nie wypełnił. */
 function briefBlock(b: Booking, token: string | null) {
   if (!token || b.brief_submitted_at) return '';
-  return `<div style="background:#F6F5F1;border-radius:12px;padding:20px 20px 4px;margin:0 0 20px;">
-<p style="margin:0 0 8px;font-weight:bold;">Kilka pytań przed rozmową</p>
+  return `<div style="background:#F6F5F1;border-radius:16px;padding:20px 20px 4px;margin:0 0 20px;">
+<p style="margin:0 0 8px;font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:bold;">Kilka pytań przed rozmową</p>
 <p style="margin:0 0 16px;">Odpowiedz na kilka krótkich pytań o firmę. Zajmie to 2 minuty, a ja przyjdę na rozmowę przygotowany.</p>
 <p style="margin:0 0 16px;">${button(briefUrl(token), 'Odpowiedz na pytania')}</p>
 </div>`;
 }
 
 function manageLine(token: string) {
-  return `<p style="margin:0;font-size:14px;color:#4A4740;">Jeśli termin przestanie Ci pasować, możesz go <a href="${manageUrl(token)}" style="color:#161511;">przełożyć albo odwołać</a>.</p>`;
+  return `<p style="margin:0;font-size:14px;color:#5E5A50;">Jeśli termin przestanie Ci pasować, możesz go <a href="${manageUrl(token)}" style="color:#161511;">przełożyć albo odwołać</a>.</p>`;
 }
 
 async function send(to: string, subject: string, html: string, replyTo?: string) {
@@ -98,7 +104,7 @@ export function sendConfirmation(b: Booking, token: string) {
     `Potwierdzenie rozmowy: ${formatRange(new Date(b.start_at), new Date(b.end_at))}`,
     layout(`<p style="margin:0 0 16px;">Dzień dobry,</p>
 <p style="margin:0 0 16px;">dziękuję za umówienie rozmowy. Termin:</p>
-<p style="margin:0 0 20px;font-size:20px;font-weight:bold;">${esc(when(b))}</p>
+<p style="margin:0 0 20px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;font-weight:bold;">${esc(when(b))}</p>
 <p style="margin:0 0 16px;">${invite} Rozmowa trwa ${BOOKING.durationMin} minut.</p>
 ${meetBlock(b)}
 ${briefBlock(b, token)}
@@ -127,7 +133,7 @@ export function sendHostNotice(b: Booking, kind: 'new' | 'moved' | 'cancelled') 
     BOOKING.hostEmail,
     `${titles[kind]}: ${b.name}${b.company ? ` (${b.company})` : ''}, ${formatRange(new Date(b.start_at), new Date(b.end_at))}`,
     layout(
-      `<p style="margin:0 0 16px;font-size:20px;font-weight:bold;">${titles[kind]}</p>` +
+      `<p style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;font-weight:bold;">${titles[kind]}</p>` +
         rows
           .filter(([, v]) => v)
           .map(([k, v]) => `<p style="margin:0 0 10px;"><strong>${k}:</strong><br>${esc(v).replace(/\n/g, '<br>')}</p>`)
@@ -143,10 +149,10 @@ export function sendReminder(b: Booking, token: string | null, label: string) {
     `Przypomnienie: rozmowa ${label}, ${formatRange(new Date(b.start_at), new Date(b.end_at))}`,
     layout(`<p style="margin:0 0 16px;">Dzień dobry,</p>
 <p style="margin:0 0 16px;">przypominam o naszej rozmowie ${label}:</p>
-<p style="margin:0 0 20px;font-size:20px;font-weight:bold;">${esc(when(b))}</p>
+<p style="margin:0 0 20px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;font-weight:bold;">${esc(when(b))}</p>
 ${meetBlock(b)}
 ${briefBlock(b, token)}
-${token ? manageLine(token) : `<p style="margin:0;font-size:14px;color:#4A4740;">Jeśli coś Ci wypadło, po prostu odpisz na tego maila.</p>`}
+${token ? manageLine(token) : `<p style="margin:0;font-size:14px;color:#5E5A50;">Jeśli coś Ci wypadło, po prostu odpisz na tego maila.</p>`}
 <p style="margin:20px 0 0;">Do usłyszenia,<br>Stanisław</p>`),
   );
 }
@@ -157,7 +163,7 @@ export function sendMoved(b: Booking, token: string) {
     `Nowy termin rozmowy: ${formatRange(new Date(b.start_at), new Date(b.end_at))}`,
     layout(`<p style="margin:0 0 16px;">Dzień dobry,</p>
 <p style="margin:0 0 16px;">rozmowa jest przełożona. Nowy termin:</p>
-<p style="margin:0 0 20px;font-size:20px;font-weight:bold;">${esc(when(b))}</p>
+<p style="margin:0 0 20px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;font-weight:bold;">${esc(when(b))}</p>
 <p style="margin:0 0 16px;">Wydarzenie w Twoim kalendarzu zaktualizuje się samo${b.mode === 'phone' ? '.' : ', link do Google Meet zostaje ten sam.'}</p>
 ${meetBlock(b)}
 ${manageLine(token)}
@@ -184,7 +190,7 @@ export function sendBriefNotice(b: Booking) {
     BOOKING.hostEmail,
     `Odpowiedzi przed rozmową: ${b.name}${b.company ? ` (${b.company})` : ''}, ${formatRange(new Date(b.start_at), new Date(b.end_at))}`,
     layout(
-      `<p style="margin:0 0 16px;font-size:20px;font-weight:bold;">Odpowiedzi przed rozmową</p>
+      `<p style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;font-weight:bold;">Odpowiedzi przed rozmową</p>
 <p style="margin:0 0 16px;">${esc(b.name)}, ${esc(when(b))}</p>` +
         rows.map(([q, a]) => `<p style="margin:0 0 12px;"><strong>${esc(q)}</strong><br>${esc(a).replace(/\n/g, '<br>')}</p>`).join('') +
         (b.doc_url ? `<p style="margin:20px 0 0;">${button(b.doc_url, 'Otwórz dokument rozmowy')}</p>` : ''),

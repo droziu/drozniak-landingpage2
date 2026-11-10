@@ -4,9 +4,9 @@ import { HomeHero } from './components/home/HomeHero';
 import { HomeMotion } from './components/home/HomeMotion';
 import './components/home/home-hero.css';
 import { ScopeList } from './components/home/ScopeList';
-import './home-scene.css';
 import './components/home/home-sections.css';
 import { AreaIcon, type IconName } from './components/AreaIcon';
+import { Tor } from './components/brand/Tor';
 import { ShapeCanvas } from './components/shapes/ShapeCanvas';
 import { SlantRow } from './components/shapes/SlantRow';
 import type { Pt } from './components/useShapeClips';
@@ -52,12 +52,14 @@ const WORK_SHAPES: Record<'a' | 'b' | 'c', Pt[]> = {
   c: [[0, 342], [531.9, 342], [593.5, 520], [0, 520]],
   b: [[426.5, 0], [1000, 0], [1000, 520], [606.5, 520]],
 };
-const WORK_STEPS: { icon: IconName; label: string }[] = [
-  { icon: 'search', label: 'Sprawdzenie' },
-  { icon: 'plan', label: 'Plan' },
-  { icon: 'launch', label: 'Wdrożenie' },
+const WORK_STEPS = [{ label: 'Sprawdzenie' }, { label: 'Plan' }, { label: 'Wdrożenie' }, { label: '30 dni wsparcia' }];
+const WORK_AREAS: { icon: IconName; label: string }[] = [
+  { icon: 'ads', label: 'Reklamy' },
+  { icon: 'site', label: 'Strona' },
+  { icon: 'mail', label: 'Mailing' },
+  { icon: 'inquiry', label: 'Zapytania' },
+  { icon: 'data', label: 'Pomiar' },
 ];
-const WORK_AREAS: IconName[] = ['ads', 'site', 'mail', 'inquiry', 'data'];
 
 // O mnie: lustro hero; zdjęcie po lewej z nosem w prawo, pod tekstem jasny pas z faktami.
 const ABOUT_SPACE = { w: 1000, h: 620 };
@@ -69,12 +71,6 @@ const ABOUT_FACTS: { icon: IconName; label: string }[] = [
   { icon: 'work', label: '10 lat doświadczenia' },
   { icon: 'people', label: 'Ponad 100 klientów' },
 ];
-
-const ArrowIcon = () => (
-  <svg className="site-btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 export default function HomePage() {
   return (
@@ -95,7 +91,6 @@ export default function HomePage() {
             <div className="hph-actions">
               <Link href="/umow" className="site-btn site-btn-accent">
                 Umów rozmowę
-                <ArrowIcon />
               </Link>
             </div>
           </div>
@@ -125,7 +120,7 @@ export default function HomePage() {
               </li>
             ))}
             <li data-reveal style={d(3)}>
-              <span className="hpc-chip hpc-chip-dark">
+              <span className="hpc-chip hpc-chip-total">
                 <span className="hpc-chip-text">Łącznie ponad 100 klientów</span>
               </span>
             </li>
@@ -146,49 +141,33 @@ export default function HomePage() {
             </p>
           </div>
           <ShapeCanvas className="hpw-canvas" shapes={WORK_SHAPES} space={WORK_SPACE} media="(min-width: 1100px)">
-            <div className="hpw-field hpw-c" data-ui>
-              <ol className="hpw-steps" aria-label="Kolejność pracy">
-                {WORK_STEPS.map((s, i) => (
-                  <li key={s.label} className="hpw-step" style={{ ['--i' as string]: i }}>
-                    <span className="hpw-dot" aria-hidden="true">
-                      <AreaIcon name={s.icon} size={24} />
-                      <span className="hpw-dot-on">
-                        <AreaIcon name={s.icon} size={24} />
-                      </span>
-                    </span>
-                    {s.label}
-                  </li>
-                ))}
-              </ol>
+            <div className="hpw-field hpw-c">
+              <Tor steps={WORK_STEPS} current={0} className="hpw-road" aria-label="Kolejność pracy przy wdrożeniu" />
             </div>
             <div className="hpw-field hpw-a">
               <div className="hpw-inner" data-reveal>
                 <h3 className="hpw-h3">Jednorazowo</h3>
                 <p className="hpw-text">Ustawiam system pozyskiwania klientów i&nbsp;przez 30 dni pilnuję, żeby działał.</p>
-                <Link href="/system-pozyskiwania-klientow" className="site-btn site-btn-ink hpw-btn-a">
+                <Link href="/system-pozyskiwania-klientow" className="site-btn site-btn-line hpw-btn-a">
                   Zobacz ofertę
-                  <ArrowIcon />
                 </Link>
               </div>
             </div>
             <div className="hpw-field hpw-b">
               <div className="hpw-inner" data-reveal style={d(1)}>
-                <span className="hpw-areas" data-ui role="img" aria-label="Reklamy, strona, mailing, zapytania i pomiar">
-                  {WORK_AREAS.map((icon, i) => (
-                    <span key={icon} className="hpw-area" aria-hidden="true" style={{ ['--i' as string]: i }}>
-                      <AreaIcon name={icon} size={24} />
-                      <span className="hpw-area-on">
-                        <AreaIcon name={icon} size={24} />
-                      </span>
-                    </span>
+                <ul className="hpw-areas" aria-label="Co prowadzę co miesiąc">
+                  {WORK_AREAS.map((a) => (
+                    <li key={a.label} className="hpw-area">
+                      <AreaIcon name={a.icon} size={24} />
+                      {a.label}
+                    </li>
                   ))}
-                </span>
+                </ul>
                 <div className="hpw-b-text">
                   <h3 className="hpw-h3">Stała współpraca</h3>
                   <p className="hpw-text">Prowadzę cały marketing firmy co miesiąc, za stałą opłatą.</p>
-                  <Link href="/prowadzenie-marketingu" className="site-btn hpw-btn">
+                  <Link href="/prowadzenie-marketingu" className="site-btn site-btn-line hpw-btn">
                     Zobacz ofertę
-                    <ArrowIcon />
                   </Link>
                 </div>
               </div>
@@ -217,9 +196,6 @@ export default function HomePage() {
       <section className="hp-section site-wrap" aria-labelledby="hp-training" style={{ paddingTop: 0 }}>
         <SlantRow className="hpt" k={0.34}>
           <div className="hpt-main" data-reveal>
-            <span className="hpt-icon" aria-hidden="true">
-              <AreaIcon name="teach" size={28} />
-            </span>
             <h2 id="hp-training" className="hpt-title">
               Szkolenia
             </h2>
@@ -227,10 +203,11 @@ export default function HomePage() {
               Prowadzę też szkolenia dla zespołów i&nbsp;pracuję z&nbsp;działami marketingu w&nbsp;większych firmach.
             </p>
           </div>
-          <Link href="/szkolenia" className="hpt-link" data-reveal style={d(1)}>
-            Zobacz szkolenia
-            <ArrowIcon />
-          </Link>
+          <div className="hpt-go" data-reveal style={d(1)}>
+            <Link href="/szkolenia" className="site-btn site-btn-line">
+              Zobacz szkolenia
+            </Link>
+          </div>
         </SlantRow>
       </section>
 
@@ -257,9 +234,7 @@ export default function HomePage() {
             <ul className="hpa-facts" data-reveal style={d(2)}>
               {ABOUT_FACTS.map((f) => (
                 <li key={f.label} className="hpa-fact">
-                  <span className="hpa-fact-icon" aria-hidden="true">
-                    <AreaIcon name={f.icon} size={20} />
-                  </span>
+                  <AreaIcon name={f.icon} size={24} />
                   {f.label}
                 </li>
               ))}

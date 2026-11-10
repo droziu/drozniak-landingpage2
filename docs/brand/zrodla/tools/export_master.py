@@ -1,48 +1,58 @@
-import sys, os, math, re, subprocess
+"""Pliki logo z jednej geometrii: napis, znak, znak mały, awatary, ikony i favikony (SVG).
+
+Użycie: S=<folder zrodla> python tools/export_master.py ../logo
+PNG, PDF i ICO robi z nich skrypt tools/export_raster.sh.
+"""
+import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from master import symbol, word, SMALL
+from tokens import INK, PAPER, GREEN, GREEN_L, DEEP, WHITE
 OUT = sys.argv[1]
-INK, PAPER, GREEN, DEEP, WHITE = "#161511", "#F6F5F1", "#14945E", "#0E2A20", "#FFFFFF"
-for d in ("napis", "znak", "ikony"): os.makedirs(f"{OUT}/{d}", exist_ok=True)
-def svgdoc(w, h, body, title, vb=None):
-    vb = vb or f"0 0 {w:g} {h:g}"
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}" width="{w:g}" height="{h:g}" role="img" aria-labelledby="t">'
+for d in ("napis", "znak", "ikony", "ikony/web"): os.makedirs(f"{OUT}/{d}", exist_ok=True)
+
+def svgdoc(w, h, body, title):
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w:g} {h:g}" width="{w:g}" height="{h:g}" role="img" aria-labelledby="t">'
             f'<title id="t">{title}</title>{body}</svg>\n')
-def r2(v): return round(v, 2)
-# ---- wordmark
-W = word(100); x0, y0, x1, y1 = W['bb']
-ww, wh = r2(x1 - x0), r2(y1 - y0)
+r2 = lambda v: round(v, 2)
+
+# rysunek / kropka: na ciemnym tle kropka jest jasna
+VARIANTS = {"kolor": (INK, GREEN), "negatyw": (PAPER, GREEN_L), "czarny": (INK, INK), "bialy": (WHITE, WHITE)}
+
+# ---- napis
+W = word(100); x0, y0, x1, y1 = W['bb']; ww, wh = r2(x1 - x0), r2(y1 - y0)
 def word_body(ink, dot):
     g = "".join(f'<path d="{d}"/>' for d in W['ink'])
     c = "".join(f'<circle cx="{cx:g}" cy="{cy:g}" r="{r:g}" fill="{dot}"/>' for cx, cy, r in W['dots'])
     return f'<g transform="translate({-x0:.2f} {-y0:.2f})"><g fill="{ink}">{g}</g>{c}</g>'
-variants = {"kolor": (INK, GREEN), "negatyw": (PAPER, GREEN), "czarny": (INK, INK), "bialy": (WHITE, WHITE)}
-for n, (ink, dot) in variants.items():
+for n, (ink, dot) in VARIANTS.items():
     open(f"{OUT}/napis/drozniak-napis-{n}.svg", "w").write(svgdoc(ww, wh, word_body(ink, dot), "Drożniak"))
-# ---- symbol (regular and small cut)
-def sym_files(geom, suffix):
-    bx0, by0, bx1, by1 = geom['bb']; w, h = r2(bx1 - bx0), r2(by1 - by0)
-    cx, cy, r = geom['dot']
-    for n, (ink, dot) in variants.items():
-        body = f'<g transform="translate({-bx0:.2f} {-by0:.2f})"><path fill="{ink}" d="{geom["d"]}"/><circle cx="{cx}" cy="{cy}" r="{r}" fill="{dot}"/></g>'
-        open(f"{OUT}/znak/drozniak-znak{suffix}-{n}.svg", "w").write(svgdoc(w, h, body, "Drożniak, znak D."))
-    return w, h
+
+# ---- znak (podstawowy i mały)
+def sym_body(g, ink, dot):
+    cx, cy, r = g['dot']
+    return f'<path fill="{ink}" d="{g["d"]}"/><circle cx="{cx}" cy="{cy}" r="{r}" fill="{dot}"/>'
+def sym_files(g, suffix):
+    bx0, by0, bx1, by1 = g['bb']
+    for n, (ink, dot) in VARIANTS.items():
+        open(f"{OUT}/znak/drozniak-znak{suffix}-{n}.svg", "w").write(svgdoc(r2(bx1 - bx0), r2(by1 - by0), sym_body(g, ink, dot), "Drożniak, znak"))
 G = symbol(); Gs = symbol(**SMALL)
-sw, sh = sym_files(G, ""); ssw, ssh = sym_files(Gs, "-maly")
-# ---- icons: tile with symbol (small cut), optical centre slightly up/left of bbox centre
-def tile(geom, size=512, radius=None, circle=False, bg=DEEP, ink=PAPER, dot=GREEN, scale=0.56):
-    bx0, by0, bx1, by1 = geom['bb']; w, h = bx1 - bx0, by1 - by0
-    s = size * scale / max(w, h)
-    # optical centre: centre the D body (without dot overhang) and nudge up 1.5%
-    tx = (size - w * s) / 2 - bx0 * s + size * 0.012
-    ty = (size - h * s) / 2 - by0 * s - size * 0.004
-    cx, cy, r = geom['dot']
-    shape = f'<circle cx="{size/2:g}" cy="{size/2:g}" r="{size/2:g}" fill="{bg}"/>' if circle else f'<rect width="{size}" height="{size}" rx="{radius if radius is not None else size*0.22:.1f}" fill="{bg}"/>'
-    body = shape + f'<g transform="translate({tx:.2f} {ty:.2f}) scale({s:.4f})"><path fill="{ink}" d="{geom["d"]}"/><circle cx="{cx}" cy="{cy}" r="{r}" fill="{dot}"/></g>'
-    return svgdoc(size, size, body, "Drożniak")
-open(f"{OUT}/ikony/drozniak-ikona-aplikacji.svg", "w").write(tile(Gs))
-open(f"{OUT}/ikony/drozniak-awatar.svg", "w").write(tile(Gs, circle=True, scale=0.5))
-open(f"{OUT}/ikony/favicon.svg", "w").write(tile(Gs, size=64, radius=12, scale=0.66))
-open(f"{OUT}/ikony/drozniak-awatar-jasny.svg", "w").write(tile(Gs, circle=True, scale=0.5, bg=PAPER, ink=INK))
-print("wordmark", ww, wh, "cap", W['cap'], "xh", round(W['xh'], 2), "dot", W['dots'])
-print("symbol", sw, sh, G['params']); print("small", ssw, ssh)
+sym_files(G, ""); sym_files(Gs, "-maly")
+
+# ---- awatary i ikony: znak w polu, środek optyczny 1,2% powyżej środka pola
+def tile(g, size=1024, scale=0.5, circle=False, radius=0.22, bg=DEEP, ink=PAPER, dot=GREEN_L):
+    bx0, by0, bx1, by1 = g['bb']; w, h = bx1 - bx0, by1 - by0
+    s = size * scale / h
+    tx = (size - w * s) / 2 + size * 0.004; ty = (size - h * s) / 2 - size * 0.012
+    shape = (f'<circle cx="{size/2:g}" cy="{size/2:g}" r="{size/2:g}" fill="{bg}"/>' if circle
+             else f'<rect width="{size}" height="{size}" rx="{size*radius:.1f}" fill="{bg}"/>')
+    return svgdoc(size, size, shape + f'<g transform="translate({tx:.2f} {ty:.2f}) scale({s:.5f})">{sym_body(g, ink, dot)}</g>', "Drożniak")
+
+I = f"{OUT}/ikony"
+open(f"{I}/drozniak-awatar.svg", "w").write(tile(G, 1080, 0.5, radius=0))                       # serwisy same przycinają do koła
+open(f"{I}/drozniak-awatar-jasny.svg", "w").write(tile(G, 1080, 0.5, radius=0, bg=PAPER, ink=INK, dot=GREEN))
+open(f"{I}/drozniak-ikona-aplikacji.svg", "w").write(tile(G, 1024, 0.56))
+open(f"{I}/favicon.svg", "w").write(tile(Gs, 64, 0.66, radius=0.19))
+open(f"{I}/web/favicon.svg", "w").write(tile(Gs, 64, 0.66, radius=0.19))
+open(f"{I}/web/_icon.svg", "w").write(tile(Gs, 512, 0.6, radius=0.19))                              # źródło ikon 180, 192, 512
+open(f"{I}/web/_icon-maskable.svg", "w").write(tile(G, 512, 0.46, radius=0))                        # znak w kole 80% pola
+print("napis", ww, wh, "| znak", G['bb'], "| znak mały", Gs['bb'])
